@@ -1,0 +1,389 @@
+\Sexpr{set_parent('Lock5withR.Rnw')}
+\Chapter{Hypothesis Tests}
+
+<<include=FALSE>>=
+opts_chunk$set(
+			   fig.width=5, fig.height=2.0
+)
+@
+
+\section{Introduction to Hypothesis Testing}
+
+\subsection{The 4-step outline}
+The following 4-step outline is a useful way to organize the ideas of hypothesis testing.
+
+\begin{enumerate}
+	\item
+		State the Null and Alternative Hypotheses
+	\item
+		Compute the Test Statistic
+
+		The test statistic is a number that summarizes the evidence 
+	\item
+		Determine the p-value (from the Randomization Distribution)
+	\item
+		Draw a conclusion
+\end{enumerate}
+
+\section{P-values}
+
+\subsection{Testing one proportion}
+
+Randomization distributions are a bit like bootstrap distributions except that
+instead of resampling from our sample (in an attempt to approximate resampling
+from the population), we need to sample from a situation in which our null
+hypothesis is true.
+
+The simplest case for this is a null hypothesis about a single proportion.
+For example, to test whether a coin is a fair coin, we might flip the coin some number of times and 
+keep track of the heads and tails.
+Suppose the data are 60 heads and 40 tails in 100 tries.
+
+\begin{enumerate}
+	\item
+		$H_0$: $p = 0.5$;  $H_a$: $p \neq 0.5$
+	\item
+		Test statistic:  $\hat p$ (the sample proportion)
+	\item
+		We can simulate a world in which $p = 0.5$ using \function{rflip()}:
+
+<<randomization-coins>>=
+RandomizationDist <- do(5000) * rflip(100, .5)  # 100 because n=100
+head(RandomizationDist)
+@
+
+<<p-value-coins>>=
+prop( ~ (prop >= 0.60), data=RandomizationDist )
+prop( ~ (prop <= 0.40), data=RandomizationDist )
+# a 2-sided p-value is the sum of the values above
+prop( ~ (prop <= 0.40 | prop >= 0.6), data=RandomizationDist )
+# We can also approximate the p-value by doubling one side:
+2 * prop( ~ prop >= 0.60, data=RandomizationDist )
+@
+	\item
+		This p-value is on the small side, but not extremely small.  
+		If we flip a fair coin 100 times, there is a 
+		\Sexpr{100 * prop( ~ (prop <= 0.40 | prop >= 0.6), data=RandomizationDist )}\%
+		chance that we would get 60\% or more head or tails.
+\end{enumerate}
+
+
+
+\section{Significance}
+
+\section{Creating Randomization Distributions}
+
+In order to use these methods to estimate a p-value, we must be able to generate a randomization distribution.
+In the case of a test with null hypothesis claiming that a proportion has a particular value (e.g, $H_O$: $p=0.5$),
+this is pretty easy.  If the population has proportion 0.50, we can simulate sampling from that proportion
+by flipping a fair coin.  If the proportion is some value other than 0.50, we simply flip a coin that has the appropriate
+probability of resulting in heads.  So the general template for creating such a randomization distribution is
+
+<<eval=FALSE>>=
+do(1000) * rflip( n, hypothesized_proportion )
+@
+where \texttt{n} is the size of the original sample.
+
+In other situations, it can be more challenging to create a randomization distribution because the null hypothesis 
+does not directly specify all of the information needed to simulate samples.
+\begin{itemize}
+	\item
+		$H_O$: $p_1 = p_2$
+
+		This would be simple \emph{if} we new the value of $p_1$ and $p_2$ (we could use \function{rflip()} twice, once
+		for each group), 
+	\item
+		$H_O$: $\mu = $ some number
+
+		Just knowing the mean does not tell us enough about the distribution.
+		We need to know about its shape.  (We might need to know the standard
+		deviation, for example, or whether the distribution is skewed.)
+
+	\item
+		$H_O$: $\mu_1 \neq \mu_2$ some number.
+
+		Now we don't know the common mean and we don't know the things mentioned in the previous example either.
+
+
+\end{itemize}
+
+So how do we come up with randomization distriution?
+
+\begin{boxedText}
+	The main criteria to consider when creating randomization samples for a statistical test are:
+	\begin{itemize}
+		\item
+			Be consistent with the null hypothesis.
+
+			If we don't do this, we won't be testing our null hypothesis.
+		\item
+			Use the data in the original sample.
+
+			With luck, the original data will shed light on some aspects of the distribution
+			that are not determined by null hypothesis.
+		\item
+			Reflect the way the original data were collected.
+	\end{itemize}
+\end{boxedText}
+
+
+\subsection{Testing Whether Two Proportions are Equal}
+
+\subsubsection{Creating some data}
+Data 4.7 in the text describes some data that are not in a data frame.  This
+often happens when a data set has only categorical variables because a simple
+table completely describes the distributions involved.  Here's the table from the book:\footnote{The book
+includes data on an additional treatment group which we are omitting here.}
+
+\begin{center}
+	\begin{tabular}{ccc}
+		\hline
+		 & Relapse & No Relapse 
+		 \\ \hline
+%		 Desipramine & 10 & 14 \\
+		 Lithium & 18 & 6 \\
+		 Placebo & 20 & 4 \\
+		 \hline
+	 \end{tabular}
+\end{center}
+
+Here's one way to create the data in \R:
+%  do(10) * data.frame( treatment = "Desipramine", response="Relapse"),
+%  do(14) * data.frame( treatment = "Desipramine", response="No Relapse"),
+<<cocaine-data,tidy=FALSE>>=
+Cocaine <- rbind( 
+  do(18) * data.frame( treatment = "Lithium",     response="Relapse"),
+  do(6)  * data.frame( treatment = "Lithium",     response="No Relapse"),
+  do(20) * data.frame( treatment = "Placebo",     response="Relapse"),
+  do(4)  * data.frame( treatment = "Placebo",     response="No Relapse")
+  )
+@
+
+\subsubsection{A Randomized Experiment: Lithium vs. Placebo}
+
+<<>>=
+tally( response ~ treatment, data=Cocaine )
+prop( response ~ treatment, data=Cocaine )
+diff( prop( response ~ treatment, data=Cocaine ) )
+@
+
+<<>>=
+Randomization.Coc <- do (1000) * diff( prop( response ~ shuffle(treatment), data=Cocaine ) )
+head(Randomization.Coc)
+histogram( ~ Relapse.Placebo, data=Randomization.Coc, v=c(-0.0833, 0.0833), width=0.08)
+@
+<<>>=
+prop( ~ (Relapse.Placebo > 0.0833 ), data=Randomization.Coc )       # 1-sided
+2 * prop( ~ (Relapse.Placebo > 0.0833 ), data=Randomization.Coc )   # 2-sided
+prop( ~ (abs(Relapse.Placebo) > 0.0833 ), data=Randomization.Coc )  # 2-sided
+@
+
+\iffalse
+\subsubsection{An Observational Study: ?? }
+
+Once again, we are interested in comparing two proportions:
+\begin{itemize}
+	\item $p_t = $ the proportion of people who lost a ticket that say they would buy a new one.
+	\item $p_c = $ the proportion of people who lost cash that say they would buy a ticket.
+\end{itemize}
+And our null hypothesis is again 
+\begin{itemize}
+	\item $H_0$:  $p_t = p_c$ 
+\end{itemize}
+But the design of this study is different.  
+\fi
+
+\subsection{Testing Whether Two Means are Equal}
+
+\subsubsection{Random assignment}
+The procedure for comparing two means is very similar
+
+<<>>=
+mean(BodyTemp ~ Sex, data=BodyTemp50)
+diff( mean(BodyTemp ~ Sex, data=BodyTemp50) )
+@
+
+<<>>=
+Randomization.Temp <- do (1000) * diff( mean( BodyTemp ~ shuffle(Sex), data=BodyTemp50 ) )
+head(Randomization.Temp,3)
+histogram(~Male, data=Randomization.Temp, v=c(0.176, -0.176))
+@
+<<>>=
+prop( ~ (Male > 0.176), data=Randomization.Temp )       # 1-sided
+2 * prop( ~ (Male > 0.176), data=Randomization.Temp )   # 2-sided
+prop( ~ (abs(Male) > 0.176), data=Randomization.Temp )  # 2-sided
+@
+
+\subsubsection{Separate sampling from two groups}
+But wait; one of our criteria was that we our randomization should mimic the design of the study.
+In this case, we did not randomly assign the sex of the subjects (for obvious reasons).  Is there
+a randomization method that more accurately reflects what actually happened?  It turns out there is.
+We could 
+\begin{itemize}
+	\item
+		First pool the 50 subjects' body temperatures.  
+		
+		(If men and women aren't different, then
+		they really form one population with the same distribution rather than two different 
+		distributions, so we can safely combine in this way when the null hypothesis is true.)
+
+	\item
+		Then randomly draw two samples of size 25 with replacement to create simulated
+		groups of women and men.
+\end{itemize}
+Here's a way to do this in \R:
+
+<<>>=
+Randomization.Temp2 <- do (1000) * diff( mean( resample(BodyTemp) ~ shuffle(Sex), data=BodyTemp50 ) )
+head(Randomization.Temp2,3)
+histogram(~Male, data=Randomization.Temp2, v=c(0.176, -0.176))
+@
+
+<<>>=
+prop( ~ (Male > 0.176), data=Randomization.Temp2 )       # 1-sided
+2 * prop( ~ (Male > 0.176), data=Randomization.Temp2 )   # 2-sided
+prop( ~ (abs(Male) > 0.176), data=Randomization.Temp2 )  # 2-sided
+@
+
+\subsubsection{Sampling from one population with two variables}
+
+If on the other hand our study design was to randomly sample 50 people and record their 
+body temperature and their sex, then another approach could be used:
+
+<<>>=
+Randomization.Temp3 <- do (1000) * diff( mean( BodyTemp ~ shuffle(Sex), data=resample(BodyTemp50) ) )
+head(Randomization.Temp3,3)
+histogram(~Male, data=Randomization.Temp3, v=c(0.176, -0.176))
+@
+
+<<>>=
+prop( ~ (Male > 0.176), data=Randomization.Temp3 )       # 1-sided
+2 * prop( ~ (Male > 0.176), data=Randomization.Temp3 )   # 2-sided
+prop( ~ (abs(Male) > 0.176), data=Randomization.Temp3 )  # 2-sided
+@
+
+As we see, the three methods give essentially the same results in this case.  But they correspond to
+three different study designs:
+\begin{enumerate}
+	\item
+		Randomized assignment of treatments (shuffle the treatment)
+	\item
+		Separate sampling from two populations (resample the response, shuffle the treatment)
+
+		Each randomization sample will have the same number of cases in each group.
+
+	\item
+		Observational study on two variables (resample entire data set, and shuffle the 
+		explanatory variable)
+
+		Different randomization samples will have different numbers of cases in the two groups.
+\end{enumerate}
+Similar approaches work for testing whether two proportions are equal as well.
+
+
+\subsubsection{A tell-tale sign that your method isn't correct}
+
+Take a look at the three histograms in this section.  Notice how each is centered at 0.   (They
+also have our hoped for bell shape.)
+<<>>=
+mean( ~ Male, data=Randomization.Temp )
+mean( ~ Male, data=Randomization.Temp2 )
+mean( ~ Male, data=Randomization.Temp3 )
+@
+This is because we are computing the difference in means \emph{assuming the difference in means is 0}.
+
+If your randomization distribution is centered at the wrong value, then it isn't simulating a world
+in which the null hypothesis is true.  This would happen, for example, if we got confused about 
+randomization vs. bootstrapping.
+
+<<tidy=FALSE>>=
+Boot.Temp <- do (1000) * diff( mean( BodyTemp ~ Sex, data=resample(BodyTemp50) ) )
+head(Boot.Temp,3)
+histogram(~Male, data=Boot.Temp, v=c(0.176, -0.176), 
+    main="This is NOT a randomization distribution")
+mean(~ Male, data=Boot.Temp)
+@
+Notice that the distribution is now centered at our test statistic instead of at the value
+from the null hypothesis.
+
+\newpage
+
+\subsection{Testing One mean}
+
+\subsubsection{Is body temperature really 98.6?}
+Suppose now that we want to test whether the mean body temparature is really 98.6 degrees F., 
+as we've always been told.  Our null and alternative hypotheses are 
+
+\begin{itemize}
+	\item $H_0$: $\mu = 98.6$
+	\item $H_a$: $\mu \neq 98.6$
+\end{itemize}
+
+The sample mean body temperature is 
+<<>>=
+mean( ~ BodyTemp, data=BodyTemp50 )
+@
+This will be our test statistic.
+Notice that it differs a bit from 98.6
+<<>>=
+98.6 - mean( ~ BodyTemp, data=BodyTemp50)  
+@
+But might this just be random variation?
+We need a randomization distribution to compare against.  But how do we create one?
+If we resample, the mean will not be 98.6.  But we shift the distribution a bit, then we will
+have the desired mean while preserving the shape of the distribution indicated by
+our sample.
+
+<<>>=
+Randomization.Temp4 <- do(1000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 ) 
+head(Randomization.Temp4, 3)
+mean( ~ result, data=Randomization.Temp4 )
+histogram(~result, data=Randomization.Temp4, v=c(98.26, 98.94))
+@
+From this we can estimate the p-value:
+<<>>=
+prop( ~ abs(result - 98.6) > 0.34, data = Randomization.Temp4 )
+@
+
+How do we interpret this (estimated) p-value of 0?  Is it impossible to have a sample mean so 
+far from 98.6 if the true population mean is 98.6?  No.  This merely means that we didn't see any
+such cases \emph{in our 1000 randomization samples}.   
+We might estimate the p-value as $p < 0.001$.
+
+To more accurately estimate small p-values, we must use many more randomization samples.  
+<<>>=
+Randomization.Temp4a <- do(10000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 ) 
+histogram(~result, data=Randomization.Temp4a, v=c(98.26, 98.94))
+@
+<<>>=
+prop( ~ abs(result - 98.6) > 0.34, data = Randomization.Temp4a )
+@
+
+
+\subsubsection{A different approach}
+An equivalent way to do the preceding test is based on a different way of expressing our 
+hypotheses.
+
+\begin{itemize}
+	\item $H_0$: $\mu - 98.6 = 0$
+	\item $H_a$: $\mu - 98.6 \neq 0$
+\end{itemize}
+
+Now our test statistic is 
+<<>>=
+mean( ~ BodyTemp, data=BodyTemp50) - 98.6
+@
+and we create a randomization distribution centered at 0:
+<<>>=
+Randomization.Temp5 <- do(1000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) - 98.26 ) 
+head(Randomization.Temp5, 3)
+mean( ~ result, data=Randomization.Temp5 )
+histogram(~result, data=Randomization.Temp5, v=c(0.34, -0.34))
+@
+From this we can estimate the p-value:
+<<>>=
+prop( ~ abs(result) > 0.34, data = Randomization.Temp5 )
+@
+
+Often there are multiple ways to express the same hypothesis test.
+

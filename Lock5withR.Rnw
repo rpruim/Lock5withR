@@ -1,0 +1,240 @@
+
+\documentclass[twoside]{book}
+\usepackage[margin=.9in]{geometry}
+\usepackage{kpfonts}
+\usepackage{amsmath}
+\usepackage{probstat}
+\usepackage{xstring}
+\usepackage{makeidx}
+
+\def\Prob{\operatorname{Pr}}
+\def\tnot{\operatorname{not}}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usepackage[hidenotes]{authNote}
+\usepackage[answerdelayed,exercisedelayed,lastexercise]{problems}
+
+%\def\myindex#1{\relax}
+%\def\Rindex#1{\relax}
+\def\myindex#1{\index{#1}}
+
+%\usepackage{tikz}
+
+
+\usepackage{multicol}
+\usepackage{longtable}
+\renewcommand{\arraystretch}{1.4}
+
+
+\usepackage[Bjornstrup]{fncychap}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+
+%% Now begin customising things. See the fancyhdr docs for more info.
+
+\renewcommand{\chaptermark}[1]{\thispagestyle{fancy}\markboth{{#1}}{}}
+\renewcommand{\sectionmark}[1]{\markright{{#1}}{}}
+%\renewcommand{\headrulewidth}{0pt}
+
+\newcommand{\exampleidx}[1]{{\it #1}}
+\newcommand{\defidx}[1]{{\bf #1}}
+\newcommand{\mainidx}[1]{{\bf #1}}
+\newcommand{\probidx}[1]{{{\underline{#1}}}}
+
+\newcommand{\variable}[1]{{\color{green!50!black}\texttt{#1}}}
+%\newcommand{\dataframe}[1]{{\color{blue!80!black}\texttt{#1}}}
+%\newcommand{\Rindex}[2][black]{\index{{\color{#1}\texttt{#2}}}}
+\newcommand{\Rindex}[1]{\index{\texttt{#1}}}
+\newcommand{\dataframe}[1]{{\color{blue!80!black}\texttt{#1}}\Rindex{#1}}
+\newcommand{\function}[1]{{\color{purple!75!blue}\texttt{\StrSubstitute{#1}{()}{}()}}\Rindex{#1}}
+\newcommand{\option}[1]{{\color{brown!80!black}\texttt{#1}}}
+\newcommand{\argument}[1]{{\color{brown!80!black}\texttt{#1}}}
+%\newcommand{\pkg}[1]{{\color{red!80!black}\texttt{#1}}}
+\newcommand{\pkg}[1]{{\color{red!80!black}\texttt{#1}}\Rindex{#1}}
+\renewcommand{\code}[1]{{\color{blue!80!black}\texttt{#1}}}
+% and for models
+\newcommand{\model}[2]{{$\,$\hbox{#1}\ \ensuremath{\sim}\ \hbox{#2}}}
+
+
+
+\chead{}
+\lhead[\sf \thepage]{\sf \leftmark}
+\rhead[\sf \leftmark]{\sf \thepage}
+\cfoot{}
+\lfoot[\sf Last Modified: \today]{\sf Math 145 : Fall 2013 : Pruim}
+\rfoot[\sf Math 145 : Fall 2013 : Pruim]{\sf Last Modified: \today}
+
+\pagestyle{fancy}
+
+\usepackage{sfsect}
+\usepackage{relsize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% macros %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\Chapter#1{%
+\chapter{#1}
+%\setcounter{page}{1}%
+}
+\def\R{{\sf R}}
+\def\Rstudio{{\sf RStudio}}
+\def\term#1{\textbf{#1}}
+\def\tab#1{{\sf #1}}
+
+\def\myRuleColor{\color{black!50!white}}
+
+\DefineVerbatimEnvironment{Sinput}{Verbatim} {fontsize=\small} 
+\DefineVerbatimEnvironment{Soutput}{Verbatim} {fontsize=\small} 
+\fvset{listparameters={\setlength{\topsep}{0pt}}} 
+
+\newlength{\tempfmlength}
+\newsavebox{\fmbox}
+\newenvironment{fmpage}[1]
+     {
+	 \medskip
+	 \setlength{\tempfmlength}{#1}
+	 \begin{lrbox}{\fmbox}
+	   \begin{minipage}{#1}
+		 \vspace*{.02\tempfmlength}
+		 \hfill
+	   \begin{minipage}{.95 \tempfmlength}}
+		 {\end{minipage}\hfill
+		 \vspace*{.015\tempfmlength}
+		 \end{minipage}\end{lrbox}\fbox{\usebox{\fmbox}}
+	 \medskip
+	 }
+
+
+\newenvironment{boxedText}[1][.98\textwidth]%
+{%
+\begin{center}
+\begin{fmpage}{#1}
+}%
+{%
+\end{fmpage}
+\end{center}
+}
+
+\newenvironment{boxedTable}[2][tbp]%
+{%
+\begin{table}[#1]
+  \refstepcounter{table}
+  \begin{center}
+\begin{fmpage}{.98\textwidth}
+  \begin{center}
+	\sf \large Box~\expandafter\thetable. #2
+\end{center}
+\medskip
+}%
+{%
+\end{fmpage}
+\end{center}
+\end{table}		% need to do something about exercises that follow boxedTable
+}
+
+\def\question{{\sf Q. }}
+\def\answer{{\sf A. }}
+
+\newenvironment{example}%
+{\textbf{Example. }}%
+{}
+
+
+%%%%%%%%%%%%%%%%%%%%%% title page info %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Lock5 with R: A companion to Unlocking the Power of Data}
+
+\author{Randall Pruim and Lana Park}
+
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeindex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<<setup,echo=FALSE,message=FALSE>>=
+require(grDevices)
+require(datasets)
+require(stats)
+require(lattice)
+require(grid)
+require(mosaic)
+require(vcd)
+require(fastR)
+require(Lock5Data)
+trellis.par.set(theme=col.mosaic())
+trellis.par.set(fontsize=list(text=9))
+options(keep.blank.line=FALSE)
+options(width=90)
+require(knitr)
+opts_chunk$set(
+tidy=TRUE,
+dev='pdf',
+fig.width=3, fig.height=2,
+fig.align='center',
+fig.show='hold',
+keep.source=TRUE,
+comment=NA
+)
+@ 
+\def\intersect{\tand}
+
+\parindent=0pt
+\parskip=3mm
+
+\begin{document}
+\maketitle
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+
+<<child="00-RStudio.Rnw", eval=FALSE>>=
+@
+
+<<child="01-CollectingData.Rnw">>=
+@
+
+<<child="02-DescribingData.Rnw">>=
+@
+
+<<child="03-CIs.Rnw">>=
+@
+
+<<child="04-HypothesisTests.Rnw">>=
+@
+
+
+<<child="05-Distributions.Rnw">>=
+@
+
+<<child="06-InferenceMeansProportions.Rnw">>=
+@
+
+<<child="07-ChiSquared.Rnw">>=
+@
+
+<<child="08-ANOVA.Rnw">>=
+@
+
+<<child="09-Regression.Rnw">>=
+@
+
+<<child="10-MultipleRegression.Rnw", eval=FALSE>>=
+@
+
+<<child="11-Probability.Rnw", eval=FALSE>>=
+@
+
+
+\bibliographystyle{amsalpha}
+\bibliography{StatsBook,DataSets,jamstatassoc,RS,R,kaplan}
+
+\printindex
+
+
+%\section{More Examples}
+
+\end{document}
+

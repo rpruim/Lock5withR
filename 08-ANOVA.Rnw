@@ -1,0 +1,539 @@
+\Sexpr{set_parent('Lock5withR')}
+\Chapter{Comparing More Than Two Means Using ANOVA}
+
+\def\fit#1{\textcolor{green!60!black}{#1}}
+\def\resid#1{\textcolor{red!80!black}{#1}}
+\def\structure<#1>#2{\textcolor{blue}{#2}}
+
+
+%
+% The following defintions are peculiar to this particular
+% presetation. They have nothing to do with the beamer class
+%
+\def\blank#1{\term{#1}}
+
+\newboolean{answers}
+\setboolean{answers}{true}
+
+
+
+\newcommand{\ans}[1]{
+	\ifthenelse{\boolean{answers}}{#1}{\relax}
+}
+
+\renewcommand{\answer}[1]{
+	\ifthenelse{\boolean{answers}}{#1}{\relax}
+}
+
+%\newcommand{\pand}{\operatorname{and}}
+%\newcommand{\por}{\operatorname{or}}
+%\newcommand{\Bin}{\operatorname{Bin}}
+%\newcommand{\Normal}{\operatorname{N}}
+%\newcommand{\sfrac}[2]{#1/#2}
+
+\section{The Basic ANOVA situation}
+
+\begin{itemize}
+\item
+   Two variables: categorical explanatory and quantitative response
+   \begin{itemize}
+   \item
+   Can be used in either experimental or observational designs.
+   \end{itemize}
+ \item
+   Main Question: Does the population mean response  depend on the (treatment) group?
+
+   \begin{itemize}
+   \item
+   $H_0$: the population group means are all the equal ($\mu_1 = \mu_2 = \cdots \mu_k$)
+   \item
+   $H_a$: the population group means are not all equal
+   \end{itemize}
+
+ \item
+   If categorical variable has only 2 values, we already have a method:  2-sample $t$-test
+
+\begin{itemize}
+ \item ANOVA allows for 3 or more groups (sub-populations)
+ \end{itemize}
+
+ \item $F$ statistic compares within group variation (how different are individuals in the same group?)
+ 		to between group variation (how different are the different group means?)
+
+ \item
+ ANOVA assumes that each group is normally distributed with the same (population) standard deviation.
+ \begin{itemize}
+ \item Check normality with normal quantile plots (of residuals)
+ \item Check equal standard deviation using 2:1 ratio rule 
+	 (largest standard deviation at most twice the smallest standard deviation).
+ \end{itemize}
+
+\end{itemize}
+
+\subsection{An Example: Ants and Sandwiches}
+
+
+<<ants-summary2-6>>=
+favstats( Ants ~ Filling, data=SandwichAnts )
+@
+
+<<ants1-6,fig.height=2,fig.width=4>>=
+xyplot( Ants ~ Filling, SandwichAnts, type=c('p','a') )
+bwplot( Ants ~ Filling, SandwichAnts )
+@
+
+Question: Are these differences significant?
+Or would we expect sample differences this large by random chance even 
+if (in the population) the mean amount of shift is equal for all three groups?
+
+Whether differences between the groups are significant depends on three things:
+
+   \begin{enumerate}
+   \item  the difference in the means
+   \item  the amount of variation within each group
+   \item  the sample sizes
+   \end{enumerate}
+
+<<ants-anova-6>>=
+anova( lm ( Ants ~ Filling, SandwichAnts ) )
+@
+
+The p-value listed in this output is the p-value for our null hypothesis that
+the mean population response is the same in each treatment group.
+In this case we would reject the null hypothesis at either the $\alpha=0.05$
+or $\alpha=0.01$ levels.
+
+In the next section we'll look at this test in more detail, but notice that if 
+you know the assumptions of a test, the null hypothesis being tested, and 
+the p-value, you can generally interpret the results even if you don't know 
+all the details of how the test statistic is computed.
+
+
+\newpage
+   
+\subsection{ The ANOVA test statistic  }
+
+
+\subsubsection{The ingredients}
+The ANOVA test statistic (called $F$) is based on three ingredients:
+\begin{enumerate}
+	\item
+		how different the group means are (between group differences)
+	\item
+		the amount of variability within each group  (within group differences)
+	\item
+		sample size
+\end{enumerate}
+
+Each of these will be involved in the calculation of $F$.
+
+The $F$ statistic is a bit complicated to compute.  We'll generally let the
+computer handle that for us.  But is useful to see one small example to see
+how the ingredients are baked into a test statistic.
+
+\subsubsection{A Small Dataset}
+
+Suppose we have three groups with the following response values.
+\begin{itemize}
+   \item  Group A: 5.3, 6.0, 6.7 \hfill [$\bar y_1= 6.0$] 
+   \item  Group B: 5.5, 6.2, 6.4, 5.5 \hfill [$\bar y_2= 5.8$]
+   \item  Group C: 7.5, 7.2, 7.8 \hfill [$\bar y_3= 7.5$]
+\end{itemize}
+
+\subsubsection{Computing $F$}
+First, let's represent our small data set in the more usual way:
+<<>>=
+response <- c( 5.4, 6.1, 6.8, 5.4, 6.1, 6.3, 5.4, 7.5, 7.2, 7.8 )
+group <- c( "A","A","A", "B","B","B","B", "C","C","C" )
+small <- data.frame( response = response, group = group )
+small
+@
+Now let's compute the grand mean and group means.
+<<>>=
+mean( response, data=small)  # grand mean
+mean( response ~ group, data=small)  # group means
+@
+And add those to our data frame
+<<>>=
+small <- transform(small, groupMean = c( 6.1, 6.1, 6.1, 5.8, 5.8, 5.8, 5.8, 7.5, 7.5, 7.5 ) )
+small <- transform(small, grandMean = rep( 6.4, 10 ) )
+small
+@
+
+Now we are ready to put the ingredients together:
+\begin{itemize}
+	\item
+		Between group variability: 
+		\fit{$G = \texttt{groupMean} - \texttt{grandMean}$}
+
+		This measures how different a group is from the overall average.
+
+	\item
+		Within group variability: 
+		\resid{$E = \texttt{response} - \texttt{groupMean}$}
+
+		This measures how different and individual is from its group average.
+		$E$ stands for ``error'', but just as in ``standard error" it is not a 
+		``mistake''.  It is simply measure how different an individual response is
+		from the model prediction (in this case, the group mean).
+
+		The individual values of \resid{$E$} are called \term{residuals}.
+\end{itemize}
+
+<<>>=
+small <- transform(small, M = groupMean - grandMean)
+small <- transform(small, E = response - groupMean)
+small
+@
+
+As we did with variance, we will square these differences:
+
+<<>>=
+small <- transform(small, M2 = (groupMean - grandMean)^2)
+small <- transform(small, E2 = (response - groupMean)^2)
+small
+@
+
+And then add them up (SS stands for ``sum of squares")
+
+<<tidy=FALSE>>=
+SSM <- sum( ~M2, data=small ); SSM    # also called SSG
+0.16 * 3 + 0.36 * 4 + 1.21 * 3 # alternate way to calculate
+SSE <- sum( ~E2, data=small ); SSE
+@
+
+Now we adjust for sample size using
+\begin{itemize}
+	\item
+		\fit{$MSM = SSM / DFM = SSM / (\mbox{number of groups} - 1)$}
+	\item
+		\resid{$MSE = SSE / DFE = SSE / (n - \mbox{number of groups}) $}
+\end{itemize}
+MS stands for ``mean square"
+<<tidy=FALSE>>=
+MSM <- SSM / ( 3-1); MSM
+MSE <- SSE / (10-3); MSE
+@
+
+Finally, our test statistic is 
+\[
+F = \frac{\fit{MSM}}{\resid{MSE}} 
+\]
+<<tidy=FALSE>>=
+F <- MSM / MSE; F
+@
+
+\subsection{P-values from the randomization distribution}
+
+We can now compute a p-value by comparing our value of $F$ (\Sexpr{F}) to a randomization distribution.
+If the null hypothesis is true, the three groups are really just one big group and the group labels are 
+meaningless, so we can shuffle the group labels to get a randomization distribution:
+<<>>=
+small.rand <- do(1000) * anova(lm( response ~ shuffle(group), data=small ))
+tally( ~ (F >= 10.27), data = small.rand )
+prop( ~ (F >= 10.27), data = small.rand )
+histogram( ~ F, data=small.rand, v=10.27 )
+@
+
+Since our estimated p-value is small, we have enough evidence in the data to reject the null hypothesis.
+
+\subsection{P-values without simulations}
+
+Under certain conditions, the $F$ statistic has a known distribution (called the $F$ distribution).  Those conditions 
+are
+\begin{enumerate}
+	\item 
+		The null hypothesis is true (i.e., each group has the same mean)
+	\item
+		Each group is sampled from a normal population
+	\item
+		Each population group has the same standard deviation
+\end{enumerate}
+When these conditions are met, we can use the $F$-distribution to compute the p-value without generating 
+the randomization distribution.
+\begin{itemize}
+	\item
+$F$ distributions have two parameters -- the degrees of freedom
+for the numerator and for the denominator.  
+
+In our example, this is $2$ for the numerator and $7$ for the denominator.  
+
+\item When $H_0$ is true, the numerator and denominator both have a mean of 1, 
+	so $F$ will tend to be close to 1.  
+	
+\item
+	When $H_0$ is false, there is more difference between the groups, so the numerator
+	tends to be larger.
+
+	This means we will reject the null hypothesis when $F$ gets large enough.
+
+	\item
+	The p-value is computed using \function{pf()}.
+\end{itemize}
+
+<<>>=
+1 - pf(F, 2, 7)
+@
+
+\subsection{Getting R to do the work}
+Of course, \R\ can do all of this work for us.  We saw this earlier.  Here it is again
+in a slightly different way:
+<<small-anova-6>>=
+small.model <- lm ( response ~ group, small ) 
+anova( small.model )
+@
+\function{lm()} stands for ``linear model" and can be used to fit a wide variety of
+situations.  It knows to do 1-way ANOVA by looking at the types of variables involved.
+
+The \function{anova()} prints the ANOVA table.  
+Notice how \fit{DFM}, \fit{SSM}, \fit{MSM}, 
+\resid{DFE}, \resid{SSE}, and \resid{MSE} show up in this table as well
+as $F$ and the p-value.
+
+Here is the ANOVA table for the \dataframe{SandwichAnts} example again:
+<<>>=
+anova( lm( Ants ~ Filling, data=SandwichAnts ) )
+@
+
+
+\subsubsection{Proportion of Variation Explained}
+
+The \function{summary()} function can be used to provide a different summary
+of the ANOVA model:
+
+\begin{small}
+<<small-summary-6>>=
+summary(small.model)
+@
+\end{small}
+
+The ratio
+\[ 
+R^2 = 
+\frac{\fit{SSM}}{\fit{SSM} + \resid{SSE}}
+= 
+\frac{\fit{SSM}}{SST} 
+\]
+measures the proportion of the total variation that is explained by 
+the grouping variable (treatment).  
+
+\subsection{An Example: Jet Lag}
+
+<<blisters-6, echo=FALSE>>=
+blisters <- data.frame(
+	time = c( 5,6,6,7,7,8,9,10,
+              7,7,8,9,9,10,10,11,
+              7,9,9,10,10,10,11,12,13),
+	treatment=c(rep('A',8), rep('B', 8), rep('P',9))
+	)
+small <- data.frame(
+	response = c(
+	5.3, 6.0, 6.7, 
+	5.5, 6.2, 6.4, 5.7,
+	7.5, 7.2, 7.9),
+	group = toupper(letters[c(1,1,1,2,2,2,2,3,3,3)])
+	)
+@
+
+<<jetlag-summary-6>>=
+require(abd)
+favstats( shift ~ treatment, data=JetLagKnees )
+@
+
+<<jetlag1-6,fig.height=2,fig.width=4>>=
+xyplot( shift ~ treatment, data=JetLagKnees, type=c('p','a') )
+bwplot( shift ~ treatment, data=JetLagKnees )
+@
+
+<<>>=
+jetlag.model <- lm( shift ~ treatment, data=JetLagKnees )
+anova(jetlag.model)
+
+@
+
+\subsubsection{Diagnositic Plots}
+We can use \function{plot()} to create some diagnostic plots.  The first two are 
+the most important for our purposes.  The provide a \term{residual plot} and a 
+\term{normal-quantile plot of residuals}.
+<<small-plot-6,fig.out=".47\\textwidth",fig.height=3.5>>=
+plot(small.model, w=1:2)
+@
+The residual plot shows the residual broken down by groups (actually by group means).  
+Ideally we should see similar patterns of variation in each cluster.
+The second plot is a normal-quantile plot of the residuals.  Since the differences 
+from the group means should be normally distributed with the same standard deviation, 
+we can combine all the residuals into a single normal-quantile plot.  
+
+\subsection{Back to Jet Lag}
+
+Here is all the code needed to analyze the jet lag experiment
+\begin{small}
+<<jetlag-reprise-6,fig.height=3.5>>=
+jetlag.model <- lm( shift ~ treatment, JetLagKnees )
+anova(jetlag.model)
+summary(jetlag.model)
+plot(jetlag.model, w=1:2)
+@
+\end{small}
+
+\section{Confidence Intervals for One Mean At a Time}
+
+We can construct a confidence interval for any of the means by just 
+taking a subset of the data and using \function{t.test()}, but there 
+are some problems with this approach.  Most importantly,
+\begin{quote}
+We were primarily interested in comparing the means across 
+the groups.  Often people will display confidence intervals for 
+each group and look for ``overlapping'' intervals.  But this is 
+not the best way to look for differences.
+\end{quote}
+Nevertheless, you will sometimes see graphs showing multiple confidence
+intervals and labeling them to indicate which means appear to be 
+different from which.  (See the solution to problem 15.3 for an example.)
+
+\section{Pairwise Comparison}
+
+We really want to compare groups in pairs, and we have a method for this:
+2-sample $t$.  But we need to make a couple adjustments to the 
+two-sample $t$.
+\begin{enumerate}
+\item 
+We will use a new formula for standard error that makes use of all the data
+(even from groups not involved in the pair).
+\item
+We also need to adjust the critical value to take into account 
+the fact that we are (usually) making multiple comparisons.
+\end{enumerate}
+
+\subsection{The Standard Error}
+
+\[SE 
+=  \sqrt{MSE \left( \frac{1}{n_i} + \frac{1}{n_j} \right) } 
+=  \sqrt{MSE} \sqrt{ \frac{1}{n_i} + \frac{1}{n_j}  } 
+\]
+
+where $n_i$ and $n_j$ are the sample sizes for the two groups being 
+compared.  Basically, $\sqrt{MSE}$ is taking the place of $s$ in our 
+usual formula.
+The degrees of freedom for this estimate is 
+\[
+DFE =  
+\mbox{total sample size} - \mbox{number of groups}
+\;.
+\]
+
+Ignoring the multiple comparisons issue, we can now compute confidence intervals
+or hypothesis tests just as before.  
+
+\begin{itemize}
+\item confidence interval:  
+\[
+\mean{y}_i - \mean{y}_j \pm t_* SE
+\]
+\item test statistic (for $H_0$: $\mu_1 - \mu_2 = 0$):  
+\[ t = \frac{ \mean{y}_i - \mean{y}_j }{SE}\;. \]
+\end{itemize}
+
+\subsection{The Multiple Comparisons Problem}
+
+Suppose we have 5 groups in our study and we want to make comparisons
+between each pair of groups.  That's $4 + 3 + 2 +1 = 10$ pairs.
+If we made 10 independent 95\% confidence intervals, the probability
+that all of the cover the appropriate parameter is \Sexpr{round(.95^10,3)}:
+<<>>=
+.95^10
+@
+So we have \term{family-wide error rate} of 
+nearly \Sexpr{round(100*(1-.95^10))}\%.
+
+We can correct for this by adjusting our critical value.  Let's take a simple
+example: just two 95\% confidence intervals.  
+The probability that both cover (assuming independence) is
+<<>>=
+.95^2
+@
+Now suppose we want both intervals to cover 95\% instead of 
+\Sexpr{round(100 * .95^2,1)}\% of the time.  We could get this by
+forming two \Sexpr{round(100 * sqrt(.95), 1)}\% confidence intervals.
+<<>>=
+sqrt(.95);
+.975^2
+@
+This means we need a larger value for $t_*$ for each interval.
+
+The ANOVA situation is a little bit more complicated because
+\begin{itemize}
+\item
+There are more than two comparisons.
+\item
+The different comparisons are not independent (because they all come from
+the same data set.)
+\end{itemize}
+
+We will briefly describe two ways to make an adjustment for multiple 
+comparisons.
+
+\subsection{Bonferroni Corrections -- An Easy Over-adjustment}
+
+Bonferroni's idea is simple:  Simple divide the desired family-wise error rate
+by the number of tests or intervals.  This is an over-correction, but it is
+easy to do, and is used in many situations where a better method is not known
+or a quick estimate is desired.
+
+Here is a table showing a few Bonferroni corrections for 
+looking at all pairwise comparisons.
+
+\begin{center}
+\begin{tabular}{ccccc}
+\hline
+number & number of & family-wise & individual & confidence level
+\\[-2mm]
+groups & pairs of groups & error rate & error rate & for determining $t_*$
+\\
+\hline
+3 & 3 & .05 & \Sexpr{round(.05/3,3)} & \Sexpr{round( 1 - .05/3, 3)}
+\\
+4 & 6 & .05 & \Sexpr{round(.05/6,3)} & \Sexpr{round( 1 - .05/6, 3)}
+\\
+5 & 10 & .05 & \Sexpr{round(.05/10,3)} & \Sexpr{round( 1 - .05/10, 3)}
+\\
+\hline
+\end{tabular}
+\end{center}
+Similar adjustments could be made for looking at only a special
+subset of the pairwise comparisons.
+
+\subsection{Tukey's Honest Significant Differences}
+Tukey's Honest Significant Differences is a better adjustment method
+specifically designed for making all pairwise comparisons in 
+an ANOVA situation.  (It takes into account the fact that the 
+tests are not independent.)
+\R\ can compute Tukey's Honest Significant Differences easily.
+\begin{center}
+<<tukey1-6, fig.width=4,fig.height=3.0>>=
+TukeyHSD ( lm ( shift ~ treatment, JetLagKnees ) )
+plot( TukeyHSD ( lm ( shift ~ treatment, JetLagKnees ) ) )
+@
+\end{center}
+
+
+%The plot labeling is often poor because it is hard to fit in the long labels
+%and the code for this plot was not written particularly carefully.
+
+Tukey's method adjusts the confidence intervals, making them a bit wider, 
+to give them the desired family-wide error rate.  
+Tukey's method also adjusts p-values (making them larger), so that when the means
+are all the same, there is only a 5\% chance that a sample will produce any
+p-values below 0.05.
+
+In this example we see that the eye group differs significantly from control
+group and also from the knee group, but that the knee and control groups 
+are not significantly different.  (We can tell this by seeing which confidence 
+intervals contain 0 or by checking which adjusted p-values are less than 0.05.)
+
+\subsection{Other Adjustments}
+There are similar methods for testing other sets of multiple comparisons.  
+Testing ``one against all the others'' goes by the name of Dunnet's method,
+for example.   This is useful when one group represents a control against which
+various treatments are being compared.
+

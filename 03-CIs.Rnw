@@ -1,0 +1,285 @@
+\Sexpr{set_parent('Lock5withR.Rnw')}
+
+\Chapter{Confidence Intervals}
+
+\section{Sampling Distributions}
+
+The key idea in this chapter is the notion of a sampling distribution.  Do not confuse it with 
+the population (what we would like to know about) or the sample (what we actually have data about).
+If we could repeatedly sample from a population, and if we computed a statistic from each sample,
+the distribution of those statistics would be the sampling distribution.  Sampling distributions
+tell us how things vary from sample to sample and are the key to interpreting data.
+
+\begin{boxedText}
+	The standard deviation of a sampling distribution is called the \textbf{standard error}, 
+	denoted $SE$.
+\end{boxedText}
+
+The standard error is our primary way of measuring how much variability there is from sample statistic
+to sample statistic, and therefore how precise our estimates are.
+
+
+\section{Interval Estimates}
+
+\begin{boxedText}
+An \term{interval estimate} 
+gives a range of plausible values for a population parameter.  
+\end{boxedText}
+
+This is better than a single number (also called a point estimate) because it gives some 
+indication of the precision of the estimate.
+
+\subsection{Margin of Error}
+One way to express an interval estimate is with a point estimate and a \term{margin of error}.
+
+\begin{center}
+\includegraphics[width=.75\textwidth]{images/2012PresElectionPolls}
+\end{center}
+
+We can convert margin of error into an interval by adding and subtracting the margin of error to/from
+the statistic.  So for the Gallup Poll, the interval would be
+
+\[
+0.50 \pm 0.02 \mbox{ which is the same as } (0.48, 0.52)
+\]
+So Gallup is claiming that any election result in which Obama received between 48\% and 52\% of the vote
+would be plausible.
+
+The actual election results? 50.4\% voted for Obama.
+Notice that 0.504 is inside the confidence interval $.50 \pm 0.02$.
+
+\begin{boxedText}
+A confidence interval for a parameter is an interval computed from sample data
+by a method that will capture the parameter for a specified proportion of all
+samples
+\end{boxedText}
+
+\begin{enumerate}
+	\item The probability of correctly containing the parameter is called the coverage rate or \term{confidence level}.
+	\item So 95\% of 95\% confidence intervals contain the parameter being estimated.
+	\item The margins of error in the tables above were designed to produce 95\% confidence intervals.
+\end{enumerate}
+
+\subsection{Using the standard error to compute a margin of error}
+
+In many (but not all) situations, the sampling distribution is 
+\begin{itemize}
+	\item unimodal,
+	\item symmetric, and
+	\item bell-shaped
+\end{itemize}
+(The technical phrase is ``approximately normal''.)  In these situations, a 95\% confidence interval can be estimated 
+with
+\[ 
+\mbox{statistic} \pm 2 SE
+\]
+
+\textbf{Example.}  A large sample of American adults the mean body mass index was $27.655$.  The standard 
+error was $0.009$. The 95\% confidence interval is therefore 
+\[
+27.655 \pm 0.018
+\]
+
+
+The important question remains:  If we don't have access to the entire population, and we only get to look at one sample,
+how do we tell the shape of the sampling distribution and estimate its standard error?  Stay tuned.
+
+\section{The Bootstrap}
+
+Here's the clever idea:  We don't have the population, but we have a sample.  Probably the sample it similar to the population
+in many ways.  So let's sample from our sample.  We'll call it \textbf{resampling} (also called \textbf{bootstrapping}).
+We want samples the same size as our original sample, so we will need to sample with replacement.  This means that we 
+may pick some members of the population more than once and others not at all.  We'll do this many times, however, so 
+each member of our sample will get its fair share.
+
+In class we did two examples by physical manipulation.
+
+\begin{itemize}
+	\item
+		We estimated the proportion of blue milk jug lids by drawing milk jug lids out of 
+		paper sacks (sample size was $n=10$)
+	\item
+		We estimated the mean commute time in Atlanta by placing commute times on
+		cards and shuffling them (again the sample size was $n=10$)
+\end{itemize}
+
+
+Let's see how this works in an example with a larger data set.  It would be really tedious to do that kind mixing and 
+shuffling physically, but the computer can easily do all of the resampling (and also the computation of statistics) for us.  
+\subsection{Method 1: statistic $\pm$ 2 SE}
+
+The example below uses data from 500 Atlanta commuters.
+<< warning=FALSE>>=
+x.bar <- mean( ~Time, data=CommuteAtlanta ); x.bar  # mean commute time in original sample
+mean( ~Time, data=resample(CommuteAtlanta) )  # mean commute time in one resample
+mean( ~Time, data=resample(CommuteAtlanta) )  # mean commute time in another resample
+
+# Now we'll do it 1000 times
+Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta)) 
+@
+We should check that that our bootstrap distribution has an appropriate shape:
+<<warning=FALSE>>=
+histogram(~result, data=Bootstrap, n=30)
+dotPlot(~result, data=Bootstrap, n=50)
+@
+Since the shape of the bootstrap distribution looks good, we can estimate the standard error and use 
+it to compute a 95\% confidence interval.
+<<tidy=FALSE>>=
+# Estimate the standard error
+SE <- sd( ~result, data=Bootstrap ); SE       # standard error
+MoE <- 2 * SE; MoE                            # margin of error for 95% CI
+x.bar - MoE                                   # lower limit of 95% CI
+x.bar + MoE                                   # upper limit of 95% CI
+@
+
+The same steps used in this example, get used in a wide variety of confidence interval situations.
+\begin{enumerate}
+	\item 
+		Compute the statistic from the original sample.
+	\item
+		Create a bootstrap distribution by resampling from the sample.
+		\begin{enumerate}
+			\item same size samples as the original sample
+			\item with replacement
+			\item compute the statistic for each sample
+		\end{enumerate}
+		The distribution of these statistics is the bootstrap distribution
+	\item
+		Estimate the standard error $SE$ by computing the standard deviation of the bootstrap distribution.
+	\item
+		95\% CI is \[ \mbox{statistic} \pm 2 SE \]
+\end{enumerate}
+
+\subsection{Another way to compute a confidence interval}
+
+Another way to create a 95\% confidence interval is to use the middle 95\% of the bootstrap distribution.
+The \function{cdata()} function can compute this for us as follows:
+<<>>=
+cdata( .95, result, data=Bootstrap )
+@
+This is not exactly the same as the interval above, but it is pretty close.
+
+One advantage of this method is that it is easy to change the confidence level.  To make a 90\% confidence interval,
+we use the middle 90\% of the bootstrap distribution instead.
+<<>>=
+cdata( .90, result, data=Bootstrap )
+@
+Notice that this interval is narrower.  This will always be the case.  Higher levels of confidence 
+lead to wider confidence intervals.
+
+(Method 1 can also be adjusted for other confidence levels as well -- 
+the number 2 needs to be replaced by an appropriate alternative.)
+
+
+\section{More Examples}
+
+This section contains the R code for some additional examples (with minimal discussion)
+
+\subsection{Comparing two proportions}
+
+<<tidy=FALSE>>=
+tally( play ~ playVer, data=littleSurvey )
+prop( play ~ playVer, data=littleSurvey )
+stat <- diff( prop( play ~ playVer, data=littleSurvey ) ); stat
+Boot.Play <- do(1000) * diff(prop( play ~ playVer, data=resample(littleSurvey) ))
+head(Boot.Play)
+histogram(~ no.v2, data=Boot.Play)
+@
+<<>>=
+SE <- sd( ~ no.v2, data=Boot.Play ); SE
+stat - 2 * SE
+stat + 2 * SE
+cdata( .95, no.v2, data=Boot.Play )
+@
+Again, the two confidence intervals are similar.
+
+Notice importantly that 0 is not in these intervals.  That means all the plausible values
+for the difference between the proportions have the version 2 respondents more likely to 
+\emph{not} go to the play.
+
+\subsection{Comparing two means}
+We can compare two means in a similar way.  Let's estimate the difference 
+between mean pulse for men and women (based on a sample of students in an introductory
+statistics course at another institution).
+
+<<tidy=FALSE>>=
+mean( Pulse ~ Sex, data=StudentSurvey )
+stat <- diff(mean(  Pulse ~ Sex, data=StudentSurvey )); stat
+Boot.Pulse <- do(1000) * diff(mean(  Pulse ~ Sex, data=resample(StudentSurvey) ))
+head(Boot.Pulse, 3)
+histogram( ~ Male, data=Boot.Pulse )
+@
+<<>>=
+SE <- sd( ~ Male, data=Boot.Pulse ); SE
+stat - 2 * SE
+stat + 2 * SE
+cdata( .95, Male, data=Boot.Pulse )
+@
+
+\subsection{One proportion -- from data}
+
+What percent of students smoke?
+
+<<>>=
+stat <- prop( ~ Smoke, data=StudentSurvey ); stat
+Boot.Smoke <- do(1000) * prop( ~ Smoke, data=resample(StudentSurvey) )
+head(Boot.Smoke, 3)
+histogram( ~No, data=Boot.Smoke )
+@
+<<>>=
+SE <- sd( ~No, data=Boot.Smoke )
+stat - SE
+stat + SE
+cdata( .95, No, data=Boot.Smoke )
+@
+
+\subsection{One proportion -- from a data summary}
+
+Here is a report from a recent USA Today poll:
+\begin{center}
+	\includegraphics[width=.7\textwidth]{images/ObamaCarePoll}
+\end{center}
+
+Let's compute a 95\% confidence interval for the proportion of people
+disapprove of the way Obama is handling health care policy.
+This time we don't have data, but we can still simulate the bootstrap distribution --
+this time we will use \function{rflip()}.
+
+<<>>=
+stat <- 0.53
+Boot.Poll <- do(1000) * rflip(1503, .53)
+head(Boot.Poll, 3)
+histogram(~ prop, data=Boot.Poll)
+@
+<<>>=
+SE <- sd(~prop, data=Boot.Poll); SE
+2 * SE             # margin of error
+stat - 2 * SE      # lower end of interval
+stat + 2 * SE      # upper end of interval
+cdata( .95, prop, data=Boot.Poll) # quantile method
+@
+These results are consistent with USA Today's claim that the margin of error is $\pm 3\%$.
+
+\subsection{A non-example: Estimating the median from a small sample}
+
+<<>>=
+median( ~ Price, data=MustangPrice )
+Boot.Mustang <- do( 1000 ) * median( ~Price, data=resample(MustangPrice) )
+head(Boot.Mustang, 3)
+histogram( ~ result, data=Boot.Mustang, n=50 )
+@
+
+This time the histogram does not have the desired shape.  There are two problems:
+\begin{enumerate}
+	\item
+		The distribution is not symmetric.  (It is right skewed.)
+	\item
+		The distribution has spikes and gaps.
+
+Since the median must be
+an element of the sample when the sample size is 25, there are only 25 possible values for the median (and some of 
+these are \emph{very} unlikely.
+\end{enumerate}
+Since the bootstrap distribution does not look like a normal distribution (bell-shaped, symmetric), we cannot safely use 
+our methods for creating a confidence interval.
+

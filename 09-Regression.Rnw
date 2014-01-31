@@ -1,0 +1,591 @@
+\Sexpr{set_parent('Lock5withR')}
+\Chapter{Regression}
+
+\section{Simple Linear Regression}
+
+\subsection{The Simple Linear Regression Model}
+
+\[
+Y = \beta_0 + \beta_1 x + \epsilon  \qquad \mbox{where $\epsilon \sim \Norm(0,\sigma)$.}
+\]
+
+In other words:
+\begin{itemize}
+\item
+The mean response for a given predictor value $x$ is given by a linear formula
+\[
+\mbox{mean response} = \beta_0 + \beta_1 x
+\]
+\item
+The distribution of all responses for a given predictor value $x$ is normal.
+\item
+The standard deviation of the responses is the same for each predictor value.
+\end{itemize}
+
+One of the goals in simple linear regression is to estimate this linear relationship -- that
+is to estimate the intercept and the slope.
+
+
+\subsection{The Least Squares Method}
+
+Of course, there are lots of lines.
+We want to determine the line that fits the data best. But what does that mean?
+
+The usual method is called the \term{method of least squares} and  chooses the line that has the 
+\emph{ smallest possible sum of squares of residuals}, where residuals are defined by
+
+\[
+\mbox{residual} = \mbox{observed response} - \mbox{predicted response}
+\]
+
+For a line with equation $y = b_0 + b_1 x$, this would be 
+\[
+e_i = y_i - (b_0 + b_1 x) 
+\]
+
+Simple calculus (that you don't need to know) allows us to compute the best
+$b_0$ and $b_1$ possible.  These best values define the least squares regression line.
+Fortunately, statistical software packages do all this work for us.  In \R,
+the command that does this is \function{lm()}.
+
+\subsection{Getting R to Compute Regression Lines}
+
+\subsubsection{Florida Lakes}
+
+<<>>=
+xyplot( AvgMercury ~ pH, data=FloridaLakes, type=c('p','r') )
+lm( AvgMercury ~ pH, data=FloridaLakes )
+@
+<<include=FALSE>>=
+lake.coefs <- do(1) * lm( AvgMercury ~ pH, data=FloridaLakes )
+@
+You can get terser output with
+<<>>=
+coef( lm( AvgMercury ~ pH, data=FloridaLakes ) )  # just show me the coefficients
+@
+
+From these coefficients, we see that our regression equation is 
+
+\[
+\widehat{\mbox{AvgMercury}} = \Sexpr{lake.coefs$Intercept} + \Sexpr{lake.coefs$pH} \cdot \mbox{pH}
+\]
+
+So for example, this suggests that the average average mercury level 
+(yes, that's two averages\footnote{For each lake, the average mercury level is calculated.  Different 
+lakes will have different average mercury levels.  Our regression line is estimating the average
+of these averages for lakes with a certain pH.}) 
+for lake with a pH of 6 is approximately
+\[
+\widehat{\mbox{AvgMercury}} 
+= 
+\Sexpr{lake.coefs$Intercept} + \Sexpr{lake.coefs$pH} \cdot \mbox{6.0}
+=
+\Sexpr{lake.coefs$Intercept + lake.coefs$pH * 6.0}
+\]
+
+\subsubsection{Inkjet Printers}
+Here's another example in which we want to predict the price of an inkjet printer from the number of pages
+it prints per minute (ppm).
+
+<<>>=
+xyplot( Price ~ PPM, data=InkjetPrinters, type=c('p','r') )
+lm( Price ~ PPM, data=InkjetPrinters )
+@
+<<include=FALSE>>=
+ink.coefs <- do(1) * lm( Price ~ PPM, data=InkjetPrinters )
+@
+You can get terser output with
+<<>>=
+coef( lm( Price ~ PPM, data=InkjetPrinters ) )
+@
+
+So our regression equation is 
+
+\[
+\widehat{\mbox{Price}} = \Sexpr{ink.coefs$Intercept} + \Sexpr{ink.coefs$PPM} \cdot \mbox{PPM}
+\]
+
+For example, this suggests that the average price for inkjet printers that print 3 pages per minute is
+\[
+\widehat{\mbox{Price}} 
+= 
+\Sexpr{ink.coefs$Intercept} + \Sexpr{ink.coefs$PPM} \cdot \mbox{3.0}
+=
+\Sexpr{ink.coefs$Intercept + ink.coefs$PPM * 3.0}
+\]
+
+
+\section{Inference (Confidence Intervals and Hypothesis Tests)}
+
+\subsection{Bootstrap}
+
+So how good are these estimates?  We would like have interval estimates
+rather than just point estimates.  One way to get interval estimates for the coefficients is 
+to use the bootstrap.
+
+\subsubsection{Florida Lakes}
+<<>>=
+boot.lakes <- do(1000) * lm( AvgMercury ~ pH, data=resample(FloridaLakes) )
+head(boot.lakes,2)
+dotPlot( ~ pH, data=boot.lakes, width=.003 )
+dotPlot( ~ Intercept, data=boot.lakes, width=.02 )
+histogram( ~ pH, data=boot.lakes, width=0.01 )
+histogram( ~ Intercept, data=boot.lakes, width=0.1 )
+@
+<<>>=
+cdata(.95, pH, boot.lakes)
+cdata(.95, Intercept, boot.lakes)
+@
+
+\subsubsection{Inkjet Printers}
+<<>>=
+boot.printers <- do(1000) * lm( Price ~ PPM, data=resample(InkjetPrinters) )
+head(boot.printers,2)
+histogram( ~ PPM, data=boot.printers )
+histogram( ~ Intercept, data=boot.printers )
+cdata(.95, PPM, boot.printers)
+cdata(.95, Intercept, boot.printers)
+@
+
+\subsection{Using Standard Errors}
+We can also compute confidence intervals using
+\[
+\mbox{estimate} \pm t_* SE
+\]
+The formulas for $SE$ are quite a bit more complicated in this case, 
+But \R\ will calculate them for us.  For $t_*$ we use $n-2$ degrees of freedom.
+(The other two degrees of freedom go for estimating the intercept and the slope).
+
+\subsubsection{Florida Lakes}
+<<>>=
+summary( lm( AvgMercury ~ pH, data=resample(FloridaLakes) ) )
+@
+The $t_*$ value is based on $DFE$, the degrees of freedom for the errors (residuals).  
+For simple linear regression, the error degrees of freedom is $n-2 = 51$.
+For a 95\% confidence interval, we first compute $t_*$:
+<<>>=
+t.star <- qt(.975, df=51); t.star
+@
+
+So we get the following confidence intervals for intercept
+\begin{align*}
+1.63  &\pm t_* SE 
+\\
+1.63 &\pm \Sexpr{t.star} \cdot 0.2118 
+\\
+1.63 &\pm \Sexpr{t.star * 0.2118}
+\end{align*}
+and the slope
+\begin{align*}
+-0.153  &\pm t_* SE 
+\\
+-0.153 & \Sexpr{t.star} \cdot 0.0319 
+\\
+-0.153 & \pm \Sexpr{t.star * 0.0319}
+\end{align*}
+
+Of course, \R\ can compute the confidence intervals for us:
+
+<<>>=
+confint( lm( AvgMercury ~ pH, data=resample(FloridaLakes) ) )             # 95% CI
+confint( lm( AvgMercury ~ pH, data=resample(FloridaLakes) ), level=.99 )  # 99% CI
+@
+
+In fact, the \function{confint()} function can be applied to data sets containing bootstrap
+distributions, too.  
+This makes it even easier to calculate bootstrap confidence intervals.  We even have a choice
+between (a) using the standard error as estimated by taking the standard deviation of the bootstrap
+distribution or (b) using the percentile method:
+<<>>=
+confint(boot.lakes)                # 95% CIs for each parameter
+confint(boot.lakes, method="perc") # 95% CIs for each parameter; percentile method
+confint(boot.lakes, "pH", level=.98, method=c("stderr","perc"))  # 98% CI just for pH, both methods
+@
+
+\subsubsection{Inkjet Printers}
+<<>>=
+summary( lm( Price ~ PPM, data=resample(InkjetPrinters) ) )
+confint( lm( Price ~ PPM, data=resample(InkjetPrinters) ), "PPM" )
+confint( boot.printers, "PPM" )
+@
+
+\subsection{Hypothesis Tests}
+
+The summary of linear models includes the results of some hypothesis tests:
+<<>>=
+summary( lm( AvgMercury ~ pH, data=FloridaLakes ) )
+@
+Of these the most interesting is the one in the row labeled \variable{pH}.  This is a test of 
+\begin{itemize}
+	\item $H_0: \beta_1 = 0$
+	\item $H_a: \beta_1 \neq 0$
+\end{itemize}
+The test statistic $t = \frac{\hat{\beta}_1 - 0}{SE}$ is converted to a p-value using a t-distribution
+with $DFE = n-2$ degrees of freedom.
+<<tidy=FALSE>>=
+t <- -0.1523 / 0.0303; t
+2 * pt( t, df = 51 )     # p-value
+@
+
+We could also estimate this p-value using randomization.  If $\beta_1 = 0$, then the model equation 
+becomes
+
+\[\mbox{response} = \beta_0 + \varepsilon \]
+so the explanatory variable doesn't matter for determining the response.  
+This means we can simulate a world in which 
+the null hypothesis is true by shuffling the explanatory variable:
+<<>>=
+rand.lakes <- do(1000) * lm( AvgMercury ~ shuffle(pH), data=FloridaLakes )
+histogram(~pH, data=rand.lakes, v=0)
+2 * prop( ~ (pH <= -0.1523), data=rand.lakes )    # p-value from randomization distribution
+@
+In this case, none of our 1000 resamples produced such a small value for $\hat \beta_1$.  This is 
+consistent with the small p-value computed previously.
+
+\subsubsection{Explanatory and Response Variables Matter}
+It is important that 
+the explanatory variable be the ``\variable{x}'' variable
+and the response variable be the ``\variable{y}'' variable
+when doing regression.
+
+
+\subsection{What Does the Slope Tell Us?}
+
+The slope is usually more interesting because it tells useful things about
+the relationship between the explanatory and response variable.
+\begin{enumerate}
+\item
+If the slope is 0, then our model becomes
+
+\[
+Y = b_0 + \epsilon  \qquad \epsilon \sim \Norm(0,\sigma)
+\]
+That is, $Y \sim \Norm(b_0,\sigma)$ and knowing the explanatory variable does
+not help us predict the response.
+
+The test of whether $\beta_1=0$ is therefore called the model utility test: it tells
+us whether the model is useful.
+\item
+If the slope is not $0$, then the slope tells us how much the average response
+changes for each unit increase in the predictor.
+\end{enumerate}
+
+\subsection{What Does the Intercept Tell Us?}
+The intercept on the other hand, tells us what happens when the predictor is 0,
+which may be very uninteresting, especially if the predictor can't be 0.  
+(Suppose your predictor is your pulse, for example.)
+\section{ANOVA for Regression}
+
+We can also think about regression as a way to analyze the variability in the response.
+<<>>=
+anova( lm( AvgMercury ~ pH, data=FloridaLakes ) )
+@
+
+This is a lot like the ANOVA tables we have seen before.  This time:
+
+\begin{align*}
+	SST &= \sum (y - \mean{y})^2
+	\\
+	SSE &= \sum (y - \hat{y})^2
+	\\
+	SSM &= \sum (\hat{y} - \mean{y})^2
+	\\
+	SST &= SSM + SSE
+\end{align*}
+As before, when $SSM$ is large and $SSE$ is small, then the model ($\hat y = \hat\beta_0 + \hat\beta_1 x$)
+explains a lot of the variability and little is left unexplained ($SSE$).  On the other hand, if $SSM$ is small
+and $SSE$ is large, then the model explains only a little of the variability and most of it is due to things not
+explained by the model.
+
+The percentage of explained variability is denoted $r^2$ or $R^2$:
+
+\[
+R^2 = \frac{SSM}{SST} = \frac{SSM}{SSM + SSE}
+\]
+
+For our the Florida lakes study, we see that 
+\begin{itemize}
+	\item
+		$SSM = 2.00$
+	\item
+		$SSE = 4.05$
+	\item
+		$SST = 2.00 + 4.05 = 6.05$
+	\item
+		$R^2 = \frac{SSM}{SST} = \frac{2}{6.05} = \Sexpr{2/6.05}$
+
+		This number is listed as ``Multiple R-squared" on the summary output.
+
+		So pH explains roughly 1/3 of the variability in mercury levels.  The other two thirds of 
+		the variability in mercury levels is due to other things.  (We can think of many things that
+		might matter: size of the lake, depth of the lake, types of fish in the lake, types of 
+		plants in the lake, proximity to industrialization -- highways, streets, manufacturing plants, etc.)
+		More complex studies might investigate the effects of several such factors simultaneously.
+\end{itemize}
+
+
+
+\subsubsection{The correlation coefficient}
+The square root of this (with a sign to indicate whether the association between explanatory and response 
+variables is positive or negative) is called the correlation coefficient, $R$ (or $r$).  Here are some important
+facts about $R$:
+\begin{enumerate}
+	\item
+		$R$ is always between -1 and 1
+	\item
+		$R$ is 1 or -1 only if all the dots fall exactly on a line.
+	\item
+		If the relationship between the explanatory and response variables is not roughly
+		linear, then $R$ is not a very useful number.  (And simple linear regression is not 
+		very useful either).
+	\item
+		For linear relationships, $R$ is a measure of the strength of the relationship.  If $R$ is close to
+		1 or -1, the linear association is strong.  If it is closer to 0, the linear association is weak (with lots
+		of scatter about the best fit line).
+\end{enumerate}
+
+
+
+\subsection{Two facts about the regression line}
+
+We always compute these values using software, but it is good to note that 
+the least squares line satisfies two very nice properties.
+\begin{enumerate}
+\item
+The point $(\mean x, \mean y)$ is on the line. 
+
+This means that $\mean y = b_0 + b_1 \mean x$  (and $b_0 = \mean y - b _1 \mean x$)
+\item
+The slope of the line is $\displaystyle b_1 = r \frac{s_y}{s_x}$.
+\end{enumerate}
+
+Since we have a point and the slope, it is easy to compute the equation for the line
+if we know $\mean x$, $s_x$, $\mean y$, $s_y$, and $r$.
+
+
+
+\section{Making Predictions}
+
+\subsection{Point Estimates for Response}
+It may be very interesting to make predictions when the explanatory variable has some other value, however.
+There are two ways to do this in \R.  One uses the \function{predict()} function.  It is simpler, however,
+to use the \function{makeFun()} function in the \pkg{mosaic} package, so that's the approach we will use here.
+
+First, let's build our linear model and store it.
+<<>>=
+lakes.model <- lm( AvgMercury ~ pH, data=FloridaLakes )
+coef(lakes.model)
+@
+
+Now let's create a function that will estimate values of \variable{AvgMercury} for a given
+value of \variable{pH}:
+<<>>=
+mercury <- makeFun( lakes.model )
+@
+We can now input a pH value and see what our least squares regression line predicts for the average mercury level
+in the fish:
+<<>>=
+mercury(pH=5)   # estimate AvgMercury when pH is 5
+mercury(pH=7)   # estimate AvgMercury when pH is 5
+@
+
+\subsection{Interval Estimates for the Mean and Individual Response}
+\R\ can compute two kinds of confidence intervals for the response for a given value
+\begin{enumerate}
+\item
+A confidence interval for the \emph{mean response} for  a \emph{given explanatory value} 
+can be computed by adding \verb!interval='confidence'!.  
+<<>>=
+mercury(pH=5, interval='confidence')
+@
+\item
+An interval for an \emph{individual response} (called a prediction interval to 
+avoid confusion with the confidence interval above) 
+can be computed by adding \verb!interval='prediction'! instead.  
+<<>>=
+mercury(pH=5, interval='prediction')
+@
+
+Prediction intervals 
+\begin{enumerate}
+\item are much wider than confidence intervals
+\item are very sensitive to the assumption that the population normal for each value of the predictor.
+\item are (for a 95\% confidence level) a little bit wider than 
+\[
+\hat y \pm 2 SE
+\]
+where $SE$ is the ``residual standard error'' reported in the summary output.
+\begin{enumerate}
+\item[]
+The prediction interval is a little wider because it takes into account 
+the uncertainty in our estimated slope and intercept as well as the 
+variability of responses around the true regression line.
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+
+The figure below shows the confidence (dotted) and prediction (dashed) intervals 
+as bands around the regression line.  
+\begin{center}
+<<lion-lmbands>>=
+require(fastR)
+xyplot( AvgMercury ~ pH, data=FloridaLakes, panel=panel.lmbands, cex=.6, alpha=.5)
+@
+\end{center}
+As the graph illustrates, the intervals are narrow near 
+the center of the data and wider near the edges of the data.  
+It is not safe to extrapolate beyond the data (without additional information), 
+since there is no data to let us know whether the pattern of the data extends.
+
+\section{Regression Cautions}
+
+\subsection{Don't Fit a Line If a Line Doesn't Fit}
+
+When doing regression you should always look at the data to see if a line 
+is a good fit.  If it is not, it may be that a suitable transformation of one
+or both of the variables may improve things.  Or perhaps some other method is 
+required.
+
+\subsubsection{Anscombe's Data}
+Anscombe illustrated the importance of looking at the data by concocting an
+interesting data set.
+
+Notice how similar the numerical summaries are for these for pairs of 
+variables
+<<>>=
+summary( lm( y1 ~ x1, anscombe) )
+@
+<<>>=
+summary( lm( y2 ~ x2, anscombe) )
+@
+<<>>=
+summary( lm( y3 ~ x3, anscombe) )
+@
+<<>>=
+summary( lm( y4 ~ x4, anscombe) )
+@
+
+But the plots reveal that very different things are going on.
+\begin{center}
+<<anscombe,fig.width=6,fig.height=2,out.width='.7\\textwidth',echo=FALSE>>=
+ddd <- with(anscombe, data.frame( 
+	x=c(x1,x2,x3,x4), 
+	y=c(y1,y2,y3,y4), 
+	set=rep(1:4,each=nrow(anscombe))) 
+	)
+xyplot( y ~ x| factor(set), data=ddd, type=c('p','r'), as.table=TRUE, lty=2 )
+@
+\end{center}
+
+\subsection{Outliers in Regression}
+
+Outliers can be very influential in regression, especially in small data sets,
+and especially if they occur for extreme values of the explanatory variable.
+Outliers cannot be removed just because we don't like them, but they should be
+explored to see what is going on (data entry error? special case? etc.)
+
+Some researchers will do ``leave-one-out'' analysis, or ``leave some out'' analysis
+where they refit the regression with each data point left out once.  If the regression
+summary changes very little when we do this, this means that the regression line
+is summarizing information that is shared among all the points relatively equally.
+But if removing one or a small number of values makes a dramatic change, then
+we know that that point is exerting a lot of influence over the resulting
+analysis (a cause for caution).  
+% See page 483 of ABD for an example of leave-one-out analysis.
+
+\subsection{Residual Plots}
+
+In addition to scatter plots of the response vs. the explanatory variable, we can also create plots
+of the residuals of the model vs either the explanatory variable or the fitted values ($\hat y$).  The 
+latter works in a wider variety of settings (including multiple regression and two-way ANOVA).
+
+<<>>=
+model1 <- lm( y1 ~ x1, data=anscombe )
+model2 <- lm( y2 ~ x2, data=anscombe )
+model3 <- lm( y3 ~ x3, data=anscombe )
+model4 <- lm( y4 ~ x4, data=anscombe )
+@
+<<>>=
+xyplot( resid(model1) ~ x1, data=anscombe )
+xyplot( resid(model1) ~ fitted(model1), data=anscombe )
+@
+<<>>=
+xyplot( resid(model2) ~ x2, data=anscombe )
+xyplot( resid(model2) ~ fitted(model2), data=anscombe )
+@
+
+You can make similar plots for models 3 and 4.  The main advantage of these plots is that they use the vertical
+space in the plot more efficiently.  This is especially important when the size of the residuals is small
+relative to the range of the response variable.
+
+Returning to our Florida lakes, we see that things look reasonable for the model we have been fitting (but stay tuned 
+for the next section).
+
+<<>>=
+lake.model <- lm( AvgMercury ~ pH, data=FloridaLakes)
+xyplot( AvgMercury ~ pH, data=FloridaLakes, type=c('p','r') )
+xyplot( resid(lake.model) ~ fitted(lake.model), data=FloridaLakes)
+@
+We are hoping not to see any strong patterns in these residual plots.
+
+\subsection{Checking the Distribution of the Residuals for Normality}
+
+Residuals should be checked to see that the distribution looks approximately
+normal and that that standard deviation remains consistent across the range of
+our data (and across time).
+
+<<lakes-qq>>=
+histogram( ~ resid(lakes.model) )
+xqqmath( ~ resid(lakes.model) )
+@
+The normal-quantile plot shown above is designed so that the points will fall along a straight line 
+when the underlying distribution is exactly normal.  As the distribution becomes less and less normal,
+the normal-quantile will look less and less like a straight line.
+
+Similar plots (and some others as well) can also be made with 
+<<eval=FALSE>>=
+plot(lakes.model)
+@
+
+In this case things don't look quite as good as we would like on the normality front.  The residuals
+are a bit too skewed (too many large positive residuals).  Using a log transformation on the response (see below)
+might improve things.
+
+\subsection{Tranformations}
+
+Transformations of one or both variables can change the shape of the 
+relationship (from non-linear to linear, we hope) and also the distribution of the 
+residuals.  In biological applications, a logarithmic transformation 
+is often useful.
+
+<<>>=
+lakes.model2 <- lm( log(AvgMercury) ~ pH, data=FloridaLakes )
+xyplot( log(AvgMercury) ~ pH, data=FloridaLakes, type=c('p','r') )
+summary(lakes.model2)
+@
+
+If we like, we can show the new model fit overlaid on the original data:
+<<>>=
+xyplot( AvgMercury ~ pH, data=FloridaLakes, main="untransformed model", type=c("p","r") )
+xyplot( AvgMercury ~ pH, data=FloridaLakes, main="log transformed model" )
+Hg <- makeFun( lakes.model2 )              # turn model into a function
+plotFun( exp(Hg(pH)) ~ pH, add=TRUE)       # add this function to the plot
+@
+
+
+
+A logarithmic transformation of \variable{AvgMercury} improves the normality of the residuals.
+<<>>=
+histogram( ~ resid(lakes.model2) )
+qqmath( ~ resid(lakes.model2) )
+xyplot( resid(lakes.model2) ~ pH, data=FloridaLakes) 
+xyplot( resid(lakes.model2) ~ fitted(lakes.model2) )
+@
+The absolute values of the residuals are perhaps a bit larger when the pH is higher (and fits are smaller),
+although this is exagerated somewhat in the plots because there is so little data with very small pH values.
+If we look at square roots of standardized residuals this effect is not as pronounced:
+<<fig.height=3>>=
+plot( lakes.model2, w=3 )
+@
+On balance, the log transformation seems to improve the situation and is to be preferred over the original model.
+

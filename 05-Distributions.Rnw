@@ -1,0 +1,162 @@
+\Sexpr{set_parent('Lock5withR')}
+
+\Chapter{Approximating with a Distribution}
+
+
+<<plotnorm,echo=FALSE>>=
+plotnorm <- function(
+		mean=0, sd=1,
+		lower = -Inf, upper = Inf,
+		n=750, xlim, xlab="", ylab="", 
+		groups, lwd=2, lty=1,
+		main = paste("N(",mean, ",", sd, ")",sep=""),
+		scales = list(y=list(draw=FALSE)),
+		col=trellis.par.get('superpose.polygon')$col,
+		add.text=TRUE,
+		digits=3,
+		cex=1,
+		...)
+{
+	if (missing(xlim)) {
+		xlim <- mean + c(-1,1) * 4.5 * sd
+	}
+
+
+	x <- seq( xlim[1], xlim[2], by= diff(xlim)/n )
+		y <- dnorm( x, mean=mean, sd=sd )
+
+		if (missing(groups)) { groups = ((x > lower) + (x > upper)) }
+
+	middle.prob = round(pnorm(upper, mean, sd) - pnorm(lower,mean,sd),digits)
+		upper.prob = round(1 - pnorm(upper,mean,sd),digits)
+		lower.prob = round(pnorm(lower,mean,sd),digits)
+
+		xyplot( y ~ x, xlab=xlab, ylab=ylab, lwd=lwd, lty=lty, scales=scales, groups=groups,
+				main= main,
+				panel = function(x,y,...) {
+				panel.xyplot(x,y,type='h' ,col=col, ...)
+				panel.xyplot(x,y,type='l',lwd=3)
+				if (is.finite(upper) && !is.finite(lower) && add.text && FALSE) {
+				grid.text(x=.98,y=unit(1,'npc')-unit(5,'lines'), 
+					bquote(P(X>.(upper)) == .(upper.prob)),
+					gp=gpar(cex=cex),
+					just='right'
+					)
+				}
+				if (is.finite(lower) && add.text && FALSE) {
+				grid.text(x=.02,y=unit(1,'npc')-unit(5,'lines'), 
+					bquote(P(X<.(lower)) == .(lower.prob)), 
+					gp=gpar(cex=cex),
+					just='left'
+					)
+				}
+				if (is.finite(upper) && is.finite(lower) && add.text) {
+				grid.text(x=unit(mean(c(lower,upper)),'native'),y=unit(0,'native')+unit(1,'lines'), 
+					bquote(.(middle.prob)), gp=gpar(cex=cex),
+					just='center'
+					)
+				}
+				},
+				...)
+}
+@
+
+\section{The Family of Normal Distributions}
+
+Normal Distributions
+\begin{itemize}
+\item  are symmetric, unimodel, and bell-shaped
+\item can have any combination of mean and standard deviation (as long as the standard deviation is positive)
+\item satisfy the 68--95--99.7 rule:
+
+Approximately 68\% of any normal distribution lies within 1 standard deviation of the mean.
+
+Approximately 95\% of any normal distribution lies within 2 standard deviations of the mean.
+
+Approximately 99.7\% of any normal distribution lies within 3 standard deviations of the mean.
+\end{itemize}
+
+<<normal-68-95-99.7,echo=FALSE,fig.height=2.0,fig.width=2,fig.show="hold",out.width=".3\\textwidth">>=
+trellis.par.set(superpose.polygon = list(col=c('gray50', 'gray80', 'gray50')))
+print(plotnorm(lower=-1,upper=1,main="",xlab="standard deviations from the mean"))
+print(plotnorm(lower=-2,upper=2,main="",xlab="standard deviations from the mean"))
+print(plotnorm(lower=-3,upper=3,main="",xlab="standard deviations from the mean"))
+@
+
+Many naturally occurring distributions are approximately normally distributed.
+
+Normal distributions are also an important part of statistical inference.
+
+
+\newpage
+
+\subsubsection*{Example: SAT scores}
+
+SAT scores used to be approximately normally distributed with a mean of 500 and a standard deviation of 100, so
+\begin{itemize}
+\item
+approximately 68\% of scores were between 400 and 600
+\item
+approximately 95\% of scores were between 300 and 700
+\item
+approximately 2.5\% of scores were above 700 
+\item
+approximately \Sexpr{34 + 47.5}\% (34\% + 47.5\%) of scores are between 400 and 700
+\end{itemize}
+
+The two main functions we need for working with normal distributions are \function{pnorm} and \function{qnorm}.
+\function{pnorm} computes the proportion of a normal distribution below a specified value:
+
+
+\[
+\mbox{\texttt{pnorm(x,mean=$\mu$, sd=$\sigma$)}} = \Prob(X \le x)
+\]
+when $X \sim \Norm(\mu, \sigma)$.
+
+We can obtain arbitrary probabilities using \verb!pnorm()!:
+<<pnorm-1>>=
+pnorm(650, 500, 100)                     # proportion who score below 650 on SAT
+1-pnorm(650, 500, 100)                   # proportion who score above 650 on SAT
+pnorm(650,500,100) - pnorm(400,500,100)  # proportion who score between 400 and 650 on SAT
+@
+
+<<SAT-1,echo=FALSE,fig.height=2.0,fig.width=2, out.width=".3\\textwidth">>=
+trellis.par.set(superpose.polygon = list(col=c('gray80', 'gray50', 'gray50')))
+print(plotnorm(500,100,lower=-300,upper=650,main="",xlab="SAT score",digits=3))
+print(plotnorm(500,100,upper=1050,lower=650,main="",xlab="SAT score",digits=3))
+print(plotnorm(500,100,lower=400,upper=650,main="",xlab="SAT score",digits=3))
+@
+
+
+\function{qnorm()} goes the other direction:  You provide the quantile (percentile expressed as a decimal) and 
+\R\ gives you the value.
+<<qnorm>>=
+# find 80th percentile in Norm(500, 100)
+qnorm(.80, 500, 100)
+@
+
+The \function{xpnorm()} function gives a bit more verbose output and also gives you a picture.
+<<xpnorm,fig.height=2.5,fig.width=4>>=
+xpnorm(700,500,100)
+@
+
+\subsection*{Z-scores (standardized scores)}
+
+Because probabilities in a normal distribution depend only on the number of standard deviations above and below the mean,
+it is useful to define $Z$-scores (also called standardized scores) as follows:
+
+\[
+\mbox{$Z$-score} = \frac{ \mbox{value} - \mbox{mean} } { \mbox{standard deviation} }
+\]
+If we know the population mean and standard deviation, we can plug those in.  When we do not, we will use 
+the mean and standard deviation of a random sample as an estimate.
+
+Z-scores provide a second way to compute normal probabilities:
+
+<<tidy=FALSE>>=
+pnorm ( 650, 500, 100 )    # proportion of SATs below 650 
+z <- (650 - 500) / 100     # z-score
+pnorm (1.5)                # proportion with z-score below 1.5
+@
+
+

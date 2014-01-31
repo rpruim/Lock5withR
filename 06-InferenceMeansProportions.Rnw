@@ -1,0 +1,453 @@
+\Sexpr{set_parent('Lock5withR')}
+
+
+\Chapter{Inference with Normal Distributions}
+
+When sampling distributions, bootstrap distributions, and randomization distributions are well approximated
+by normal distributions, and when we have a way of computing the standard error, we can use normal distributions
+to compute confidence intervals and p-values using the following general templates:
+
+\begin{itemize} 
+	\item confidence interval: 
+		\[ 
+		\mbox{statistic} \pm \mbox{critical value} \cdot  SE 
+		\]
+
+	\item hypothesis testing: 
+		\[ 
+		\mbox{test statistic} = \frac{ \mbox{statistic} - \mbox{null parameter}} { SE } 
+		\]
+\end{itemize} 
+
+\section{Inference for One Proportion}
+
+If we are working with one categorical variable, we can compute confidence intervals and p-values
+using the following standard error formula:
+\[
+SE = \sqrt{ \frac{ p (1-p) } {n} }
+\]
+Actually that's not quite right.  We could use this if we new $p$ (the population proportion), but we never will.
+
+Instead, we will use one of these approximations:
+\begin{itemize}
+	\item
+		confidence intervals:  
+		$ \displaystyle SE = \sqrt{ \frac{ \hat{p} (1-\hat p) } {n} }$
+
+		We will estimate $p$ using our sample statistic $\hat p$.
+	\item
+		p-values:  
+		$ \displaystyle SE = \sqrt{ \frac{ p_0 (1 - p_0) } {n} }$
+
+		Since p-values are computed assuming $p = p_0$ (the null parameter), we should use $p_0$ 
+		for computing $SE$.
+\end{itemize}
+
+
+The distributions will be close enough to normal for our purposes when
+\[
+p n \ge 10 and (1-p) n \ge 10
+\;.
+\]
+(We'll check these using $\hat p$ or $p_0$.)
+
+
+\subsection{Examples}
+
+\subsubsection{Rock, Paper, Scissors}
+	In a study to see whether people playing rock paper scissors are 
+	equally likely to choose rock, paper, or scissors on their first 
+	round, 119 people were observed.  66 of them chose rock.
+
+	We can use this data to test the hypotheses:
+	\begin{itemize}
+		\item $H_0$: $p = 1/3$
+		\item $H_a$: $p \neq 1/3$
+	\end{itemize}
+	where $p$ is the proportion of people who start with rock.
+
+	First we check that the normal approximation is good enough:
+
+<<rock-paper-scissors, tidy=FALSE>>=
+p.hat <- 66/119; p.hat
+p.hat * 119               # check >= 10
+(1 - p.hat) * 119         # check >= 10
+SE <- sqrt( 1/3 * 2/3 / 119 ); SE
+z <- (p.hat - 1/3) / SE; z
+pnorm(z)                  # large side (rounded)
+1 - pnorm(z)              # small side (less rounding)
+2 * (1 - pnorm(z))        # p-value = 2 * small side
+@
+
+We hardly needed to compute a p-value in this case.  A test statistic of $z =
+\Sexpr{round(z,2)}$ already tells us that the p-value will be quite small.
+
+We can also compute a 95\% confidence interval for the proportion of people who start with rock:
+<<tidy=FALSE>>=
+p.hat                                          # same as above
+1/3 * 119                                      # check >= 10
+2/3 * 119                                      # check >= 10
+SE <- sqrt( p.hat * (1 - p.hat) / 119 ); SE    # est. SE is (a little) different now
+p.hat - 1.96 * SE                              # lower end of CI 
+p.hat + 1.96 * SE                              # upper end of CI
+@
+If we want a different confidence level, we simply adjust the critical value.  Let's compute
+a 98\% confidence interval.
+<<tidy=FALSE>>=
+z.star <- qnorm( 0.99 ); z.star                # critical value for 98% CI
+p.hat <- 66/119; p.hat                         # same as above
+SE <- sqrt( p.hat * (1 - p.hat) / 119 ); SE    # est. SE is (a little) different now
+p.hat - z.star * SE                            # lower end of CI 
+p.hat + z.star * SE                            # upper end of CI
+@
+
+
+\subsubsection{Pollination}
+Many plants are capable of self-pollination.  To keep this from happening, some flowers 
+come in left- and right-handed versions.  In left-handed plants, the pollen gets on the 
+left sides of visiting bees.  In right-handed plants, pollen gets on the right sides of bees.
+As the bees fly from flower to flower, the right-handed plants pollinate the left-handed plants,
+and vice versa.
+
+One genetic model suggests that there should be a 3:1 ratio of right-handed to left-handed flowers.
+Scientists observed 6 right-handed and 21 right-handed flowers.  How is this data related to the 
+conjecture of a simple Mendelian inheritance model?
+
+We can test $H_0$: $p = 1/4$ against a two-sided alternative as follows:
+
+<<tidy=FALSE>>=
+p.hat <- 6/27; p.hat
+Rand.Flowers <- do (1000) * rflip(27, .25)
+histogram( ~prop, data=Rand.Flowers, width=1/27 )
+prop( ~ (prop < p.hat), data=Rand.Flowers )        # one-sided p-value
+2 * prop( ~ (prop < p.hat), data=Rand.Flowers )    # two-sided p-value
+@
+Notice that we need to be a bit cautious about 
+using the normal distribution in this case since
+$p_0 n < 10$:
+<<>>=
+27 * .25
+@
+Let's see how different the results are:
+<<tidy=FALSE>>=
+SE <- sqrt( 1/4 * 3/4 / 27 ); SE
+z <- (p.hat - 1/4) / SE; z
+pnorm(z)                                           # one-sided p-value
+2 * pnorm(z)                                       # two-sided p-value
+@
+
+The approximation is not very good in this case (\Sexpr{2 * pnorm(z)} vs.
+\Sexpr{2 * prop( ~ (prop < p.hat), data=Rand.Flowers ) }), but the conclusion
+either way would be the same -- do not reject the null hypothesis. 
+In this case, that means that the data are consistent with the null hypothesis.  But 
+there is not a lot of data, and it may well be consistent with other hypotheses as well.
+
+\subsubsection{Helper-Hinderer}
+We all recognize the difference between naughty and nice, right? What about
+children less than a year old -- do they recognize the difference and show a
+preference for nice over naughty? In a study reported in the November 2007
+issue of \emph{Nature}, researchers investigated whether infants take into account an
+individual’s actions towards others in evaluating that individual as appealing
+or aversive, perhaps laying for the foundation for social interaction.  In one
+component of the study, 10-month-old infants were shown a “climber” character
+(a piece of wood with eyes glued onto it) that could not make it up a
+hill in two tries. Then they were alternately shown two scenarios for the
+climber’s next try, one where the climber was pushed to the top of the hill by
+another character (``helper") and one where the climber was pushed back down the
+hill by another character (``hinderer"). The infant was alternately shown these
+two scenarios several times. Then the child was presented with both pieces of
+wood (the helper and the hinderer) and asked to pick one to play with. The
+researchers found that the 14 of the 16 infants chose the helper over the
+hinderer.
+
+What can we conclude?  More of them chose the helper than the hinderer.  But maybe it was
+just chance.  Maybe they just grab one of the toys and it has nothing to do with
+whether or not they had seen the toys be helpful.
+
+We can test
+\begin{itemize}
+	\item $H_0$: $p = 1/2$
+	\item $H_a$: $p \neq 1/2$
+\end{itemize}
+to see whether 14 out of 16 is unusual enough to lead us to believe that the 
+children are doing something other than guessing.
+
+Once again, the normal approximation method might not be as accurate as 
+we would like because the sample size is a bit small (but closer to our rule of
+thumb than in the preceding example):
+<<>>=
+16 * 1/2                               # a bit too small
+@
+So let's do this two ways.  Once using the normal approximation and once using 
+the randomization distribution and see how close the results are.
+
+<<helper-hinder-norm, tidy=FALSE>>=
+p.hat <- 14/16; p.hat
+SE <- sqrt ( (1/2 * 1/2) / 16);  SE
+z <- (p.hat - 1/2) / SE; z
+pnorm(z)
+2 * ( 1 - pnorm(z) )                   # p-value
+@
+
+<<helper-hinder-rand>>=
+Rand.toys <- do(5000) * rflip(16, .5)
+head(Rand.toys, 3)
+2 * prop( ~(prop >= p.hat), data=Rand.toys )
+histogram(~prop, data=Rand.toys, width=1/16)
+@
+
+In this case, the normal approximation is not so far off (which shouldn't surprise us too much
+since 8 is not that far from 10), but we would expect that randomization p-value to be the 
+more accurate one in this situation. 
+In both cases the p-values are less than 0.05, so we can reject the null hypothesis (at the usual
+$\alpha=0.05$ level) and conclude that the kids are not just guessing.
+
+
+\subsection{Automating Everyting}
+
+\R\ can automate the entire process for us.  Here are some examples.
+
+\subsubsection{Pollination}
+<<>>=
+binom.test( 6, 27, p=0.25 )    # using an exact method
+prop.test( 6, 27, p=0.25 )     # using normal approximation
+@
+
+The proportion test above uses a fancier version of the normal approximation (employing 
+the so-called continuity correction, which usually makes it more accurate).  We can get
+\R\ to do without this correction, and then the results will match ours above:
+<<>>=
+prop.test( 6, 27, p=0.5, correct=FALSE)
+z^2                            # should match X-squared in the output above.
+@
+
+\subsubsection{Helper-Hinderer}
+<<>>=
+binom.test( 14, 16, p=0.5 )    # using an exact method
+prop.test(  14, 16, p=0.5 )    # using normal approximation
+@
+
+The proportion test above uses a fancier version of the normal approximation (employing 
+the so-called continuity correction, which usually makes it more accurate).  We can get
+\R\ to do without this correction, and then the results will match ours above:
+<<>>=
+prop.test( 14, 16, p=0.5, correct=FALSE)
+z^2                            # should match X-squared in the output above.
+@
+
+\subsection{Determining Sample Size}
+An important part of designing a study is deciding how large the sample needs to be
+for the intended purposes of the study.
+
+\question
+You have been asked to conduct a public opinion survey to determine what 
+percentage of the residents of a city are in favor of the mayor's new deficit 
+reduction efforts.  You need to have a margin of error of $\pm 3\%$.  How large
+must your sample be?  (Assume a 95\% confidence interval.)
+
+\answer
+The margin of error will be $1.96 \sqrt{\frac{\hat p (1-\hat p)}{n}}$, so our method 
+will be to make a reasonable guess about what $\hat p$ will be, and then determine how
+large $n$ must be to make the margin of error small enough.
+
+Since $SE$ is largest when $\hat p = 0.50$, one safe estimate for $\hat p$ is $0.50$, and 
+that is what we will use unless we are quite sure that $p$ is close to $0$ or $1$.  (In
+those latter cases, we will make a best guess, erring on the side of being too close to 
+$0.50$ to avoid doing the work of getting a sample much larger than we need.)
+
+We can solve $0.03 = \sqrt{ \frac{0.5 \cdot 0.5}{n}}$ algebraically, or we can play a
+simple game of ``higher and lower'' until we get our value of $n$.  We could also
+graph $\sqrt{ \frac{0.5 \cdot 0.5}{n}}$ and use the graph to estimate $n$.  Here's 
+the ``higher/lower'' guessing method.
+<<higher-lower>>=
+1.96 * sqrt(.5 * .5 / 400)
+1.96 * sqrt(.5 * .5 / 800)
+1.96 * sqrt(.5 * .5 / 1200)
+1.96 * sqrt(.5 * .5 / 1000)
+1.96 * sqrt(.5 * .5 / 1100)
+1.96 * sqrt(.5 * .5 / 1050)
+@
+So we need a sample size a bit larger than 1050, but not as large as 1100.  
+We can continue this process to get a tighter estimate if we like:
+<<higher-lower-b>>=
+1.96 * sqrt(.5 * .5 / 1075)
+1.96 * sqrt(.5 * .5 / 1065)
+1.96 * sqrt(.5 * .5 / 1070)
+1.96 * sqrt(.5 * .5 / 1068)
+1.96 * sqrt(.5 * .5 / 1067)
+@
+We see that a sample of size 1067 is guaranteed to give us a margin of error of at most 
+$3\%$.
+
+It isn't really important to get this down to the nearest whole number, however.  Our goal
+is to know roughly what size sample we need (tens? hundreds? thousands? tens of thousands?).
+Knowing the answer to 2 significant figures is usually sufficient for planning purposes.
+
+Side note:  The \R\ function \verb!uniroot! can automate this guessing for us, but it 
+requires a bit of programming to use it:
+<<uniroot>>=
+# uniroot finds when a function is 0, so we need to build such a function;
+# this function is 0 when the margin of error is 0.03:
+f <- makeFun( 1.96 * sqrt(.5 * .5/ n) - 0.03  ~ n )  
+# uniroot needs a function and a lower bound and upper bound to search between
+uniroot( f, c(1,50000) )$root  
+@
+
+\subsubsection{Example}
+\question
+How would things change in the previous problem if 
+\begin{enumerate}
+\item
+We wanted a 98\% confidence interval instead of a 95\% confidence interval?
+\item
+We wanted a 95\% confidence interval with a margin of error at most $0.5$\%?
+\item
+We wanted a 95\% confidence interval with a margin of error at most $0.5$\%
+and we are pretty sure that $p < 10$\%?
+\end{enumerate}
+
+\answer
+We'll use \verb!uniroot()! here.  
+You should use the ``higher-lower'' method or algebra and compare your results.
+
+<<sample-size-uniroot>>=
+f1 <- makeFun( qnorm(.99) * sqrt(.5 * .5/ n) - 0.03 ~ n )
+uniroot(f1, c(1,50000))$root
+f2 <- makeFun( qnorm(.975) * sqrt(.5 * .5/ n) - 0.005 ~ n )
+uniroot(f2, c(1,50000))$root
+f3 <- makeFun( qnorm(.99) * sqrt(.1 * .9/ n) - 0.005 ~ n )
+uniroot(f3, c(1,50000))$root
+@
+
+
+\section{Inference for One Mean}
+
+If we are working with one quantitative variable, we can compute confidence intervals and p-values
+using the following standard error formula:
+\[
+SE = \frac{\sigma}{ \sqrt{n}} 
+\]
+Once again, there is a small problem: we won't know $\sigma$.  So we will estimate $\sigma$ using our data:
+\[
+\displaystyle SE \approx \frac{s}{\sqrt{n}}
+\]
+Unfortunately, the distribution of 
+\[
+\frac{\mean x - \mu}{ s/\sqrt{n}}
+\]
+does not have a normal distribution.  Instead the distribution is a bit ``shorter and fatter" than the normal
+distribution.  The correct distribution is called the t-distribution with $n-1$ degrees of freedom. 
+All t-distributions are symmetric and centered at zero.  The smaller the degrees of freedom, the shorter and fatter 
+the t-distribution.
+
+
+Using t-distributions, our templates for confidence intervals and p-values become the following:
+\begin{itemize}
+	\item
+		confidence intervals:  
+		$ \displaystyle \mean{x} \pm  t_* SE$ where $SE = \frac{s}{\sqrt n}$ and $df=n-1$.
+
+	\item
+		p-values:  
+		$ \displaystyle t = \frac{ \mean{x} - \mu_0}{ SE } $ where $SE = s/\sqrt{n}$ and $df=n-1$.
+\end{itemize}
+
+Here is some \R\ code related to t-tests and confidence intervals.
+
+\subsection{The Long Way}
+
+The test statistic for a null hypothesis of $H_0: \mu = \mu_0$ is 
+\[
+t = \frac{ \mean x - \mu_0}{ s/\sqrt{n}} = \frac{ \mbox{estimate} - \mbox{hypothesis value} }{\mbox{standard error} }
+\]
+This is easily computed in \RStudio:
+<<temp1,tidy=FALSE>>=
+# some ingredients
+x.bar <- mean(~ BodyTemp, data=BodyTemp50); x.bar
+sd <- sd (~ BodyTemp, data=BodyTemp50); sd
+n <- nrow (BodyTemp50); n
+se <- sd/sqrt(n); se
+# test statistic
+t <- ( x.bar - 98.6 ) / se; t
+# 2-sided p-value
+2 * pt( - abs(t), df=49 )
+@
+
+Similarly, we can compute a 95\% confidence interval
+<<temp2>>=
+t.star <- qt(.975, df=49); t.star
+# lower limit
+x.bar - t.star * se
+# upper limit
+x.bar + t.star * se
+@
+
+\subsection{Super Short Cuts}
+
+Of course, \RStudio\ can do all of the calculations for you if you give it the raw data:
+<<temp3>>=
+t.test(~BodyTemp, data=BodyTemp50, mu=98.6)
+@
+You can also zoom in just the information you want:
+<<temp4>>=
+pval(t.test(~BodyTemp, data=BodyTemp50, mu=98.6))
+confint(t.test(~BodyTemp, data=BodyTemp50))
+@
+
+
+\subsection{Sample Size Estimation}
+
+Suppose we want to estimate the mean height of male Calvin students to within $\pm 1$ inch with 95\% confidence.
+That is we want
+\[
+t_* SE = t_* \frac{s}{\sqrt{n}} = 1
+\]
+In order to determine our sample size, we will estimate $t_* \approx 2$ (this should be pretty close unless the 
+require sample size is very small.)  We also need to come up with some estimate of hte standard deviation.
+In this case, other data has been used to estimate the standard deviation of the heights of 18--25 year-old males
+to be about 3 in.  If we assume that our population has a similar standard deviation, then we want
+\[
+2 \frac{3}{\sqrt{n}} = 1
+\]
+We can solve this pretty easily to show that $n = 6^2 = 36$.  So we need roughly 40 subjects to gain that
+level of precision.  Again, the point is not to determine the exact number but to know roughly what size sample
+will suffice.  
+
+\subsection{The Central Limit Theorem and When These Approximations are Good Enough}
+
+William Gosset proved that using $\displaystyle SE = \frac{s}{\sqrt{n}}$ and the appropriate $t$-distribution
+works perfectly when the population is exactly normally distributed.  But what happens when the population
+is \emph{not} normally distributed?  An important theorem called the Central Limit Theorem says that 
+as the sample sizes get larger and larger, the shape of the population distribution matters less and less.
+
+The usual rule of thumb given is that
+\begin{enumerate}
+	\item When the population is normal, we can use these methods for any sample size.
+	\item
+		When the population is very nearly normal (unimodal and at most modestly skewed), 
+		we can use these methods even for fairly small sample sizes.
+	\item
+		For most population distributions that occur in practice, sample sizes of $n \ge 30$ work 
+		quite well.  (But see the next item.)
+	\item
+		Because outliers can substantially affect both the mean $\mean x$ and the standard deviation $s$, 
+		outliers should be investigated.  If it is unclear why an unusual observation is in the data, 
+		it may not be clear whether it should be removed or not, and the conclusions may differ substantially 
+		with and without the outlier.
+\end{enumerate}
+As with all rules of thumb, the numbers given are guidelines.  Things always work better when the sample size
+is larger and the population distribution is more like a normal distribution.  Unfortunately, when sample 
+sizes are small, it is difficult to assess whether the population is normal.\footnote{Gossett offered 
+the following advice: when the sample size is large, the population distribution doesn't matter, so use 
+the t-distribution methods.  When the sample size is small, you won't be able to tell that the population
+isn't normal, so use the t-distribution methods.
+
+That's a little too cavalier with small samples.  But the method does work remarkably well in many
+situations -- even situations where the sample sizes are modest.}
+
+Tim Hesterberg (a statistician at Google) has argued that (1) this rule of thumb doesn't actually work very well, 
+(2) there is a much better approach to deciding based on looking at the bootstrap distribution, and 
+(3) it can be very difficult to tell how well things are working when sample sizes are very small.  For small
+sample sizes, we really need to be convinced (for reasons other than our data) that the population should be 
+expected to be approximately normally distributed.
+

@@ -1,0 +1,617 @@
+\Chapter{Chi-Squared Tests}
+\section{Goodness of Fit Testing for Simple Hypotheses}
+
+Goodness of fit tests test how well a distribution fits some hypothesis.
+
+%\begin{example}
+\subsection{Golfballs in the Yard Example}
+%Golf balls in the Yard.  
+
+Allan Rossman used to live along a golf course.
+One summer he collected 500 golf balls in his back yard and tallied 
+the number each golf ball to see if the numbers were equally likely to be
+1, 2, 3, or 4.  
+
+
+{\sf Step 1: State the Null and Alternative Hypotheses.}
+\begin{itemize}
+\item
+$H_0:$ The four numbers are equally likely (in the population of golf balls 
+driven 150--200 yards and sliced).
+\item
+$H_a$: The four numbers are not equally likely (in the population).
+\end{itemize}
+
+If we let $p_i$ be the proportion of golf balls with the number $i$ on them, 
+then we can restate the null hypothesis as
+\begin{itemize}
+\item
+$H_0:$ $p_1 = p_2 = p_3 = p_4 = 0.25$.
+\item
+$H_a$: The four numbers are not equally likely (in the population).
+\end{itemize}
+
+{\sf Step 2: Compute a test statistic.}
+Here are Allan's data:
+<<golfballs-data-7>>=
+golfballs
+@
+(Fourteen golf balls didn't have any of these numbers and were
+removed from the data leaving 486 golf balls to test our null hypotheses.)
+
+Although we made up several potential test statistics in class, the 
+standard test statistic for this situation is 
+
+\begin{boxedText}
+The \term{Chi-squared test statistic}:
+\[
+\chi^2 = \sum \frac{(\mbox{observed} - \mbox{expected})^2 }{ \mbox{expected} }
+\]
+There is one term in this sum \emph{for each cell in our data table}, and
+
+\begin{itemize}
+\item observed $=$ the tally in that cell (a count from our raw data)
+\item expected $=$ the number we would ``expect" if the percentages 
+followed our null hypothesis exactly.  (Note: the expected counts might
+not be whole numbers.)
+\end{itemize}
+\end{boxedText}
+
+In our particular example, we would expect $25\%$ of the 486 (i.e., 121.5) 
+golf balls in each category, so
+\Rindex{sum()}%
+<<golfballs-teststat-7,echo=F>>=
+observed <- golfballs
+expected <- 121.5
+teststat <- sum( ( observed - expected )^2 / expected )
+@
+
+\[
+\chi^2 =
+\frac{ (137 - 121.5)^2}{ 121.5}
++
+\frac{(138 - 121.5)^2}{ 121.5}
++
+\frac{(107 - 121.5)^2}{ 121.5}
++
+\frac{(104 - 121.5)^2}{ 121.5}
+=
+\Sexpr{round( teststat, 3 ) }
+\]
+
+{\sf Step 3: Compute a p-value}
+Our test statistic will be large when the observed counts and expected counts
+are quite different.  It will be small when the observed counts and expected 
+counts are quite close.  So we will reject when the test statistic is large.
+To know how large is large enough, we need to know the sampling distribution.
+
+\begin{boxedText}
+If $H_0$ is true and the sample is large enough, 
+then the sampling distribution for the
+Chi-squared test statistic will be approximately a Chi-squared 
+distribution.  
+\smallskip
+\begin{itemize}
+\item
+The \term{degrees of freedom} for this type of goodness of fit test
+is one less than the number of cells.
+\item
+The approximation gets better and better as the sample size gets larger.
+\end{itemize}
+\end{boxedText}
+
+The mean of a Chi-squared distribution is equal to its degrees of freedom.
+This can help us get a rough idea about whether our test statistic
+is unusually large or not.
+
+How unusual is it to get a test statistic at least as large as 
+ours (\Sexpr{round(teststat,2)})?  
+We compare to a Chi-squared distribution with 3 degrees of freedom.  
+The mean value of such a statistic is 3, and our test statistic is 
+almost 3 times as big, so we anticipate that our value is 
+rather unusual, but not extremely unusual.  This is the case:
+<<golfballs-pvalue-7>>=
+1 - pchisq( 8.469, df=3 ) 
+@
+
+{\sf Step 4: Interpret the p-value and Draw a Conclusion.}
+Based on this smallish p-value, we can reject our null hypothesis at the usual
+$\alpha = 0.05$ level.  We have sufficient evidence to cast doubt on the 
+hypothesis that all the numbers are equally common among the population of 
+golfballs.
+
+{\sf Automation.}
+Of course, \R\ can automate this whole process for us if we provide 
+the data table and the null hypothesis.  The default null hypothesis
+is that all the probabilities are equal, so in this case it is enough
+to give \R\ the golf balls data.
+
+\Rindex{chisq.test()}%
+<<golfballs-chisq.test-7>>=
+chisq.test( golfballs )
+@
+%\end{example}
+
+\subsection{Plant Genetics Example}
+%\begin{example}
+A biologist is conducting a plant breeding experiment in which plants can
+have one of four phenotypes.  If these phenotypes are caused by a simple
+Mendelian model, the phenotypes should occur in a 9:3:3:1 ratio.
+She raises 41 plants with the following phenotypes.  
+\begin{center}
+\begin{tabular}{l||c|c|c|c}
+\hline
+phenotype & 1 & 2 & 3 & 4 
+\\
+\hline
+count & 20 & 10 & 7 & 4
+\\
+\hline
+\end{tabular}
+\end{center}
+
+Should she worry that
+the simple genetic model doesn't work for her phenotypes?
+
+<<plants-2-7>>=
+plants <- c( 20, 10, 7, 4 ) 
+chisq.test( plants, p=c(9/16, 3/16, 3/16, 1/16) )
+@
+
+Things to notice:
+\begin{itemize}
+\item
+\verb!plants <- c( 20, 10, 7, 4 )! is the way to enter this kind of data
+by hand. 
+\item
+This time we need to tell \R\ what the null hypothesis is.  That's what
+\verb! p=c(9/16, 3/16, 3/16, 1/16)! is for.
+\item
+The Chi-squared distribution is only an approximation to the sampling 
+distribution of our test statistic, and the approximation is not very
+good when the expected cell counts are too small.  This is the reason
+for the warning.
+\end{itemize}
+
+\subsection{Small Cell Counts}
+
+The chi-squared approximation is not very good when expected cell counts
+are too small.  Our rule of thumb will be this:  
+
+\begin{boxedText}
+The chi-squared approximation is good enough when
+\smallskip
+
+\begin{itemize}
+\item
+All the expected  counts are at least 1.
+\item 
+Most (at least 80\%) of the expected counts are at least 5.
+\end{itemize}
+\smallskip
+
+Notice that this depends on \emph{expected} counts, not observed counts.
+\end{boxedText}
+
+Our expected count for phenotype 4 is only 
+$\frac{1}{16} \cdot 41 = \Sexpr{ round(1/16 * 41,3) }$, which means that 
+25\% of our expected counts are between 1 and 5, so our approximation will
+be a little crude.  (The other expected counts are well in the safe range.)
+If you are too lazy to calculate all those expected counts yourself, you can
+use the \function{xchisq.test()} in the pkg{mosaic} package, which prints out 
+some additional information about our test.
+If we are getting sick of typing
+those null probabilities over and over, we could save them, too:
+<<xchisq.test-7>>=
+nullHypothesis <- c(9/16, 3/16, 3/16, 1/16)
+xchisq.test(plants, p=nullHypothesis) 
+@
+
+When the expected cell counts are not large enough, 
+we can ask \R\ to use the empirical 
+method (just like we did with \verb!statTally!) instead.
+<<plants-simulate-7>>=
+chisq.test( plants, p= nullHypothesis, simulate = TRUE )
+@
+
+This doesn't change our overall conclusion in this case.  These data are 
+not inconsistent with the simple genetic model.  
+
+If you repeat the code above several times, you will see how the empirical p-value 
+varies from one computation to the next.
+By default, \R\ is using 2000 randomizations.  
+This can be adjusted 
+with the \option{B} argument to \function{chisq.test()}.
+%\end{example}
+
+%\begin{example}
+\subsection{If we had more data \dots}
+Interestingly, if we had 10 times as much data in the same proportions, the 
+conclusion would be very different.
+<<plants-more-7>>=
+morePlants <- c( 200, 100, 70, 40 ) 
+chisq.test( morePlants, p=nullHypothesis )
+@
+% We've seen this same effect with the binomial test in an exercise.
+%\end{example}
+\subsection{When there are only two categories}
+
+When there are only two categories, the Chi-squared goodeness of fit test is equivalent
+to the 1-proportion test.
+So we can redo our rock-paper-scissors example using the Chi-squared test.
+Notice that \function{prop.test()} uses the count in one category and total but 
+that \function{chisq.test()} uses cell counts.
+
+
+\Rindex{binom.test()}%
+\Rindex{chisq.test()}%
+<<toads-binom-7>>=
+prop.test(66,119, p=1/3)     
+@
+<<toads-chisq-7>>=
+chisq.test(c(66,53), p=c(1/3, 2/3))    # 66 + 53 = 119
+@
+Both of these test the same hypotheses:
+\begin{itemize}
+\item
+$H_0: p_R = 1/3$
+\item
+$H_a: p_R \neq 1/3$
+\end{itemize}
+where $p_R$ is the proportion of people playing rock first.
+
+We could also use \function{binom.test()}:
+<<>>=
+binom.test(66, 119, p=1/3)
+@
+Although all three tests test the same hypotheses and give similar p-values (in this
+example), the binomial test is generally used because
+\begin{itemize}
+\item
+The binomial test is exact for all sample sizes while the Chi-squared test and 1-proportion test
+are only approximate, and the approximation is poor when sample sizes are small.
+\item
+	The binomial test and 1-proportion test also produce confidence intervals.
+\end{itemize}
+
+\section{A better way to test Rock-Paper-Scissors}
+
+But there is a better way to deal with the Rock-Paper-Scissors data.  We should take advantage of the full
+data.
+<<>>=
+chisq.test( c(66, 39, 14), p=c(1/3,1/3,1/3) )
+xchisq.test( c(66, 39, 14), p=c(1/3,1/3,1/3) )
+@
+
+\section{Chi-squared for Two-Way Tables}
+
+\subsection{Example: Trematodes}
+
+<<trematodes-1-7>>=
+require(abd)
+tally(~ eaten + infection.status, Trematodes ) -> fish; fish
+chisq.test(fish)
+@
+
+Some details:
+\begin{itemize}
+\item $H_0$: 
+The proportion of fish that are eaten is the same for each treatment group
+(high infection, low infection, or no infection).
+
+\item $H_a$: The proportion of fish differs among the treatment groups.
+
+\item $\displaystyle \mbox{expected count} 
+		= \frac{ \mbox{ (row total) (column total) } }{ \mbox{grand total} }$
+\end{itemize}
+<<trematodes-2-7>>=
+observed <- c( 9, 35, 49, 37, 10, 1)
+9 + 35 + 49    # row 1 total
+37 + 10 + 1    # row 2 total
+9 + 37         # col 1 total
+35 + 10        # col 2 total
+49 + 1         # col 3 total
+9 + 35 + 49 + 37 + 10 + 1    # grand total 
+@
+<<trematodes-3-7>>=
+expected <- c( 93*46/141, 93*45/141, 93*50/141, 48*46/141, 48*45/141, 48*50/141 ); expected
+X.squared <- sum ( (observed - expected)^2 / expected ) ; X.squared
+@
+\begin{itemize}
+\item $\displaystyle \mbox{expected proportion} 
+		= \frac{ \mbox{row total} }{ \mbox{grand total} }
+			\cdot 
+			\frac{ \mbox{column total} }{ \mbox{grand total} }
+		= \mbox{ (row proportion) } \mbox{ (column proportion) } $
+		\begin{itemize}
+		\item
+		So $H_0$ can be stated in terms of independent rows and columns.
+		\end{itemize}
+\item This also explains the degrees of freedom.  We need to estimate all but one 
+		row proportion (since they sum to 1, once we have all but one we know them all), 
+		and all but one column proportion.  So 
+		\begin{align*}
+		\mbox{degrees of freedom} & =  \mbox{(number of rows)}\mbox{(number of columns)} 
+									\\
+									& \qquad - 1 - 
+		                              (\mbox{number of rows} - 1)  - (\mbox{number of columns} - 1 ) 
+									  \\
+								&= (\mbox{number of rows} - 1) (\mbox{number of columns} - 1 ) 
+		\end{align*}
+	\item
+		Again, \function{xchisq.test()} will show us some of the internal details.
+<<>>=
+xchisq.test( fish )
+@
+\end{itemize}
+
+\subsection{Example: Physicians Health Study}
+
+<<phs-7>>=
+phs <- cbind(c(104,189),c(10933,10845)); phs
+rownames(phs) <- c("aspirin","placebo")                  # add row names
+colnames(phs) <- c("heart attack","no heart attack")     # add column names
+phs 
+xchisq.test(phs)
+@
+
+
+\subsection{Example: Fisher Twin Study}
+Here is an example that was treated by R. A. Fisher
+in an article 
+\cite{Fisher:1962:crossProduct}
+and again later in a book \cite{Fisher:1970:Methods}.
+The data come from a study of same-sex twins where one twin had had 
+a criminal conviction.  Two pieces of information were recorded:
+whether the sibling had also had a criminal conviction and whether
+the twins were monozygotic (identical) twins and dizygotic (nonidentical) 
+twins.
+Dizygotic twins are no more genetically related than any other siblings,
+but monozygotic twins have essentially identical DNA.  Twin studies like
+this have often used to investigate the effects of ``nature vs. nurture''.
+
+
+Here are the data from the study Fisher analyzed:
+% latex table generated in R 2.5.1 by xtable 1.4-6 package
+% Wed Aug 22 17:25:38 2007
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{rrr}
+  \hline
+ & Convicted & Not convicted \\
+  \hline
+    Dizygotic & $2$  & $15$ \\
+  Monozygotic & $10$ & $ 3$ \\
+   \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\noindent
+The question is whether this gives evidence for a genetic influence
+on criminal convictions.  If genetics had nothing to do with 
+convictions, we would expect conviction rates to be the same for 
+monozygotic and dizygotic twins since other factors (parents, schooling,
+living conditions, etc.) should be very similar for twins of either sort.
+So our null hypothesis is that the conviction rates are the same for 
+monozygotic and dizygotic twins.  That is,
+
+\begin{itemize}
+  \item $H_0: p_M = p_D$.
+  \item $H_a: p_M \neq p_D$.
+\end{itemize}
+
+<<fisher-twins-7>>=
+twins <- rbind( c(2,15), c(10,3) ); twins
+rownames(twins) <- c('dizygotic', 'monozygotic')
+colnames(twins) <- c('convicted', 'not convicted')
+twins
+@
+
+<<fisher-twins-chisq-7>>=
+chisq.test(twins)
+@
+We can get \R\ to compute the expected counts for us, too.  
+<<fisher-twins-expected-7>>=
+xchisq.test(twins)
+@
+This is an important check because
+the chi-squared approximation is not good when expected counts are too small.  Recall our general rule of 
+thumb:
+\begin{itemize}
+\item All expected counts should be at least $1$.
+\item 80\% of expected counts should be at least $5$.
+
+For a $2 \times 2$ table, this means all four expected counts should be at least 5.
+\end{itemize}
+
+In our example, we are just on the good side of our rule of thumb.  
+We could compare with the randomization p-value:
+<<>>=
+chisq.test(twins, simulate=TRUE)
+@
+
+There is also an exact test that works only
+in the case of a $2\times2$ table (much like the binomial test can be used instead of a goodness of fit 
+test if there are only two categories).  The test is called \term{Fisher's Exact Test}.
+
+<<fisher-twins-test-7>>=
+fisher.test(twins)
+@
+
+
+In this case we see that the simulated p-value from the Chi-squared Test is nearly the same as 
+the exact p-value from Fisher's Exact Test.  This is because Fisher's test is using mathematical
+formulas to compute probabilities of \emph{all} randomizations -- it is essentially the same as 
+doing infinitely many randomizations!  
+
+Regardless of the approach we use, it appears that the conviction rates is higher 
+for monozygotic twins than for dizygotic twins.
+
+Note: For a $2\times2$ table, we could also use the method of 2-proportions (\function{prop.test()}, 
+manual resampling, or formula-based).  The approximations based on the normal distribution
+will be poor in the same situations where the Chi-squared test gives a poor approximation.
+
+\subsection{Dealing with Low Expected Counts}
+
+What do we do if we have low expected counts?
+\begin{enumerate}
+\item
+	We can use \option{simulate=TRUE} to tell \R\ to use simulations instead of comparing 
+	the test statistic to the Chi-Squared (or normal) distribution.
+\item
+If we have a $2\times2$ table, we can use Fisher's Exact Test.
+\item
+For goodness of fit testing with only two categories, we can use the binomial test.
+\item
+For goodness of fit testing and larger 2-way tables, we can sometimes combine some of the cells to 
+get larger expected counts.
+\item
+Low expected counts often arise when analysing small data sets.  Sometimes the only good solution
+is to design a larger study so there is more data to analyse.
+\end{enumerate}
+
+\subsection{Cows and Bats}
+
+In Costa Rica, the
+vampire bat \emph{Desmodus rotundus} feeds on the blood of domestic cattle. 
+If the bats respond to a hormonal signal, cows in estrous (in heat) may be
+bitten with a different probability than cows not in estrous. (The researcher
+could tell the difference by harnessing painted sponges to the undersides of
+bulls who would leave their mark during the night.)
+
+Here is a summary of the data from one study investigating this:
+
+\begin{center}
+\begin{tabular}{lrr|r}
+\hline
+& cows in estrous & cows not in estrous & row totals
+\\
+\hline
+\hline
+bitten & 15 & 6 & 21
+\\
+not bitten & 7 & 322 & 329
+\\
+\hline
+column totals & 22 & 328 & 350
+\\
+\hline
+\end{tabular}
+\end{center}
+
+<<cows-7>>=
+cows <- cbind(c(15,6),c(7,322)); cows
+rownames(cows) <- c("bitten","not bitten")               # add row names
+colnames(cows) <- c("in estrous","not in estrous")       # add column names
+cows
+xchisq.test(cows)
+@
+
+This time one of our expected counts is too low for our rule of thumb.
+So let's use Fisher's Exact Test instead:
+<<cows-fisher-7>>=
+fisher.test(cows)
+@
+
+Alternatively, we could use the Chi-Squared test statistic and a randomization approach:
+<<>>=
+chisq.test(cows, simulate=TRUE)
+@
+
+In this example the conclusion is the same: extremely strong evidence against the null hypothesis.
+The p-value from the randomization test is not as small because you cannot estimate such small p-values 
+with so few randomizations.  The information we have is probably sufficient for our purposes, but to
+get a more accurate estimate of very small p-values requires many more randomizations.
+
+\subsection{Odds and Odds Ratio}
+
+You may be wondering about the odds ratio that appears in Fisher's exact test.  Here is a 
+brief explanation of that number.
+
+\begin{align*}
+\mbox{odds} = O &= \frac{ p }{ 1-p } 
+\\[2mm]
+&= \frac{ p n }{ (1-p)n } 
+\\[2mm]
+&= \frac{ \mbox{number of successes}}{ \mbox{number of failures} } 
+\\[2mm]
+\mbox{odds ratio} = OR 
+&=
+\frac{ \mbox{odds}_1 }{\mbox{odds}_2}
+= 
+\frac{
+\frac{ p_1 }{ 1-p_1 } 
+}{
+\frac{ p_2 }{ 1-p_2 } 
+}
+\\[2mm]
+&=
+\frac{ p_1 }{ 1-p_1 } \cdot \frac{ 1 - p_2 }{ p_2 } 
+\end{align*}
+
+We can estimate these quantities using data.  When we do, we put hats on everything
+\begin{align*}
+\mbox{estimated odds} = \hat O &= \frac{ \hat p }{ 1-\hat p } 
+\\[2mm]
+\mbox{estimated odds ratio} = \hat{OR} 
+&=
+\frac{ \hat{O}_1  }{ \hat{O}_2 }
+= 
+\frac{
+\frac{ \hat p_1 }{ 1-\hat p_1 } 
+}{
+\frac{ \hat p_2 }{ 1-\hat p_2 } 
+}
+\\[2mm]
+&=
+\frac{ \hat p_1 }{ 1-\hat p_1 } \cdot \frac{ 1 - \hat p_2 }{ \hat p_2 } 
+\end{align*}
+
+The null hypothesis of Fisher's Exact Test is that the odds ratio is $1$, that is, that the two proportions
+are equal.
+\verb!fisher.test()! uses a somewhat more complicated method to estimate odds ratio, so the formulas
+above won't exactly match the odds ratio displayed in the output of \verb!fisher.test()!, but the 
+value will be quite close.
+
+<<twins-or-7>>=
+(2/15) / (10/3)     # simple estimate of odds ratio
+(10/3) / (2/15)     # simple estimate of odds ratio with roles reversed
+@
+
+
+Notice that when $p_1$ and $p_1$ are small, then $1-p_1$ and $1 - p_2$ are both close to 1, so 
+\[
+\mbox{odds ratio} \approx \frac{ p_1 }{ p_2 }  = \mbox{relative risk}
+\]
+Relative risk is easier to understand, but odds ratio has nicer statistical and mathematical 
+properties.
+
+Fisher's exact test is equivalent to a randomization test using the odds ratio as the test statistic.
+
+\subsection{Survey Says}
+
+Let's take a look at some data from the survey we administered the first week of class.
+<<loadSurvey-7>>=
+survey <- read.file("http://www.calvin.edu/~rpruim/data/survey/littleSurvey.csv")
+head(survey, 2)
+@
+This includes data from past semesters as well.  Let's make a data set that contains only things from 2013:
+<<>>=
+survey2 <- subset(survey, grepl("2013", date))   # only keep rows with 2013 in the date
+@
+
+<<>>=
+tally( play ~ playVer, data=survey2, format="count" )
+tally( play ~ playVer, data=survey2 )
+@
+
+<<>>=
+playTable <- tally(play ~ playVer, data=survey2, format="count", margin=FALSE)
+playTable
+chisq.test(playTable)
+chisq.test(playTable,simulate=TRUE)
+fisher.test(playTable)
+prop.test(play ~ playVer, data=survey2)
+@
+
