@@ -1,0 +1,1 @@
+Sys.setenv(TEXINPUTS=".\\inputs\\\\")
