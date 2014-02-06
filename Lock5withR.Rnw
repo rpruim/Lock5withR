@@ -64,8 +64,8 @@
 \lhead[\sf \thepage]{\sf \leftmark}
 \rhead[\sf \leftmark]{\sf \thepage}
 \cfoot{}
-\lfoot[\sf Last Modified: \today]{\sf Math 145 : Fall 2013 : Pruim}
-\rfoot[\sf Math 145 : Fall 2013 : Pruim]{\sf Last Modified: \today}
+\lfoot[\sf Last Modified: \today]{\sf \copyright 2014}
+\rfoot[\sf \copyright 2014]{\sf Last Modified: \today}
 
 \pagestyle{fancy}
 
