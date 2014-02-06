@@ -3,6 +3,9 @@
 \setcounter{chapter}{-1}
 \Chapter{What Is Statistics?}
 
+
+
+
 %\section{Statistics: Answering Questions With Data}
 
 This is a course primarily about statistics, but what exactly is 
