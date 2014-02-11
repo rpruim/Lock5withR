@@ -1,26 +1,50 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
 \Chapter{Describing Data}
 
-In this chapter we discuss graphical and numerical summaries of data. These notes focus primarily on
-how to get \R\ to do the work for you. The text book includes more information about why and when
-to use various kinds of summaries.
+In this chapter we discuss graphical and numerical summaries of data. 
+%These notes focus primarily on how to get \R\ to do the work for you. The text book includes more information about why and when to use various kinds of summaries.
 
-\section*{Categorical Variables}
+\section{Categorical Variables}
+
+\subsection*{One Categorical Variable}
 
 %One categorical variable with proportion
 %frequency table?
+<<>>=
+tally(~Response, data = TrueLove)
+tally(~Response, format = "proportion", data = TrueLove)
+@
 %relative frequency
 %bar chart
 %pie chart
 %proportion calculation?
 
-%Two Categorical Variables: Two-Way Tables
-%Two-way table with row and column totals
+\subsection*{Two Categorical Variables: Two-Way Tables}
+
+Often, it is useful to compute cross tables for two (or more) variables. We can use \function{tally()} for several ways to investigate a two-way table.
+<<tally-2way>>=
+tally(~ Gender + Award, data = StudentSurvey)
+tally(Gender ~ Award, data = StudentSurvey)
+tally(~ Gender | Award, data=StudentSurvey)
+@
+
+Notice that (by default) some of these us counts and some use proportions.
+If you don't like the defaults, or if you don't want the row and column totals (called marginal
+totals), we can change the defaults by adding a bit more instruction.
+<<tally-2way-options>>=
+tally(~ Gender + Award, data=StudentSurvey, margins=FALSE, format="percent")
+@
+
+We can arrange the table differently by converting it to a data frame.
+<<tally-2way-data-frame>>=
+as.data.frame(tally(~ Gender + Award, data=StudentSurvey) )
+@
+
 %example 2.6 main of StudentSurvey plus 2.5
 %difference in prop-- I think there is a command for this
 %Visualizing a relationshi bw Two categorical variables (segmented bar chart and side by side bar charts)
 
-\section*{One Quantitative Variable: Shape and Center}
+\section{One Quantitative Variable: Shape and Center}
 
 %the shape of a distribution
 \subsection*{Distributions}
@@ -41,34 +65,28 @@ relative frequency), or densities (more on densities later).
 A distribution may be described using a table (listing values and frequencies)
 or a graph (e.g., a histogram) or with words that describe general features 
 of the distribution (e.g., symmetric, skewed).
+%%%%
+\subsection{The shape of a distribution}
 
+If we make a histogram (or any of these other plots) 
+of our data, we can describe the overall shape of the distribution.
+Keep in mind that the shape of a particular histogram may depend on the choice of bins.
+Choosing too many or too few bins can hide the true shape of the distribution.  (When in doubt, make
+more than one histogram.)
 
-<<>>=
-MammalLongevity
-dotplot(~ Longevity, data = MammalLongevity)
-@
-%fix for stacked dots
-%outliers
-
-%Histograms
-%frequency table for mammals
-<<>>=
-histogram(~ Longevity, data = MammalLongevity)
-@
-%fix intervals?
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Summaries of One Variable}
-
-A distribution is described by what values occur 
-and with what frequency.  That is, the distribution answers two 
-questions:
-\begin{itemize}
-  \item What values?  
-	\item How often?
-\end{itemize}
-
+Here are some words we use to describe shapes of distributions.
+\begin{description}
+\item[symmetric] The left and right sides are mirror images of each other.
+\item[skewed] The distribution stretches out farther in one direction than in the other.  
+(We say the distribution is skewed toward the long tail.)
+\item[uniform] The heights of all the bars are (roughly) the same.  
+(So the data are equally likely to be anywhere within some range.)
+\item[unimodal] There is one major ``bump'' where there is a lot of data.
+\item[bimodal] There are two ``bumps''.
+\item[outlier] An observation that does not fit the overall pattern of the rest of 
+the data.
+\end{description}
+%%%%
 Statisticians have devised a number of graphs to help us see 
 distributions visually.  
 
@@ -88,6 +106,20 @@ In other words, there are three pieces of information we must provide to
 		The name of the data frame this variable is a part of.
 \end{itemize}
 
+
+<<>>=
+MammalLongevity
+dotplot(~ Longevity, data = MammalLongevity)
+@
+%fix for stacked dots
+%outliers
+
+%Histograms
+%frequency table for mammals
+<<>>=
+histogram(~ Longevity, data = MammalLongevity)
+@
+%fix intervals?
 
 \subsection{Histograms (and density plots) for quantitative variables}
 
@@ -150,43 +182,9 @@ dotPlot( ~ age, data=HELPrct )
 @
 \fi
 
+\section{One Quantitative Variable: Measures and Spread}
 
-
-
-\subsection{The shape of a distribution}
-
-If we make a histogram (or any of these other plots) 
-of our data, we can describe the overall shape of the distribution.
-Keep in mind that the shape of a particular histogram may depend on the choice of bins.
-Choosing too many or too few bins can hide the true shape of the distribution.  (When in doubt, make
-more than one histogram.)
-
-Here are some words we use to describe shapes of distributions.
-\begin{description}
-\item[symmetric] The left and right sides are mirror images of each other.
-\item[skewed] The distribution stretches out farther in one direction than in the other.  
-(We say the distribution is skewed toward the long tail.)
-\item[uniform] The heights of all the bars are (roughly) the same.  
-(So the data are equally likely to be anywhere within some range.)
-\item[unimodal] There is one major ``bump'' where there is a lot of data.
-\item[bimodal] There are two ``bumps''.
-\item[outlier] An observation that does not fit the overall pattern of the rest of 
-the data.
-\end{description}
-
-
-\begin{problem}
-	Use \R's help system to find out what the \variable{i1} and \variable{i2}
-	variables are in the \dataframe{HELPrct} data frame.  Make histograms
-	for each variable and comment on what you find out.  How would you describe
-	the shape of these distributions?  Do you see any outliers (observations
-	that don't seem to fit the pattern of the rest of the data)?  
-\end{problem}
-
-We'll learn about another graph used for quantitative variables 
-(a boxplot, \function{bwplot()} in \R) soon.
-
-\subsection{Numerical Summaries (i.e., statistics)}
+\subsection*{Numerical Summaries (i.e., statistics)}
 
 Recall that a statistics is a number computed from data.  
 Numerical summaries are computed using the same template as graphical summaries.  
@@ -203,69 +201,7 @@ iqr(~age, data=HELPrct)        # inter-quartile range
 favstats(~age, data=HELPrct)   # some favorite statistics
 @
 
-\subsection{Bar graphs for categorical variables}
-
-Bar graphs are a way of displaying the distribution of a categorical variable.
-
-<<bargraph>>=
-bargraph( ~ substance, data=HELPrct) 
-bargraph( ~ substance, data=HELPrct, horizontal=TRUE )
-@
-
-Statisticians rarely use pie charts because they are harder to read.
-
-\section{Creating Tables}
-
-\subsection{Tabulating a categorical variable}
-
-The \function{tally()} function tabulates categorical variables.  
-This syntax is just like the syntax for plotting, we just replace
-\function{bargraph} with \function{tally}:
-<<tally-substance>>=
-tally( ~ substance, data = HELPrct )
-@
-
-
-\subsection{Tabulating a quantitative variable}
-
-Although \function{tally()} works with quantitative variables
-as well as categorical variables, this is only useful when there are not too
-many different values for the variable.
-
-<<xtabs-quantitative>>=
-tally( ~age, data=HELPrct )
-@
-
-\subsubsection*{Tabulating in bins (optional)}
-It is more convenient to group them into bins.  We just have to tell \R\ what the bins are.
-For example, suppose we wanted to group the 20s, 30s, 40s, etc. together.
-\Rindex{cut()}%
-\Rindex{tally()}%
-<<cut>>=
-binnedAge <- cut(HELPrct$age, breaks=c(10,20,30,40,50,60,70) )
-tally( ~binnedAge )      # no data frame given because its not in a data frame
-@
-That's not quite what we wanted: 30 is in with the 20s, for example.
-Here's how we fix that.
-
-<<cut2>>=
-binnedAge <- cut(HELPrct$age, breaks=c(10,20,30,40,50,60,70), right=FALSE )
-tally( ~binnedAge )      # no data frame given because it's not in a data frame
-@
-
-
-We won't use this very often, since typically seeing this information in a histogram is 
-more useful.  
-
-\subsubsection*{Labeling a histogram}
-
-The \function{histogram()} function offers you the option of 
-adding the counts to the graph.
-<<histogram-counts,fig.width=6,warning=FALSE>>=
-histogram( ~age, data=HELPrct, label=TRUE, type='count', 
-		   width=10, center=5, ylim=c(0,300), right=FALSE )
-@
-
+\section{Outliers, Boxplots, and Quantitative/Categorical Relationships}
 
 \section{Looking at multiple variables at once}
 
@@ -288,7 +224,7 @@ histogram(~BirthRate | Developed, data=AllCountries, width=5)
 @
 
 \begin{problem}
-	Compare the distributions of \variable{i1} and \variable{i2} among men
+  Compare the distributions of \variable{i1} and \variable{i2} among men
 	and women.
 \end{problem}
 \begin{solution}
@@ -378,32 +314,98 @@ xyplot( mcs ~ age | sex, groups=substance, data=HELPrct, alpha=.6, cex=.5,
 @
 
 
-\subsection{Cross-tables: Tabulating two or more variables}
 
-\function{tally()} can also compute cross tables for two (or more) variables.
-Here are several ways to get a table of sex and substance in the \dataframe{HELPrct}
-data.  
-<<tally-2way>>=
-tally(~ sex + substance, data=HELPrct)
-tally(sex ~ substance, data=HELPrct)
-tally( ~ sex | substance, data=HELPrct)
-@
-Notice that (by default) some of these us counts and some use proportions.
-If you don't like the defaults, or if you don't want the row and column totals (called marginal
-totals), we can change the defaults by adding a bit more instruction.
-<<tally-2way-options>>=
-tally(~ sex + substance, data=HELPrct, margins=FALSE, format="percent")
-@
-
-
-We can arrange the table differently by converting it to a data frame.
-<<tally-2way-data-frame>>=
-as.data.frame( tally(~ sex + substance, data=HELPrct) )
-@
 
 
 
 \iffalse
+
+\section{Two Quantitative Variables: Scatterplot and Correlation}
+
+\section{Two Quantitative Variables: Linear Regression}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\begin{problem}
+	Use \R's help system to find out what the \variable{i1} and \variable{i2}
+	variables are in the \dataframe{HELPrct} data frame.  Make histograms
+	for each variable and comment on what you find out.  How would you describe
+	the shape of these distributions?  Do you see any outliers (observations
+	that don't seem to fit the pattern of the rest of the data)?  
+\end{problem}
+
+We'll learn about another graph used for quantitative variables 
+(a boxplot, \function{bwplot()} in \R) soon.
+
+
+
+\subsection{Bar graphs for categorical variables}
+
+Bar graphs are a way of displaying the distribution of a categorical variable.
+
+<<bargraph>>=
+bargraph( ~ substance, data=HELPrct) 
+bargraph( ~ substance, data=HELPrct, horizontal=TRUE )
+@
+
+Statisticians rarely use pie charts because they are harder to read.
+
+\section{Creating Tables}
+
+\subsection{Tabulating a categorical variable}
+
+The \function{tally()} function tabulates categorical variables.  
+This syntax is just like the syntax for plotting, we just replace
+\function{bargraph} with \function{tally}:
+<<tally-substance>>=
+tally( ~ substance, data = HELPrct )
+@
+
+
+\subsection{Tabulating a quantitative variable}
+
+Although \function{tally()} works with quantitative variables
+as well as categorical variables, this is only useful when there are not too
+many different values for the variable.
+
+<<xtabs-quantitative>>=
+tally( ~age, data=HELPrct )
+@
+
+\subsubsection*{Tabulating in bins (optional)}
+It is more convenient to group them into bins.  We just have to tell \R\ what the bins are.
+For example, suppose we wanted to group the 20s, 30s, 40s, etc. together.
+\Rindex{cut()}%
+\Rindex{tally()}%
+<<cut>>=
+binnedAge <- cut(HELPrct$age, breaks=c(10,20,30,40,50,60,70) )
+tally( ~binnedAge )      # no data frame given because its not in a data frame
+@
+That's not quite what we wanted: 30 is in with the 20s, for example.
+Here's how we fix that.
+
+<<cut2>>=
+binnedAge <- cut(HELPrct$age, breaks=c(10,20,30,40,50,60,70), right=FALSE )
+tally( ~binnedAge )      # no data frame given because it's not in a data frame
+@
+
+
+We won't use this very often, since typically seeing this information in a histogram is 
+more useful.  
+
+\subsubsection*{Labeling a histogram}
+
+The \function{histogram()} function offers you the option of 
+adding the counts to the graph.
+<<histogram-counts,fig.width=6,warning=FALSE>>=
+histogram( ~age, data=HELPrct, label=TRUE, type='count', 
+		   width=10, center=5, ylim=c(0,300), right=FALSE )
+@
+
+
+
 \section{Working with Pre-Tabulated Data}
 
 Sometimes data arrive pre-tabulated.  We can use \function{barchart()} instead of \function{bargraph()}
@@ -441,65 +443,7 @@ have to do any copying and pasting.  This is a much better workflow since it avo
 copy-and-paste which is error prone and makes it easy to regenerate an entire report
 should the data change (because you get more of it or correct an error, for example).
 
-\section{Using R Markdown}
 
-Although you can export plots from \RStudio\ for use in other applications, there is another 
-way of preparing documents that has many advantages.  \RStudio\ provides several ways to 
-create documents that include text, \R\ code, \R\ output, graphics, even mathematical notation
-all in one document.  The simplest of these is R Markdown.  
-
-To create a new R Markdown document, go to ``File", ``New", then ``R Markdown":
-\begin{center}
-	\includegraphics[width=3in]{images/NewRMarkdown}
-\end{center}
-
-When you do this, a file editing pane will open with a template inserted.  If you click
-on ``Knit HTML", \RStudio\ will turn this into an HTML file and display it for you.  Give it a try.
-You will be asked to name your file if you haven't already done so.  If you are using the \RStudio\
-server in a browser, then your file will live on the server (``in the cloud'') rather than 
-on your computer.
-
-If you look at the template file you will see that the file has two kinds of sections.  Some of this file is 
-just normal text (with some extra symbols to make things bold, add in headings, etc.)  You can get
-a list of all of these mark up options by selecting the ``Mardown Quick Reference" in the question mark
-menu.
-
-\begin{center}
-	\includegraphics[width=2in]{images/MardownQuickReference}
-\end{center}
-
-The second type of section is an \R\ code chunk.  These are colored differently to make them
-easier to see.  You can insert a new code chunk by selecting ``Insert Chunk" from the ``Chunks" 
-menu:
-\begin{center}
-	\includegraphics[width=2in]{images/InsertChunk}
-\end{center}
-\noindent
-(You can also type \verb!```{r}! to begin and \verb!```! to end the code chunk if you would 
-rather type.)
-You can put any \R\ code in these code chunks and the results (text output or graphics) as well
-as the \R\ code will be displayed in your HTML file.
-
-There are options to do things like (a) run \R\ code without displayng it, (b) run \R\ code without
-displaying the output, (c) controling size of plots, etc., etc.  
-But for starting out, this is really all you need to know.
-
-\subsection*{R Markdown files must be self-contained}
-R Markdown files do not have access to things you have done in your console.  (This is good, else 
-your document would change based on things not in the file.)  This means that you must explicitly
-load data, and require packages \emph{in the R Markdown file} in order to use them.  In this class,
-this means that most of your R Markdown files will have a chunk near the beginning that includes
-
-<<>>=
-require(mosaic)       # load the mosaic package
-require(Lock5Data)    # get data sets from the book
-@
-
-For your first assignment, I'll provide you a template to get you going.
-
-\subsection{Printing your document}
-
-The preview window has an icon that looks like an arrow pointing at a window.  If you click on that the document will open in a regular browser window.  From there you can use your browser's print features to print the document.
 
 \section{A Few Bells and Whistles}
 There are lots of arguments that control how these plots look.  Here are just a
@@ -704,51 +648,6 @@ Notice how different this looks.  Now the heights are equal to the relative
 frequency, but this makes the wider bars have too much area.
 \fi
 
-
-
-%\section{Getting Help in RStudio} INCLUDE IN 00
-
-\subsection{The \RStudio\ help system}
-There are several ways to get \RStudio\ to help you when you forget something.
-Most objects in packages have help files that you can access by typing something 
-like:
-<<help-questionmark,eval=FALSE,tidy=FALSE>>=
-?bargraph
-?histogram
-?HELPrct
-@
-You can search the help system using
-<<help-GR,eval=FALSE>>=
-help.search('Grand Rapids')    # Does R know anything about Grand Rapids?
-@
-This can be useful if you don't know the name of the function or data set you 
-are looking for.
-
-\subsection{Tab completion}
-As you type the name of a function in \RStudio, you can hit the tab key and it
-will show you a list of all the ways you could complete that name, and after
-you type the opening parenthesis, if you hit the tab key, you will get a list
-of all the arguments and (sometimes) some helpful hints about what they are.)
-
-\subsection{History}
-If you know you have done something before, but can't remember how, you can
-search your history.  The history tab shows a list of recently executed
-commands.  There is also a search bar to help you find things from longer ago.
-
-\subsection{Error messages}
-When things go wrong, \R\ tries to help you out by providing an error message.
-If you can't make sense of the message, you can try copying and pasting your
-command and the error message and sending to me in an email.  One common error
-message is illustrated below.
-<<error-message>>=
-fred <- 23
-frd
-@
-The object \code{frd} is not found because it was mistyped.  It should have
-been \code{fred}.  If you see an ``object not found'' message, check your
-typing and check to make sure that the necessary packages have been loaded.
-
-\newpage
 
 
 \newpage
