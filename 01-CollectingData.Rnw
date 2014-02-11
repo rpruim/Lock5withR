@@ -1,432 +1,57 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
+\Chapter{Collecting Data}
 
-\setcounter{chapter}{-1}
-\Chapter{What Is Statistics?}
+%INCLUDE REAL INTRODUCTION TO CHAPTER 1
+%In this chapter we discuss graphical and numerical summaries of data.  These notes focus primarily on
+%how to get \R\ to do the work for you.  The text book includes more information about why and when
+%to use various kinds of summaries.
 
-%\section{Statistics: Answering Questions With Data}
+\section{The Structure of Data}
 
-This is a course primarily about statistics, but what exactly is 
-\emph{statistics}?  In other words, what is this course about?%
-\footnote{As we will see, the words \emph{statistic} and 
-\emph{statistics} get used in more than one way.  More on that later.}
-Here are some definitions of statistics from other people:
+%INTRODUCTION TO SECTION
+%sub-subsections
 
-\begin{itemize}
-% \item
-%	a body of methods for making wise decisions in the face of uncertainty  
-%	(W.A. Wallis)
-  
-  \item a collection of procedures and principles for gaining information in
-	order to make decisions when faced with 
-	uncertainty (J. Utts \cite{Utts:2005:SeeingThroughStats}),
+\subsection*{A Student Survey}
 
-  \item a way of taming uncertainty, of turning raw data into arguments that
-	can resolve profound questions (T. Amabile \cite{AgainstAllOdds:video}),
+Data sets in \R\ are usually stored as \term{data frames} in a rectangular arrangement with rows 
+corresponding to observational units and columns corresponding to variables.  A number of data
+sets are built into \R\ and its packages. The package for our text is \pkg{Lock5Data} which comes with a number of data sets. %1.4 p.13
 
-%  \item  the science of gaining information from numerical data (D.S. Moore)
-
-  \item the science of drawing conclusions from data with the aid of the
-	mathematics of probability 
-	(S. Garfunkel \cite{ForAllPracticalPurposes:video}),
-
-	\item
-	the explanation of variation in the context of what remains unexplained
-	(D. Kaplan \cite{kaplan-modeling}),
-
- \item the mathematics of the collection, organization, and interpretation of
-   numerical data, especially the analysis of a population's characteristics by
-   inference from sampling 
-   (American Heritage Dictionary \cite{AmHerDictionary:1982}).
-
-\end{itemize}
-
-Here's a simpler definition:
-
-\begin{boxedText}
-	\begin{center}
-	Statistics is the science of answering questions with data.
-	\end{center}
-\end{boxedText}
-
-This definition gets at two important elements of the longer definitions above:
-
-%There's more to it 
-%While not exactly the same, these definitions highlight four key elements
-%of statistics.
-%\subsection*{Four Key Components}
-
-\subsection*{Data -- the raw material}
-
-\myindex{data}
-Data are the raw material for doing statistics.  We will learn
-more about different types of data, how to collect data, and how to summarize 
-data as we go along.  
-
-\subsection*{Information -- the goal}
-The goal of doing statistics is to gain some information or to make a decision -- that is, to 
-answer some question.
-
-Statistics is useful because it helps us answer questions like the following:
-\footnote{The opening pages of each chapter of our book include many more questions.}
-\begin{itemize}
-  \item
-Which of two treatment plans leads to the best clinical outcomes?
-  \item
-Are men or women more successful at quitting smoking? And does it matter
-which smoking cessation program they use?
-  \item 
-%\myindex{Kellog's|exampleidx}%
-Is my cereal company complying with regulations about the 
-amount of cereal in its cereal boxes?
-\end{itemize}
-In this sense, statistics is a science -- a method for obtaining 
-new knowledge.%
-%\footnote{In German, the word for science is \emph{Wissenschaft}.  Literally
-%translated it means ``knowledge creation''.}
-Our simple definition is light on describing the context in which this takes place.
-So let's add two more important aspects of statistics.
-
-\subsection*{Uncertainty -- the context}
-
-\myindex{randomness}
-The tricky thing about statistics is the uncertainty involved.  
-If we measure one box of cereal, how do we know that all the others are 
-similarly filled?  If every box of cereal were identical and every measurement
-perfectly exact, then one measurement would suffice.  But the boxes may differ
-from one another, and even if we measure the same box multiple times,
-we may get different answers to the question 
-\emph{How much cereal is in the box?}
-
-So we need to answer questions like 
-\emph{How many boxes should we measure?}
-and 
-\emph{How many times should we measure each box?}
-Even so, there is no answer to these questions
-that will give us absolute certainty.
-So we need to answer questions like 
-\emph{How sure do we need to be?}
-
-\subsection*{Probability -- the tool}
-
-In order to answer a question like \emph{How sure do we need to be?},
-we need some way of measuring our level of certainty.  This is where
-mathematics enters into statistics.  Probability is the area of 
-mathematics that deals with reasoning about uncertainty.  
-
-%So before we can answer the statistical questions we just listed, 
-%we must first develop some skill in probability.  
-%Once we have developed the necessary tools to deal with uncertainty,
-%we will be able to give good answers to our statistical questions.
-
-%Let's take a bird's eye view of the processes
-%involved in a statistical study.  
-%We'll come back and fill in the details later.
-
-%\subsection{General Outline of a Statistical Study}
-
-\section{A First Example: The Lady Tasting Tea}
-
-\myindex{lady tasting tea|exampleidx}%
-%\myindex{tea|seeonly{lady tasting tea}}%
-There is a famous story about a lady who claimed that
-tea with milk tasted different depending on whether the milk was 
-added to the tea or the tea added to the milk.
-The story is famous because of the setting in which she made this claim.  
-She was attending a party in Cambridge, England, in the $1920$s.
-Also in attendance were a number of university dons and their wives.
-The scientists in attendance scoffed at the woman and her claim.
-What, after all, could be the difference?
-
-\myindex{Fisher, R. A.}%
-All the scientists but one, that is.  Rather than simply dismiss the 
-woman's claim, he proposed that they decide how one 
-should \emph{test} the claim.  The tenor of the conversation changed at 
-this suggestion, and the scientists began to discuss how the claim should be 
-tested.  Within a few minutes cups of tea with milk had been prepared and 
-presented to the woman for tasting.
-
-Let's take this simple example as a prototype for a statistical study.
-What steps are involved?  
-\begin{enumerate}
-  \item Determine the question of interest.
-
-	Just what is it we want to know?  It may take some effort to 
-	make a vague idea precise.  The precise questions may not exactly
-	correspond to our vague questions, and the very exercise of 
-	stating the question precisely may modify our question.  Sometimes
-	we cannot come up with any way to answer the question we really want
-	to answer, so we have to live with some other question that is 
-	not exactly what we wanted but is something we can study and will
-	(we hope) give us some information about our original question.
-
-	In our example this question seems fairly easy to state:
-	Can the lady tell the difference between the two tea preparations?
-	But we need to refine this question.  For example, are we 
-	asking if she \emph{always} correctly identifies cups of tea
-	or merely if she does better than we could do ourselves (by 
-	guessing)?  
-
-  \item 
-	Determine the \term{population}. 
-	\myindex{population}%
-
-	Just who or what do we want to know about?  Are we only interested in
-	this one woman or women in general or only women who claim to
-	be able to distinguish tea preparations?
-
-  \item
-	Select \term{measurements}.
-
-	We are going to need some data.  
-	We get our data by making some measurements.
-	These might be physical measurements with some device (like a ruler
-	or a scale).
-	But there are other sorts of measurements too, 
-	like the answer to a question on a form.
-	Sometimes it is tricky to figure out just what to measure.
-	(How do we measure happiness or intelligence, for example?)
-	Just how we do our measuring will have important consequences 
-	for the subsequent statistical analysis.
-	The recorded values of these measurements are called
-	\term{variables} (because the values vary from one individual to another).
-
-	In our example, a measurement may consist of recording for a given
-	cup of tea whether the woman's claim is correct or incorrect.
-	%it is milk-into-tea or tea-into-milk.
-
-  \item
-	Determine the \term{sample}.
-	\myindex{sample}%
-
-	Usually we cannot measure every individual in our population; we have 
-	to select some to measure.  
-	But how many and which ones?  
-	These are important questions that must be answered.
-	Generally speaking, bigger is better, but it is also more expensive.
-	Moreover, no size is large enough if the sample is selected inappropriately.
-
-	Suppose we gave the lady one cup of tea.  If she correctly identifies
-	the mixing procedure, will we be convinced of her claim?  She might just
-	be guessing; so we should probably have her taste more than one 
-	cup.  Will we be convinced if she correctly identifies $5$ cups? $10$ cups?
-	$50$ cups?
-
-	What if she makes a mistake?  If we present her with $10$ cups and she
-	correctly identifies $9$ of the $10$, what will we conclude?  
-	\authNote{added A success rate of -- 2010-10-23}%
-	A success rate of $90$\% is, it seems,
-	much better than just guessing, and anyone can make a mistake now and then.
-	But what if she correctly identifies $8$ out of $10$? $80$ out of $100$?
-	
-	And how should we prepare the cups?  Should we make $5$ each way?  
-	\authNote{Left it as "and how" -- 2010-10-23}%
-	Does it matter if we tell the woman that there are $5$ prepared 
-	each way?
-	Should we flip a coin to decide even if that means we might end 
-	up with $3$ prepared one way and $7$ the other way?  
-	Do any of these differences matter?
-
-  \item
-	Make and record the measurements.
-
-	Once we have the design figured out, we have to do the legwork of 
-	data collection.  This can be a time-consuming and tedious process.
-	In the case of the lady tasting tea, the scientists decided to 
-	present her with ten cups of tea which were quickly prepared.
-	A study of public opinion may require many thousands of phone calls or 
-	personal interviews.
-	In a laboratory setting, each measurement might be the result 
-	of a carefully performed laboratory experiment.
-
-  \item Organize the data.
-
-	Once the data have been collected, it is often necessary or useful
-	to organize them.  Data are typically stored in spreadsheets or 
-	in other formats that are convenient for processing with 
-	statistical packages.  Very large data sets are often stored in 
-	databases.  
-	
-	Part of the organization of the data may involve producing graphical and
-	numerical summaries of the data.  These summaries may give us initial
-	insights into our questions or help us detect errors that may have occurred
-	to this point.
-
-  \item Draw conclusions from data.
-
-	Once the data have been collected, organized, and analyzed, we need
-	to reach a conclusion.  
-	Do we believe the woman's claim?  
-	Or do we think she is merely guessing?  How sure are we that this
-	conclusion is correct?
-
-%	In Parts~\ref{part:inf1}--\ref{part:inf2} 
-	Eventually we will
-	learn a number of important and frequently used methods for 
-	drawing inferences from data.  More importantly, we will learn
-	the basic framework used for such procedures so that it should 
-	become easier and easier to learn new procedures as we become 
-	familiar with the framework.
-	
-	%How strongly do we believe it?  
-
-  \item Produce a report.
-
-		Typically the results of a statistical study are reported in 
-		some manner.  This may be as a refereed article in an academic 
-		journal, as an internal report to a company, or as a solution
-		to a problem on a homework assignment.  These reports may themselves
-		be further distilled into press releases, newspaper articles,
-		advertisements, and the like.  The mark of a good report
-		is that it provides the essential information about each 
-		of the steps of the study.
-
-		As we go along, we will learn some of the standard terminology and
-		procedures that you are likely to see in basic statistical reports and 
-		will gain a framework for learning more.  
-\end{enumerate}
-
-At this point, you may be wondering who the innovative scientist was and 
-what the results of the experiment were.
-\myindex{Fisher, R. A.}%
-The scientist was R. A. Fisher, who first described this situation
-as a pedagogical example in his 1925 book on 
-statistical methodology \cite{Fisher:1925:Methods}.
-Fisher developed statistical methods that are among the most
-important and widely used methods to this day, and most of his 
-applications were biological.
-\nocite{Fisher:1970:Methods}%
-
-
-\section{Coins and Cups}
-You might also be curious about how the experiment came out.
-How many cups of tea were prepared?  How many did the woman 
-correctly identify?  What was the conclusion?
-
-Fisher never says.  In his book he is interested in the method, not the 
-particular results.  But let's suppose we decide to test the lady with
-ten cups of tea.  
-We'll flip a coin to decide which way to prepare the cups.  
-If we flip a head, we will pour the milk in first; if tails, we 
-put the tea in first.
-Then we present the ten cups to the lady and have her state which ones she
-thinks were prepared each way.  
-
-It is easy to give her a score (9 out of 10, or 7 out of 10, or whatever
-it happens to be).  It is trickier to figure out what to do with her score.
-Even if she is just guessing and has no idea, she could get lucky and 
-get quite a few correct -- maybe even all 10.  But how likely is that?
-
-Let's try an experiment.  I'll flip 10 coins.  You guess which are heads and
-which are tails, and we'll see how you do.  
-
-$\vdots$
-
-Comparing with your classmates, we will undoubtedly see that some 
-of you did better and others worse.
-
-Now let's suppose the lady gets 9 out of 10 correct.  That's not perfect,
-but it is better than we would expect for someone who was just guessing.
-On the other hand, it is not impossible to get 9 out of 10 just by guessing.
-So here is Fisher's great idea:  Let's figure out how hard it is to get
-9 out of 10 by guessing.  If it's not so hard to do, then perhaps that's 
-just what happened, so we won't be too impressed with the lady's tea tasting
-ability.  On the other hand, if it is really unusual to get 9 out of 10 
-correct by guessing, then we will have some evidence that she must 
-be able to tell something.
-
-But how do we figure out how unusual it is to get 9 out of 10 just by 
-guessing?  We'll learn another method later, but for now, let's just 
-flip a bunch of coins and keep track.  If the lady is just guessing, she 
-might as well be flipping a coin.
-
-So here's the plan.  We'll flip 10 coins.  We'll call the heads correct 
-guesses and the tails incorrect guesses.  Then we'll flip 10 more coins,
-and 10 more, and 10 more, and \dots.  That would get pretty tedious.
-Fortunately, computers are good at tedious things, so we'll let the computer 
-do the flipping for us using a tool in the \pkg{mosaic} package.
-This package is already installed in our \RStudio\ server.  If you are running
-your own installation of \R\ you can install \pkg{mosaic} using the following 
-command:
-<<install-mosaic,eval=FALSE>>=
-install.packages("mosaic")
-@
-The \function{rflip()} function can flip one coin
-
-<<flip1coin,cache=TRUE>>=
-require(mosaic)
-rflip()
-@
-or a number of coins
-<<flip10coins,cache=TRUE>>=
-rflip(10)
-@
-and show us the results.
-
-Typing \code{rflip(10)} a bunch of times is almost as tedious as 
-flipping all those coins.   But it is not too hard to 
-tell \R\ to \function{do()} this a bunch of times.
-<<flip2,cache=TRUE>>=
-do(2) * rflip(10)
-@
-%And if we switch to a ``quiet'' version of \verb!rflip()!,
-%we will get much terser output -- 
-%just the counts of the number of heads (i.e., correct guesses).
-%<<flip3,cache=TRUE>>=
-%do(100) * rflip(10)           # "quiet version" of rflip()
-%@
-Let's get \R\ to \function{do()} it for us 10,000 times and make 
-a table of the results.
-<<seed123,echo=FALSE>>=
-set.seed(123)
-@
-<<flip4,cache=TRUE>>=
-results <- do(10000) * rflip(10)
-table(results$heads)
-@
-<<flip5,cache=TRUE>>=
-perctable(results$heads)     #  the table in percents
-proptable(results$heads)     #  the table in proportions (i.e., decimals)
-@
-We could also use \function{tally()} for this.
-<<tally>>=
-tally(~heads, data=results)
-tally(~heads, data=results, format='percent')
-tally(~heads, data=results, format='proportion')
+<<>>=
+require(Lock5Data)  # Tell R to use the package for our text book
+data(StudentSurvey) # load the StudentSurvey data set
 @
 
+Let's take a look at the data frame for the Student Survey example in the text. If we type the name of the data set, \R\ will display it in its entirety for us. However, \dataframe{StudentSurvey} is a larger data set, so it is more useful to look at some sort of summary or subset of the data. %1.4 p14
+<<>>=
+head(StudentSurvey) # first six cases of the data set
+@
 
-You might be surprised to see that the number of correct guesses
-is exactly 5 (half of the 10 tries) only 
-\Sexpr{round(as.numeric(table(results$heads)[6]/100,1))}\%
-of the time.  But most of the results are quite close to 5 correct.
-\Sexpr{round(sum(table(results$heads)[5:7]/100,1))}\% of the results are 
-4, 5, or 6, for example.
-And \Sexpr{round(sum(table(results)[4:8]/100,1))}\% of the results 
-are  between 3 and 7 (inclusive).
-But getting 8 correct is a bit unusual, and getting 9 or 10 correct is even 
-more unusual.  
+We can easily classify variables as either \term{categorical} or \term{quantitative} by studying the result of \function{head()}, but there are some summaries of the data set which reveal such information.
+<<>>=
+str(StudentSurvey) # structure of the data set
+summary(StudentSurvey) # summary of each variable
+@
 
-So what do we conclude?  It is possible that the lady could get 9 or 10 correct
-just by guessing, but it is not very likely (it only happened in about
-\Sexpr{round( sum(table(results$heads)[10:11]/100), 1 )}\% of our simulations). 
-So \emph{one of two things must be true}:
-\begin{itemize}
-\item The lady got unusually ``lucky", or 
-\item The lady is not just guessing.
-\end{itemize}
+Here are some more summaries:
+<<>>=
+nrow(StudentSurvey) # number of rows
+ncol(StudentSurvey) # number of columns
+dim(StudentSurvey) # number of rows and columns
+@
 
-Although Fisher did not say how the experiment came out, others have reported
-that the lady correctly identified all 10 cups!
-\cite{salsburg}
+\subsection*{Data on Countries}
 
-This same reasoning can be applied to answer a wide range of questions that have a similar form.
-For example, the question of whether dogs can smell cancer could be answered essentially the same way 
-(although it would be a bit more involved than preparing tea and presenting cups to the Lady).
+<<>>=
+head(AllCountries)
+summary(AllCountries)
+@
+%Info just on Iceland--observation 86
+%something about data()?
 
-\Chapter{Data and Where It Comes From}
+\section{Sampling from a Population}
 
-\section{Data}
-
+%population vs. sample 
 \begin{boxedText}
 Imagine data as a 2-dimensional structure (like a spreadsheet).
 \medskip
@@ -438,8 +63,8 @@ are collecting data about).
 \item
 Columns correspond to \term{variables} (measurements collected on each observational unit).
 \item
-	At the intersection of a row and a column is the \term{value} of the variable
-	for a particular observational unit.
+  At the intersection of a row and a column is the \term{value} of the variable
+  for a particular observational unit.
 \end{itemize}
 \end{boxedText}
 
@@ -455,7 +80,7 @@ your observational units are.
 one of two or more categories (examples: color, sex, case/control status, species, etc.)
 
 \iftrue
-These can be further sub-divided into ordinal and nominal variables
+These can be further sub-divided into ordinal and nominal variables.
 If the categories have a natural and meaningful order, we will call them
 \term{ordered} or \term{ordinal} variables.  Otherwise, they are \term{nominal}
 variables.
@@ -478,51 +103,7 @@ a variable we are trying to predict or explain
 a variable used to predict or explain a response variable
 \end{description}
 
-%Often we will be interested in the relationships between two or more variables.
-%We may try to explain or predict one variable (the \term{response variable})
-%from other variables (the \term{explanatory variables}).
-
-\subsection*{Distributions}
-
-\begin{boxedText}
-The distribution of a variable answers two questions:
-\begin{itemize}
-\item
-\emph{What values} can the variable have?
-\item
-\emph{With what frequency} does each value occur?
-
-The frequency may be described in terms of counts, proportions (often called 
-relative frequency), or densities (more on densities later).
-\end{itemize}
-\end{boxedText}
-
-A distribution may be described using a table (listing values and frequencies)
-or a graph (e.g., a histogram) or with words that describe general features 
-of the distribution (e.g., symmetric, skewed).
-\section{Samples and Populations}
-\begin{description}
-\item[population] 
-the collection of animals, plants, objects, etc.
-that we want to know about
-\item[sample]
-the (smaller) set of animals, plants, objects, etc. about which we have data
-\item[parameter]
-a number that describes a population or model.
-\item[statistic]
-a number that describes a sample.
-\end{description}
-
-Much of statistics centers around this question:
-\begin{center}
-\large
-\fbox{
-\rule[-2.5mm]{0pt}{8mm}
-\emph{What can we learn about a population from a sample?} \ 
-}
-\end{center}
-
-\subsection*{Estimation}
+\subsection{Estimation}
 
 Often we are interested in knowing (approximately) the 
 value of some parameter.  A statistic used for this purpose is called
@@ -550,9 +131,31 @@ the measure of how close estimates are to the thing being estimated
 (called the \term{estimand}).
 \end{description}
 
+\section{Samples and Populations}
+\begin{description}
+\item[population] 
+the collection of animals, plants, objects, etc.
+that we want to know about
+\item[sample]
+the (smaller) set of animals, plants, objects, etc. about which we have data
+\item[parameter]
+a number that describes a population or model.
+\item[statistic]
+a number that describes a sample.
+\end{description}
+
+Much of statistics centers around this question:
+\begin{center}
+\large
+\fbox{
+\rule[-2.5mm]{0pt}{8mm}
+\emph{What can we learn about a population from a sample?} \ 
+}
+\end{center}
+
 
 \subsection*{Sampling}
-%\subsection*{Simple Random Samples}
+
 \term{Sampling} is the process of selecting a sample.  
 Statisticians use 
 \term{random samples} 
@@ -572,7 +175,6 @@ particular, in a simple random sample, \emph{every individual has an equal
 chance to be in the sample}, in fact, every subset of the population of a fixed
 size has an equal chance to be in the sample.
 
-%\subsubsection*{Some other types of samples}
 Other sampling methods include
 \begin{description}
 \item[convenience sampling] using whatever individuals are easy to obtain
@@ -606,8 +208,12 @@ of the population we are trying to study, leading us to draw inaccurate or
 incorrect conclusions.
 \fi
 
+%ex 1.15 select a random sample of 5 of AllCountries
 
-\section{Types of Statistical Studies}
+
+\section{Experiments and Observational Studies}
+
+\subsection*{Types of Statistical Studies}
 
 Statisticians use the word experiment to mean something very specific.
 \emph{In an \term{experiment}, the researcher determines the values of 
@@ -615,46 +221,31 @@ one or more (explanatory) variables}, typically by random assignment.
 If there is no such assignment by the researcher, the study is an
 \term{observational study}.
 
-\section{Data in R}
+%random selection and randomized experiment
+%matched pairs?
 
-Data sets in \R\ are usually stored as \term{data frames} in a rectangular arrangement with rows 
-corresponding to observational unites and columns corresponding to variables.  A number of data
-sets are built into \R\ and its packages.  Let's take a look at \dataframe{CricketChirps}, 
-a small data set that comes with the Lock5 text.
+\subsection*{Vehicles and Life Expectancy}
 
-<<require-Lock5Data>>=
-require(Lock5Data)  # Tell R to use the package for our text book
-@
-If we type the name of the data set, \R\ will display it for us.
-\newpage
-<<CricketChirps>>=
-CricketChirps
-@
-
-This data set has 7 observational units (what are they?) and 2 variables (what are they?)
-For larger data sets, it is more useful to look at some sort of summary or subset of the data.
-Here are the first few rows of the \dataframe{iris} data set.
-<<head-iris>>=
-head(iris)
-@
-Here are some summaries of the data set:
 <<>>=
-str(iris)       # structure of the data set
-summary(iris)   # summary of each variable
-nrow(iris)      # how many rows?
-ncol(iris)      # how many columns?
-dim(iris)       # how many rows and columns?
+head(LifeExpectancyVehicles, 10)
+@
+%fix for every 4 years?
+%confounding variables
+
+<<tidy=FALSE>>=
+xyplot(LifeExpectancy ~ Vehicles, xlab = "Vehicles (millions)", ylab = "Life Expectancy", 
+       data = LifeExpectancyVehicles)
 @
 
 Many of the datasets in \R\ have useful help files that describe the data and explain 
-how they were collected or give references to the original studies.  You can access this 
-information for the \dataframe{iris} data set by typing
+how they were collected or give references to the original studies. You can access this 
+information for the \dataframe{AllCountries} data set by typing
 <<tidy=FALSE,eval=FALSE>>=
-?iris
+?AllCountries
 @
 
 We'll learn how to make more customized summaries (numerical and graphical)
-soon.  For now, it is only important to observe how the organization of data in
+soon. For now, it is only important to observe how the organization of data in
 \R\ reflects the observational units and variables in the data set.
 
 This is important if you want to construct your own data set 
@@ -663,34 +254,11 @@ You want to be sure that the structure of your spread sheet uses rows and column
 in this same way, and that you don't put any extra stuff into the spread sheet.  It is a 
 good idea to include an extra row at the top which names the variables.
 
-Going back to the \dataframe{CricketChirps} data, here's how it might look if we collect that 
-same data in Excel:
+%Going back to the \dataframe{CricketChirps} data, here's how it might look if we collect that 
+%same data in Excel:
 
-\begin{center}
-	\includegraphics[width=4in]{images/CricketsExcel}
-\end{center}
+%\begin{center}
+  %\includegraphics[width=4in]{images/CricketsExcel}
+%\end{center}
 
 We'll learn how to get the data from Excel into \R\ soon.
-
-
-\newpage
-
-\section{Important Distinctions}
-
-When learning the vocabulary in this chapter, it is useful to focus on
-the distinctions being made:
-
-\begin{center}
-	\begin{tabular}{r@{ vs. }l}
-	cases & variables \\
-	categorical & quantitative \\
-	(nominal & ordinal) \\
-	(discrete & continuous) \\
-	experiment & observational study \\
-	population & sample \\
-	parameter & statistic \\
-	biased & unbiased
-\end{tabular}
-\end{center}
-
-
