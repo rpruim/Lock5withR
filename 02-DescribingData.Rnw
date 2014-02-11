@@ -1,241 +1,63 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
 \Chapter{Describing Data}
 
-In this chapter we discuss graphical and numerical summaries of data.  These notes focus primarily on
-how to get \R\ to do the work for you.  The text book includes more information about why and when
+In this chapter we discuss graphical and numerical summaries of data. These notes focus primarily on
+how to get \R\ to do the work for you. The text book includes more information about why and when
 to use various kinds of summaries.
 
-\section{Getting Started With \RStudio}
+\section*{Categorical Variables}
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=.85\textwidth]{images/RStudio-Welcome}
-\end{center}
-\caption{Welcome to \Rstudio.}
-\label{fig:Rstudio-welcome}%
-\end{figure}
+%One categorical variable with proportion
+%frequency table?
+%relative frequency
+%bar chart
+%pie chart
+%proportion calculation?
 
-You can access the Calvin \RStudio{} server via links from our course
-web site (\url{http://www.calvin.edu/~rpruim/courses/m145/F13/}) or from
-\url{http://dahl.calvin.edu}.
+%Two Categorical Variables: Two-Way Tables
+%Two-way table with row and column totals
+%example 2.6 main of StudentSurvey plus 2.5
+%difference in prop-- I think there is a command for this
+%Visualizing a relationshi bw Two categorical variables (segmented bar chart and side by side bar charts)
 
-\subsection{Logging in and changing your password}
-You will be prompted to login.  Your login and password are both your Calvin
-userid.  
-Once you are logged in, you will see something like 
-Figure~\ref{fig:Rstudio-welcome}.
+\section*{One Quantitative Variable: Shape and Center}
 
-You should change your password.  Here's how.
-\begin{enumerate}
-	\item From the \tab{Tools} menu, select \tab{Shell}
-	\item
-		Type \code{yppasswd}
-	\item
-		You will be prompted for your old password, then your new password twice.
-	\item
-		If you give a sufficiently strong new password (at least six letters, at least one capital, etc.) you will receive notice that your password has been reset.  If there was a problem, you will see a message about it and can try again.
-	\item
-		Once you have reset your password, click on \tab{Close} to close the 
-		shell and get back to \RStudio.
-\end{enumerate}
+%the shape of a distribution
+\subsection*{Distributions}
 
-\subsection{Using R as a calculator}
-
-Notice that \Rstudio\ divides its world into four panels.  Several of the panels
-are further subdivided into multiple tabs.
-The console panel is where we type commands that \R\ will execute. 
-
-\R\ can be used as a calculator.  Try typing the following commands in the console panel.
-\Rindex{sqrt()}%
-\Rindex{log()}%
-\Rindex{log10()}%
-<<arithmetic2>>=
-5 + 3
-15.3 * 23.4
-sqrt(16)
-@
-You can save values to named variables for later reuse
-<<variables2,tidy=FALSE>>=
-product = 15.3 * 23.4       # save result
-product                     # show the result
-product <- 15.3 * 23.4      # <- is assignment operator, same as =
-product                     
-15.3 * 23.4 -> newproduct   # -> assigns to the right
-newproduct
-.5 * product                # half of the product
-log(product)                # (natural) log of the product
-log10(product)              # base 10 log of the product
-log(product,base=2)         # base 2 log of the product
-@
-
-The semi-colon can be used to place multiple commands on one line.  
-One frequent use of this is to save and print a value all in one go:
-<<variables-semi2, tidy=FALSE>>=
-15.3 * 23.4 -> product; product    # save result and show it
-@
-
-\subsection{Loading packages}
-
-\R\ is divided up into packages.  A few of these are loaded every time you
-run \R, but most have to be selected.  This way you only have as much of \R\ as you
-need.
-
-In the \tab{Packages} tab, check the boxes next to the following packages to
-load them:
+\begin{boxedText}
+The distribution of a variable answers two questions:
 \begin{itemize}
-	\item mosaic  (a package from Project MOSAIC, should autoload on the server)
-%	\item fastR   (a package from a different text book)
-	\item Lock5Data     (a package for our text book)
+\item
+\emph{What values} can the variable have?
+\item
+\emph{With what frequency} does each value occur?
+
+The frequency may be described in terms of counts, proportions (often called 
+relative frequency), or densities (more on densities later).
 \end{itemize}
+\end{boxedText}
 
-\section{Four Things to Know About \R}
-Computers are great for doing complicated computations quickly, but you have to speak to them 
-on their terms.  Here are few things that will help you communicate with \R.
-\begin{enumerate}
-\item \R\ is case-sensitive
+A distribution may be described using a table (listing values and frequencies)
+or a graph (e.g., a histogram) or with words that describe general features 
+of the distribution (e.g., symmetric, skewed).
 
-If you mis-capitalize something in \R\ it won't do what you want.
 
-\item 
-Functions in \R\ use the following syntax:
-<<function-syntax,eval=FALSE>>=
-functionname( argument1, argument2, ... )
+<<>>=
+MammalLongevity
+dotplot(~ Longevity, data = MammalLongevity)
 @
-\vspace{-5mm}
-\begin{itemize}
-\item The arguments are \underline{always} \emph{surrounded by (round) parentheses} and 
-\emph{separated by commas}.
+%fix for stacked dots
+%outliers
 
-Some functions (like \function{data()}) 
-have no required arguments, but you still need the parentheses.
-
-\item
-If you type a function name without the parentheses, you will see the \emph{code} for that
-function -- which probably isn't what you want at this point.
-\end{itemize}
-\item
-TAB completion and arrows can improve typing speed and accuracy.
-
-If you begin a command and hit the TAB key, \R\ will show you a list of
-possible ways to complete the command.  If you hit TAB after the opening
-parenthesis of a function, it will show you the list of arguments it expects.
-The up and down arrows can be used to retrieve past commands.
-\item
-	If you get into some sort of mess typing (usually indicated by extra '$+$' 
-	signs along the left edge), you can hit the escape key to get back to
-	a clean prompt.
-\end{enumerate}
-
-
-\section{Data in \R}
-
-\subsection{Data in Packages}
-Most often, data sets in \R\ are stored in a structure called a 
-\term{data frame}.  There are a number of data sets built into \R\
-and many more that come in various add on packages.  The \pkg{Lock5Data}
-package, for example, contains all the data sets from our text book.
-In the book, data set names are printed in bold text.
-
-You can see a list of them using 
-<<datasets,eval=FALSE>>=
-data(package="Lock5Data")
+%Histograms
+%frequency table for mammals
+<<>>=
+histogram(~ Longevity, data = MammalLongevity)
 @
+%fix intervals?
 
-You can find a longer list of all data sets available in any loaded package
-using 
-<<eval=FALSE>>=
-data()
-@
-
-
-\subsection{The HELPrct data set}
-The \dataframe{HELPrct} data frame from the \pkg{mosaic} package
-contains data from the Health Evaluation and Linkage to Primary Care
-randomized clinical trial.  You can find out more about the study and
-the data in this data frame by typing
-<<HELPrcthelp,eval=FALSE,tidy=FALSE>>=
-?HELPrct
-@
-
-Among other things, this will tell us something about the subjects in
-this study:
-\begin{quote}
-	Eligible subjects were adults, who spoke Spanish or English, reported
-	alcohol, heroin or cocaine as their first or second drug of choice, resided
-	in proximity to the primary care clinic to which they would be referred or
-	were homeless. Patients with established primary care relationships they
-	planned to continue, significant dementia, specific plans to leave the
-	Boston area that would prevent research participation, failure to provide
-	contact information for tracking purposes, or pregnancy were excluded.
-
-Subjects were interviewed at baseline during their detoxification stay and
-follow-up interviews were undertaken every 6 months for 2 years.
-\end{quote}
-
-It is often handy to look at the first few rows of a data frame.  It will
-show you the names of the variables and the kind of data in them:
-<<headHELP>>=
-head(HELPrct)
-@
-
-That's plenty of variables to get us started with exploration of data.
-
-\subsection{Using your own data}
-
-We will postpone for now a discussion about getting your own data into \RStudio,
-but any data you can get into a reasonable format (like csv) can be imported
-into \RStudio\ pretty easily.
-
-\newpage
-
-\section{The Most Important Template}
-
-Most of what we will do in this chapter makes use of a single \R\ template:
-
-\def\phbox#1{\fbox{\phantom{#1}}}
-\def\ttfbox#1{\fbox{\texttt{#1}}}
-\[
-\phbox{goal} \; ( \; \phbox{yl} \; \sim \; \phbox{yl} \;, \; \texttt{data}=\phbox{mydata} \; )
-\]
-
-It is useful if we name the slots in this template:
-
-\[
-\ttfbox{goal} \; (  \;\ttfbox{y}  \;\sim  \;\ttfbox{x} \;, \; \texttt{data}=\ttfbox{mydata} \; )
-\]
-
-Actually, there are some variations on this template:
-
-
-<<eval=FALSE>>=
-### Simpler version
-goal( ~ x, data = mydata )
-
-### Fancier version: 
-goal( y ~ x | z , data = mydata )
- 
-### Unified version: 
-goal( formula , data = mydata )
-@
-
-To use the template, you just need to know what goes in each slot.  This can be determined by
-asking yourself two questions:
-\begin{enumerate}
-	\item
-		What do you want \R\ to do? 
-		\begin{itemize}
-			\item this determines what function to use (goal).
-		\end{itemize}
-	\item
-		What must \R\ know to do that?
-		\begin{itemize}
-			\item this determines the inputs to the function
-			\item for describing data, must must identify \emph{which data frame}
-				and \emph{which variable(s)}.
-		\end{itemize}
-
-\end{enumerate}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Summaries of One Variable}
 
@@ -243,7 +65,7 @@ A distribution is described by what values occur
 and with what frequency.  That is, the distribution answers two 
 questions:
 \begin{itemize}
-	\item What values?  
+  \item What values?  
 	\item How often?
 \end{itemize}
 
@@ -884,7 +706,7 @@ frequency, but this makes the wider bars have too much area.
 
 
 
-\section{Getting Help in RStudio}
+%\section{Getting Help in RStudio} INCLUDE IN 00
 
 \subsection{The \RStudio\ help system}
 There are several ways to get \RStudio\ to help you when you forget something.
@@ -1327,5 +1149,3 @@ have in your final data frame.
 \end{problem}
 
 \shipoutProblems
-
-
