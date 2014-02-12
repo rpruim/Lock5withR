@@ -6,26 +6,48 @@ In this chapter we discuss graphical and numerical summaries of data.
 
 \section{Categorical Variables}
 
+%Introduction to Categorial Variables?
+
 \subsection*{One Categorical Variable}
 
-%One categorical variable with proportion
-%frequency table?
-<<>>=
-tally(~Response, data = TrueLove)
-tally(~Response, format = "proportion", data = TrueLove)
+The data set for the One True Love survey is not readily available in the package for our textbook but the authors do provide us with the necessary information to own data spreadsheet (in either Excel or Google) and import it into \R. (See Chapter 0 for instructions.) %One could also use any other data set as an example.
+
+From the dataset we named as \dataframe{TrueLove}, we can display the \emph{frequency} of the variable by utilizing \function{tally()}.
+<<tally-1way>>=
+tally(~ Response, data = TrueLove)
 @
-%relative frequency
-%bar chart
-%pie chart
+
+Similarily, we can also display the \emph{relative frequencies}, or \term{proportions}.
+<<tally-1way-proportion>>=
+tally(~ Response, format = "proportion", data = TrueLove)
+@
+
+\subsubsection*{Visualizing the Data in One Categorical Variable}
+
+To visualize counts or proportions, \R\ provides many different chart and plot functions, including \emph{bar charts} and \emph{pie charts}. Bar charts, also known as bar graphs, are a way of displaying the distribution of a categorical variable.
+
+<<bargraph>>=
+bargraph(~ Response, data=TrueLove)
+bargraph(~ Response, data=TrueLove, horizontal=TRUE )
+@
+
+Here is an example of a pie chart, but note that statisticians rarely use pie charts because they are harder to read.
+%Include pie chart?
+<<piechart>>=
+slices <- c(78, 1812, 735) # assigning vectors of the area of each slice
+lbls <- c("Don't know", "Disagree", "Agree") # assigning vectors of labels of corresponding slice
+pie(slices, labels = lbls) # plotting "slices" for a pie chart
+@
+
 %proportion calculation?
 
 \subsection*{Two Categorical Variables: Two-Way Tables}
 
-Often, it is useful to compute cross tables for two (or more) variables. We can use \function{tally()} for several ways to investigate a two-way table.
+Often, it is useful to compute cross tables for two (or more) variables. We can again use \function{tally()} for several ways to investigate a two-way table.
 <<tally-2way>>=
-tally(~ Gender + Award, data = StudentSurvey)
-tally(Gender ~ Award, data = StudentSurvey)
-tally(~ Gender | Award, data=StudentSurvey)
+tally(~ Response + Gender, data = TrueLove)
+tally(Response ~ Gender, data = TrueLove)
+tally(~ Response | Gender, data = TrueLove)
 @
 
 Notice that (by default) some of these us counts and some use proportions.
@@ -40,14 +62,23 @@ We can arrange the table differently by converting it to a data frame.
 as.data.frame(tally(~ Gender + Award, data=StudentSurvey) )
 @
 
-%example 2.6 main of StudentSurvey plus 2.5
 %difference in prop-- I think there is a command for this
-%Visualizing a relationshi bw Two categorical variables (segmented bar chart and side by side bar charts)
+
+\subsubsection*{Visualizing a Relationship between Two Categorical Variables}
+A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}.
+%Any way to segment using mosaic?
+<<bargraph-segmented>>=
+counts <- table(StudentSurvey$Gender, StudentSurvey$Award)
+barplot(counts, legend = rownames(counts)) 
+@
+
+We use \argument{auto.key=TRUE} to build 
+a simple legend so we can tell which groups are which.
+<<bargraph-groups>>=
+bargraph(~ Gender, groups=Award, data=StudentSurvey, auto.key=TRUE)
+@
 
 \section{One Quantitative Variable: Shape and Center}
-
-%the shape of a distribution
-\subsection*{Distributions}
 
 \begin{boxedText}
 The distribution of a variable answers two questions:
@@ -57,7 +88,7 @@ The distribution of a variable answers two questions:
 \item
 \emph{With what frequency} does each value occur?
 
-The frequency may be described in terms of counts, proportions (often called 
+Again, the frequency may be described in terms of counts, proportions (often called 
 relative frequency), or densities (more on densities later).
 \end{itemize}
 \end{boxedText}
@@ -65,8 +96,98 @@ relative frequency), or densities (more on densities later).
 A distribution may be described using a table (listing values and frequencies)
 or a graph (e.g., a histogram) or with words that describe general features 
 of the distribution (e.g., symmetric, skewed).
-%%%%
-\subsection{The shape of a distribution}
+
+\subsection*{The Shape of a Distribution}
+
+Statisticians have devised a number of graphs to help us see distributions visually.  
+
+The general syntax for making a graph of one variable in a data frame is
+<<eval=FALSE>>=
+plotname(~ variable, data=dataName)
+@
+%explain ~?
+
+In other words, there are three pieces of information we must provide to 
+\R\ in order to get the plot we want:
+\begin{itemize}
+  \item
+		The kind of plot (\function{histogram()}, \function{bargraph()}, 
+		\function{densityplot()}, \function{bwplot()}, etc.)
+	\item
+		The name of the variable 
+	\item
+		The name of the data frame this variable is a part of.
+\end{itemize}
+
+%Intro to dotplot
+<<dotplot>>=
+MammalLongevity
+dotPlot(~ Longevity, width=1, center=.5, data = MammalLongevity)
+@
+%fix dotplot so it looks better
+
+\subsubsection*{Histograms (and density plots) for quantitative variables}
+
+Histograms are a way of displaying the distribution of a quantitative 
+variable. Here are a couple examples:
+%frequency table for mammals
+<<histogram>>=
+histogram(~ Longevity, data = MammalLongevity)
+histogram(~ BirthRate, data=AllCountries)
+histogram(~ age, data=HELPrct)
+@
+%explain HELPrct? Or refer to Chapter 0?
+
+We can control the (approximate) number of bins using the \option{nint} 
+argument, which may be abbreviated as \option{n}.
+The number of bins (and to a lesser extent the positions of the bins)
+can make a histogram look quite different.
+<<histogram2, fig.width=3,out.width='.3\\textwidth'>>=
+histogram(~ Longevity, type="count", data=MammalLongevity, n=8)
+histogram(~ Longevity, type="count", data=MammalLongevity, n=15)
+histogram(~ Longevity, type="count", data=MammalLongevity, n=30)
+@
+%Fix center of histogram--histogram( ~ Longevity, type="count", data=MammalLongevity, width=5, center=2.5)
+
+We can also describe the bins in terms of center and width instead of in terms of the number
+of bins.  This is especially nice for count or other integer data.
+<<xhistogram,fig.width=3,out.width='.3\\textwidth'>>=
+histogram(~ Longevity, type="count", data=MammalLongevity, width=10)
+histogram(~ Longevity, type="count", data=MammalLongevity, width=5)
+histogram(~ Longevity, type="count", data=MammalLongevity, width=2)
+@
+
+We can illustrate example 2.9 
+<<fig.width=3,out.width='.3\\textwidth'>>=
+histogram(~ Pulse, data=StudentSurvey, width=5)
+histogram(~ Exercise, type="count", data=StudentSurvey, width=2) 
+histogram(~ Piercings, data=StudentSurvey, width=1)
+@
+%fix exercise histogram
+
+Sometimes a \term{frequency polygon} provides a more useful view.
+The only thing that changes is \function{histogram()} becomes \function{freqpolygon()}.
+<<freqpolygon,fig.width=3,out.width='.3\\textwidth'>>=
+freqpolygon(~ age, data=HELPrct, width=5)
+@
+
+What is a frequency polygon?  The picture below shows how it is related to a histogram.  The frequency
+polygon is just a dot-to-dot drawing through the centers of the tops of the bars of the histogram.
+<<freqpolygon-illustrated,fig.width=8, fig.height=3, out.height="3in", fig.align="center", echo=FALSE>>=
+freqpolygon(~ age, data=HELPrct, breaks=seq(10,70,by=4), lwd=3, par.settings=col.whitebg(), 
+             panel=function(x,...) { 
+  panel.xhistogram(x,...);
+  panel.freqpolygon(x,...)}
+             )
+@
+
+\R\ also provides a ``smooth'' version called a density plot; just change 
+the function name from \function{histogram()} to \function{densityplot()}.
+<<densityplot>>=
+densityplot(~ Longevity, data=MammalLongevity)
+densityplot(~ BirthRate, data=AllCountries )
+densityplot(~ age, data=HELPrct )
+@
 
 If we make a histogram (or any of these other plots) 
 of our data, we can describe the overall shape of the distribution.
@@ -86,107 +207,39 @@ Here are some words we use to describe shapes of distributions.
 \item[outlier] An observation that does not fit the overall pattern of the rest of 
 the data.
 \end{description}
-%%%%
-Statisticians have devised a number of graphs to help us see 
-distributions visually.  
 
-The general syntax for making a graph of one variable in a data frame is
-<<eval=FALSE>>=
-plotname( ~ variable, data=dataName )
-@
-In other words, there are three pieces of information we must provide to 
-\R\ in order to get the plot we want:
-\begin{itemize}
-	\item
-		The kind of plot (\function{histogram()}, \function{bargraph()}, 
-		\function{densityplot()}, \function{bwplot()}, etc.)
-	\item
-		The name of the variable 
-	\item
-		The name of the data frame this variable is a part of.
-\end{itemize}
+\subsection*{The Center of a Distribution}
 
-
-<<>>=
-MammalLongevity
-dotplot(~ Longevity, data = MammalLongevity)
-@
-%fix for stacked dots
-%outliers
-
-%Histograms
-%frequency table for mammals
-<<>>=
-histogram(~ Longevity, data = MammalLongevity)
-@
-%fix intervals?
-
-\subsection{Histograms (and density plots) for quantitative variables}
-
-Histograms are a way of displaying the distribution of a quantitative 
-variable.
-
-
-Here are a couple examples:
-<<histogram>>=
-histogram( ~ BirthRate, data=AllCountries )
-histogram( ~ age, data=HELPrct )
+Recall that a statistic is a number computed from data.  
+Numerical summaries are computed using the same template as graphical summaries.
+The \term{mean} and the \term{median} are key summaries which describe the center of a distribution.
+%explain the subset? or refer to Chapter 0?
+%example 2.11
+<<center>>=
+ICU20 <- subset(ICUAdmissions, Age=="20")
+mean(~HeartRate, data=ICU20)
+median(~HeartRate, data=ICU20)
+ICU55 = subset(ICUAdmissions, Age=="55")
+mean(~HeartRate, data=ICU55)
+median(~HeartRate, data=ICU55)
 @
 
-We can control the (approximate) number of bins using the \option{nint} 
-argument, which may be abbreviated as \option{n}.
-The number of bins (and to a lesser extent the positions of the bins)
-can make a histogram look quite different.
-<<histogram2, fig.width=3,out.width='.3\\textwidth'>>=
-histogram( ~ age, data=HELPrct, n=8 )
-histogram( ~ age, data=HELPrct, n=15 )
-histogram( ~ age, data=HELPrct, n=30 )
-@
-We can also describe
-the bins in terms of center and width instead of in terms of the number
-of bins.  This is especially nice for count or other integer data.
+\subsection*{Resistance}
 
-<<xhistogram,fig.width=3,out.width='.3\\textwidth'>>=
-histogram( ~ age, data=HELPrct, width=10 )
-histogram( ~ age, data=HELPrct, width=5 )
-histogram( ~ age, data=HELPrct, width=2 )
+%Introduction
+%Example 2.14
+<<FloridaLakes-example>>=
+head(FloridaLakes)
+histogram(~Alkalinity, width=10, type="count", data=FloridaLakes)
+mean(~Alkalinity, data=FloridaLakes)
+median(~Alkalinity, data=FloridaLakes)
 @
-Sometimes a \term{frequency polygon} provides a more useful view.
-The only thing that changes is \function{histogram()} becomes \function{freqpolygon()}.
-<<freqpolygon,fig.width=3,out.width='.3\\textwidth'>>=
-freqpolygon( ~ age, data=HELPrct, width=5 )
-@
-What is a frequency polygon?  The picture below shows how it is related to a histogram.  The frequency
-polygon is just a dot-to-dot drawing through the centers of the tops of the bars of the histogram.
-
-<<freqpolygon-illustrated,fig.width=8, fig.height=3, out.height="3in", fig.align="center", echo=FALSE>>=
-freqpolygon( ~age, data=HELPrct, breaks=seq(10,70,by=4), lwd=3, par.settings=col.whitebg(), 
-             panel=function(x,...) { 
-  panel.xhistogram(x,...);
-  panel.freqpolygon(x,...)}
-             )
-@
-
-\R\ also provides a ``smooth'' version called a density plot; just change 
-the function name from \function{histogram()} to \function{densityplot()}.
-<<densityplot>>=
-densityplot( ~ BirthRate, data=AllCountries )
-densityplot( ~ age, data=HELPrct )
-@
-
-\iffalse
-Finally, there is a version that uses a dot for each observed value
-<<dotPlot>>=
-dotPlot( ~ BirthRate, data=AllCountries )
-dotPlot( ~ age, data=HELPrct )
-@
-\fi
 
 \section{One Quantitative Variable: Measures and Spread}
 
 \subsection*{Numerical Summaries (i.e., statistics)}
 
-Recall that a statistics is a number computed from data.  
+Recall that a statistic is a number computed from data.  
 Numerical summaries are computed using the same template as graphical summaries.  
 Here are some examples.
 
@@ -341,16 +394,7 @@ We'll learn about another graph used for quantitative variables
 
 
 
-\subsection{Bar graphs for categorical variables}
 
-Bar graphs are a way of displaying the distribution of a categorical variable.
-
-<<bargraph>>=
-bargraph( ~ substance, data=HELPrct) 
-bargraph( ~ substance, data=HELPrct, horizontal=TRUE )
-@
-
-Statisticians rarely use pie charts because they are harder to read.
 
 \section{Creating Tables}
 
