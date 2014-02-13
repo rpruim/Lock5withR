@@ -4,50 +4,60 @@
 In this chapter we discuss graphical and numerical summaries of data. 
 %These notes focus primarily on how to get \R\ to do the work for you. The text book includes more information about why and when to use various kinds of summaries.
 
+
+
 \section{Categorical Variables}
 
 %Introduction to Categorial Variables?
 
+
 \subsection*{One Categorical Variable}
 
-The data set for the One True Love survey is not readily available in the package for our textbook but the authors do provide us with the necessary information to own data spreadsheet (in either Excel or Google) and import it into \R. (See Chapter 0 for instructions.) %One could also use any other data set as an example.
+Let us investigate categorical variables in \R\ by taking a look at the data set for the One True Love survey. Notice that the data set is not readily available in our textbook's package. However, the authors do provide us with the necessary information to create our own data spreadsheet (in either Excel or Google) and import it into \R. (See Chapter 0 for instructions.) %One could also use any other data set as an example.
 
-From the dataset we named as \dataframe{TrueLove}, we can display the \emph{frequency} of the variable by utilizing \function{tally()}.
+From the dataset we named as \dataframe{OneTrueLove}, we can tabulate the categorical variable to display the \emph{frequency} by using the \function{tally()} function.
 <<tally-1way>>=
-tally(~ Response, data = TrueLove)
+tally(~ Response, data=OneTrueLove)
 @
+Note the use of the \R\ template in Chapter 0.
 
 Similarily, we can also display the \emph{relative frequencies}, or \term{proportions}.
 <<tally-1way-proportion>>=
-tally(~ Response, format = "proportion", data = TrueLove)
+tally(~ Response, format="proportion", data=OneTrueLove)
 @
+
+In addition to manually calculating the proportion, we can use the \function{prop()} function.
+<<prop-1way>>=
+prop(~ Response, data=OneTrueLove)
+@
+%how to display disagree/don't know?
+
 
 \subsubsection*{Visualizing the Data in One Categorical Variable}
 
 To visualize counts or proportions, \R\ provides many different chart and plot functions, including \emph{bar charts} and \emph{pie charts}. Bar charts, also known as bar graphs, are a way of displaying the distribution of a categorical variable.
 
 <<bargraph>>=
-bargraph(~ Response, data=TrueLove)
-bargraph(~ Response, data=TrueLove, horizontal=TRUE )
+bargraph(~ Response, data=OneTrueLove)
+bargraph(~ Response, data=OneTrueLove, horizontal=TRUE)
 @
 
-Here is an example of a pie chart, but note that statisticians rarely use pie charts because they are harder to read.
+%Here is an example of a pie chart, but note that statisticians rarely use pie charts because they are harder to read.
 %Include pie chart?
-<<piechart>>=
-slices <- c(78, 1812, 735) # assigning vectors of the area of each slice
-lbls <- c("Don't know", "Disagree", "Agree") # assigning vectors of labels of corresponding slice
-pie(slices, labels = lbls) # plotting "slices" for a pie chart
-@
+%<<piechart>>=
+%slices <- c(78, 1812, 735) # assigning vectors of the area of each slice
+%lbls <- c("Don't know", "Disagree", "Agree") # assigning vectors of labels of corresponding slice
+%pie(slices, labels = lbls) # plotting "slices" for a pie chart
+%@
 
-%proportion calculation?
 
 \subsection*{Two Categorical Variables: Two-Way Tables}
 
 Often, it is useful to compute cross tables for two (or more) variables. We can again use \function{tally()} for several ways to investigate a two-way table.
 <<tally-2way>>=
-tally(~ Response + Gender, data = TrueLove)
-tally(Response ~ Gender, data = TrueLove)
-tally(~ Response | Gender, data = TrueLove)
+tally(~ Response + Gender, data=TrueLove)
+tally(Response ~ Gender, data=TrueLove)
+tally(~ Response | Gender, data=TrueLove)
 @
 
 Notice that (by default) some of these us counts and some use proportions.
@@ -59,24 +69,34 @@ tally(~ Gender + Award, data=StudentSurvey, margins=FALSE, format="percent")
 
 We can arrange the table differently by converting it to a data frame.
 <<tally-2way-data-frame>>=
-as.data.frame(tally(~ Gender + Award, data=StudentSurvey) )
+as.data.frame(tally(~ Gender + Award, data=StudentSurvey))
+@
+
+Again, we can calculate the proportions of two categorical variables.
+<<prop-2way>>=
+prop(Response~Gender, data=OneTrueLove)
 @
 
 %difference in prop-- I think there is a command for this
 
+
 \subsubsection*{Visualizing a Relationship between Two Categorical Variables}
+
 A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}.
 %Any way to segment using mosaic?
-<<bargraph-segmented>>=
-counts <- table(StudentSurvey$Gender, StudentSurvey$Award)
-barplot(counts, legend = rownames(counts)) 
-@
+%<<bargraph-segmented>>=
+%counts <- table(StudentSurvey$Gender, StudentSurvey$Award)
+%barplot(counts, legend = rownames(counts)) 
+%@
 
 We use \argument{auto.key=TRUE} to build 
 a simple legend so we can tell which groups are which.
 <<bargraph-groups>>=
 bargraph(~ Gender, groups=Award, data=StudentSurvey, auto.key=TRUE)
 @
+%explain the differences in packages?
+
+
 
 \section{One Quantitative Variable: Shape and Center}
 
@@ -97,15 +117,14 @@ A distribution may be described using a table (listing values and frequencies)
 or a graph (e.g., a histogram) or with words that describe general features 
 of the distribution (e.g., symmetric, skewed).
 
+
 \subsection*{The Shape of a Distribution}
 
 Statisticians have devised a number of graphs to help us see distributions visually.  
-
 The general syntax for making a graph of one variable in a data frame is
 <<eval=FALSE>>=
 plotname(~ variable, data=dataName)
 @
-%explain ~?
 
 In other words, there are three pieces of information we must provide to 
 \R\ in order to get the plot we want:
@@ -119,21 +138,48 @@ In other words, there are three pieces of information we must provide to
 		The name of the data frame this variable is a part of.
 \end{itemize}
 
-%Intro to dotplot
-<<dotplot>>=
+
+\subsubsection*{Dot Plot}
+Let's take first make a \emph{dot plot} of the variable Longevity in the \dataframe{MammalLongevity} data set for a quick and simple look at the distribution.
+<<dotplot, warning=FALSE>>=
 MammalLongevity
 dotPlot(~ Longevity, width=1, center=.5, data = MammalLongevity)
 @
 %fix dotplot so it looks better
 
-\subsubsection*{Histograms (and density plots) for quantitative variables}
+
+\subsubsection*{Histograms and Density Plots}
+
+Although \function{tally()} works with quantitative variables
+as well as categorical variables, this is only useful when there are not too
+many different values for the variable.
+
+<<xtabs-quantitative>>=
+tally(~ Longevity, data=MammalLongevity)
+@
+
+Sometimes, it is more convenient to group them into bins.  We just have to tell \R\ what the bins are.
+For example, suppose we wanted to group together by 5.
+\Rindex{cut()}%
+\Rindex{tally()}%
+<<cut>>=
+binnedLong <- cut(MammalLongevity$Longevity, breaks=c(0,5,10,15,20,25,30,35,40))
+tally(~ binnedLong)      # no data frame given because its not in a data frame
+@
+
+Suppose we wanted to group the 1s, 10s, 20s, etc. together. We want to make sure then that 10 is with the 10s, so we should add another argument.
+<<cut2>>=
+binnedLong2 <- cut(MammalLongevity$Longevity, breaks=c(0,10,20,30,40,50), right=FALSE)
+tally(~ binnedLong2)      # no data frame given because it's not in a data frame
+@
+
+We won't use this very often however, since seeing this information in a histogram is typically more useful.  
 
 Histograms are a way of displaying the distribution of a quantitative 
 variable. Here are a couple examples:
 %frequency table for mammals
 <<histogram>>=
 histogram(~ Longevity, data = MammalLongevity)
-histogram(~ BirthRate, data=AllCountries)
 histogram(~ age, data=HELPrct)
 @
 %explain HELPrct? Or refer to Chapter 0?
@@ -142,28 +188,35 @@ We can control the (approximate) number of bins using the \option{nint}
 argument, which may be abbreviated as \option{n}.
 The number of bins (and to a lesser extent the positions of the bins)
 can make a histogram look quite different.
-<<histogram2, fig.width=3,out.width='.3\\textwidth'>>=
+<<histogram2, fig.width=3, out.width='.3\\textwidth', warning=FALSE>>=
 histogram(~ Longevity, type="count", data=MammalLongevity, n=8)
 histogram(~ Longevity, type="count", data=MammalLongevity, n=15)
 histogram(~ Longevity, type="count", data=MammalLongevity, n=30)
 @
-%Fix center of histogram--histogram( ~ Longevity, type="count", data=MammalLongevity, width=5, center=2.5)
+%Fix center of histogram--histogram( ~ Longevity, type="count", data=MammalLongevity, width=5, center=2.5)?
 
 We can also describe the bins in terms of center and width instead of in terms of the number
 of bins.  This is especially nice for count or other integer data.
-<<xhistogram,fig.width=3,out.width='.3\\textwidth'>>=
+<<xhistogram,fig.width=3,out.width='.3\\textwidth', warning=FALSE>>=
 histogram(~ Longevity, type="count", data=MammalLongevity, width=10)
 histogram(~ Longevity, type="count", data=MammalLongevity, width=5)
 histogram(~ Longevity, type="count", data=MammalLongevity, width=2)
 @
 
-We can illustrate example 2.9 
-<<fig.width=3,out.width='.3\\textwidth'>>=
-histogram(~ Pulse, data=StudentSurvey, width=5)
-histogram(~ Exercise, type="count", data=StudentSurvey, width=2) 
+We can illustrate Example 2.9. Note the various options available for the \function{histogram()} function enable us to replicate Figure 2.8.
+<<Example2.9, warning=FALSE>>=
+histogram(~ Pulse, type='count', width=5, label=TRUE, data=StudentSurvey)
+histogram(~ Exercise, type='count', width=2, center=2, label=TRUE, 
+          right=FALSE, ylim=c(0,70), data=StudentSurvey) 
 histogram(~ Piercings, data=StudentSurvey, width=1)
 @
-%fix exercise histogram
+
+%The \function{histogram()} function offers you the option of 
+%adding the counts to the graph.
+%<<histogram-counts,fig.width=6,warning=FALSE>>=
+%histogram(~ age, data=HELPrct, label=TRUE, type='count', 
+%       width=10, center=5, ylim=c(0,300), right=FALSE )
+%@
 
 Sometimes a \term{frequency polygon} provides a more useful view.
 The only thing that changes is \function{histogram()} becomes \function{freqpolygon()}.
@@ -208,13 +261,38 @@ Here are some words we use to describe shapes of distributions.
 the data.
 \end{description}
 
+
+
 \subsection*{The Center of a Distribution}
 
-Recall that a statistic is a number computed from data.  
-Numerical summaries are computed using the same template as graphical summaries.
-The \term{mean} and the \term{median} are key summaries which describe the center of a distribution.
-%explain the subset? or refer to Chapter 0?
-%example 2.11
+Recall that a statistic is a number computed from data. The \term{mean} and the \term{median} are key statistics which describe the center of a distribution. We can see through Example 2.11 that numerical summaries are computed using the same template as graphical summaries.
+
+\subsubsection*{Subsets}
+
+Note however, that the example asks about subsets of \dataframe{ICUAdmissions}--specifically about 20-year-old and 55-year-old patients. In this case, we can manipulate the data (to name a new data set) with the subset command. Here are some examples.
+\begin{enumerate}
+  \item 
+    Select only the males from the \dataframe{ICUAdmissions} data set.
+<<>>=
+tally(~ Sex, data=ICUAdmissions) 
+ICUMales <- subset(ICUAdmissions, Sex=="Male") # notice the double =
+dim(ICUMales)
+@
+	\item
+		Select only the subjects over 50:
+<<>>=
+ICUold <- subset(ICUAdmissions, Age > 50) 
+@
+%	\item
+%		Only the states (and Puerto Rico and District of Columbia) data from the US Census data set loaded %above.
+%<<>>=
+%tally( ~Sumlev, data=Population)
+%States <- subset(Population, Sumlev==40)
+%dim(States)
+%@
+\end{enumerate}
+The \function{subset()} function can use any condition that evaluates to TRUE or FALSE for each row (case) in the data set.
+
 <<center>>=
 ICU20 <- subset(ICUAdmissions, Age=="20")
 mean(~HeartRate, data=ICU20)
@@ -224,37 +302,98 @@ mean(~HeartRate, data=ICU55)
 median(~HeartRate, data=ICU55)
 @
 
-\subsection*{Resistance}
+\subsubsection*{Visualizing the Mean and Median on a Graph}
 
-%Introduction
-%Example 2.14
-<<FloridaLakes-example>>=
+Let's take a look at Example 2.14 for an illustration of the mean and median.
+<<FloridaLakes-example, warning=FALSE>>=
 head(FloridaLakes)
 histogram(~Alkalinity, width=10, type="count", data=FloridaLakes)
 mean(~Alkalinity, data=FloridaLakes)
 median(~Alkalinity, data=FloridaLakes)
 @
 
-\section{One Quantitative Variable: Measures and Spread}
 
-\subsection*{Numerical Summaries (i.e., statistics)}
 
-Recall that a statistic is a number computed from data.  
-Numerical summaries are computed using the same template as graphical summaries.  
-Here are some examples.
+\section{One Quantitative Variable: Measures of Spread}
 
+In the previous section, we investigated center summary statistics. In this section, we will cover some other important statistics.
 <<numerical-summaries>>=
-mean(~age, data=HELPrct)
-median(~age, data=HELPrct)
-max(~age, data=HELPrct)
-min(~age, data=HELPrct)
-sd(~age, data=HELPrct)         # standard deviation
-var(~age, data=HELPrct)        # variance
-iqr(~age, data=HELPrct)        # inter-quartile range
-favstats(~age, data=HELPrct)   # some favorite statistics
+summary(April14Temps)
+favstats(~DesMoines, data=April14Temps) # some favorite statistics
 @
 
+
+\subsection*{Standard Deviation}
+
+First, the density plots of the temperatures of Des Moines and San Francisco reveal that Des Moines has a greater \emph{variability} or \emph{spread}.
+<<sd-exploration, echo=FALSE>>=
+densityplot(~ DesMoines, xlim=c(20, 90), data=April14Temps)
+densityplot(~ SanFrancisco, xlim=c(20, 90), data=April14Temps)
+@
+
+Although both \function{summary()} and \function{favstats()} calculate the \term{standard deviation} of a variable, we can also use the \function{sd()} to find just the standard deviation. 
+<<standard-deviation>>=
+sd(~DesMoines, data=April14Temps)        
+sd(~SanFrancisco, data=April14Temps)
+var(~DesMoines, data=April14Temps)        # variance = sd^2
+@
+
+%<<>>=
+%dotPlot(~ DesMoines, data=April14Temps)
+%dotPlot(~ SanFrancisco, data=April14Temps)
+%@
+
+Let's also take a look at Example 2.17.
+<<Example2.17>>>=
+densityplot(~ Pulse, data=StudentSurvey)
+histogram(~ Pulse, data=StudentSurvey)
+plotDist("norm")
+mean(~Pulse, data=StudentSurvey)
+sd(~Pulse, data=StudentSurvey)
+@
+%how to fit a normal curve to histogram?
+%easy way to compute 2 or 3 sd?
+
+%include Example 2.18?
+
+%how to include z-scores with R?
+
+
+\subsection*{Percentile}
+In Example 2.20, the text uses a histogram to estimate the \term{percentile} of the daily closing price for the S&P 500. We can also find the exact percentiles using the \function{quantile()} function. 
+<<percentile, warning=FALSE>>=
+histogram(~Close, type="count", data=SandP500)
+quantile(SandP500$Close, probs=seq(0, 1, 0.25))
+quantile(SandP500$Close, probs=seq(0, 1, 0.90))
+@
+
+
+\subsection*{Five Number Summary}
+
+We have covered many different ways to obtain the \term{five number summary} but \function{summary()} is the fastest way to obtain the summaries of the quantitative variables in a data set and \function{favstats()} is the fastest way to obtain more detailed statistics about a specific quantitative variable.
+<<five-number-summary>>=
+favstats(~Exercise, data=StudentSurvey)
+min(~Longevity, data=MammalLongevity) 
+max(~Longevity, data=MammalLongevity) 
+range(~Longevity, data=MammalLongevity)  # subtract to get the numerical range value
+iqr(~Longevity, data=MammalLongevity)    # inter-quartile range 
+@
+%the range and iqr do not match the book b/c the book uses different quartiles
+
+
+
 \section{Outliers, Boxplots, and Quantitative/Categorical Relationships}
+
+\subsection*{Detection of Outliers}
+
+<<>>=
+favstats(~Longevity, data=MammalLongevity)
+subset
+@
+
+<<>>=
+bwplot(~Longevity, data=MammalLongevity)
+@
 
 \section{Looking at multiple variables at once}
 
@@ -392,61 +531,6 @@ xyplot( mcs ~ age | sex, groups=substance, data=HELPrct, alpha=.6, cex=.5,
 We'll learn about another graph used for quantitative variables 
 (a boxplot, \function{bwplot()} in \R) soon.
 
-
-
-
-
-\section{Creating Tables}
-
-\subsection{Tabulating a categorical variable}
-
-The \function{tally()} function tabulates categorical variables.  
-This syntax is just like the syntax for plotting, we just replace
-\function{bargraph} with \function{tally}:
-<<tally-substance>>=
-tally( ~ substance, data = HELPrct )
-@
-
-
-\subsection{Tabulating a quantitative variable}
-
-Although \function{tally()} works with quantitative variables
-as well as categorical variables, this is only useful when there are not too
-many different values for the variable.
-
-<<xtabs-quantitative>>=
-tally( ~age, data=HELPrct )
-@
-
-\subsubsection*{Tabulating in bins (optional)}
-It is more convenient to group them into bins.  We just have to tell \R\ what the bins are.
-For example, suppose we wanted to group the 20s, 30s, 40s, etc. together.
-\Rindex{cut()}%
-\Rindex{tally()}%
-<<cut>>=
-binnedAge <- cut(HELPrct$age, breaks=c(10,20,30,40,50,60,70) )
-tally( ~binnedAge )      # no data frame given because its not in a data frame
-@
-That's not quite what we wanted: 30 is in with the 20s, for example.
-Here's how we fix that.
-
-<<cut2>>=
-binnedAge <- cut(HELPrct$age, breaks=c(10,20,30,40,50,60,70), right=FALSE )
-tally( ~binnedAge )      # no data frame given because it's not in a data frame
-@
-
-
-We won't use this very often, since typically seeing this information in a histogram is 
-more useful.  
-
-\subsubsection*{Labeling a histogram}
-
-The \function{histogram()} function offers you the option of 
-adding the counts to the graph.
-<<histogram-counts,fig.width=6,warning=FALSE>>=
-histogram( ~age, data=HELPrct, label=TRUE, type='count', 
-		   width=10, center=5, ylim=c(0,300), right=FALSE )
-@
 
 
 
@@ -913,31 +997,6 @@ someData <- read.file('file.csv',
 }
 
 \section{Manipulating your data}
-
-\subsection{Subsets}
-You may want to work with only a subset of your data.  This can be done with the subset command.
-Here are some examples.
-\begin{enumerate}
-	\item Select only the males from the \dataframe{HELPrct} data set.
-<<>>=
-tally( ~ sex, data=HELPrct ) 
-HELPmales <- subset(HELPrct, sex=="male") # notice the double =
-dim(HELPmales)
-@
-	\item
-		Select only the subjects over 50:
-<<>>=
-HELPold <- subset(HELPrct, age > 50) 
-@
-	\item
-		Only the states (and Puerto Rico and District of Columbia) data from the US Census data set loaded above.
-<<>>=
-tally( ~Sumlev, data=Population)
-States <- subset(Population, Sumlev==40)
-dim(States)
-@
-\end{enumerate}
-The \function{subset()} function can use any condition that evaluates to TRUE or FALSE for each row (case) in the data set.
 
 \subsection{Creating new variables}
 
