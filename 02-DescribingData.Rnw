@@ -55,9 +55,9 @@ bargraph(~ Response, data=OneTrueLove, horizontal=TRUE)
 
 Often, it is useful to compute cross tables for two (or more) variables. We can again use \function{tally()} for several ways to investigate a two-way table.
 <<tally-2way>>=
-tally(~ Response + Gender, data=TrueLove)
-tally(Response ~ Gender, data=TrueLove)
-tally(~ Response | Gender, data=TrueLove)
+tally(~ Response + Gender, data=OneTrueLove)
+tally(Response ~ Gender, data=OneTrueLove)
+tally(~ Response | Gender, data=OneTrueLove)
 @
 
 Notice that (by default) some of these us counts and some use proportions.
@@ -82,19 +82,17 @@ prop(Response~Gender, data=OneTrueLove)
 
 \subsubsection*{Visualizing a Relationship between Two Categorical Variables}
 
-A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}.
+A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}. (We will discuss grouping more in section 2.4.)
 %Any way to segment using mosaic?
 %<<bargraph-segmented>>=
 %counts <- table(StudentSurvey$Gender, StudentSurvey$Award)
 %barplot(counts, legend = rownames(counts)) 
 %@
 
-We use \argument{auto.key=TRUE} to build 
-a simple legend so we can tell which groups are which.
+We use \argument{auto.key=TRUE} to build a simple legend so we can tell which groups are which.
 <<bargraph-groups>>=
 bargraph(~ Gender, groups=Award, data=StudentSurvey, auto.key=TRUE)
 @
-%explain the differences in packages?
 
 
 
@@ -204,7 +202,7 @@ histogram(~ Longevity, type="count", data=MammalLongevity, width=2)
 @
 
 We can illustrate Example 2.9. Note the various options available for the \function{histogram()} function enable us to replicate Figure 2.8.
-<<Example2.9, warning=FALSE>>=
+<<Example2.9,fig.width=3,out.width='.3\\textwidth', warning=FALSE>>=
 histogram(~ Pulse, type='count', width=5, label=TRUE, data=StudentSurvey)
 histogram(~ Exercise, type='count', width=2, center=2, label=TRUE, 
           right=FALSE, ylim=c(0,70), data=StudentSurvey) 
@@ -236,7 +234,7 @@ freqpolygon(~ age, data=HELPrct, breaks=seq(10,70,by=4), lwd=3, par.settings=col
 
 \R\ also provides a ``smooth'' version called a density plot; just change 
 the function name from \function{histogram()} to \function{densityplot()}.
-<<densityplot>>=
+<<densityplot, fig.width=3,out.width='.3\\textwidth'>>=
 densityplot(~ Longevity, data=MammalLongevity)
 densityplot(~ BirthRate, data=AllCountries )
 densityplot(~ age, data=HELPrct )
@@ -372,7 +370,7 @@ quantile(SandP500$Close, probs=seq(0, 1, 0.90))
 
 We have covered many different ways to obtain the \term{five number summary} but \function{summary()} is the fastest way to obtain the summaries of the quantitative variables in a data set and \function{favstats()} is the fastest way to obtain more detailed statistics about a specific quantitative variable.
 <<five-number-summary>>=
-favstats(~Exercise, data=StudentSurvey)
+favstats(~Longevity, data=MammalLongevity)
 min(~Longevity, data=MammalLongevity) 
 max(~Longevity, data=MammalLongevity) 
 range(~Longevity, data=MammalLongevity)  # subtract to get the numerical range value
@@ -386,18 +384,38 @@ iqr(~Longevity, data=MammalLongevity)    # inter-quartile range
 
 \subsection*{Detection of Outliers}
 
-<<>>=
-favstats(~Longevity, data=MammalLongevity)
-subset
-@
+Generally, outliers are considered to be values 
+\begin{itemize}
+\item less than Q1 - 1.5(IQR), and 
+\item greater than Q3 + 1.5(IQR).
+\end{itemize}
 
-<<>>=
+There is no function in \R\ that directly results in outliers because practically, there is no one specific formula for such a determination. However, a boxplot will indirectly reveal outliers using the method above.
+
+\subsection*{Boxplots}
+
+A way to visualize the five number summary and outliers for a variable is to create a boxplot.
+<<boxplot>>=
+favstats(~Longevity, data=MammalLongevity)
 bwplot(~Longevity, data=MammalLongevity)
 @
 
-\section{Looking at multiple variables at once}
+We can similarity investigate the \emph{Smokers} variable in \dataframe{USStates}.
+<<boxplot2>>=
+bwplot(~Smokers, data=USStates)
+@
 
-\subsection{Conditional plots}
+The boxplot reveals two outliers. To identify them, we can again use \function{subset()} for smokers greater or less than the \emph{whiskers} of the boxplot.
+<<subset-outliers>>=
+subset(USStates, Smokers<15)
+subset(USStates, Smokers>28)
+@
+
+%include Example 2.28?
+
+\subsection*{Quantitative and Categorical Variables}
+
+\subsubsection*{Conditional plots}
 The formula for a \pkg{lattice} plot can be extended to create multiple panels 
 (sometimes called \term{facets})
 based on a ``condition'', often given by another variable.  The 
@@ -406,51 +424,21 @@ general syntax for this becomes
 plotname( ~ variable | condition, data=dataName )
 @
 
-For example, we might like to see how the ages of men and women compare 
-in the HELP study, or whether the distribution of weights of male mosquitoes 
-is different from the distribution for females.
-
-<<compare-ages>>=
-histogram( ~ age | sex, HELPrct, width=5)
-histogram(~BirthRate | Developed, data=AllCountries, width=5)
+For example, we might like to see whether the number of hours spent watching tv differ between men and women in the Student Survey, or how the distribution of birth rates compare between countries at different stages of development.
+<<conditionalplots>>=
+bwplot(~TV | Gender, data=StudentSurvey)
+histogram(~BirthRate | Developed, data=AllCountries, auto.key=TRUE, width=5)
 @
-
-\begin{problem}
-  Compare the distributions of \variable{i1} and \variable{i2} among men
-	and women.
-\end{problem}
-\begin{solution}
-<<>>=
-densityplot( ~i1, groups=sex, data=HELPrct )
-densityplot( ~i2, groups=sex, data=HELPrct )
-@
-\end{solution}
-
-\begin{problem}
-	Compare the distributions of \variable{i1} and \variable{i2} among 
-	the three \variable{substance} groups.
-\end{problem}
-\begin{solution}
-<<>>=
-densityplot( ~i1, groups=substance, data=HELPrct )
-densityplot( ~i2, groups=substance, data=HELPrct )
-@
-<<>>=
-densityplot( ~i1|sex, groups=substance, data=HELPrct )
-densityplot( ~i2|sex, groups=substance, data=HELPrct )
-@
-<<>>=
-xyplot( i2 ~ i1, groups=sex, data= HELPrct, alpha=.6, cex=.6 )
-@
-\end{solution}
 
 We can do the same thing for bar graphs.
-
-<<substance-by-sex>>=
-bargraph( ~ substance | sex, data=HELPrct)
+<<conditionalplot-categorical>>=
+bargraph(~ Award | Gender, data=StudentSurvey)
 @
+This graph should be familiar as we have plotted these variables together previously. Here we used different panels, but before, in 2.1, we had used grouping. 
 
-\subsection{Grouping}
+%how to create a side-by-side bwplot?
+
+\subsubsection*{Grouping}
 Another way to look at multiple groups simultaneously is by using 
 the \argument{groups} argument.  What groups does depends a bit on the type of 
 graph, but it will put the information in one panel rather than multiple panels.
@@ -461,8 +449,7 @@ it is difficult to overlay histograms.%
 in some situations.}
 Density plots work better for this.
 
-Here are some examples.  We use \argument{auto.key=TRUE} to build 
-a simple legend so we can tell which groups are which.
+Here are some examples using the \dataframe{HELPrct} data frame. Again, we use \argument{auto.key=TRUE} to build a simple legend so we can tell which groups are which.
 <<groups>>=
 bargraph(~substance, groups=sex, data=HELPrct, auto.key=TRUE)
 densityplot(~age, groups=sex, data=HELPrct, auto.key=TRUE)
@@ -478,6 +465,8 @@ densityplot(~age|substance, groups=sex, data=HELPrct, auto.key=TRUE, layout=c(3,
 This plot shows that for each substance, the age distributions of men and 
 women are quite similar, but that the distributions differ from 
 substance to substance.
+
+\section{}
 
 \subsection{Scatterplots}
 
@@ -520,16 +509,8 @@ xyplot( mcs ~ age | sex, groups=substance, data=HELPrct, alpha=.6, cex=.5,
 
 
 
-\begin{problem}
-	Use \R's help system to find out what the \variable{i1} and \variable{i2}
-	variables are in the \dataframe{HELPrct} data frame.  Make histograms
-	for each variable and comment on what you find out.  How would you describe
-	the shape of these distributions?  Do you see any outliers (observations
-	that don't seem to fit the pattern of the rest of the data)?  
-\end{problem}
 
-We'll learn about another graph used for quantitative variables 
-(a boxplot, \function{bwplot()} in \R) soon.
+
 
 
 
@@ -1102,6 +1083,43 @@ For problems 1--\ref{prob:CPSmulti},
 include both the plots and the code you used to make them as well as any
 required discussion.  Once you get the plots figured out, feel free to 
 use some of the bells and whistles to make the plots even better.
+
+\begin{problem}
+  Use \R's help system to find out what the \variable{i1} and \variable{i2}
+	variables are in the \dataframe{HELPrct} data frame.  Make histograms
+	for each variable and comment on what you find out.  How would you describe
+	the shape of these distributions?  Do you see any outliers (observations
+	that don't seem to fit the pattern of the rest of the data)?  
+\end{problem}
+
+\begin{problem}
+  Compare the distributions of \variable{i1} and \variable{i2} among men
+  and women.
+\end{problem}
+\begin{solution}
+<<>>=
+densityplot( ~i1, groups=sex, data=HELPrct )
+densityplot( ~i2, groups=sex, data=HELPrct )
+@
+\end{solution}
+
+\begin{problem}
+	Compare the distributions of \variable{i1} and \variable{i2} among 
+	the three \variable{substance} groups.
+\end{problem}
+\begin{solution}
+<<>>=
+densityplot( ~i1, groups=substance, data=HELPrct )
+densityplot( ~i2, groups=substance, data=HELPrct )
+@
+<<>>=
+densityplot( ~i1|sex, groups=substance, data=HELPrct )
+densityplot( ~i2|sex, groups=substance, data=HELPrct )
+@
+<<>>=
+xyplot( i2 ~ i1, groups=sex, data= HELPrct, alpha=.6, cex=.6 )
+@
+\end{solution}
 
 \begin{problem}
 	\label{prob:CPS1}
