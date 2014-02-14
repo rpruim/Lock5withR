@@ -18,8 +18,9 @@ tell us how things vary from sample to sample and are the key to interpreting da
 The standard error is our primary way of measuring how much variability there is from sample statistic
 to sample statistic, and therefore how precise our estimates are.
 
+\section{Understanding and Interpreting Confidence Intervals}
 
-\section{Interval Estimates}
+\subsection*{Interval Estimates and Margin of Error}
 
 \begin{boxedText}
 An \term{interval estimate} 
@@ -29,7 +30,6 @@ gives a range of plausible values for a population parameter.
 This is better than a single number (also called a point estimate) because it gives some 
 indication of the precision of the estimate.
 
-\subsection{Margin of Error}
 One way to express an interval estimate is with a point estimate and a \term{margin of error}.
 
 \begin{center}
@@ -84,7 +84,9 @@ error was $0.009$. The 95\% confidence interval is therefore
 The important question remains:  If we don't have access to the entire population, and we only get to look at one sample,
 how do we tell the shape of the sampling distribution and estimate its standard error?  Stay tuned.
 
-\section{The Bootstrap}
+\subsection*{Confidence Intervals}
+
+\section{Constructing Bootstrap Confidence Intervals}
 
 Here's the clever idea:  We don't have the population, but we have a sample.  Probably the sample it similar to the population
 in many ways.  So let's sample from our sample.  We'll call it \textbf{resampling} (also called \textbf{bootstrapping}).
