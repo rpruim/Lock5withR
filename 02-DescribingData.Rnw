@@ -17,6 +17,7 @@ Let us investigate categorical variables in \R\ by taking a look at the data set
 
 From the dataset we named as \dataframe{OneTrueLove}, we can tabulate the categorical variable to display the \emph{frequency} by using the \function{tally()} function.
 <<tally-1way>>=
+OneTrueLove <- read.file( "OneTrueLove.csv" )
 tally(~ Response, data=OneTrueLove)
 @
 Note the use of the \R\ template in Chapter 0.
