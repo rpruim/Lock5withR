@@ -1,4 +1,5 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
+
 \Chapter{Collecting Data}
 
 %INCLUDE REAL INTRODUCTION TO CHAPTER 1
@@ -11,7 +12,7 @@
 %INTRODUCTION TO SECTION
 %sub-subsections
 
-\subsection*{A Student Survey}
+\subsubsection*{A Student Survey}
 
 Data sets in \R\ are usually stored as \term{data frames} in a rectangular arrangement with rows 
 corresponding to observational units and columns corresponding to variables.  A number of data
@@ -40,7 +41,7 @@ ncol(StudentSurvey) # number of columns
 dim(StudentSurvey) # number of rows and columns
 @
 
-\subsection*{Data on Countries}
+\subsubsection*{Data on Countries}
 
 <<>>=
 head(AllCountries)
@@ -103,7 +104,7 @@ a variable we are trying to predict or explain
 a variable used to predict or explain a response variable
 \end{description}
 
-\subsection{Estimation}
+\subsection*{Estimation}
 
 Often we are interested in knowing (approximately) the 
 value of some parameter.  A statistic used for this purpose is called
@@ -224,7 +225,7 @@ If there is no such assignment by the researcher, the study is an
 %random selection and randomized experiment
 %matched pairs?
 
-\subsection*{Vehicles and Life Expectancy}
+\subsubsection*{Vehicles and Life Expectancy}
 
 <<>>=
 head(LifeExpectancyVehicles, 10)
@@ -252,7 +253,8 @@ This is important if you want to construct your own data set
 (in Excel or a google spreadhseet, for example) that you will later import into \R.
 You want to be sure that the structure of your spread sheet uses rows and columns 
 in this same way, and that you don't put any extra stuff into the spread sheet.  It is a 
-good idea to include an extra row at the top which names the variables.
+good idea to include an extra row at the top which names the variables. Take a look at
+Chapter 0 to learn how to get the data from Excel into \R.
 
 %Going back to the \dataframe{CricketChirps} data, here's how it might look if we collect that 
 %same data in Excel:
@@ -260,5 +262,3 @@ good idea to include an extra row at the top which names the variables.
 %\begin{center}
   %\includegraphics[width=4in]{images/CricketsExcel}
 %\end{center}
-
-We'll learn how to get the data from Excel into \R\ soon.
