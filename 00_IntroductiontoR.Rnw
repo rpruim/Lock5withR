@@ -17,7 +17,7 @@ You can access the Calvin \RStudio{} server via links from our course
 web site (\url{http://www.calvin.edu/~rpruim/courses/m145/F13/}) or from
 \url{http://dahl.calvin.edu}.
 
-\subsection{Logging in and changing your password}
+\subsection*{Logging in and changing your password}
 You will be prompted to login.  Your login and password are both your Calvin
 userid.  
 Once you are logged in, you will see something like 
@@ -37,7 +37,112 @@ You should change your password.  Here's how.
 		shell and get back to \RStudio.
 \end{enumerate}
 
-\subsection{Using R as a calculator}
+\subsection*{Loading packages}
+
+\R\ is divided up into packages.  A few of these are loaded every time you
+run \R, but most have to be selected.  This way you only have as much of \R\ as you
+need.
+
+In the \tab{Packages} tab, check the boxes next to the following packages to
+load them:
+\begin{itemize}
+  \item mosaic  (a package from Project MOSAIC, should autoload on the server)
+%  \item fastR   (a package from a different text book)
+	\item Lock5Data     (a package for our text book)
+\end{itemize}
+
+\section{Using R Markdown}
+
+Although you can export plots from \RStudio\ for use in other applications, there is another 
+way of preparing documents that has many advantages.  \RStudio\ provides several ways to 
+create documents that include text, \R\ code, \R\ output, graphics, even mathematical notation
+all in one document.  The simplest of these is R Markdown.  
+
+To create a new R Markdown document, go to ``File", ``New", then ``R Markdown":
+\begin{center}
+  \includegraphics[width=3in]{images/NewRMarkdown}
+\end{center}
+
+When you do this, a file editing pane will open with a template inserted.  If you click
+on ``Knit HTML", \RStudio\ will turn this into an HTML file and display it for you.  Give it a try.
+You will be asked to name your file if you haven't already done so.  If you are using the \RStudio\
+server in a browser, then your file will live on the server (``in the cloud'') rather than 
+on your computer.
+
+If you look at the template file you will see that the file has two kinds of sections.  Some of this file is just normal text (with some extra symbols to make things bold, add in headings, etc.)  You can get a list of all of these mark up options by selecting the ``Mardown Quick Reference" in the question mark menu.
+
+\begin{center}
+  \includegraphics[width=2in]{images/MardownQuickReference}
+\end{center}
+
+The second type of section is an \R\ code chunk.  These are colored differently to make them
+easier to see.  You can insert a new code chunk by selecting ``Insert Chunk" from the ``Chunks" 
+menu:
+\begin{center}
+	\includegraphics[width=2in]{images/InsertChunk}
+\end{center}
+\noindent
+(You can also type \verb!```{r}! to begin and \verb!```! to end the code chunk if you would 
+rather type.)
+You can put any \R\ code in these code chunks and the results (text output or graphics) as well
+as the \R\ code will be displayed in your HTML file.
+
+There are options to do things like (a) run \R\ code without displayng it, (b) run \R\ code without
+displaying the output, (c) controling size of plots, etc., etc.  
+But for starting out, this is really all you need to know.
+
+\subsection*{R Markdown files must be self-contained}
+R Markdown files do not have access to things you have done in your console.  (This is good, else 
+your document would change based on things not in the file.)  This means that you must explicitly
+load data, and require packages \emph{in the R Markdown file} in order to use them.  In this class,
+this means that most of your R Markdown files will have a chunk near the beginning that includes
+
+<<>>=
+require(mosaic)       # load the mosaic package
+require(Lock5Data)    # get data sets from the book
+@
+
+\subsection*{Printing your document}
+
+The preview window has an icon that looks like an arrow pointing at a window.  If you click on that the document will open in a regular browser window.  From there you can use your browser's print features to print the document.
+
+\section{Getting Help in RStudio}
+
+\subsection*{The \RStudio\ help system}
+There are several ways to get \RStudio\ to help you when you forget something.
+Most objects in packages have help files that you can access by typing something 
+like:
+<<help-questionmark,eval=FALSE,tidy=FALSE>>=
+?bargraph
+?histogram
+?HELPrct
+@
+You can search the help system using
+<<help-GR,eval=FALSE>>=
+help.search('Grand Rapids')    # Does R know anything about Grand Rapids?
+@
+This can be useful if you don't know the name of the function or data set you 
+are looking for.
+
+\subsection*{History}
+If you know you have done something before, but can't remember how, you can
+search your history.  The history tab shows a list of recently executed
+commands.  There is also a search bar to help you find things from longer ago.
+
+\subsection*{Error messages}
+When things go wrong, \R\ tries to help you out by providing an error message.
+If you can't make sense of the message, you can try copying and pasting your
+command and the error message and sending to me in an email.  One common error
+message is illustrated below.
+<<error-message>>=
+fred <- 23
+frd
+@
+The object \code{frd} is not found because it was mistyped.  It should have
+been \code{fred}.  If you see an ``object not found'' message, check your
+typing and check to make sure that the necessary packages have been loaded.
+
+\subsection*{Using R as a calculator}
 
 Notice that \Rstudio\ divides its world into four panels.  Several of the panels
 are further subdivided into multiple tabs.
@@ -73,19 +178,6 @@ One frequent use of this is to save and print a value all in one go:
 15.3 * 23.4 -> product; product    # save result and show it
 @
 
-\subsection{Loading packages}
-
-\R\ is divided up into packages.  A few of these are loaded every time you
-run \R, but most have to be selected.  This way you only have as much of \R\ as you
-need.
-
-In the \tab{Packages} tab, check the boxes next to the following packages to
-load them:
-\begin{itemize}
-  \item mosaic  (a package from Project MOSAIC, should autoload on the server)
-%	\item fastR   (a package from a different text book)
-	\item Lock5Data     (a package for our text book)
-\end{itemize}
 
 \section{Four Things to Know About \R}
 Computers are great for doing complicated computations quickly, but you have to speak to them 
@@ -126,66 +218,6 @@ The up and down arrows can be used to retrieve past commands.
 \end{enumerate}
 
 
-\section{Data in \R}
-
-\subsection{Data in Packages}
-Most often, data sets in \R\ are stored in a structure called a 
-\term{data frame}.  There are a number of data sets built into \R\
-and many more that come in various add on packages.  The \pkg{Lock5Data}
-package, for example, contains all the data sets from our text book.
-In the book, data set names are printed in bold text.
-
-You can see a list of them using 
-<<datasets,eval=FALSE>>=
-data(package="Lock5Data")
-@
-
-You can find a longer list of all data sets available in any loaded package
-using 
-<<eval=FALSE>>=
-data()
-@
-
-
-\subsection{The HELPrct data set}
-The \dataframe{HELPrct} data frame from the \pkg{mosaic} package
-contains data from the Health Evaluation and Linkage to Primary Care
-randomized clinical trial.  You can find out more about the study and
-the data in this data frame by typing
-<<HELPrcthelp,eval=FALSE,tidy=FALSE>>=
-?HELPrct
-@
-
-Among other things, this will tell us something about the subjects in
-this study:
-\begin{quote}
-	Eligible subjects were adults, who spoke Spanish or English, reported
-	alcohol, heroin or cocaine as their first or second drug of choice, resided
-	in proximity to the primary care clinic to which they would be referred or
-	were homeless. Patients with established primary care relationships they
-	planned to continue, significant dementia, specific plans to leave the
-	Boston area that would prevent research participation, failure to provide
-	contact information for tracking purposes, or pregnancy were excluded.
-
-Subjects were interviewed at baseline during their detoxification stay and
-follow-up interviews were undertaken every 6 months for 2 years.
-\end{quote}
-
-It is often handy to look at the first few rows of a data frame.  It will
-show you the names of the variables and the kind of data in them:
-<<headHELP>>=
-head(HELPrct)
-@
-
-That's plenty of variables to get us started with exploration of data.
-
-\subsection{Using your own data}
-
-We will postpone for now a discussion about getting your own data into \RStudio,
-but any data you can get into a reasonable format (like csv) can be imported
-into \RStudio\ pretty easily.
-
-\newpage
 
 \section{The Most Important Template}
 
@@ -218,7 +250,7 @@ goal( formula , data = mydata )
 To use the template, you just need to know what goes in each slot.  This can be determined by
 asking yourself two questions:
 \begin{enumerate}
-	\item
+  \item
 		What do you want \R\ to do? 
 		\begin{itemize}
 			\item this determines what function to use (goal).
@@ -233,9 +265,369 @@ asking yourself two questions:
 
 \end{enumerate}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\section{Statistics: Answering Questions With Data}
+
+\section{Data in \R}
+
+\subsection*{Data in Packages}
+Most often, data sets in \R\ are stored in a structure called a 
+\term{data frame}.  There are a number of data sets built into \R\
+and many more that come in various add on packages.  The \pkg{Lock5Data}
+package, for example, contains all the data sets from our text book.
+In the book, data set names are printed in bold text.
+
+You can see a list of them using 
+<<datasets,eval=FALSE>>=
+data(package="Lock5Data")
+@
+
+You can find a longer list of all data sets available in any loaded package
+using 
+<<eval=FALSE>>=
+data()
+@
+
+\subsection*{The HELPrct data set}
+The \dataframe{HELPrct} data frame from the \pkg{mosaic} package
+contains data from the Health Evaluation and Linkage to Primary Care
+randomized clinical trial.  You can find out more about the study and
+the data in this data frame by typing
+<<HELPrcthelp,eval=FALSE,tidy=FALSE>>=
+?HELPrct
+@
+
+Among other things, this will tell us something about the subjects in
+this study:
+\begin{quote}
+	Eligible subjects were adults, who spoke Spanish or English, reported
+	alcohol, heroin or cocaine as their first or second drug of choice, resided
+	in proximity to the primary care clinic to which they would be referred or
+	were homeless. Patients with established primary care relationships they
+	planned to continue, significant dementia, specific plans to leave the
+	Boston area that would prevent research participation, failure to provide
+	contact information for tracking purposes, or pregnancy were excluded.
+
+Subjects were interviewed at baseline during their detoxification stay and
+follow-up interviews were undertaken every 6 months for 2 years.
+\end{quote}
+
+It is often handy to look at the first few rows of a data frame.  It will
+show you the names of the variables and the kind of data in them:
+<<headHELP>>=
+head(HELPrct)
+@
+
+That's plenty of variables to get us started with exploration of data.
+
+\subsection*{Using your own data}
+
+\subsubsection*{From Excel or Google to R}
+So far we have been using data that lives in \R\ packages.  This has allowed us 
+to focus on things like how to make plots and create numerical summaries without
+worrying too much about the data themselves.  But if you are going to do any of your
+own statistical analyses, then you will need to import your own data into
+\R\ and have some tools for manipulating the data once it is there.  
+
+Excel or Google spreadsheets are reasonable tools for entering (small) data sets by hand and 
+doing basic data tidying (organizing) and cleaning (correcting errors).  
+This section describes how to get data from a spreadsheet into \R.
+
+\subsubsection*{While you are still in the spreadsheet}
+
+If you are creating
+your own data in a spreadsheet with the intent of bringing into \R\ (or some other statistical package)
+for analysis, it is important that you design your spreadsheet appropriately.  For most data sets
+this will mean 
+\begin{enumerate}
+  \item
+  	The first row should contain variables names.
+
+		These should be names that will work well in \R.  This usually means they will be 
+		relatively short and avoid spaces and punctuation.
+
+	\item
+		Each additional row corresponds to a case/observational unit.
+
+	\item
+		Each column corresponds to a variable.
+	\item
+		There is \textbf{nothing} else in the spreadsheet.
+
+		Do not include notes to yourself, plots, numerical summaries, etc.  These things can
+		be kept in a separate worksheet, another file, your lab notebook, just not in
+		the worksheet you are going to export.
+\end{enumerate}
+
+\subsubsection*{Exporting to csv}
+
+The comma separated values (csv) format has become a standard way of transferring data between programs.
+Both Google and Excel can export to this format, and \R\ can import from this format.  Once your data 
+are ready to go, export them to csv.  Give the file a good name, and remember where you have put it.
+
+\subsubsection*{Uploading the data (\RStudio\ server only)}
+
+To get the data from your computer onto the server, you need to \textbf{upload} the data.  (You can skip this 
+step if you are working with a local copy of \RStudio.)  Uploading transfers 
+a copy of your data from your computer onto the server (the ``cloud'').  This is like uploading pictures
+to Facebook so you can later use them in posts or as a cover photo or tag your friends or whatever else once the photo
+is on Facebook.
+
+To upload the data, go to the \textbf{Files} tab and click on \textbf{Upload}:
+
+\begin{center}
+	\includegraphics[width=.5\textwidth]{images/Upload}
+\end{center}
+
+A window will pop up prompting you to browse to the file's location on your computer.  Choose the file and it will upload to
+the server.  You should see it appear in your file menu.
+
+\subsubsection*{Importing the data into R}
+Now that the file is on the server, you can import it into \R.  This takes place in the \textbf{Environment} tab.  
+Once there, choose \textbf{Import Dataset} and then \textbf{From Text File...}.  
+\begin{center}
+	\includegraphics[width=.3\textwidth]{images/Import1}
+\end{center}
+The instructions are pretty clear from there, but here are some things to watch for:
+\begin{itemize}
+	\item
+		The default name for the data set is taken from the file name.  If you used a very long file name, you will
+		probably want to shorten this down.  (But don't call it \texttt{Data} or something too generic either.)  
+		If the data are from the asters you have been tagging, perhaps call it \texttt{Asters}.  If you are working with
+		multiple data sets that deal with asters, add a bit more detail, perhaps \texttt{Asters01} or some such
+		thing.
+	\item
+		Be sure to select to use your first line as variable names (Heading = Yes).
+\end{itemize}
+
+\begin{center}
+	\includegraphics[width=.75\textwidth]{images/Import2}
+\end{center}
+
+The data set should now be ready for use in \R.
+
+\subsubsection*{A shortcut for Google Spreadsheets}
+
+You can avoid all the uploading step if you use a Google spreadsheet and import directly from Google.  To do this, you must first \textbf{publish} your Google spreadsheet, and then copy the csv URL from Google.  Here's how.
+
+\begin{enumerate}
+	\item
+		In the file menu select \textbf{Publish}
+\begin{center}
+	\includegraphics[width=.35\textwidth]{images/Publish1}
+\end{center}
+\newpage
+
+	\item
+		In the publish menu, select \textbf{Start Publishing}
+\begin{center}
+	\includegraphics[width=.35\textwidth]{images/Publish2}
+\end{center}
+	\item
+		Now choose the \textbf{CSV} file format.
+\begin{center}
+	\includegraphics[width=.35\textwidth]{images/Publish3}
+\end{center}
+	\item
+		Once you have done that, you can copy the URL:
+\begin{center}
+	\includegraphics[width=.35\textwidth]{images/GoogleCsvURL}
+\end{center}
+
+\item In \R, use the \function{fectchGoogle()} function to load the data into \R:
+<<>>=
+# The URL will be really long and ugly...
+Asters3 <- fetchGoogle("https://docs.google.com/spreadsheet/pub?key=0ApQwsmr3d8V2cmprN01YNnNqMEkxbHlNMHBQWmx0VkE&output=csv")
+@
+	\textbf{Don't forget the quotation marks!}  (They won't be part of what you copy from Google.)
+
+\end{enumerate}
+
+\subsubsection*{Using R commands to read a data file}
+
+Even if you primarily use the \RStudio\ 
+interface to import data, it is good to know about the 
+command line methods since these are required to import
+data into scripts, RMarkdown, and Rnw files.  
+CSV files (and a few other types of files as well)
+can be read with 
+<<>>=
+someData <- read.file("file.csv")
+@
+
+This can be used to read data directly from a URL as well.  For example, here is 
+some data from the US Census Bureau:
+<<>>=
+Population <- read.file("http://www.census.gov/popest/data/national/totals/2012/files/NST_EST2012_ALLDATA.csv")
+dim(Population)
+head(Population,4)
+@
+Many web sites provide data in csv format.  
+Here some examples:
+\begin{itemize}
+	\item
+		\url{http://www.census.gov/} (Census Bureau data)
+	\item
+		\url{http://www.ncdc.noaa.gov/data-access} (NOAA Weather and climate data)
+
+	\item
+		\url{http://www.gapminder.org/data/} (Gapminder data)
+	\item
+		\url{http://introcs.cs.princeton.edu/java/data/} has a number of data sets, 
+		some in csv format, collected from other places on the internet.
+	\item
+		\url{http://www.exploredata.net/Downloads} has data from WHO, a genome expression study,
+		and a microbiome study.
+\end{itemize}
+But be aware that some of these files might
+need to be cleaned up a bit before they are usable for statistics.  
+Also, some internet files are 
+very large and may take a while to download.  Many sites will give an indication of the 
+size of the data set so you know what you are in for.   The better sites will include 
+links to a code book (a description of all the variables, units used, how and when the data were
+collected, and any other information relevant to interpreting the data).
+Such a document is available for the population data loaded above.  You can find it
+at \url{http://www.census.gov/popest/data/national/totals/2012/files/NST-EST2012-alldata.pdf}
+
+There are similar functions for reading various other sorts 
+of data.  There is even a \function{read.xls()} function
+in the \pkg{gdata} package that can read directly from 
+Excel spreadsheets without having to first export them to csv
+format.  There are also utilities for converting to and from
+native data formats of other statistical programs (like SAS,
+SPSS, etc.).  But since these typically all know how to 
+read and write csv files, learning a workflow that goes 
+through CSV is a broadly applicable skill.
+
+\subsubsection*{Missing Data}
+
+The \option{na.strings} argument can be used to specify
+codes for missing values.  
+The following can be useful, for example:
+<<tidy=FALSE>>=
+someData <- read.file('file.csv', 
+  na.strings=c('NA','','.','-','na'))
+@
+because SAS uses a period (\verb!.!) to code missing data, and some csv 
+exporters use `\texttt{-}'.  By default \R\ reads these as string data, 
+which forces the entire variable to be of character type instead of numeric.
+
+By default, \R\ will recode character data as a factor.  If you prefer to leave
+such variables in character format, you can use
+<<tidy=FALSE>>=
+somData <- read.file('file.csv', 
+  na.strings=c('NA','','.','-','na'), 
+  stringsAsFactors=FALSE) 
+@
+
+\footnote{
+Even finer control can be obtained by manually setting the class (type) used 
+for each column in the file.  In addition, this speeds up the reading of the file.
+For a csv file with four columns, we can declare them to be of class integer,
+numeric, character, and factor with the following command.
+<<tidy=FALSE>>=
+someData <- read.file('file.csv', 
+  na.strings=c('NA','','.','-','na'), 
+  colClasses=c('integer','character')) 
+@
+}
+
+\subsection*{Manipulating your data}
+
+\subsubsection*{Creating new variables}
+
+We can add a new variable to data set using \function{transform()}:
+<<tidy=FALSE>>=
+head(iris,3)
+iris2  <- transform(iris, 
+                    Sepal.Ratio = Sepal.Length / Sepal.Width,
+                    Petal.Ratio = Petal.Length / Petal.Width )
+head(iris2,3)
+States <- transform(States, 
+                    Pop.Increase = 100 * (POPESTIMATE2012 - POPESTIMATE2010)/POPESTIMATE2010 )
+histogram( ~ Pop.Increase, data=States, width=0.5, 
+                           main="% Population increase (2010 to 2012)" )
+@
+Generally, it is a good idea to keep raw data (like \variable{Sepal.Length} and \variable{Sepal.Width} in your data file, but let \R\ do the computation of derived variables for you.  Among other advantages, if you ever fix an error in a \variable{Sepal.Length} measurement, you don't have to worry about remembering to also recompute the ratio.  Futhermore, your \R\ code documents how the derived value was computed.
+
+\subsubsection*{Dropping Variables}
+
+Less frequently, you might want to remove a variable from a data frame.  We can use \function{subset()} for this as well:
+<<>>=
+iris3 <- subset(iris2, select = - Sepal.Ratio)  # the minus sign means drop 
+head(iris3, 3)
+@
+
+%\subsection{Summarizing and Aggregating with \pkg{plyr}}
+
+\subsection*{Saving Data}
+\function{write.csv()} can be used to save data from \R\ into csv formatted files.
+This can be useful for exporting to some other program.
+
+<<writingData>>=
+write.csv(iris3, "iris3.csv")
+@
+
+Data can also be saved in native \R\ format.  Saving data sets 
+(and other \R\ objects) using \function{save()} has some advantages over other file formats:
+\begin{itemize}
+  \item 
+  Complete information about the objects is saved, including attributes.
+  \item
+  Data saved this way takes less space and loads much more quickly.
+  \item
+  Multiple objects can be saved to and loaded from a single file.
+\end{itemize}
+The downside is that these files are only readable in \R.
+
+<<savingData,exec=FALSE,echo=TRUE>>=
+save(iris3, file="iris3.rda")   # the traditional file extension is rda for R native data.
+load("iris3.rda")          # loads previously saved data
+@
+
+For more on importing and exporting data, especially from other
+formats, see the 
+\textit{R Data Import/Export} manual available on 
+\href{http://cran.r-project.org/manuals.html}{CRAN}.
+
+
+\subsection*{Merging datasets}
+
+The \dataframe{fusion1} data frame in the \pkg{fastR} package contains 
+genotype information for a SNP (single nucleotide polymorphism) in the gene
+\emph{TCF7L2}.  
+The \dataframe{pheno} data frame contains phenotypes
+(including type 2 diabetes case/control status) for an intersecting set of individuals.
+We can merge these together to explore the association between
+genotypes and phenotypes using \verb!merge()!.
+
+%\Rindex{merge()}%
+<<>>=
+require(fastR)
+head(fusion1,3)
+head(pheno,3)
+@
+
+<<>>=
+# merge fusion1 and pheno keeping only id's that are in both
+fusion1m <- merge(fusion1, pheno, by.x='id', by.y='id', all.x=FALSE, all.y=FALSE)
+head(fusion1m, 3)
+@
+In this case, since the values are the same for each data frame, we could collapse
+\option{by.x} and \option{by.y} to \option{by} and collapse
+\option{all.x} and \option{all.y} to \option{all}.
+The first of these specifies which column(s) to use to identify matching cases.
+The second indicates whether cases in one data frame that do not appear in the other 
+should be kept (\code{TRUE}) or dropped 
+(filling in \code{NA} as needed) or dropped from the merged data frame.
+
+Now we are ready to begin our analysis.
+<<fusion1-xtabs>>=
+tally(~t2d + genotype, fusion1m)
+@
+
+
+
+\section{Statistics: Answering Questions With Data}
 
 This is a course primarily about statistics, but what exactly is 
 \emph{statistics}?  In other words, what is this course about?%
@@ -659,106 +1051,3 @@ For example, the question of whether dogs can smell cancer could be answered ess
 (although it would be a bit more involved than preparing tea and presenting cups to the Lady).
 
 %%%%%%from Chapter 2
-\section{Using R Markdown}
-
-Although you can export plots from \RStudio\ for use in other applications, there is another 
-way of preparing documents that has many advantages.  \RStudio\ provides several ways to 
-create documents that include text, \R\ code, \R\ output, graphics, even mathematical notation
-all in one document.  The simplest of these is R Markdown.  
-
-To create a new R Markdown document, go to ``File", ``New", then ``R Markdown":
-\begin{center}
-  \includegraphics[width=3in]{images/NewRMarkdown}
-\end{center}
-
-When you do this, a file editing pane will open with a template inserted.  If you click
-on ``Knit HTML", \RStudio\ will turn this into an HTML file and display it for you.  Give it a try.
-You will be asked to name your file if you haven't already done so.  If you are using the \RStudio\
-server in a browser, then your file will live on the server (``in the cloud'') rather than 
-on your computer.
-
-If you look at the template file you will see that the file has two kinds of sections.  Some of this file is 
-just normal text (with some extra symbols to make things bold, add in headings, etc.)  You can get
-a list of all of these mark up options by selecting the ``Mardown Quick Reference" in the question mark
-menu.
-
-\begin{center}
-	\includegraphics[width=2in]{images/MardownQuickReference}
-\end{center}
-
-The second type of section is an \R\ code chunk.  These are colored differently to make them
-easier to see.  You can insert a new code chunk by selecting ``Insert Chunk" from the ``Chunks" 
-menu:
-\begin{center}
-	\includegraphics[width=2in]{images/InsertChunk}
-\end{center}
-\noindent
-(You can also type \verb!```{r}! to begin and \verb!```! to end the code chunk if you would 
-rather type.)
-You can put any \R\ code in these code chunks and the results (text output or graphics) as well
-as the \R\ code will be displayed in your HTML file.
-
-There are options to do things like (a) run \R\ code without displayng it, (b) run \R\ code without
-displaying the output, (c) controling size of plots, etc., etc.  
-But for starting out, this is really all you need to know.
-
-\subsection*{R Markdown files must be self-contained}
-R Markdown files do not have access to things you have done in your console.  (This is good, else 
-your document would change based on things not in the file.)  This means that you must explicitly
-load data, and require packages \emph{in the R Markdown file} in order to use them.  In this class,
-this means that most of your R Markdown files will have a chunk near the beginning that includes
-
-<<>>=
-require(mosaic)       # load the mosaic package
-require(Lock5Data)    # get data sets from the book
-@
-
-%%%%For your first assignment, I'll provide you a template to get you going.
-
-\subsection{Printing your document}
-
-The preview window has an icon that looks like an arrow pointing at a window.  If you click on that the document will open in a regular browser window.  From there you can use your browser's print features to print the document.
-
-\section{Getting Help in RStudio}
-
-\subsection{The \RStudio\ help system}
-There are several ways to get \RStudio\ to help you when you forget something.
-Most objects in packages have help files that you can access by typing something 
-like:
-<<help-questionmark,eval=FALSE,tidy=FALSE>>=
-?bargraph
-?histogram
-?HELPrct
-@
-You can search the help system using
-<<help-GR,eval=FALSE>>=
-help.search('Grand Rapids')    # Does R know anything about Grand Rapids?
-@
-This can be useful if you don't know the name of the function or data set you 
-are looking for.
-
-\subsection{Tab completion}
-As you type the name of a function in \RStudio, you can hit the tab key and it
-will show you a list of all the ways you could complete that name, and after
-you type the opening parenthesis, if you hit the tab key, you will get a list
-of all the arguments and (sometimes) some helpful hints about what they are.)
-
-\subsection{History}
-If you know you have done something before, but can't remember how, you can
-search your history.  The history tab shows a list of recently executed
-commands.  There is also a search bar to help you find things from longer ago.
-
-\subsection{Error messages}
-When things go wrong, \R\ tries to help you out by providing an error message.
-If you can't make sense of the message, you can try copying and pasting your
-command and the error message and sending to me in an email.  One common error
-message is illustrated below.
-<<error-message>>=
-fred <- 23
-frd
-@
-The object \code{frd} is not found because it was mistyped.  It should have
-been \code{fred}.  If you see an ``object not found'' message, check your
-typing and check to make sure that the necessary packages have been loaded.
-
-\newpage
