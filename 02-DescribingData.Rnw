@@ -31,6 +31,7 @@ In addition to manually calculating the proportion, we can use the \function{pro
 prop(~ Response, data=OneTrueLove)
 @
 %how to display disagree/don't know?
+%more on prop in chapter 3 guide..
 
 
 \subsubsection*{Visualizing the Data in One Categorical Variable}
@@ -77,8 +78,7 @@ Again, we can calculate the proportions of two categorical variables.
 prop(Response~Gender, data=OneTrueLove)
 @
 
-%difference in prop-- I think there is a command for this
-
+%difference in prop-- how to manipulate the prop? diff(prop(Award~Gender, data=StudentSurvey))
 
 \subsubsection*{Visualizing a Relationship between Two Categorical Variables}
 
@@ -175,7 +175,6 @@ We won't use this very often however, since seeing this information in a histogr
 
 Histograms are a way of displaying the distribution of a quantitative 
 variable. Here are a couple examples:
-%frequency table for mammals
 <<histogram>>=
 histogram(~ Longevity, data = MammalLongevity)
 histogram(~ age, data=HELPrct)
@@ -368,9 +367,9 @@ quantile(SandP500$Close, probs=seq(0, 1, 0.90))
 
 \subsection*{Five Number Summary}
 
-We have covered many different ways to obtain the \term{five number summary} but \function{summary()} is the fastest way to obtain the summaries of the quantitative variables in a data set and \function{favstats()} is the fastest way to obtain more detailed statistics about a specific quantitative variable.
+We have already covered many different functions which results in the \term{five number summary} but \function{fivenum()} is most direct way to obtain in the five number summary. 
 <<five-number-summary>>=
-favstats(~Longevity, data=MammalLongevity)
+fivenum(~Longevity, data=MammalLongevity)
 min(~Longevity, data=MammalLongevity) 
 max(~Longevity, data=MammalLongevity) 
 range(~Longevity, data=MammalLongevity)  # subtract to get the numerical range value
@@ -386,8 +385,9 @@ iqr(~Longevity, data=MammalLongevity)    # inter-quartile range
 
 Generally, outliers are considered to be values 
 \begin{itemize}
-\item less than Q1 - 1.5(IQR), and 
-\item greater than Q3 + 1.5(IQR).
+\item less than Q_1 - 1.5(IQR), and 
+\item 
+greater than Q_3 + 1.5(IQR).
 \end{itemize}
 
 There is no function in \R\ that directly results in outliers because practically, there is no one specific formula for such a determination. However, a boxplot will indirectly reveal outliers using the method above.
@@ -466,23 +466,24 @@ This plot shows that for each substance, the age distributions of men and
 women are quite similar, but that the distributions differ from 
 substance to substance.
 
-\section{}
 
-\subsection{Scatterplots}
+
+\section{Two Quantitative Variables: Scatterplot and Correlation}
+
+
+\subsection*{Visualizing a Relationship between Two Quantitative Variables: Scatterplots}
 
 The most common way to look at two quantitative variables is with a 
-scatter plot.  The \pkg{lattice} function for this is \function{xyplot()}, 
+scatterplot.  The \pkg{lattice} function for this is \function{xyplot()}, 
 and the basic syntax is
-
 <<xyplot-syntax, eval=FALSE>>=
-xyplot( yvar ~ xvar, data=dataName)
+xyplot(yvar ~ xvar, data=dataName)
 @
 
 Notice that now we have something on both sides of the \~{} since we need to tell
 \R\ about two variables.  
-
 <<xyplot1>>=
-xyplot( mcs ~ age, data=HELPrct )
+xyplot(Margin ~ Approval, data=ElectionMargin)
 @
 
 Grouping and conditioning work just as before.
@@ -494,71 +495,182 @@ xyplot( mcs ~ age | sex, groups=substance, data=HELPrct, alpha=.6, cex=.5,
 	   auto.key=TRUE )
 @
 
+Here are some additional scatterplots from Example 2.34 to study the differences in strengh and direction of the associations.
+<<xyplot3>>=
+xyplot(AvgMercury ~ pH, data = FloridaLakes)
+xyplot(AvgMercury ~ Alkalinity, data = FloridaLakes)
+xyplot(Alkalinity ~ pH, data = FloridaLakes)
+xyplot(AvgMercury ~ ThreeYrStdMercury, data = FloridaLakes)
+@
+
+\subsection*{Summarizing a Relationship between Two Quantitative Variables: Correlation}
+
+Another key numerical statistic is the \term{correlation}--the correlation is a measure of the strength and direction of the relationship between two quantitative variables.
+<<correlation>>=
+cor(Margin ~ Approval, data = ElectionMargin)
+cor(AvgMercury ~ pH, data = FloridaLakes)
+cor(AvgMercury ~ Alkalinity, data = FloridaLakes)
+cor(Alkalinity ~ pH, data = FloridaLakes)
+cor(AvgMercury ~ ThreeYrStdMercury, data = FloridaLakes)
+@
+
+\subsubsection*{Cricket Chirps and Temperature}
+
+We can now easily explore Example 2.35.
+<<Example2.35>>=
+CricketChirps
+xyplot(Temperature ~ Chirps, data = CricketChirps)
+cor(Temperature ~ Chirps, data = CricketChirps)
+@
+
+\subsubsection*{Effects of Diet on Levels of Retinol and Beta-carotene}
+
+Further, using the \function{subset()} function again, we can investigate the correlation between variables with some restrictions.
+<<>>=
+xyplot(Alcohol ~ Calories, data=subset(NutritionStudy, Age>59))
+cor(Alcohol ~ Calories, data=subset(NutritionStudy, Age>59))
+@
+
+And now we omit the outlier
+<<omitoutlier>>=
+NutritionStudy60 = subset(NutritionStudy, Age>59)
+xyplot(Alcohol ~ Calories, data=subset(NutritionStudy60, Alcohol<25))
+cor(Alcohol ~ Calories, data=subset(NutritionStudy60, Alcohol<25))
+@
 
 
-
-
-
-\iffalse
-
-\section{Two Quantitative Variables: Scatterplot and Correlation}
 
 \section{Two Quantitative Variables: Linear Regression}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
-
-
-
-
-\section{Working with Pre-Tabulated Data}
-
-Sometimes data arrive pre-tabulated.  We can use \function{barchart()} instead of \function{bargraph()}
-to graph pre-tabulated data.%
-\footnote{\function{bargraph()} converts raw data into a summary table and then
-calls \function{barchart()} to do the plotting.}
-
-<<teen-deaths>>=
-TeenDeaths
-barchart(deaths ~ cause, data=TeenDeaths)
-barchart(cause ~ deaths, data=TeenDeaths)
+When the relationship between variables is sufficiently \emph{linear}, you may be able to predict the value of a variable using the other variable. This is possible by fitting a \emph{regression line}. To plot this in \R, all we need to do is add an additional argument, \argument{type=c("p", "r")}, to the xyplot.
+<<linearregression>>=
+xyplot(Tip ~ Bill, type=c("p", "r"), data=RestaurantTips)
 @
-Notice that by default the causes are displayed in alphabetical order.  \R\ assumes that categorical
-data is nominal unless you say otherwise.  Here's one way to make it ordinal using the order in which 
-things appear in the \dataframe{TeenDeaths} data frame.
-<<teen-deaths-reordered>>=
-barchart( ordered(cause, levels=cause) ~ deaths, TeenDeaths)
+
+The equation for the regression line, or the \emph{prediction equation} is
+\[
+\widehat{\mbox{Response}} = a + b \cdot \mbox{Explanatory}
+\]
+
+So now, we need to find the values for a, the intercept, and b, the slope using the function to fit linear models.
+<<>>=
+lm(Tip ~ Bill, data=RestaurantTips)
+coef(lm(Tip ~ Bill, data=RestaurantTips))  # just show me the coefficients
 @
-\fi
+<<include=FALSE>>=
+tip.coefs <- do(1) * lm(Tip ~ Bill, data=RestaurantTips)
+@
 
-\section{Exporting Plots}
+This results in the equation
+\[
+\widehat{\mbox{Tip}} = \Sexpr{tip.coefs$Intercept} + \Sexpr{tip.coefs$Bill} \cdot \mbox{Bill}
+\]
 
-You can save plots to files or copy them to the clipboard using the 
-\tab{Export} menu in the \tab{Plots} tab.  It is quite simple to copy the 
-plots to the clipboard and then paste them into a Word document, for example.
-You can even adjust the height and width of the plot first to get it the 
-shape you want.
+With this equation, one can predict the tip for different bill amounts.
+%There is an easier way to predict.. makeFun?
 
-\R\ code and output can be copied and pasted as well.  It's best to use a 
-fixed width font (like Courier) for \R\ code so that things align properly.
+An important aspect of the linear regression is the difference between the prediction and actual observation. This is called the \term{residual}, defined
 
-\RStudio\ also provides a way (actually multiple ways) to create documents
-that include text, \R\ code, \R\ output, and graphics all in one document so you don't 
-have to do any copying and pasting.  This is a much better workflow since it avoids 
-copy-and-paste which is error prone and makes it easy to regenerate an entire report
-should the data change (because you get more of it or correct an error, for example).
+\[
+\mbox{residual} = \mbox{observed response} - \mbox{predicted response}
+\]
+
+%easy way to calculate residuals?
+
+<<>>=
+xyplot(AvgMercury ~ pH, type=c("p", "r"), data=FloridaLakes)
+lm(AvgMercury ~ pH, data=FloridaLakes)
+1.53-0.1523*7.5
+1.10-0.388
+@
 
 
 
-\section{A Few Bells and Whistles}
+
+\section{Graphical Summaries -- Important Ideas}
+
+\subsection*{Patterns and Deviations from Patterns}
+The goal of a statistical plot is to help us see 
+\begin{itemize}
+\item 
+potential patterns in the data, and 
+\item
+deviations from those patterns.  
+\end{itemize}
+
+\subsection*{Different Plots for Different Kinds of Variables}
+Graphical summaries can help us see the \emph{distribution} of a variable 
+or the \emph{relationships} between two (or more) variables.  The type of plot
+used will depend on the kinds of variables involved. You can use \function{demo()} to see how
+to get \R\ to make the plots in this section.
+
+When we do statistical analysis, we will see that the analysis we use will 
+also depend on the kinds of variables involved, so this is an important idea.
+
+\subsection*{Side-by-side Plots and Overlays Can Reveal Importance of Additional Factors}
+The \pkg{lattice} graphics plots make it particularly easy to generate plats that 
+divide the data into groups and either produce a panel for each group (using \verb!|!)
+or display each group in a different way (different colors or symbols, using 
+the \argument{groups} argument).  These plots can reveal the 
+possible influence of additional variables -- sometimes called covariates.
+
+\subsection*{Area = (relative) frequency}
+
+Many plots are based on the key idea that our eyes are good at comparing areas.  Plots 
+that use area (e.g., histograms, mosaic plots, bar charts, pie charts) should always obey
+this principle
+\begin{center}
+\large
+Area $=$ (relative) frequency
+\end{center}
+Plots that violate this principle can be deceptive and distort the true nature
+of the data.  
+
+\subsection*{An Example: Histogram with unequal bin widths}
+
+It is possible to make histograms with bins that have different widths.
+But in this case it is important that the height of the bars is chosen so 
+that area (\emph{NOT height}) is proportional to frequency.  
+Using height instead of area would distort the picture.
+
+When unequal bin sizes are specified, \function{histogram()} by default chooses
+the density scale:
+<<hist-unequal-bins,fig.width=3,fig.height=2>>=
+histogram( ~ Sepal.Length, data=iris, breaks=c(4,5,5.5,5.75,6,6.5,7,8,9))
+@
+The density scale is important.
+It tells \R\ to use a scale such that 
+the area (height $\times$ width) of the rectangles is equal to the relative frequency.
+For example, the bar from 5.0 to 5.5 has width $\frac12$ and height about $0.36$, so 
+the area is $0.18$, which means approximately 18\% of the sepal lengths are 
+between 5.0 and 5.5.
+
+It would be incorrect to choose \option{type="count"} or \option{type="proportion"} since
+this distorts the picture of the data.  Fortunately, \R\ will warn you if you try:
+<<hist-unequal-bins-bad-echo,fig.width=3,fig.height=2,eval=FALSE>>=
+histogram( ~ Sepal.Length, data=iris, breaks=c(4,5,5.5,5.75,6,6.5,7,8,9), type='count')
+@
+<<hist-unequal-bins-bad,fig.width=3,fig.height=2,echo=FALSE>>=
+trellis.par.set(theme=col.mosaic(bw=TRUE))
+histogram( ~ Sepal.Length, data=iris, breaks=c(4,5,5.5,5.75,6,6.5,7,8,9),type="count")
+trellis.focus('panel',1,1)
+grid.text(y=.7,'Never do this!', gp=gpar(col='red',cex=2,alpha=.6))
+trellis.unfocus()
+trellis.par.set(theme=col.mosaic())
+@
+
+Notice how different this looks.  Now the heights are equal to the relative
+frequency, but this makes the wider bars have too much area.
+
+
+
+
+\section*{More on Plots}
 There are lots of arguments that control how these plots look.  Here are just a
 few examples, some of which we have already seen.
 
-\subsection{auto.key}
+\subsection*{auto.key}
+
 \option{auto.key=TRUE} turns on a simple legend for the grouping variable.  
 (There are ways to have more control, if you need it.)
 
@@ -567,7 +679,7 @@ xyplot(Sepal.Length ~ Sepal.Width, groups=Species, data=iris,
 	auto.key=TRUE)   
 @
 
-\subsection{alpha, cex}
+\subsection*{alpha, cex}
 Sometimes it is nice to have elements of a plot be partly transparent.  When
 such elements overlap, they get darker, showing us where data are ``piling up."
 Setting the \argument{alpha} argument to a value between 0 and 1 controls the
@@ -632,7 +744,7 @@ You can a list of the hundreds of available color names using
 colors()
 @
 
-\subsection{trellis.par.set()}
+\subsection*{trellis.par.set()}
 Default settings for lattice graphics are set using 
 \function{trellis.par.set()}.
 Don't like the default font sizes?  You can change to a 7 point (base) font using
@@ -677,403 +789,41 @@ trellis.par.set(theme=col.mosaic())
 trellis.par.set(mySettings)
 @
 
-
-\section{Graphical Summaries -- Important Ideas}
-\subsection{Patterns and Deviations from Patterns}
-The goal of a statistical plot is to help us see 
-\begin{itemize}
-\item 
-potential patterns in the data, and 
-\item
-deviations from those patterns.  
-\end{itemize}
-
-\subsection{Different Plots for Different Kinds of Variables}
-Graphical summaries can help us see the \emph{distribution} of a variable 
-or the \emph{relationships} between two (or more) variables.  The type of plot
-used will depend on the kinds of variables involved.
-There is a nice summary of these on page~48.  You can use \function{demo()} to see how
-to get \R\ to make the plots in this section.
-
-Later, when we do statistical analysis, we will see that the analysis we use will 
-also depend on the kinds of variables involved, so this is an important idea.
-
-\subsection{Side-by-side Plots and Overlays Can Reveal Importance of Additional Factors}
-The \pkg{lattice} graphics plots make it particularly easy to generate plats that 
-divide the data into groups and either produce a panel for each group (using \verb!|!)
-or display each group in a different way (different colors or symbols, using 
-the \argument{groups} argument).  These plots can reveal the 
-possible influence of additional variables -- sometimes called covariates.
-
-\subsection{Area = (relative) frequency}
-
-Many plots are based on the key idea that our eyes are good at comparing areas.  Plots 
-that use area (e.g., histograms, mosaic plots, bar charts, pie charts) should always obey
-this principle
-\begin{center}
-\large
-Area $=$ (relative) frequency
-\end{center}
-Plots that violate this principle can be deceptive and distort the true nature
-of the data.  
-
-\iffalse
-\subsubsection*{An Example: Histogram with unequal bin widths}
-
-It is possible to make histograms with bins that have different widths.
-But in this case it is important that the height of the bars is chosen so 
-that area (\emph{NOT height}) is proportional to frequency.  
-Using height instead of area would distort the picture.
-
-When unequal bin sizes are specified, \function{histogram()} by default chooses
-the density scale:
-
-<<hist-unequal-bins,fig.width=3,fig.height=2>>=
-histogram( ~ Sepal.Length, data=iris, breaks=c(4,5,5.5,5.75,6,6.5,7,8,9))
-@
-The density scale is important.
-It tells \R\ to use a scale such that 
-the area (height $\times$ width) of the rectangles is equal to the relative frequency.
-For example, the bar from 5.0 to 5.5 has width $\frac12$ and height about $0.36$, so 
-the area is $0.18$, which means approximately 18\% of the sepal lengths are 
-between 5.0 and 5.5.
-
-
-It would be incorrect to choose \option{type="count"} or \option{type="proportion"} since
-this distorts the picture of the data.  Fortunately, \R\ will warn you if you try:
-<<hist-unequal-bins-bad-echo,fig.width=3,fig.height=2,eval=FALSE>>=
-histogram( ~ Sepal.Length, data=iris, breaks=c(4,5,5.5,5.75,6,6.5,7,8,9), type='count')
-@
-<<hist-unequal-bins-bad,fig.width=3,fig.height=2,echo=FALSE>>=
-trellis.par.set(theme=col.mosaic(bw=TRUE))
-histogram( ~ Sepal.Length, data=iris, breaks=c(4,5,5.5,5.75,6,6.5,7,8,9),type="count")
-trellis.focus('panel',1,1)
-grid.text(y=.7,'Never do this!', gp=gpar(col='red',cex=2,alpha=.6))
-trellis.unfocus()
-trellis.par.set(theme=col.mosaic())
-@
-
-Notice how different this looks.  Now the heights are equal to the relative
-frequency, but this makes the wider bars have too much area.
-\fi
-
-
-
-\newpage
-
-%\chapter*{Using Your Own Data}
-
-\section{From Excel or Google to R}
-So far we have been using data that lives in \R\ packages.  This has allowed us 
-to focus on things like how to make plots and create numerical summaries without
-worrying too much about the data themselves.  But if you are going to do any of your
-own statistical analyses, then you will need to import your own data into
-\R\ and have some tools for manipulating the data once it is there.  
-
-Excel or Google spreadsheets are reasonable tools for entering (small) data sets by hand and 
-doing basic data tidying (organizing) and cleaning (correcting errors).  
-This section describes how to get data from a spreadsheet into \R.
-
-\subsection{While you are still in the spreadsheet}
-
-If you are creating
-your own data in a spreadsheet with the intent of bringing into \R\ (or some other statistical package)
-for analysis, it is important that you design your spreadsheet appropriately.  For most data sets
-this will mean 
-\begin{enumerate}
-	\item
-		The first row should contain variables names.
-
-		These should be names that will work well in \R.  This usually means they will be 
-		relatively short and avoid spaces and punctuation.
-
-	\item
-		Each additional row corresponds to a case/observational unit.
-
-	\item
-		Each column corresponds to a variabls
-	\item
-		There is \textbf{nothing} else in the spreadsheet.
-
-		Do not include notes to yourself, plots, numerical summaries, etc.  These things can
-		be kept in a separate worksheet, another file, your lab notebook, just not in
-		the worksheet you are going to export.
-\end{enumerate}
-
-\subsection{Exporting to csv}
-
-The comma separated values (csv) format has become a standard way of transferring data between programs.
-Both Google and Excel can export to this format, and \R\ can import from this format.  Once your data 
-are ready to go, export them to csv.  Give the file a good name, and remember where you have put it.
-
-\subsection{Uploading the data (\RStudio\ server only)}
-
-To get the data from your computer onto the server, you need to \textbf{upload} the data.  (You can skip this 
-step if you are working with a local copy of \RStudio.)  Uploading transfers 
-a copy of your data from your computer onto the server (the ``cloud'').  This is like uploading pictures
-to Facebook so you can later use them in posts or as a cover photo or tag your friends or whatever else once the photo
-is on Facebook.
-
-To upload the data, go to the \textbf{Files} tab and click on \textbf{Upload}:
-
-\begin{center}
-	\includegraphics[width=.5\textwidth]{images/Upload}
-\end{center}
-
-A window will pop up prompting you to browse to the file's location on your computer.  Choose the file and it will upload to
-the server.  You should see it appear in your file menu.
-
-\subsection{Importing the data into R}
-Now that the file is on the server, you can import it into \R.  This takes place in the \textbf{Environment} tab.  
-Once there, choose \textbf{Import Dataset} and then \textbf{From Text File...}.  
-\begin{center}
-	\includegraphics[width=.3\textwidth]{images/Import1}
-\end{center}
-The instructions are pretty clear from there, but here are some things to watch for:
-\begin{itemize}
-	\item
-		The default name for the data set is taken from the file name.  If you used a very long file name, you will
-		probably want to shorten this down.  (But don't call it \texttt{Data} or something too generic either.)  
-		If the data are from the asters you have been tagging, perhaps call it \texttt{Asters}.  If you are working with
-		multiple data sets that deal with asters, add a bit more detail, perhaps \texttt{Asters01} or some such
-		thing.
-	\item
-		Be sure to select to use your first line as variable names (Heading = Yes).
-\end{itemize}
-
-\begin{center}
-	\includegraphics[width=.75\textwidth]{images/Import2}
-\end{center}
-
-The data set should now be ready for use in \R.
-
-
-\subsection{A shortcut for Google Spreadsheets}
-
-You can avoid all the uploading step if you use a Google spreadsheet and import directly from Google.  To do this, you must first \textbf{publish} your Google spreadsheet, and then copy the csv URL from Google.  Here's how.
-
-\begin{enumerate}
-	\item
-		In the file menu select \textbf{Publish}
-\begin{center}
-	\includegraphics[width=.35\textwidth]{images/Publish1}
-\end{center}
-\newpage
-
-	\item
-		In the publish menu, select \textbf{Start Publishing}
-\begin{center}
-	\includegraphics[width=.35\textwidth]{images/Publish2}
-\end{center}
-	\item
-		Now choose the \textbf{CSV} file format.
-\begin{center}
-	\includegraphics[width=.35\textwidth]{images/Publish3}
-\end{center}
-	\item
-		Once you have done that, you can copy the URL:
-\begin{center}
-	\includegraphics[width=.35\textwidth]{images/GoogleCsvURL}
-\end{center}
-
-\item In \R, use the \function{fectchGoogle()} function to load the data into \R:
-<<>>=
-# The URL will be really long and ugly...
-Asters3 <- fetchGoogle("https://docs.google.com/spreadsheet/pub?key=0ApQwsmr3d8V2cmprN01YNnNqMEkxbHlNMHBQWmx0VkE&output=csv")
-@
-	\textbf{Don't forget the quotation marks!}  (They won't be part of what you copy from Google.)
-
-\end{enumerate}
-
-%It's your choice which workflow you like better.
-
-
-\subsection{Using R commands to read a data file}
-
-Even if you primarily use the \RStudio\ 
-interface to import data, it is good to know about the 
-command line methods since these are required to import
-data into scripts, RMarkdown, and Rnw files.  
-CSV files (and a few other types of files as well)
-can be read with 
-<<>>=
-someData <- read.file("file.csv")
-@
-This can be used to read data directly from a URL as well.  For example, here is 
-some data from the US Census Bureau:
-<<>>=
-Population <- read.file("http://www.census.gov/popest/data/national/totals/2012/files/NST_EST2012_ALLDATA.csv")
-dim(Population)
-head(Population,4)
-@
-Many web sites provide data in csv format.  
-Here some examples:
-\begin{itemize}
-	\item
-		\url{http://www.census.gov/} (Census Bureau data)
-	\item
-		\url{http://www.ncdc.noaa.gov/data-access} (NOAA Weather and climate data)
-
-	\item
-		\url{http://www.gapminder.org/data/} (Gapminder data)
-	\item
-		\url{http://introcs.cs.princeton.edu/java/data/} has a number of data sets, 
-		some in csv format, collected from other places on the internet.
-	\item
-		\url{http://www.exploredata.net/Downloads} has data from WHO, a genome expression study,
-		and a microbiome study.
-\end{itemize}
-But be aware that some of these files might
-need to be cleaned up a bit before they are usable for statistics.  
-Also, some internet files are 
-very large and may take a while to download.  Many sites will give an indication of the 
-size of the data set so you know what you are in for.   The better sites will include 
-links to a code book (a description of all the variables, units used, how and when the data were
-collected, and any other information relevant to interpreting the data).
-Such a document is available for the population data loaded above.  You can find it
-at \url{http://www.census.gov/popest/data/national/totals/2012/files/NST-EST2012-alldata.pdf}
-
-There are similar functions for reading various other sorts 
-of data.  There is even a \function{read.xls()} function
-in the \pkg{gdata} package that can read directly from 
-Excel spreadsheets without having to first export them to csv
-format.  There are also utilities for converting to and from
-native data formats of other statistical programs (like SAS,
-SPSS, etc.).  But since these typically all know how to 
-read and write csv files, learning a workflow that goes 
-through CSV is a broadly applicable skill.
-
-
-\subsection{Missing Data}
-
-The \option{na.strings} argument can be used to specify
-codes for missing values.  
-The following can be useful, for example:
-<<tidy=FALSE>>=
-someData <- read.file('file.csv', 
-  na.strings=c('NA','','.','-','na'))
-@
-because SAS uses a period (\verb!.!) to code missing data, and some csv 
-exporters use `\texttt{-}'.  By default \R\ reads these as string data, 
-which forces the entire variable to be of character type instead of numeric.
-
-By default, \R\ will recode character data as a factor.  If you prefer to leave
-such variables in character format, you can use
-<<tidy=FALSE>>=
-somData <- read.file('file.csv', 
-  na.strings=c('NA','','.','-','na'), 
-  stringsAsFactors=FALSE) 
-@
-
-\footnote{
-Even finer control can be obtained by manually setting the class (type) used 
-for each column in the file.  In addition, this speeds up the reading of the file.
-For a csv file with four columns, we can declare them to be of class integer,
-numeric, character, and factor with the following command.
-<<tidy=FALSE>>=
-someData <- read.file('file.csv', 
-  na.strings=c('NA','','.','-','na'), 
-  colClasses=c('integer','character')) 
-@
-}
-
-\section{Manipulating your data}
-
-\subsection{Creating new variables}
-
-We can add a new variable to data set using \function{transform()}:
-<<tidy=FALSE>>=
-head(iris,3)
-iris2  <- transform(iris, 
-                    Sepal.Ratio = Sepal.Length / Sepal.Width,
-                    Petal.Ratio = Petal.Length / Petal.Width )
-head(iris2,3)
-States <- transform(States, 
-                    Pop.Increase = 100 * (POPESTIMATE2012 - POPESTIMATE2010)/POPESTIMATE2010 )
-histogram( ~ Pop.Increase, data=States, width=0.5, 
-                           main="% Population increase (2010 to 2012)" )
-@
-Generally, it is a good idea to keep raw data (like \variable{Sepal.Length} and \variable{Sepal.Width} in
-your data file, but let \R\ do the computation of derived variables for you.  Among other advantages, if you
-ever fix an error in a \variable{Sepal.Length} measurement, you don't have to worry about remembering to 
-also recompute the ratio.  Futhermore, your \R\ code documents how the derived value was computed.
-
-\subsection{Dropping Variables}
-Less frequently, you might want to remove a variable from a data frame.  We can use \function{subset()} for this as well:
-<<>>=
-iris3 <- subset(iris2, select = - Sepal.Ratio)  # the minus sign means drop 
-head(iris3, 3)
-@
-
-%\subsection{Summarizing and Aggregating with \pkg{plyr}}
-
-\section{Saving Data}
-\function{write.csv()} can be used to save data from \R\ into csv formatted files.
-This can be useful for exporting to some other program.
-
-<<writingData>>=
-write.csv(iris3, "iris3.csv")
-@
-
-Data can also be saved in native \R\ format.  Saving data sets 
-(and other \R\ objects) using \function{save()} has some advantages over other file formats:
-\begin{itemize}
-  \item 
-  Complete information about the objects is saved, including attributes.
-  \item
-  Data saved this way takes less space and loads much more quickly.
-  \item
-  Multiple objects can be saved to and loaded from a single file.
-\end{itemize}
-The downside is that these files are only readable in \R.
-
-<<savingData,exec=FALSE,echo=TRUE>>=
-save(iris3, file="iris3.rda")   # the traditional file extension is rda for R native data.
-load("iris3.rda")          # loads previously saved data
-@
-
-
-For more on importing and exporting data, especially from other
-formats, see the 
-\textit{R Data Import/Export} manual available on 
-\href{http://cran.r-project.org/manuals.html}{CRAN}.
-
-
-\subsection{Merging datasets}
-
-The \dataframe{fusion1} data frame in the \pkg{fastR} package contains 
-genotype information for a SNP (single nucleotide polymorphism) in the gene
-\emph{TCF7L2}.  
-The \dataframe{pheno} data frame contains phenotypes
-(including type 2 diabetes case/control status) for an intersecting set of individuals.
-We can merge these together to explore the association between
-genotypes and phenotypes using \verb!merge()!.
-
-%\Rindex{merge()}%
-<<>>=
-require(fastR)
-head(fusion1,3)
-head(pheno,3)
-@
-
-<<>>=
-# merge fusion1 and pheno keeping only id's that are in both
-fusion1m <- merge(fusion1, pheno, by.x='id', by.y='id', all.x=FALSE, all.y=FALSE)
-head(fusion1m, 3)
-@
-In this case, since the values are the same for each data frame, we could collapse
-\option{by.x} and \option{by.y} to \option{by} and collapse
-\option{all.x} and \option{all.y} to \option{all}.
-The first of these specifies which column(s) to use to identify matching cases.
-The second indicates whether cases in one data frame that do not appear in the other 
-should be kept (\code{TRUE}) or dropped 
-(filling in \code{NA} as needed) or dropped from the merged data frame.
-
-Now we are ready to begin our analysis.
-<<fusion1-xtabs>>=
-tally(~t2d + genotype, fusion1m)
-@
-
+%\subsection*{Working with Pre-Tabulated Data}
+%
+%Sometimes data arrive pre-calculated.  We can use \function{barchart()} instead of \function{bargraph()}
+%to graph pre-tabulated data.%
+%\footnote{\function{bargraph()} converts raw data into a summary table and then
+%calls \function{barchart()} to do the plotting.}
+%<<teen-deaths>>=
+%TeenDeaths
+%barchart(deaths ~ cause, data=TeenDeaths)
+%barchart(cause ~ deaths, data=TeenDeaths)
+%@
+%
+%Notice that by default the causes are displayed in alphabetical order.  \R\ assumes that categorical
+%data is nominal unless you say otherwise.  Here's one way to make it ordinal using the order in which 
+%things appear in the \dataframe{TeenDeaths} data frame.
+%<<teen-deaths-reordered>>=
+%barchart( ordered(cause, levels=cause) ~ deaths, TeenDeaths)
+%@
+
+\section*{Exporting Plots}
+
+You can save plots to files or copy them to the clipboard using the 
+\tab{Export} menu in the \tab{Plots} tab.  It is quite simple to copy the 
+plots to the clipboard and then paste them into a Word document, for example.
+You can even adjust the height and width of the plot first to get it the 
+shape you want.
+
+\R\ code and output can be copied and pasted as well.  It's best to use a 
+fixed width font (like Courier) for \R\ code so that things align properly.
+
+\RStudio\ also provides a way (actually multiple ways) to create documents
+that include text, \R\ code, \R\ output, and graphics all in one document so you don't 
+have to do any copying and pasting.  This is a much better workflow since it avoids 
+copy-and-paste which is error prone and makes it easy to regenerate an entire report
+should the data change (because you get more of it or correct an error, for example).
 
 \newpage
 
