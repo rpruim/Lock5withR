@@ -84,11 +84,15 @@ prop(Response~Gender, data=OneTrueLove)
 \subsubsection*{Visualizing a Relationship between Two Categorical Variables}
 
 A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}. (We will discuss grouping more in section 2.4.)
-%Any way to segment using mosaic?
-%<<bargraph-segmented>>=
-%counts <- table(StudentSurvey$Gender, StudentSurvey$Award)
-%barplot(counts, legend = rownames(counts)) 
-%@
+Any way to segment using mosaic?
+<<bargraph-segmented>>=
+counts <- table(StudentSurvey$Gender, StudentSurvey$Award)
+barplot(counts, legend = rownames(counts)) 
+@
+
+<<>>=
+bargraph(~Award, data=StudentSurvey, group=Gender, stack=TRUE)
+@
 
 We use \argument{auto.key=TRUE} to build a simple legend so we can tell which groups are which.
 <<bargraph-groups>>=
@@ -374,11 +378,12 @@ fivenum(~Longevity, data=MammalLongevity)
 min(~Longevity, data=MammalLongevity) 
 max(~Longevity, data=MammalLongevity) 
 range(~Longevity, data=MammalLongevity)  # subtract to get the numerical range value
-iqr(~Longevity, data=MammalLongevity)    # inter-quartile range 
+iqr(~Longevity, data=MammalLongevity)   # inter-quartile range 
 @
 %the range and iqr do not match the book b/c the book uses different quartiles
+%several different methods, iqr different
 
-
+\offNote{example}
 
 \section{Outliers, Boxplots, and Quantitative/Categorical Relationships}
 
@@ -427,8 +432,9 @@ plotname( ~ variable | condition, data=dataName )
 
 For example, we might like to see whether the number of hours spent watching tv differ between men and women in the Student Survey, or how the distribution of birth rates compare between countries at different stages of development.
 <<conditionalplots>>=
-bwplot(~TV | Gender, data=StudentSurvey)
+bwplot(Gender ~ TV, data=StudentSurvey)
 histogram(~BirthRate | Developed, data=AllCountries, auto.key=TRUE, width=5)
+dotPlot(~TV|Gender, layout=c(1,2), width=1.5, data = StudentSurvey)
 @
 
 We can do the same thing for bar graphs.
