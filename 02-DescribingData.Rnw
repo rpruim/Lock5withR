@@ -5,6 +5,9 @@ In this chapter we discuss graphical and numerical summaries of data.
 %These notes focus primarily on how to get \R\ to do the work for you. The text book includes more information about why and when to use various kinds of summaries.
 
 
+<<>>=
+dotPlot( ~TV , data=StudentSurvey, groups = (3 <= TV & TV <= 15 ), width=.5)
+@
 
 \section{Categorical Variables}
 
