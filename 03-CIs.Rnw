@@ -17,8 +17,6 @@ tell us how things vary from sample to sample and are the key to interpreting da
 %Example 3.3
 \subsection*{Variability of Sample Statistics}
 
-Here's the clever idea:  We don't have the population, but we have a sample.  Probably the sample it similar to the population in many ways.  So let's sample from our sample.  We'll call it \textbf{resampling} (also called \textbf{bootstrapping}). We want samples the same size as our original sample, so we will need to sample with replacement.  This means that we may pick some members of the population more than once and others not at all.  We'll do this many times, however, so each member of our sample will get its fair share. The computer can easily do all of the resampling (and also the computation of statistics) for us using the \function{resample()} function.
-
 \subsubsection*{Example 3.4}
 <<Example3.4>>=
 head(StatisticsPhD)
@@ -26,34 +24,34 @@ mean(~FTGradEnrollment, data=StatisticsPhD) # mean enrollment in original popula
 @
 
 \subsubsection*{Example 3.5}
+To select a random sample of a certain size in \R, we can use the \function{sample()} function.
 <<Example3.5>>=
-ReEnroll = resample(StatisticsPhD, 10, replace=FALSE); ReEnroll
-x.bar = mean(~FTGradEnrollment, data=ReEnroll); x.bar  # mean enrollment in one resample (ReEnroll)
+sample10 = sample(StatisticsPhD, 10); sample10
+x.bar = mean(~FTGradEnrollment, data=sample10); x.bar  # mean enrollment in sample10
 @
-This is a random sample of 10 programs from \dataframe{StatisticsPhD} WITHOUT replacement. The default for \function{resample()} is to replace, meaning that a school selected previously will be put back into the population from which \R\ can ramdomly selects again for a total of 10 programs. Note that this resample has been assigned a name to which we can refer back to find its mean.
+Note that this sample has been assigned a name to which we can refer back to find the mean of that particular sample.
 
 <<>>=
-mean(~FTGradEnrollment, data=resample(StatisticsPhD, 10, replace=FALSE))  # mean enrollment in another resample 
+mean(~FTGradEnrollment, data=sample(StatisticsPhD, 10))  # mean enrollment in another sample 
 
 # Now we'll do it 1000 times
-Bootstrap <- do(1000) * mean(~FTGradEnrollment, data=resample(StatisticsPhD, 10, replace=FALSE))
+sampledist <- do(1000) * mean(~FTGradEnrollment, data=sample(StatisticsPhD, 10))
 @
 
-We should check that that our bootstrap distribution has an appropriate shape:
+We should check that that our sample distribution has an appropriate shape:
 <<>>=
-histogram(~result, data=Bootstrap, n=30)
-dotPlot(~result, data=Bootstrap, n=50)
+histogram(~result, data=sampledist, n=30)
+dotPlot(~result, data=sampledist, n=50)
 @
-
+%these plots are incorrect in pdf
 \subsubsection*{Example 3.6}
 
-One proportion -- from a data summary
-
-This time we don't have data, but we can still simulate the bootstrap distribution by using the \function{rflip()} function.
+This time we don't have data, but instead we have a summary of the data. We can however, still simulate the sample distribution by using the \function{rflip()} function.
+%start of bootstrapping???
 <<>>=
-Boot.Deg <- do(1000) * rflip(200, 0.275) # 1000 samples, each of size 200 and proportion 0.275
-head(Boot.Deg, 3)
-dotPlot(~ prop, width=.005, data=Boot.Deg)
+sampledistdeg <- do(1000) * rflip(200, 0.275) # 1000 samples, each of size 200 and proportion 0.275
+head(sampledistdeg, 3)
+dotPlot(~ prop, width=.005, data=sampledistdeg)
 @
 
 \subsection*{Measuring Sampling Variability: The Standard Error}
@@ -67,11 +65,11 @@ The standard error is our primary way of measuring how much variability there is
 to sample statistic, and therefore how precise our estimates are.
 
 \subsubsection*{Example 3.7}
-Standard error is the standard deviation of a sample statistic so to find SE, we use \function{sd()}.
+Calculating the SE is the same as calculating the standard deviation of a sampling distribution, so we use \function{sd()}.
 
 <<standarderror>>=
-SE <- sd(~result, data=Bootstrap); SE    # Bootstrap from Example 3.5
-SE2 <- sd(~prop, data=Boot.Deg); SE2     # Boot.Deg from Example 3.6
+SE <- sd(~result, data=sampledist); SE    # Bootstrap from Example 3.5
+SE2 <- sd(~prop, data=sampledistdeg); SE2     # Boot.Deg from Example 3.6
 @
 
 %Example 3.8
@@ -85,16 +83,16 @@ SE2 <- sd(~prop, data=Boot.Deg); SE2     # Boot.Deg from Example 3.6
 \subsubsection*{Example 3.9}
 
 <<bootstrap-samplesize, fig.width=3, out.width='.3\\textwidth',>>=
-Boot.1000 <- do(1000) * rflip(1000, 0.275) # 1000 samples, each of size 1000 and proportion 0.275
-Boot.200 <- do(1000) * rflip(200, 0.275)   # 1000 samples, each of size 200 and proportion 0.275
-Boot.50 <- do(1000) * rflip(50, 0.275)     # 1000 samples, each of size 50 and proportion 0.275
+sampledist.1000 <- do(1000) * rflip(1000, 0.275) # 1000 samples, each of size 1000 and proportion 0.275
+sampledist.200 <- do(1000) * rflip(200, 0.275)   # 1000 samples, each of size 200 and proportion 0.275
+sampledist.50 <- do(1000) * rflip(50, 0.275)     # 1000 samples, each of size 50 and proportion 0.275
 
-dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=Boot.1000)
-dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=Boot.200)
-dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=Boot.50)
+dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=sampledist.1000)
+dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=sampledist.200)
+dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=sampledist.50)
 @
 
-%Example 3.10 (do confindence intervals?)
+%Example 3.10 (do confidence intervals?)
 
 \subsection*{Importance of Random Sampling}
 
@@ -114,21 +112,32 @@ indication of the precision of the estimate.
 
 One way to express an interval estimate is with a point estimate and a \term{margin of error}.
 
-\begin{center}
-\includegraphics[width=.75\textwidth]{images/2012PresElectionPolls}
-\end{center}
-
 We can convert margin of error into an interval by adding and subtracting the margin of error to/from
-the statistic.  So for the Gallup Poll, the interval would be
+the statistic.
+
+\subsubsection*{Example 3.12}
 
 \[
-0.50 \pm 0.02 \mbox{ which is the same as } (0.48, 0.52)
+0.42 \pm 0.03 \mbox{ which is the same as } (0.39, 0.45)
 \]
-So Gallup is claiming that any election result in which Obama received between 48\% and 52\% of the vote
-would be plausible.
 
-The actual election results? 50.4\% voted for Obama.
-Notice that 0.504 is inside the confidence interval $.50 \pm 0.02$.
+\subsubsection*{Example 3.13}
+
+<<marginoferror, tidy=FALSE>>=
+p.hat = 0.54                          # sample proportion
+MoE = 0.02                            # margin of error
+p.hat - MoE                         # lower limit of interval estimate
+p.hat + MoE                         # upper limit of interval estimate
+@
+
+<<>>=
+p.hat =0.54 
+MoE=0.10
+p.hat - MoE
+p.hat + MoE
+@
+
+\subsection*{Confidence Intervals}
 
 \begin{boxedText}
 A confidence interval for a parameter is an interval computed from sample data
@@ -142,78 +151,143 @@ samples
 	\item The margins of error in the tables above were designed to produce 95\% confidence intervals.
 \end{enumerate}
 
-\subsection{Using the standard error to compute a margin of error}
+\subsubsection*{Example 3.14}
 
-In many (but not all) situations, the sampling distribution is 
-\begin{itemize}
-	\item unimodal,
-	\item symmetric, and
-	\item bell-shaped
-\end{itemize}
-(The technical phrase is ``approximately normal''.)  In these situations, a 95\% confidence interval can be estimated 
-with
-\[ 
-\mbox{statistic} \pm 2 SE
-\]
+<<confidenceinterval, tidy=FALSE>>=
+x.bar = 61.5               # given sample mean
+SE = 11                    # given estimated standard error
+MoE = 2 * SE; MoE          # margin of error for 95% CI
+x.bar - MoE                # lower limit of 95% CI
+x.bar + MoE                # upper limit of 95% CI
+@
 
-\textbf{Example.}  A large sample of American adults the mean body mass index was $27.655$.  The standard 
-error was $0.009$. The 95\% confidence interval is therefore 
-\[
-27.655 \pm 0.018
-\]
+\subsection*{Understanding Confidence Intervals}
+\subsubsection*{Example 3.15}
 
+<<confidenceinterval2>>=
+SE=0.03
+p1=0.26 
+p2=0.32
+p3=0.20
+MoE=2*SE
+@
 
-The important question remains:  If we don't have access to the entire population, and we only get to look at one sample,
-how do we tell the shape of the sampling distribution and estimate its standard error?  Stay tuned.
+<<>>=
+p1-MoE
+p1+MoE
+p2-MoE
+p2+MoE
+p3-MoE
+p3+MoE
+@
 
-\subsection*{Confidence Intervals}
+<<>>=
+p= 0.275
+SE= 0.03
+MoE = 2 * SE
+p - MoE
+p + MoE
+
+dotPlot(~ prop, width=.005, groups = (0.215 <= prop & prop <= 0.335), data=sampledistdeg)
+@
+
+%how to do plots on page 184?
+
+\subsection*{Interpreting Confidence Intervals}
+
+\subsubsection*{Example 3.16}
+
+<<>>=
+x.bar= 27.655
+SE= 0.009
+MoE = 2 * SE
+x.bar - MoE
+x.bar + MoE
+@
+
+\subsubsection*{Example 3.17}
+
+<<>>=
+diff.x= -1.915
+SE= 0.016
+MoE = 2 * SE
+diff.x - MoE
+diff.x + MoE
+@
 
 \section{Constructing Bootstrap Confidence Intervals}
 
-Here's the clever idea:  We don't have the population, but we have a sample.  Probably the sample it similar to the population
-in many ways.  So let's sample from our sample.  We'll call it \textbf{resampling} (also called \textbf{bootstrapping}).
-We want samples the same size as our original sample, so we will need to sample with replacement.  This means that we 
-may pick some members of the population more than once and others not at all.  We'll do this many times, however, so 
-each member of our sample will get its fair share.
+Here's the clever idea:  We don't have the population, but we have a sample.  Probably the sample it similar to the population in many ways.  So let's sample from our sample.  We'll call it \textbf{resampling} (also called \textbf{bootstrapping}). We want samples the same size as our original sample, so we will need to sample with replacement.  This means that we may pick some members of the population more than once and others not at all.  We'll do this many times, however, so each member of our sample will get its fair share. (Notice the similarity to and difference from sampling from populations in the previous sections.) 
 
-In class we did two examples by physical manipulation.
+\subsubsection*{Commuting in Atlanta}
+<<fig.width=5>>=
+head(CommuteAtlanta, 3)
+dotPlot(~Time, width=1, cex=.5, data=CommuteAtlanta)
+mean(~Time, data=CommuteAtlanta)
+sd(~Time, data=CommuteAtlanta)
+@
 
-\begin{itemize}
-	\item
-		We estimated the proportion of blue milk jug lids by drawing milk jug lids out of 
-		paper sacks (sample size was $n=10$)
-	\item
-		We estimated the mean commute time in Atlanta by placing commute times on
-		cards and shuffling them (again the sample size was $n=10$)
-\end{itemize}
+\subsection*{Bootstrap Samples}
+The computer can easily do all of the resampling by using the \function{resample()}.
+<<>>=
+resample(CommuteAtlanta, 10)
+@
 
-
-Let's see how this works in an example with a larger data set.  It would be really tedious to do that kind mixing and 
-shuffling physically, but the computer can easily do all of the resampling (and also the computation of statistics) for us.  
-\subsection{Method 1: statistic $\pm$ 2 SE}
+\subsection*{Bootstrap Distribution}
 
 The example below uses data from 500 Atlanta commuters.
-<< warning=FALSE>>=
-x.bar <- mean( ~Time, data=CommuteAtlanta ); x.bar  # mean commute time in original sample
+<<>>=
 mean( ~Time, data=resample(CommuteAtlanta) )  # mean commute time in one resample
 mean( ~Time, data=resample(CommuteAtlanta) )  # mean commute time in another resample
 
 # Now we'll do it 1000 times
 Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta)) 
 @
+
 We should check that that our bootstrap distribution has an appropriate shape:
 <<warning=FALSE>>=
 histogram(~result, data=Bootstrap, n=30)
 dotPlot(~result, data=Bootstrap, n=50)
 @
-Since the shape of the bootstrap distribution looks good, we can estimate the standard error and use it to compute a 95\% confidence interval.
-<<tidy=FALSE>>=
-# Estimate the standard error
-SE <- sd( ~result, data=Bootstrap ); SE       # standard error
-MoE <- 2 * SE; MoE                            # margin of error for 95% CI
-x.bar - MoE                                   # lower limit of 95% CI
-x.bar + MoE                                   # upper limit of 95% CI
+
+\subsubsection*{Example 3.19}
+<<fig.width=5>>=
+BootP <- do(1000) * rflip(100, .52)
+head(BootP, 3)
+dotPlot(~ prop, width=.01, data=BootP)
 @
+
+%\subsubsection*{Example 3.20}
+% <<>>=
+% 
+% @
+% make dataset?
+
+\subsection*{Estimating Standard Error Based on a Bootstrap Distribution}
+\subsubsection*{Example 3.21}
+Since the shape of the bootstrap distribution from Example 3.19 looks good, we can estimate the standard error.
+<<>>=
+SE = sd(~prop, data=BootP); SE
+@
+
+\subsubsection*{Example 3.22}
+We can again use the standard error to compute a 95\% confidence interval.
+<<tidy=FALSE>>=
+x.bar <- mean(~Time, data = CommuteAtlanta); x.bar
+SE <- sd(~result, data = Bootstrap ); SE        # standard error
+MoE <- 2 * SE; MoE                              # margin of error for 95% CI
+x.bar - MoE                                     # lower limit of 95% CI
+x.bar + MoE                                     # upper limit of 95% CI
+@
+
+<<>>=
+p.hat = 0.52
+SE = sd( ~result, data=Bootstrap ); SE      
+MoE = 2 * SE; MoE                          
+p.hat - MoE                                 
+p.hat + MoE                                 
+@
+
 
 The same steps used in this example, get used in a wide variety of confidence interval situations.
 \begin{enumerate}
@@ -233,25 +307,7 @@ The same steps used in this example, get used in a wide variety of confidence in
 		95\% CI is \[ \mbox{statistic} \pm 2 SE \]
 \end{enumerate}
 
-\subsection{Another way to compute a confidence interval}
 
-Another way to create a 95\% confidence interval is to use the middle 95\% of the bootstrap distribution.
-The \function{cdata()} function can compute this for us as follows:
-<<>>=
-cdata( .95, result, data=Bootstrap )
-@
-This is not exactly the same as the interval above, but it is pretty close.
-
-One advantage of this method is that it is easy to change the confidence level.  To make a 90\% confidence interval,
-we use the middle 90\% of the bootstrap distribution instead.
-<<>>=
-cdata( .90, result, data=Bootstrap )
-@
-Notice that this interval is narrower.  This will always be the case.  Higher levels of confidence 
-lead to wider confidence intervals.
-
-(Method 1 can also be adjusted for other confidence levels as well -- 
-the number 2 needs to be replaced by an appropriate alternative.)
 
 
 \section{More Examples}
@@ -366,3 +422,50 @@ these are \emph{very} unlikely.
 Since the bootstrap distribution does not look like a normal distribution (bell-shaped, symmetric), we cannot safely use 
 our methods for creating a confidence interval.
 
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Using the standard error to compute a margin of error}
+
+In many (but not all) situations, the sampling distribution is 
+\begin{itemize}
+  \item unimodal,
+	\item symmetric, and
+	\item bell-shaped
+\end{itemize}
+(The technical phrase is ``approximately normal''.)  In these situations, a 95\% confidence interval can be estimated 
+with
+\[ 
+\mbox{statistic} \pm 2 SE
+\]
+
+\textbf{Example.}  A large sample of American adults the mean body mass index was $27.655$.  The standard 
+error was $0.009$. The 95\% confidence interval is therefore 
+\[
+27.655 \pm 0.018
+\]
+
+
+The important question remains:  If we don't have access to the entire population, and we only get to look at one sample,
+how do we tell the shape of the sampling distribution and estimate its standard error?  Stay tuned.
+
+Another way to create a 95\% confidence interval is to use the middle 95\% of the bootstrap distribution.
+The \function{cdata()} function can compute this for us as follows:
+<<>>=
+cdata(0.95, prop, data=sampledistdeg)
+dotPlot(~ prop, width=.005, groups = (0.215 <= prop & prop <= 0.34), data=sampledistdeg)
+@
+This is not exactly the same as the interval above, but it is pretty close.
+
+One advantage of this method is that it is easy to change the confidence level.  To make a 90\% confidence interval,
+we use the middle 90\% of the sample distribution instead.
+<<>>=
+cdata(0.90, prop, data=sampledistdeg)
+@
+Notice that this interval is narrower.  This will always be the case.  Higher levels of confidence 
+lead to wider confidence intervals.
+
+(Method 1 can also be adjusted for other confidence levels as well -- 
+the number 2 needs to be replaced by an appropriate alternative.)
+
+<<>>=
+cdata(0.95, prop, data=(do(1000) * rflip(200, 0.275)))
+@
