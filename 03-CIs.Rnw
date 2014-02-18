@@ -10,13 +10,95 @@ If we could repeatedly sample from a population, and if we computed a statistic 
 the distribution of those statistics would be the sampling distribution.  Sampling distributions
 tell us how things vary from sample to sample and are the key to interpreting data.
 
+\subsection*{Population Parameters and Sample Statistics}
+%Example 3.1
+\subsection*{Sample Statistics as Point Estimates of Population Parameters}
+%Example 3.2
+%Example 3.3
+\subsection*{Variability of Sample Statistics}
+
+Here's the clever idea:  We don't have the population, but we have a sample.  Probably the sample it similar to the population in many ways.  So let's sample from our sample.  We'll call it \textbf{resampling} (also called \textbf{bootstrapping}). We want samples the same size as our original sample, so we will need to sample with replacement.  This means that we may pick some members of the population more than once and others not at all.  We'll do this many times, however, so each member of our sample will get its fair share. The computer can easily do all of the resampling (and also the computation of statistics) for us using the \function{resample()} function.
+
+\subsubsection*{Example 3.4}
+<<Example3.4>>=
+head(StatisticsPhD)
+mean(~FTGradEnrollment, data=StatisticsPhD) # mean enrollment in original population
+@
+
+\subsubsection*{Example 3.5}
+<<Example3.5>>=
+ReEnroll = resample(StatisticsPhD, 10, replace=FALSE); ReEnroll
+x.bar = mean(~FTGradEnrollment, data=ReEnroll); x.bar  # mean enrollment in one resample (ReEnroll)
+@
+This is a random sample of 10 programs from \dataframe{StatisticsPhD} WITHOUT replacement. The default for \function{resample()} is to replace, meaning that a school selected previously will be put back into the population from which \R\ can ramdomly selects again for a total of 10 programs. Note that this resample has been assigned a name to which we can refer back to find its mean.
+
+<<>>=
+mean(~FTGradEnrollment, data=resample(StatisticsPhD, 10, replace=FALSE))  # mean enrollment in another resample 
+
+# Now we'll do it 1000 times
+Bootstrap <- do(1000) * mean(~FTGradEnrollment, data=resample(StatisticsPhD, 10, replace=FALSE))
+@
+
+We should check that that our bootstrap distribution has an appropriate shape:
+<<>>=
+histogram(~result, data=Bootstrap, n=30)
+dotPlot(~result, data=Bootstrap, n=50)
+@
+
+\subsubsection*{Example 3.6}
+
+One proportion -- from a data summary
+
+This time we don't have data, but we can still simulate the bootstrap distribution by using the \function{rflip()} function.
+<<>>=
+Boot.Deg <- do(1000) * rflip(200, 0.275) # 1000 samples, each of size 200 and proportion 0.275
+head(Boot.Deg, 3)
+dotPlot(~ prop, width=.005, data=Boot.Deg)
+@
+
+\subsection*{Measuring Sampling Variability: The Standard Error}
+
 \begin{boxedText}
-	The standard deviation of a sampling distribution is called the \textbf{standard error}, 
+  The standard deviation of a sampling distribution is called the \textbf{standard error}, 
 	denoted $SE$.
 \end{boxedText}
 
 The standard error is our primary way of measuring how much variability there is from sample statistic
 to sample statistic, and therefore how precise our estimates are.
+
+\subsubsection*{Example 3.7}
+Standard error is the standard deviation of a sample statistic so to find SE, we use \function{sd()}.
+
+<<standarderror>>=
+SE <- sd(~result, data=Bootstrap); SE    # Bootstrap from Example 3.5
+SE2 <- sd(~prop, data=Boot.Deg); SE2     # Boot.Deg from Example 3.6
+@
+
+%Example 3.8
+%<<>>=
+%MoE <- 2 * SE; MoE                            # margin of error for 95% CI
+% x.bar - MoE                                   # lower limit of 95% CI
+% x.bar + MoE                                   # upper limit of 95% CI
+% @
+
+\subsection*{The Importance of Sample Size}
+\subsubsection*{Example 3.9}
+
+<<bootstrap-samplesize, fig.width=3, out.width='.3\\textwidth',>>=
+Boot.1000 <- do(1000) * rflip(1000, 0.275) # 1000 samples, each of size 1000 and proportion 0.275
+Boot.200 <- do(1000) * rflip(200, 0.275)   # 1000 samples, each of size 200 and proportion 0.275
+Boot.50 <- do(1000) * rflip(50, 0.275)     # 1000 samples, each of size 50 and proportion 0.275
+
+dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=Boot.1000)
+dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=Boot.200)
+dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=Boot.50)
+@
+
+%Example 3.10 (do confindence intervals?)
+
+\subsection*{Importance of Random Sampling}
+
+%Example 3.11
 
 \section{Understanding and Interpreting Confidence Intervals}
 
@@ -124,8 +206,7 @@ We should check that that our bootstrap distribution has an appropriate shape:
 histogram(~result, data=Bootstrap, n=30)
 dotPlot(~result, data=Bootstrap, n=50)
 @
-Since the shape of the bootstrap distribution looks good, we can estimate the standard error and use 
-it to compute a 95\% confidence interval.
+Since the shape of the bootstrap distribution looks good, we can estimate the standard error and use it to compute a 95\% confidence interval.
 <<tidy=FALSE>>=
 # Estimate the standard error
 SE <- sd( ~result, data=Bootstrap ); SE       # standard error
