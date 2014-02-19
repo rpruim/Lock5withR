@@ -178,6 +178,9 @@ fig.show='hold',
 keep.source=TRUE,
 comment=NA
 )
+knit_hooks$set(seed = function(before, options, envir) {
+    if (before) set.seed(options$seed) 
+})
 @ 
 \def\intersect{\tand}
 
