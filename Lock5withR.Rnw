@@ -171,9 +171,11 @@ options(width=90)
 require(knitr)
 opts_chunk$set(
 tidy=TRUE,
+boxedLabel=TRUE,
+size='small',
 dev='pdf',
 fig.width=3, fig.height=2,
-out.width=".47\\textwith",
+out.width=".47\\textwidth",
 fig.align='center',
 fig.show='hold',
 keep.source=TRUE,

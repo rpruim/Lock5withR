@@ -241,15 +241,17 @@ histogram(~ Piercings, width=1, label=TRUE, data=StudentSurvey)
 
 Sometimes a \term{frequency polygon} provides a more useful view.
 The only thing that changes is \function{histogram()} becomes \function{freqpolygon()}.
-<<freqpolygon,fig.width=3,out.width='.3\\textwidth'>>=
+
+<<freqpolygon>>=
 freqpolygon(~ Exercise, data=StudentSurvey, width=5)
 @
 
 What is a frequency polygon?  The picture below shows how it is related to a histogram.  The frequency
 polygon is just a dot-to-dot drawing through the centers of the tops of the bars of the histogram.
-<<freqpolygon-illustrated,fig.width=8, fig.height=3, out.height="3in", fig.align="center", echo=FALSE>>=
-freqpolygon(~Exercise, data=StudentSurvey, breaks=seq(0,45,by=4), lwd=3, par.settings=col.whitebg(), 
-             panel=function(x,...) { 
+<<freqpolygon-illustrated, echo=FALSE>>=
+freqpolygon(~Exercise, data=StudentSurvey, breaks=seq(0,45,by=4), lwd=3, 
+            par.settings=col.whitebg(), 
+            panel=function(x,...) { 
   panel.xhistogram(x,...);
   panel.freqpolygon(x,...)}
              )
@@ -257,7 +259,7 @@ freqpolygon(~Exercise, data=StudentSurvey, breaks=seq(0,45,by=4), lwd=3, par.set
 
 \R\ also provides a ``smooth'' version called a density plot; just change 
 the function name from \function{histogram()} to \function{densityplot()}.
-<<densityplot, fig.width=3,out.width='.3\\textwidth'>>=
+<<densityplot>>=
 densityplot(~ Longevity, data=MammalLongevity)
 densityplot(~ BirthRate, data=AllCountries )
 @
