@@ -1,13 +1,11 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
 \Chapter{Describing Data}
 
+%take note of skipped examples
 In this chapter we discuss graphical and numerical summaries of data. 
 %These notes focus primarily on how to get \R\ to do the work for you. The text book includes more information about why and when to use various kinds of summaries.
-<<>>=
-dotPlot( ~TV , data=StudentSurvey, groups = (3 <= TV & TV <= 15 ), width=.5)
-@
 
-
+%subset: ex1027[28,]
 \section{Categorical Variables}
 
 %Introduction to Categorial Variables?
@@ -18,10 +16,10 @@ dotPlot( ~TV , data=StudentSurvey, groups = (3 <= TV & TV <= 15 ), width=.5)
 
 Let us investigate categorical variables in \R\ by taking a look at the data set for the One True Love survey. Notice that the data set is not readily available in our textbook's package. However, the authors do provide us with the necessary information to create our own data spreadsheet (in either Excel or Google) and import it into \R. (See Chapter 0 for instructions.)
 
-From the dataset we named as \dataframe{OneTrueLove}, we can tabulate the categorical variable to display the \emph{frequency} by using the \function{tally()} function.
+From the dataset we named as \dataframe{OneTrueLove}, we can tabulate the categorical variable to display the \emph{frequency} by using the \function{tally()} function. The default in tallying is to not include the row totals, or column totals when there are two variables. These are called marginal totals and if you want them, you can change the default.
 <<tally-1way>>=
 OneTrueLove <- read.file( "OneTrueLove.csv" )
-tally(~ Response, data=OneTrueLove)
+tally(~ Response, margin=TRUE, data=OneTrueLove)
 @
 Note the use of the \R\ template in Chapter 0.
 
@@ -40,7 +38,7 @@ prop(~ Response, level="Don't know", data=OneTrueLove)
 
 Further, we can also display the \emph{relative frequencies}, or \term{proportions} in a table.
 <<tally-1way-proportion>>=
-tally(~ Response, format="proportion", data=OneTrueLove)
+tally(~ Response, format="proportion", margin=TRUE, data=OneTrueLove)
 @
 
 \subsubsection*{Visualizing the Data in One Categorical Variable}
@@ -64,10 +62,10 @@ bargraph(~ Response, data=OneTrueLove, horizontal=TRUE)
 
 \subsection*{Two Categorical Variables: Two-Way Tables}
 
-Often, it is useful to compute cross tables for two (or more) variables. We can again use \function{tally()} for several ways to investigate a two-way table. If you don't like the defaults, or if you don't want the row and column totals (called marginal totals), we can change the defaults by adding a bit more instruction.
+Often, it is useful to compute cross tables for two (or more) variables. We can again use \function{tally()} for several ways to investigate a two-way table. 
 <<tally-2way>>=
 tally(~ Response + Gender, data=OneTrueLove)
-tally(~ Response + Gender, margins=FALSE, data=OneTrueLove)
+tally(~ Response + Gender, margins=TRUE, data=OneTrueLove)
 @
 
 \subsubsection*{Example 2.5}
@@ -94,7 +92,7 @@ tally(~ Gender, format="percent", data=OneTrueLove)
 
 \subsubsection*{Example 2.6}
 <<tally-2way-2>>=
-tally(~Gender + Award, data=StudentSurvey)
+tally(~Gender + Award, margin=TRUE, data=StudentSurvey)
 @
 
 Also, we can arrange the table differently by converting it to a data frame.
@@ -188,7 +186,7 @@ dotPlot(~ Longevity, width=1, cex=.1, data = MammalLongevity)
 
 Although \function{tally()} works with quantitative variables as well as categorical variables, this is only useful when there are not too many different values for the variable.
 <<xtabs-quantitative>>=
-tally(~ Longevity, data=MammalLongevity)
+tally(~ Longevity, margin=TRUE, data=MammalLongevity)
 @
 
 Sometimes, it is more convenient to group them into bins.  We just have to tell \R\ what the bins are.
@@ -389,7 +387,7 @@ mean(~ Sales, data=RetailSales)
 sd(~ Sales, data=RetailSales)
 @
 
-%how to include z-scores with R?
+%how to include z-scores with R? using scale?
 
 %Example 2.19
 
@@ -664,6 +662,7 @@ An important aspect of the linear regression is the difference between the predi
 \subsubsection*{Example 2.43}
 <<Example2.43>>=
 lm(Margin~Approval, data=ElectionMargin)
+residuals(lm(Margin~Approval, data=ElectionMargin))
 @
 
 %Example 2.44
