@@ -1,6 +1,8 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
 
 \Chapter{Confidence Intervals}
+%how to keep samples from changing? set.seed?
+%take note of skipped examples
 
 \section{Sampling Distributions}
 
@@ -33,22 +35,35 @@ Note that this sample has been assigned a name to which we can refer back to fin
 
 <<>>=
 mean(~FTGradEnrollment, data=sample(StatisticsPhD, 10))  # mean enrollment in another sample 
+@
 
+<<>>=
 # Now we'll do it 1000 times
 sampledist <- do(1000) * mean(~FTGradEnrollment, data=sample(StatisticsPhD, 10))
 @
 
 We should check that that our sample distribution has an appropriate shape:
-<<>>=
-histogram(~result, data=sampledist, n=30)
+<<fig.width=5, fig.height=2>>=
 dotPlot(~result, data=sampledist, n=50)
 @
-%these plots are incorrect in pdf
+
+In many (but not all) situations, the sampling distribution is 
+\begin{itemize}
+  \item unimodal,
+  \item symmetric, and
+	\item bell-shaped
+\end{itemize}
+(The technical phrase is ``approximately normal''.)  In these situations, a 95\% confidence interval can be estimated 
+with
+\[ 
+\mbox{statistic} \pm 2 SE
+\]
+
 \subsubsection*{Example 3.6}
 
 This time we don't have data, but instead we have a summary of the data. We can however, still simulate the sample distribution by using the \function{rflip()} function.
 %start of bootstrapping???
-<<>>=
+<<fig.width=4, fig.height=3>>=
 sampledistdeg <- do(1000) * rflip(200, 0.275) # 1000 samples, each of size 200 and proportion 0.275
 head(sampledistdeg, 3)
 dotPlot(~ prop, width=.005, data=sampledistdeg)
@@ -181,7 +196,7 @@ p3-MoE
 p3+MoE
 @
 
-<<>>=
+<<fig.width=4, fig.height=3>>=
 p= 0.275
 SE= 0.03
 MoE = 2 * SE
@@ -220,7 +235,7 @@ diff.x + MoE
 Here's the clever idea:  We don't have the population, but we have a sample.  Probably the sample it similar to the population in many ways.  So let's sample from our sample.  We'll call it \textbf{resampling} (also called \textbf{bootstrapping}). We want samples the same size as our original sample, so we will need to sample with replacement.  This means that we may pick some members of the population more than once and others not at all.  We'll do this many times, however, so each member of our sample will get its fair share. (Notice the similarity to and difference from sampling from populations in the previous sections.) 
 
 \subsubsection*{Commuting in Atlanta}
-<<fig.width=5>>=
+<<fig.width=5, fig.height=2>>=
 head(CommuteAtlanta, 3)
 dotPlot(~Time, width=1, cex=.5, data=CommuteAtlanta)
 mean(~Time, data=CommuteAtlanta)
@@ -245,13 +260,12 @@ Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta))
 @
 
 We should check that that our bootstrap distribution has an appropriate shape:
-<<warning=FALSE>>=
-histogram(~result, data=Bootstrap, n=30)
+<<fig.width=5, fig.height=2>>=
 dotPlot(~result, data=Bootstrap, n=50)
 @
 
 \subsubsection*{Example 3.19}
-<<fig.width=5>>=
+<<fig.width=4, fig.height=3>>=
 BootP <- do(1000) * rflip(100, .52)
 head(BootP, 3)
 dotPlot(~ prop, width=.01, data=BootP)
@@ -282,16 +296,14 @@ x.bar + MoE                                     # upper limit of 95% CI
 
 <<>>=
 p.hat = 0.52
-SE = sd( ~result, data=Bootstrap ); SE      
+SE = sd( ~prop, data=BootP); SE      
 MoE = 2 * SE; MoE                          
 p.hat - MoE                                 
 p.hat + MoE                                 
 @
-
-
 The same steps used in this example, get used in a wide variety of confidence interval situations.
 \begin{enumerate}
-	\item 
+  \item 
 		Compute the statistic from the original sample.
 	\item
 		Create a bootstrap distribution by resampling from the sample.
@@ -306,111 +318,99 @@ The same steps used in this example, get used in a wide variety of confidence in
 	\item
 		95\% CI is \[ \mbox{statistic} \pm 2 SE \]
 \end{enumerate}
+\section{Bootstrap Confidence Intervals Using Percentiles}
+\subsection*{Confidence Intervals Based on Bootstrap Percentiles}
+\subsubsection*{Example 3.23}
 
+Another way to create a 95\% confidence interval is to use the middle 95\% of the bootstrap distribution.
+The \function{cdata()} function can compute this for us as follows:
+<<fig.width=5>>=
+cdata(0.95, result, data=Bootstrap)
+dotPlot(~ result, width=.2, groups = (27.47 <= result & result <= 31.00), data=Bootstrap)
+@
+This is not exactly the same as the interval of the original sample, but it is pretty close. Notice the \argument{groups=} for marking the confidence interval.
 
+\subsubsection*{Example 3.24}
 
+One advantage of this method is that it is easy to change the confidence level. 
 
-\section{More Examples}
+To make a 90\% confidence interval, we use the middle 90\% of the sample distribution instead.
+<<>>=
+cdata(0.99, result, data=Bootstrap)
+dotPlot(~ result, width=.2, groups = (26.98 <= result & result <= 31.58), data=Bootstrap)
 
-This section contains the R code for some additional examples (with minimal discussion)
+cdata(0.90, result, data=Bootstrap)
+dotPlot(~ result, width=.2, groups = (27.63 <= result & result <= 31.66), data=Bootstrap)
+@
+Notice that this interval is narrower.  This will always be the case.  Higher levels of confidence 
+lead to wider confidence intervals.
 
-\subsection{Comparing two proportions}
+(Method 1 can also be adjusted for other confidence levels as well -- 
+the number 2 needs to be replaced by an appropriate alternative.)
 
-<<tidy=FALSE>>=
-tally( play ~ playVer, data=littleSurvey )
-prop( play ~ playVer, data=littleSurvey )
-stat <- diff( prop( play ~ playVer, data=littleSurvey ) ); stat
-Boot.Play <- do(1000) * diff(prop( play ~ playVer, data=resample(littleSurvey) ))
-head(Boot.Play)
-histogram(~ no.v2, data=Boot.Play)
+\subsection*{Finding Confidence Intervals for Many Different Parameters}
+\subsubsection*{Example 3.25}
+<<fig.width=4, fig.height=3>>=
+head(ExerciseHours)
+bwplot(Gender~Exercise, data=ExerciseHours)
+favstats(~Exercise|Gender, data=ExerciseHours)
+@
+
+<<>>=
+stat <-diff(mean(Exercise~Gender, data=ExerciseHours)); stat
+@
+
+<<>>=
+BootE <- do(1000) * diff(mean(Exercise~Gender, data=resample(ExerciseHours)))
+head(BootE, 3)
+@
+<<fig.width=4, fig.height=3>>=
+cdata(0.95, M, data=BootE)
+dotPlot(~M, width=.25, cex=.5, groups =(-1.44 <= M & M <= 7.534), xlab="Difference in mean", data=BootE)
 @
 <<>>=
-SE <- sd( ~ no.v2, data=Boot.Play ); SE
+SE <- sd( ~ M, data=BootE); SE
 stat - 2 * SE
 stat + 2 * SE
-cdata( .95, no.v2, data=Boot.Play )
 @
-Again, the two confidence intervals are similar.
 
-Notice importantly that 0 is not in these intervals.  That means all the plausible values
-for the difference between the proportions have the version 2 respondents more likely to 
-\emph{not} go to the play.
-
-\subsection{Comparing two means}
-We can compare two means in a similar way.  Let's estimate the difference 
-between mean pulse for men and women (based on a sample of students in an introductory
-statistics course at another institution).
-
-<<tidy=FALSE>>=
-mean( Pulse ~ Sex, data=StudentSurvey )
-stat <- diff(mean(  Pulse ~ Sex, data=StudentSurvey )); stat
-Boot.Pulse <- do(1000) * diff(mean(  Pulse ~ Sex, data=resample(StudentSurvey) ))
-head(Boot.Pulse, 3)
-histogram( ~ Male, data=Boot.Pulse )
+\subsubsection*{Example 3.26}
+<<fig.width=4, fig.height=3>>=
+head(MustangPrice, 3)
+xyplot(Price~Miles, ylab="Price ($1000s)", xlab="Miles (1000s)", data=MustangPrice)
+cor(Price~Miles, data=MustangPrice)
 @
+%correlation based on ordered pairs?
 <<>>=
-SE <- sd( ~ Male, data=Boot.Pulse ); SE
-stat - 2 * SE
-stat + 2 * SE
-cdata( .95, Male, data=Boot.Pulse )
+BootM <- do(5000) * cor(Price~Miles, data=resample((MustangPrice)))
+head(BootM, 3)
+@
+<<fig.width=4, fig.height=3>>=
+cdata(0.98, result, data=BootM)
+dotPlot(~result, width=.005, groups =(-.9394 <= result & result <= -.7060), xlab="r", data=BootM)
 @
 
-\subsection{One proportion -- from data}
-
-What percent of students smoke?
-
-<<>>=
-stat <- prop( ~ Smoke, data=StudentSurvey ); stat
-Boot.Smoke <- do(1000) * prop( ~ Smoke, data=resample(StudentSurvey) )
-head(Boot.Smoke, 3)
-histogram( ~No, data=Boot.Smoke )
-@
-<<>>=
-SE <- sd( ~No, data=Boot.Smoke )
-stat - SE
-stat + SE
-cdata( .95, No, data=Boot.Smoke )
+\subsection*{Another Look at the Effect of Sample Size}
+\subsubsection*{Example 3.27}
+<<fig.width=5, fig.height=3>>=
+BootP400 <- do(1000) * rflip(400, .52)
+head(BootP400, 3)
+cdata(0.95, prop, data=BootP400)
+dotPlot(~ prop, width=.005, groups= (0.47 <= prop & prop<= 0.5675), data=BootP400)
 @
 
-\subsection{One proportion -- from a data summary}
-
-Here is a report from a recent USA Today poll:
-\begin{center}
-	\includegraphics[width=.7\textwidth]{images/ObamaCarePoll}
-\end{center}
-
-Let's compute a 95\% confidence interval for the proportion of people
-disapprove of the way Obama is handling health care policy.
-This time we don't have data, but we can still simulate the bootstrap distribution --
-this time we will use \function{rflip()}.
-
+\subsection*{One Caution on Constructing Bootstrap Confidence Intervals}
+\subsubsection*{Example 3.28}
 <<>>=
-stat <- 0.53
-Boot.Poll <- do(1000) * rflip(1503, .53)
-head(Boot.Poll, 3)
-histogram(~ prop, data=Boot.Poll)
-@
-<<>>=
-SE <- sd(~prop, data=Boot.Poll); SE
-2 * SE             # margin of error
-stat - 2 * SE      # lower end of interval
-stat + 2 * SE      # upper end of interval
-cdata( .95, prop, data=Boot.Poll) # quantile method
-@
-These results are consistent with USA Today's claim that the margin of error is $\pm 3\%$.
-
-\subsection{A non-example: Estimating the median from a small sample}
-
-<<>>=
-median( ~ Price, data=MustangPrice )
-Boot.Mustang <- do( 1000 ) * median( ~Price, data=resample(MustangPrice) )
+median(~ Price, data=MustangPrice )
+Boot.Mustang <- do(5000) * median( ~Price, data=resample(MustangPrice) )
 head(Boot.Mustang, 3)
 histogram( ~ result, data=Boot.Mustang, n=50 )
 @
 
 This time the histogram does not have the desired shape.  There are two problems:
 \begin{enumerate}
-	\item
+  \item
 		The distribution is not symmetric.  (It is right skewed.)
 	\item
 		The distribution has spikes and gaps.
@@ -421,51 +421,3 @@ these are \emph{very} unlikely.
 \end{enumerate}
 Since the bootstrap distribution does not look like a normal distribution (bell-shaped, symmetric), we cannot safely use 
 our methods for creating a confidence interval.
-
-%%%%%%%%%%%%%%%%%%%%
-\subsection{Using the standard error to compute a margin of error}
-
-In many (but not all) situations, the sampling distribution is 
-\begin{itemize}
-  \item unimodal,
-	\item symmetric, and
-	\item bell-shaped
-\end{itemize}
-(The technical phrase is ``approximately normal''.)  In these situations, a 95\% confidence interval can be estimated 
-with
-\[ 
-\mbox{statistic} \pm 2 SE
-\]
-
-\textbf{Example.}  A large sample of American adults the mean body mass index was $27.655$.  The standard 
-error was $0.009$. The 95\% confidence interval is therefore 
-\[
-27.655 \pm 0.018
-\]
-
-
-The important question remains:  If we don't have access to the entire population, and we only get to look at one sample,
-how do we tell the shape of the sampling distribution and estimate its standard error?  Stay tuned.
-
-Another way to create a 95\% confidence interval is to use the middle 95\% of the bootstrap distribution.
-The \function{cdata()} function can compute this for us as follows:
-<<>>=
-cdata(0.95, prop, data=sampledistdeg)
-dotPlot(~ prop, width=.005, groups = (0.215 <= prop & prop <= 0.34), data=sampledistdeg)
-@
-This is not exactly the same as the interval above, but it is pretty close.
-
-One advantage of this method is that it is easy to change the confidence level.  To make a 90\% confidence interval,
-we use the middle 90\% of the sample distribution instead.
-<<>>=
-cdata(0.90, prop, data=sampledistdeg)
-@
-Notice that this interval is narrower.  This will always be the case.  Higher levels of confidence 
-lead to wider confidence intervals.
-
-(Method 1 can also be adjusted for other confidence levels as well -- 
-the number 2 needs to be replaced by an appropriate alternative.)
-
-<<>>=
-cdata(0.95, prop, data=(do(1000) * rflip(200, 0.275)))
-@
