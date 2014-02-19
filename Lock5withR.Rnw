@@ -249,23 +249,23 @@ else x
 <<child="03-CIs.Rnw">>=
 @
 
-<<child="04-HypothesisTests.Rnw">>=
+<<child="04-HypothesisTests.Rnw", eval=FALSE>>=
 @
 
 
-<<child="05-Distributions.Rnw">>=
+<<child="05-Distributions.Rnw", eval=FALSE>>=
 @
 
-<<child="06-InferenceMeansProportions.Rnw">>=
+<<child="06-InferenceMeansProportions.Rnw", eval=FALSE>>=
 @
 
-<<child="07-ChiSquared.Rnw">>=
+<<child="07-ChiSquared.Rnw", eval=FALSE>>=
 @
 
-<<child="08-ANOVA.Rnw">>=
+<<child="08-ANOVA.Rnw", eval=FALSE>>=
 @
 
-<<child="09-Regression.Rnw">>=
+<<child="09-Regression.Rnw", eval=FALSE>>=
 @
 
 <<child="10-MultipleRegression.Rnw", eval=FALSE>>=
