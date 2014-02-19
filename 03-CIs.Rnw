@@ -1,5 +1,6 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
 
+\setcounter{chapter}{2}
 \Chapter{Confidence Intervals}
 %how to keep samples from changing? set.seed?
 %take note of skipped examples
@@ -136,11 +137,12 @@ the statistic.
 0.42 \pm 0.03 \mbox{ which is the same as } (0.39, 0.45)
 \]
 
+
 \subsubsection*{Example 3.13}
 
 <<marginoferror, tidy=FALSE>>=
-p.hat = 0.54                          # sample proportion
-MoE = 0.02                            # margin of error
+p.hat = 0.54                        # sample proportion
+MoE = 0.02                          # margin of error
 p.hat - MoE                         # lower limit of interval estimate
 p.hat + MoE                         # upper limit of interval estimate
 @
@@ -210,6 +212,19 @@ dotPlot(~ prop, width=.005, groups = (0.215 <= prop & prop <= 0.335), data=sampl
 
 \subsection*{Interpreting Confidence Intervals}
 
+\subsubsection*{Figure 3.13}
+We can create the data needed for plots like Figure 3.13 using \function{CIsim()}.  The plot
+itself uses \function{xYplot()} from the \pkg{Hmisc} package.
+<<message=FALSE, seed=1234, fig.width=8>>=
+results <- CIsim(200, samples=100, rdist=rbinom, args=list(size=1, prob=0.275), 
+                 method=binom.test, method.args=list(success=1), verbose=FALSE, estimand=0.275)
+require(Hmisc)
+xYplot(Cbind(estimate,lower,upper) ~ sample,
+  data=results,
+  par.settings=col.mosaic(), 
+  groups=cover)
+@
+
 \subsubsection*{Example 3.16}
 
 <<>>=
@@ -271,11 +286,14 @@ head(BootP, 3)
 dotPlot(~ prop, width=.01, data=BootP)
 @
 
-%\subsubsection*{Example 3.20}
-% <<>>=
-% 
-% @
-% make dataset?
+\subsubsection*{Example 3.20}
+Variables can be created in \R\ using the \function{c()} function then collected into
+a data frame using the \function{data.frame()} function.
+\authNote{The bootstrapping is still to be done here.}
+<<>>=
+Laughter <- data.frame( NumLaughs =  c(16, 22, 9, 31, 6, 42) )
+mean( ~ NumLaughs, data=Laughter )
+@
 
 \subsection*{Estimating Standard Error Based on a Bootstrap Distribution}
 \subsubsection*{Example 3.21}
@@ -366,7 +384,8 @@ head(BootE, 3)
 @
 <<fig.width=4, fig.height=3>>=
 cdata(0.95, M, data=BootE)
-dotPlot(~M, width=.25, cex=.5, groups =(-1.44 <= M & M <= 7.534), xlab="Difference in mean", data=BootE)
+dotPlot(~M, width=.25, cex=.5, groups =(-1.44 <= M & M <= 7.534), 
+        xlab="Difference in mean", data=BootE)
 @
 <<>>=
 SE <- sd( ~ M, data=BootE); SE

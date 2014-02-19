@@ -1,4 +1,5 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
+\setcounter{chapter}{1}
 \Chapter{Describing Data}
 
 %take note of skipped examples
@@ -389,7 +390,13 @@ sd(~ Sales, data=RetailSales)
 
 %how to include z-scores with R? using scale?
 
-%Example 2.19
+\subsubsection*{Example 2.19}
+
+Z-scores can be computed as follows:
+<<>>=
+( 204 - mean(~Systolic, data=ICUAdmissions) ) / sd(~Systolic, data=ICUAdmissions)
+( 52- mean(~HeartRate, data=ICUAdmissions) ) / sd(~HeartRate, data=ICUAdmissions)
+@
 
 
 \subsection*{Percentile}
