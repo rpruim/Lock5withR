@@ -98,7 +98,7 @@ SE2 <- sd(~prop, data=sampledistdeg); SE2     # Boot.Deg from Example 3.6
 \subsection*{The Importance of Sample Size}
 \subsubsection*{Example 3.9}
 
-<<bootstrap-samplesize, fig.width=3, out.width='.3\\textwidth',>>=
+<<bootstrap-samplesize, opts.label="fig3">>=
 sampledist.1000 <- do(1000) * rflip(1000, 0.275) # 1000 samples, each of size 1000 and proportion 0.275
 sampledist.200 <- do(1000) * rflip(200, 0.275)   # 1000 samples, each of size 200 and proportion 0.275
 sampledist.50 <- do(1000) * rflip(50, 0.275)     # 1000 samples, each of size 50 and proportion 0.275
@@ -215,7 +215,7 @@ dotPlot(~ prop, width=.005, groups = (0.215 <= prop & prop <= 0.335), data=sampl
 \subsubsection*{Figure 3.13}
 We can create the data needed for plots like Figure 3.13 using \function{CIsim()}.  The plot
 itself uses \function{xYplot()} from the \pkg{Hmisc} package.
-<<message=FALSE, seed=1234, fig.width=8>>=
+<<message=FALSE, seed=1234, opts.label="fig1">>=
 results <- CIsim(200, samples=100, rdist=rbinom, args=list(size=1, prob=0.275), 
                  method=binom.test, method.args=list(success=1), verbose=FALSE, estimand=0.275)
 require(Hmisc)
@@ -368,7 +368,7 @@ the number 2 needs to be replaced by an appropriate alternative.)
 
 \subsection*{Finding Confidence Intervals for Many Different Parameters}
 \subsubsection*{Example 3.25}
-<<fig.width=4, fig.height=3>>=
+<<>>=
 head(ExerciseHours)
 bwplot(Gender~Exercise, data=ExerciseHours)
 favstats(~Exercise|Gender, data=ExerciseHours)
