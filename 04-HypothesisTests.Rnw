@@ -110,7 +110,7 @@ dotPlot(~Taps|Group, layout=c(1,2), width=1, cex=.1, data=CaffeineTaps)
 	\item
 		Test statistic:  $\bar x_1 - \bar x_2$ (the sample statistic is the difference in sample means)
 	\item
-		We simulate a world in which $\mu = 0$:
+		We simulate a world in which $\mu_1 = \mu_2$ or $\mu_1 - \mu_2 = 0$:
 <<eval=FALSE>>=
 Randomization.Caff <- do (1000) * diff( mean( Taps ~ shuffle(Group), data=CaffeineTaps ) )
 head(Randomization.Caff,3)
@@ -171,51 +171,52 @@ prop( ~ (prop <= 0.2 | prop >= 0.8), data=RandomizationDist )
 @
 \end{enumerate}
 
-\section{P-values}
+\section{Determining Statisical Significance}
+%Example 4.21
+%Example 4.22
+%Example 4.23
+%Example 4.24
+%Example 4.25
+%Example 4.26
+\subsection*{Less Formal Statistical Decisions}
 
-\subsection{Testing one proportion}
+\subsubsection*{Example 4.27}
 
-Randomization distributions are a bit like bootstrap distributions except that
-instead of resampling from our sample (in an attempt to approximate resampling
-from the population), we need to sample from a situation in which our null
-hypothesis is true.
+Testing two means.
 
-The simplest case for this is a null hypothesis about a single proportion.
-For example, to test whether a coin is a fair coin, we might flip the coin some number of times and 
-keep track of the heads and tails.
-Suppose the data are 60 heads and 40 tails in 100 tries.
+<<Example4.27>>=
+head(Smiles)
+mean(Leniency ~ Group, data=Smiles)
+diff(mean(Leniency ~ Group, data=Smiles))
+@
 
 \begin{enumerate}
+  \item
+    $H_0$: $\mu_1 = \mu_2$;  $H_a$: $\mu_1 \neq \mu_2$
+  \item
+  	Test statistic:  $\bar x_1 - \bar x_2$ (the sample statistic is the difference in sample means)
 	\item
-		$H_0$: $p = 0.5$;  $H_a$: $p \neq 0.5$
-	\item
-		Test statistic:  $\hat p$ (the sample proportion)
-	\item
-		We can simulate a world in which $p = 0.5$ using \function{rflip()}:
-
+		We simulate a world in which $\mu_1 = \mu_2$:
 <<>>=
-RandomizationDist <- do(5000) * rflip(100, .5)  # 100 because n=100
-head(RandomizationDist)
+Randomization.Smiles <- do (1000) * diff(mean(Leniency ~ shuffle(Group), data=Smiles))
+head(Randomization.Smiles,3)
+dotPlot(~smile, width=.03, cex=.5, groups= (smile >=0.79), xlab="Diff", data=Randomization.Smiles)
 @
 
 <<>>=
-prop( ~ (prop >= 0.60), data=RandomizationDist )
-prop( ~ (prop <= 0.40), data=RandomizationDist )
-# a 2-sided p-value is the sum of the values above
-prop( ~ (prop <= 0.40 | prop >= 0.6), data=RandomizationDist )
-# We can also approximate the p-value by doubling one side:
-2 * prop( ~ prop >= 0.60, data=RandomizationDist )
+prop( ~ (smile <= -0.79 | smile >= 0.79), data=Randomization.Smiles )
+2 * prop( ~ smile >= 0.79, data=Randomization.Smiles )
 @
-	\item
-		This p-value is on the small side, but not extremely small.  
-		If we flip a fair coin 100 times, there is a 
-		\Sexpr{100 * prop( ~ (prop <= 0.40 | prop >= 0.6), data=RandomizationDist )}\%
-		chance that we would get 60\% or more head or tails.
+
+Now we find the p-value to test a difference of 0.76:
+<<>>=
+prop( ~ (smile <= -0.76 | smile >= 0.76), data=Randomization.Smiles )
+2 * prop( ~ smile >= 0.76, data=Randomization.Smiles )
+dotPlot(~smile, width=.03, cex=.5, groups= (smile >=0.76), data=Randomization.Smiles)
+@
 \end{enumerate}
 
 
-
-\section{Significance}
 
 \section{Creating Randomization Distributions}
 
