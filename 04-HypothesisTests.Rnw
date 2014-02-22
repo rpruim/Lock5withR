@@ -90,7 +90,7 @@ histogram(~prop, width=0.04, groups = (prop >= 0.76), data=Randomization.Match )
 
 <<Example4.16>>=
 prop( ~ (prop >= 0.88), data=Randomization.Match ) # 22/25
-histogram(~prop, width=0.04, groups = (prop >= 0.88), data=Randomization.Match )
+histogram(~prop, width=0.04, v=c(0.88), data=Randomization.Match )
 @
 
 %Example 4.17
@@ -254,7 +254,7 @@ does not directly specify all of the information needed to simulate samples.
 
 \end{itemize}
 
-So how do we come up with randomization distriution?
+So how do we come up with randomization distribution?
 
 \begin{boxedText}
 	The main criteria to consider when creating randomization samples for a statistical test are:
@@ -273,18 +273,17 @@ So how do we come up with randomization distriution?
 	\end{itemize}
 \end{boxedText}
 
+\subsection*{Randomization Test for a Difference in Proportions: Cocaine Addiction}
 
-\subsection{Testing Whether Two Proportions are Equal}
-
-\subsubsection{Creating some data}
+\subsubsection*{Creating some data} 
 Data 4.7 in the text describes some data that are not in a data frame.  This
 often happens when a data set has only categorical variables because a simple
 table completely describes the distributions involved.  Here's the table from the book:\footnote{The book
 includes data on an additional treatment group which we are omitting here.}
 
 \begin{center}
-	\begin{tabular}{ccc}
-		\hline
+  \begin{tabular}{ccc}
+  	\hline
 		 & Relapse & No Relapse 
 		 \\ \hline
 %		 Desipramine & 10 & 14 \\
@@ -306,24 +305,140 @@ Cocaine <- rbind(
   )
 @
 
-\subsubsection{A Randomized Experiment: Lithium vs. Placebo}
+%Example 4.28
+\subsubsection*{Example 4.29}
+
+Testing two proportions.
 
 <<>>=
 tally( response ~ treatment, data=Cocaine )
-prop( response ~ treatment, data=Cocaine )
-diff( prop( response ~ treatment, data=Cocaine ) )
+prop( response ~ treatment,  data=Cocaine )
+diff( prop( response ~ treatment, data=Cocaine ))
+@
+
+\begin{enumerate}
+  \item
+    $H_0$: $p_1 = p_2$;  $H_a$: $p_1 < p_2$
+	\item
+		Test statistic:  $\hat p_1 = \hat p_2$ (the difference in sample proportions)
+	\item
+		We simulate a world in which $p_1 = p_2$ or $p_1 - p_2$ = 0:
+<<>>=
+Randomization.Coc <- do (5000) * diff( prop( response ~ shuffle(treatment), data=Cocaine ) )
+head(Randomization.Coc)
+histogram( ~ Relapse.Placebo, data=Randomization.Coc, v=c(-0.0833), width=0.08)
 @
 
 <<>>=
-Randomization.Coc <- do (1000) * diff( prop( response ~ shuffle(treatment), data=Cocaine ) )
-head(Randomization.Coc)
-histogram( ~ Relapse.Placebo, data=Randomization.Coc, v=c(-0.0833, 0.0833), width=0.08)
+prop( ~ (Relapse.Placebo < -0.0833 ), data=Randomization.Coc )
 @
+\end{enumerate}
+
+\subsection*{Randomization Test for a Correlation: Malevolent Uniforms and Penalties}
+
+%Example 4.30
+\subsubsection*{Example 4.31}
+
+Testing correlation.
+
 <<>>=
-prop( ~ (Relapse.Placebo > 0.0833 ), data=Randomization.Coc )       # 1-sided
-2 * prop( ~ (Relapse.Placebo > 0.0833 ), data=Randomization.Coc )   # 2-sided
-prop( ~ (abs(Relapse.Placebo) > 0.0833 ), data=Randomization.Coc )  # 2-sided
+cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
 @
+
+\begin{enumerate}
+  \item
+    $H_0$: $\rho = 0$;  $H_a$: $\rho > 0$
+	\item
+		Test statistic:  $r$ (the sample correlation)
+	\item
+		We simulate a world in which $\rho = 0$:
+<<>>=
+Randomization.Mal <- do (10000) * cor(NFL_Malevolence~ shuffle(ZPenYds), data=MalevolentUniformsNFL)
+head(Randomization.Mal)
+histogram( ~result, v=c(0.43), width=0.05, data=Randomization.Mal)
+@
+
+<<>>=
+prop( ~ (result > 0.43 ), data=Randomization.Mal )
+@
+\end{enumerate}
+
+\subsection*{Randomization Test for a Mean: Body Temperature}
+
+%Example 4.32
+
+\subsubsection*{Example 4.33}
+
+Testing one mean.
+<<>>=
+mean(~BodyTemp, data=BodyTemp50)
+dotPlot(~BodyTemp, v=c(98.26), width=.1, cex=.2, data=BodyTemp50)
+@
+
+\begin{enumerate}
+  \item
+    $H_0$: $\mu = 98.6$;  $H_a$: $\mu \neq 98.6$
+  \item
+		Test statistic:  $\bar x$ (the sample mean)
+    
+Notice that the test statistic differs a bit from 98.6
+<<>>=
+98.6 - mean( ~ BodyTemp, data=BodyTemp50)  
+@
+
+But might this just be random variation?
+We need a randomization distribution to compare against.
+    
+	\item
+		If we resample, the mean will not be 98.6.  But we shift the distribution a bit, then we will
+have the desired mean while preserving the shape of the distribution indicated by
+our sample. We simulate a world in which $\mu = 98.6$:
+<<>>=
+Randomization.Temp <- do(10000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 ) 
+head(Randomization.Temp, 3)
+mean( ~ result, data=Randomization.Temp )
+histogram(~result, width=.025, v=c(98.26, 98.94), data=Randomization.Temp)
+@
+From this we can estimate the p-value:
+<<>>=
+prop( ~ abs(result - 98.6) > 0.34, data = Randomization.Temp )
+@
+\end{enumerate}
+
+How do we interpret this (estimated) p-value of 0?  Is it impossible to have a sample mean so 
+far from 98.6 if the true population mean is 98.6?  No.  This merely means that we didn't see any
+such cases \emph{in our 10000 randomization samples}.   
+We might estimate the p-value as $p < 0.001$. Generally, to more accurately estimate small p-values, we must use many more randomization samples.
+
+\subsubsection*{A different approach}
+An equivalent way to do the preceding test is based on a different way of expressing our 
+hypotheses.
+
+\begin{itemize}
+  \item $H_0$: $\mu - 98.6 = 0$
+	\item $H_a$: $\mu - 98.6 \neq 0$
+\end{itemize}
+
+Now our test statistic is 
+<<>>=
+mean( ~ BodyTemp, data=BodyTemp50) - 98.6
+@
+and we create a randomization distribution centered at 0:
+<<>>=
+Randomization.Temp2 <- do(1000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) - 98.26 ) 
+head(Randomization.Temp2, 3)
+mean( ~ result, data=Randomization.Temp2 )
+histogram(~result, width=.025, v=c(0.34, -0.34), data=Randomization.Temp2)
+@
+From this we can estimate the p-value:
+<<>>=
+prop( ~ abs(result) > 0.34, data = Randomization.Temp2 )
+@
+
+Often there are multiple ways to express the same hypothesis test.
+
+%Example 4.34
+
 
 \iffalse
 \subsubsection{An Observational Study: ?? }
@@ -452,85 +567,3 @@ mean(~ Male, data=Boot.Temp)
 @
 Notice that the distribution is now centered at our test statistic instead of at the value
 from the null hypothesis.
-
-\newpage
-
-\subsection{Testing One mean}
-
-\subsubsection{Is body temperature really 98.6?}
-Suppose now that we want to test whether the mean body temparature is really 98.6 degrees F., 
-as we've always been told.  Our null and alternative hypotheses are 
-
-\begin{itemize}
-	\item $H_0$: $\mu = 98.6$
-	\item $H_a$: $\mu \neq 98.6$
-\end{itemize}
-
-The sample mean body temperature is 
-<<>>=
-mean( ~ BodyTemp, data=BodyTemp50 )
-@
-This will be our test statistic.
-Notice that it differs a bit from 98.6
-<<>>=
-98.6 - mean( ~ BodyTemp, data=BodyTemp50)  
-@
-But might this just be random variation?
-We need a randomization distribution to compare against.  But how do we create one?
-If we resample, the mean will not be 98.6.  But we shift the distribution a bit, then we will
-have the desired mean while preserving the shape of the distribution indicated by
-our sample.
-
-<<>>=
-Randomization.Temp4 <- do(1000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 ) 
-head(Randomization.Temp4, 3)
-mean( ~ result, data=Randomization.Temp4 )
-histogram(~result, data=Randomization.Temp4, v=c(98.26, 98.94))
-@
-From this we can estimate the p-value:
-<<>>=
-prop( ~ abs(result - 98.6) > 0.34, data = Randomization.Temp4 )
-@
-
-How do we interpret this (estimated) p-value of 0?  Is it impossible to have a sample mean so 
-far from 98.6 if the true population mean is 98.6?  No.  This merely means that we didn't see any
-such cases \emph{in our 1000 randomization samples}.   
-We might estimate the p-value as $p < 0.001$.
-
-To more accurately estimate small p-values, we must use many more randomization samples.  
-<<>>=
-Randomization.Temp4a <- do(10000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 ) 
-histogram(~result, data=Randomization.Temp4a, v=c(98.26, 98.94))
-@
-<<>>=
-prop( ~ abs(result - 98.6) > 0.34, data = Randomization.Temp4a )
-@
-
-
-\subsubsection{A different approach}
-An equivalent way to do the preceding test is based on a different way of expressing our 
-hypotheses.
-
-\begin{itemize}
-	\item $H_0$: $\mu - 98.6 = 0$
-	\item $H_a$: $\mu - 98.6 \neq 0$
-\end{itemize}
-
-Now our test statistic is 
-<<>>=
-mean( ~ BodyTemp, data=BodyTemp50) - 98.6
-@
-and we create a randomization distribution centered at 0:
-<<>>=
-Randomization.Temp5 <- do(1000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) - 98.26 ) 
-head(Randomization.Temp5, 3)
-mean( ~ result, data=Randomization.Temp5 )
-histogram(~result, data=Randomization.Temp5, v=c(0.34, -0.34))
-@
-From this we can estimate the p-value:
-<<>>=
-prop( ~ abs(result) > 0.34, data = Randomization.Temp5 )
-@
-
-Often there are multiple ways to express the same hypothesis test.
-
