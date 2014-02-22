@@ -29,12 +29,6 @@ The following 4-step outline is a useful way to organize the ideas of hypothesis
 %Example 4.2
 %Example 4.3
 %Example 4.4
-
-\subsubsection*{Do Teams with Malevolent Uniforms Get More Penalties?}
-<<>>=
-xyplot(ZPenYds ~ NFL_Malevolence, type=c("p", "r"), data=MalevolentUniformsNFL)
-cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
-@
 %Example 4.5
 %Example 4.6
 %Example 4.7
@@ -58,7 +52,7 @@ Testing one proportion.
   \item
   	$H_0$: $p = 0.5$;  $H_a$: $p > 0.5$
 	\item
-		Test statistic:  $\hat p$ (the sample proportion)
+		Test statistic:  $\hat p = 16/25$ (the sample proportion)
 	\item
 		We can simulate a world in which $p = 0.5$ using \function{rflip()}:
 
@@ -108,7 +102,7 @@ dotPlot(~Taps|Group, layout=c(1,2), width=1, cex=.1, data=CaffeineTaps)
   \item
     $H_0$: $\mu_1 = \mu_2$;  $H_a$: $\mu_1 > \mu_2$
 	\item
-		Test statistic:  $\bar x_1 - \bar x_2$ (the sample statistic is the difference in sample means)
+		Test statistic:  $\bar x_1 - \bar x_2 = 3.5$ (the difference in sample means)
 	\item
 		We simulate a world in which $\mu_1 = \mu_2$ or $\mu_1 - \mu_2 = 0$:
 <<eval=FALSE>>=
@@ -154,7 +148,7 @@ Testing one proportion.
   \item
     $H_0$: $p = 0.5$;  $H_a$: $p \neq 0.5$
   \item
-		Test statistic:  $\hat p$ (the sample proportion)
+		Test statistic:  $\hat p = 0.8$ (the sample proportion)
 	\item
 		We simulate a world in which $p = 0.5$:
 <<Example4.20>>=
@@ -194,7 +188,7 @@ diff(mean(Leniency ~ Group, data=Smiles))
   \item
     $H_0$: $\mu_1 = \mu_2$;  $H_a$: $\mu_1 \neq \mu_2$
   \item
-  	Test statistic:  $\bar x_1 - \bar x_2$ (the sample statistic is the difference in sample means)
+  	Test statistic:  $\bar x_1 - \bar x_2 = 0.79$ (the difference in sample means)
 	\item
 		We simulate a world in which $\mu_1 = \mu_2$:
 <<>>=
@@ -342,6 +336,7 @@ prop( ~ (Relapse.Placebo < -0.0833 ), data=Randomization.Coc )
 Testing correlation.
 
 <<>>=
+xyplot(ZPenYds ~ NFL_Malevolence, type=c("p", "r"), data=MalevolentUniformsNFL)
 cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
 @
 
@@ -349,7 +344,7 @@ cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
   \item
     $H_0$: $\rho = 0$;  $H_a$: $\rho > 0$
 	\item
-		Test statistic:  $r$ (the sample correlation)
+		Test statistic:  $r = 0.43$ (the sample correlation)
 	\item
 		We simulate a world in which $\rho = 0$:
 <<>>=
@@ -379,7 +374,7 @@ dotPlot(~BodyTemp, v=c(98.26), width=.1, cex=.2, data=BodyTemp50)
   \item
     $H_0$: $\mu = 98.6$;  $H_a$: $\mu \neq 98.6$
   \item
-		Test statistic:  $\bar x$ (the sample mean)
+		Test statistic:  $\bar x = 98.26$ (the sample mean)
     
 Notice that the test statistic differs a bit from 98.6
 <<>>=
@@ -393,11 +388,12 @@ We need a randomization distribution to compare against.
 		If we resample, the mean will not be 98.6.  But we shift the distribution a bit, then we will
 have the desired mean while preserving the shape of the distribution indicated by
 our sample. We simulate a world in which $\mu = 98.6$:
-<<>>=
+<<seed=1234>>=
 Randomization.Temp <- do(10000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 ) 
 head(Randomization.Temp, 3)
 mean( ~ result, data=Randomization.Temp )
-histogram(~result, width=.025, v=c(98.26, 98.94), data=Randomization.Temp)
+cdata(0.95, result, data=Randomization.Temp )
+histogram(~result, width=.01, v=c(98.40, 98.6, 98.81), data=Randomization.Temp)
 @
 From this we can estimate the p-value:
 <<>>=
@@ -413,22 +409,18 @@ We might estimate the p-value as $p < 0.001$. Generally, to more accurately esti
 \subsubsection*{A different approach}
 An equivalent way to do the preceding test is based on a different way of expressing our 
 hypotheses.
-
-\begin{itemize}
-  \item $H_0$: $\mu - 98.6 = 0$
-	\item $H_a$: $\mu - 98.6 \neq 0$
-\end{itemize}
-
-Now our test statistic is 
+\begin{enumerate}
+  \item
+    $H_0$: $\mu - 98.6 = 0$;  $H_a$: $\mu - 98.6 \neq 0$
+  \item
+		Test statistic:  $\bar x - 98.6 = -0.34$
+	\item
+		We we create a randomization distribution centered at $\mu - 98.6 = 0$:
 <<>>=
-mean( ~ BodyTemp, data=BodyTemp50) - 98.6
-@
-and we create a randomization distribution centered at 0:
-<<>>=
-Randomization.Temp2 <- do(1000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) - 98.26 ) 
+Randomization.Temp2 <- do(5000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) - 98.26 ) 
 head(Randomization.Temp2, 3)
 mean( ~ result, data=Randomization.Temp2 )
-histogram(~result, width=.025, v=c(0.34, -0.34), data=Randomization.Temp2)
+histogram(~result, width=.01, v=c(0.34, -0.34), data=Randomization.Temp2)
 @
 From this we can estimate the p-value:
 <<>>=
@@ -439,6 +431,52 @@ Often there are multiple ways to express the same hypothesis test.
 
 %Example 4.34
 
+\section{Confidence Intervals and Hypothesis Tests}
+
+If your randomization distribution is centered at the wrong value, then it isn't simulating a world
+in which the null hypothesis is true.  This would happen, for example, if we got confused about 
+randomization vs. bootstrapping.
+
+<<seed=1234>>=
+Boot.Temp <- do (5000) * mean(~ BodyTemp, data=resample(BodyTemp50))
+head(Boot.Temp,3)
+mean(~ result, data=Boot.Temp)
+cdata(0.95, result, data=Boot.Temp)
+histogram(~result, width=.01, v=c(98.26, 98.6), 
+          groups=(98.05 <=result & result <= 98.46), data=Boot.Temp)
+@
+Notice that the distribution is now centered at our test statistic instead of at the value
+from the null hypothesis.
+
+\subsubsection*{Example 4.35}
+
+\begin{enumerate}
+  \item
+    $H_0$: $\mu = 98.4$;  $H_a$: $\mu \neq 98.4$
+  \item
+  	Test statistic:  $\bar x = 98.26$ (the sample mean)
+	\item
+		We simulate a world in which $\mu = 98.4$:
+<<seed=1234>>=
+Randomization.Temp3 <- do(5000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.14 ) 
+head(Randomization.Temp3, 3)
+mean( ~ result, data=Randomization.Temp3 )
+cdata(0.95, result, data=Randomization.Temp3)
+histogram(~result, width=.01, v=c(98.26, 98.4), 
+          groups=(98.19 <=result & result <= 98.62), 
+          xlim=c(97.8, 99.0), data=Randomization.Temp3) # randomization
+histogram(~result, width=.01, v=c(98.26, 98.4), 
+          groups=(98.05 <=result & result <= 98.46), 
+          xlim=c(97.8, 99.0), data=Boot.Temp) # bootstrap
+@
+
+\end{enumerate}
+
+%Example 4.36
+%Example 4.37
+%Example 4.38
+%Example 4.39
+%Example 4.40
 
 \iffalse
 \subsubsection{An Observational Study: ?? }
@@ -452,8 +490,7 @@ And our null hypothesis is again
 \begin{itemize}
 	\item $H_0$:  $p_t = p_c$ 
 \end{itemize}
-But the design of this study is different.  
-\fi
+But the design of this study is different.
 
 \subsection{Testing Whether Two Means are Equal}
 
@@ -543,8 +580,6 @@ three different study designs:
 Similar approaches work for testing whether two proportions are equal as well.
 
 
-\subsubsection{A tell-tale sign that your method isn't correct}
-
 Take a look at the three histograms in this section.  Notice how each is centered at 0.   (They
 also have our hoped for bell shape.)
 <<>>=
@@ -554,16 +589,4 @@ mean( ~ Male, data=Randomization.Temp3 )
 @
 This is because we are computing the difference in means \emph{assuming the difference in means is 0}.
 
-If your randomization distribution is centered at the wrong value, then it isn't simulating a world
-in which the null hypothesis is true.  This would happen, for example, if we got confused about 
-randomization vs. bootstrapping.
-
-<<tidy=FALSE>>=
-Boot.Temp <- do (1000) * diff( mean( BodyTemp ~ Sex, data=resample(BodyTemp50) ) )
-head(Boot.Temp,3)
-histogram(~Male, data=Boot.Temp, v=c(0.176, -0.176), 
-    main="This is NOT a randomization distribution")
-mean(~ Male, data=Boot.Temp)
-@
-Notice that the distribution is now centered at our test statistic instead of at the value
-from the null hypothesis.
+\fi
