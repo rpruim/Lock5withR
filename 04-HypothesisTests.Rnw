@@ -44,6 +44,133 @@ cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
 %Example 4.11
 %Example 4.12
 
+\section{Measuring Evidence with P-values}
+
+Randomization distributions are a bit like bootstrap distributions except that
+instead of resampling from our sample (in an attempt to approximate resampling
+from the population), we need to sample from a situation in which our null
+hypothesis is true.
+
+\subsection*{P-values from Randomization Distributions}
+\subsubsection*{Example 4.13}
+Testing one proportion.
+\begin{enumerate}
+  \item
+  	$H_0$: $p = 0.5$;  $H_a$: $p > 0.5$
+	\item
+		Test statistic:  $\hat p$ (the sample proportion)
+	\item
+		We can simulate a world in which $p = 0.5$ using \function{rflip()}:
+
+<<>>=
+Randomization.Match <- do(10000) * rflip(25, .5)  # 25 because n=25
+head(Randomization.Match)
+histogram(~prop, width=0.04, data=Randomization.Match)
+@
+
+Here we find the proportion of the simulations which resulted in 16 or more matches out of 25, or 0.64 or greater, for the p-value.
+<<>>=
+prop( ~ (prop >= 0.64), data=Randomization.Match ) # 16/25
+histogram(~prop, width=0.04, groups = (prop >= 0.64), data=Randomization.Match)
+@
+\end{enumerate}
+
+%Example 4.14
+
+\subsubsection*{Example 4.15}
+
+<<Example4.15>>=
+prop( ~ (prop >= 0.60), data=Randomization.Match ) # 15/25
+prop( ~ (prop >= 0.76), data=Randomization.Match ) # 19/25
+histogram(~prop, width=0.04, groups = (prop >= 0.60), data=Randomization.Match )
+histogram(~prop, width=0.04, groups = (prop >= 0.76), data=Randomization.Match )
+@
+
+\subsubsection*{Example 4.16}
+
+<<Example4.16>>=
+prop( ~ (prop >= 0.88), data=Randomization.Match ) # 22/25
+histogram(~prop, width=0.04, groups = (prop >= 0.88), data=Randomization.Match )
+@
+
+%Example 4.17
+\subsubsection*{Example 4.18}
+Testing two means.
+<<>>=
+mean(Taps ~ Group, data=CaffeineTaps)
+diff( mean(Taps ~ Group, data=CaffeineTaps) )
+dotPlot(~Taps|Group, layout=c(1,2), width=1, cex=.1, data=CaffeineTaps)
+@
+
+\authNote{problem with new variable}
+
+\begin{enumerate}
+  \item
+    $H_0$: $\mu_1 = \mu_2$;  $H_a$: $\mu_1 > \mu_2$
+	\item
+		Test statistic:  $\bar x_1 - \bar x_2$ (the sample statistic is the difference in sample means)
+	\item
+		We simulate a world in which $\mu = 0$:
+<<eval=FALSE>>=
+Randomization.Caff <- do (1000) * diff( mean( Taps ~ shuffle(Group), data=CaffeineTaps ) )
+head(Randomization.Caff,3)
+histogram(~No Caffeine, data=Randomization.Caff)
+@
+
+<<eval=FALSE>>=
+prop( ~ (No Caffeine > 3.5), data=Randomization.Temp )
+@
+\end{enumerate}
+
+\subsection*{P-values and the Alternative Hypothesis}
+
+\subsubsection*{Example 4.19}
+Testing one proportion.
+\begin{enumerate}
+  \item
+    $H_0$: $p = 0.5$;  $H_a$: $p > 0.5$
+	\item
+		Test statistic:  $\hat p$ (the sample proportion)
+	\item
+		We simulate a world in which $p = 0.5$:
+
+<<seed=1234>>=
+RandomizationDist <- do(1000) * rflip(10, .5)  # 10 because n=10
+head(RandomizationDist)
+histogram(~prop, label=TRUE, data=RandomizationDist)
+@
+
+<<Example4.19>>=
+prop( ~ (prop >= 0.8), data=RandomizationDist )
+prop( ~ (prop >= 0.6), data=RandomizationDist )
+prop( ~ (prop >= 0.4), data=RandomizationDist )
+@
+\end{enumerate}
+
+\subsubsection*{Example 4.20}
+Testing one proportion.
+
+\begin{enumerate}
+  \item
+    $H_0$: $p = 0.5$;  $H_a$: $p \neq 0.5$
+  \item
+		Test statistic:  $\hat p$ (the sample proportion)
+	\item
+		We simulate a world in which $p = 0.5$:
+<<Example4.20>>=
+prop( ~ (prop >= 0.8), data=RandomizationDist )
+prop( ~ (prop <= 0.2), data=RandomizationDist )
+histogram(~prop, label=TRUE, groups=(prop <= 0.2 | prop >= 0.8), data=RandomizationDist)
+@
+
+<<>>=
+# a 2-sided p-value is the sum of the values above
+prop( ~ (prop <= 0.2 | prop >= 0.8), data=RandomizationDist )
+# We can also approximate the p-value by doubling one side
+2 * prop( ~ prop >= 0.80, data=RandomizationDist )
+@
+\end{enumerate}
+
 \section{P-values}
 
 \subsection{Testing one proportion}
@@ -66,12 +193,12 @@ Suppose the data are 60 heads and 40 tails in 100 tries.
 	\item
 		We can simulate a world in which $p = 0.5$ using \function{rflip()}:
 
-<<randomization-coins>>=
+<<>>=
 RandomizationDist <- do(5000) * rflip(100, .5)  # 100 because n=100
 head(RandomizationDist)
 @
 
-<<p-value-coins>>=
+<<>>=
 prop( ~ (prop >= 0.60), data=RandomizationDist )
 prop( ~ (prop <= 0.40), data=RandomizationDist )
 # a 2-sided p-value is the sum of the values above
