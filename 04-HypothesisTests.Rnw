@@ -1,4 +1,5 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
+\setcounter{chapter}{3}
 \Chapter{Hypothesis Tests}
 
 <<include=FALSE>>=
@@ -7,13 +8,13 @@ opts_chunk$set(
 )
 @
 
-\section{Introduction to Hypothesis Testing}
+\section{Introducing Hypothesis Tests}
 
-\subsection{The 4-step outline}
+\subsection*{The 4-step outline}
 The following 4-step outline is a useful way to organize the ideas of hypothesis testing.
 
 \begin{enumerate}
-	\item
+  \item
 		State the Null and Alternative Hypotheses
 	\item
 		Compute the Test Statistic
@@ -24,6 +25,24 @@ The following 4-step outline is a useful way to organize the ideas of hypothesis
 	\item
 		Draw a conclusion
 \end{enumerate}
+%Example 4.1
+%Example 4.2
+%Example 4.3
+%Example 4.4
+
+\subsubsection*{Do Teams with Malevolent Uniforms Get More Penalties?}
+<<>>=
+xyplot(ZPenYds ~ NFL_Malevolence, type=c("p", "r"), data=MalevolentUniformsNFL)
+cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
+@
+%Example 4.5
+%Example 4.6
+%Example 4.7
+%Example 4.8
+%Example 4.9
+%Example 4.10
+%Example 4.11
+%Example 4.12
 
 \section{P-values}
 
