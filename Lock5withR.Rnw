@@ -252,7 +252,7 @@ else x
 <<child="03-CIs.Rnw">>=
 @
 
-<<child="04-HypothesisTests.Rnw", eval=FALSE>>=
+<<child="04-HypothesisTests.Rnw", eval=TRUE>>=
 @
 
 
