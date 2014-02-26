@@ -426,6 +426,7 @@ From this we can estimate the p-value:
 <<>>=
 prop( ~ abs(result) > 0.34, data = Randomization.Temp2 )
 @
+\end{enumerate}
 
 Often there are multiple ways to express the same hypothesis test.
 
