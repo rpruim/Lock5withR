@@ -178,7 +178,7 @@ This should look familiar from the previous section.
 
 \subsubsection*{Dot Plot}
 Let's make a \emph{dot plot} of the variable Longevity in the \dataframe{MammalLongevity} data set for a quick and simple look at the distribution. We use the syntax provided above with two additional arguments to make the figure look the way we want it to. The next few sections will explain a few of the different arguments available for plots in \R.
-<<dotplot, fig.width=8>>=
+<<dotplot, opts.label="fig1">>=
 MammalLongevity
 dotPlot(~ Longevity, width=1, cex=.1, data = MammalLongevity)
 @
@@ -216,7 +216,7 @@ We can control the (approximate) number of bins using the \option{nint}
 argument, which may be abbreviated as \option{n}.
 The number of bins (and to a lesser extent the positions of the bins)
 can make a histogram look quite different.
-<<histogram2, fig.width=3, out.width='.3\\textwidth', warning=FALSE>>=
+<<histogram2, opts.label="fig3", warning=FALSE>>=
 histogram(~ Longevity, type="count", data=MammalLongevity, n=8)
 histogram(~ Longevity, type="count", data=MammalLongevity, n=15)
 histogram(~ Longevity, type="count", data=MammalLongevity, n=30)
@@ -224,7 +224,7 @@ histogram(~ Longevity, type="count", data=MammalLongevity, n=30)
 
 We can also describe the bins in terms of center and width instead of in terms of the number
 of bins.  This is especially nice for count or other integer data.
-<<xhistogram,fig.width=3,out.width='.3\\textwidth', warning=FALSE>>=
+<<xhistogram, opts.label="fig3", warning=FALSE>>=
 histogram(~ Longevity, type="count", data=MammalLongevity, width=10)
 histogram(~ Longevity, type="count", data=MammalLongevity, width=5)
 histogram(~ Longevity, type="count", data=MammalLongevity, width=2)
@@ -232,7 +232,7 @@ histogram(~ Longevity, type="count", data=MammalLongevity, width=2)
 
 \subsubsection*{Example 2.9}
 Note the various options available for the \function{histogram()} function enable us to replicate Figure 2.8 some including centering, adding counts, labels, and limit to the y-axis (similar for x-axis) .
-<<Example2.9,fig.width=3,out.width='.3\\textwidth', tidy=FALSE>>=
+<<Example2.9, opts.label="fig3", tidy=FALSE>>=
 histogram(~ Pulse, type='count', width=5, data=StudentSurvey)
 histogram(~ Exercise, type='count', width=2, center=2, 
           right=FALSE, ylim=c(0,70), data=StudentSurvey) 
@@ -357,7 +357,7 @@ favstats(~DesMoines, data=April14Temps) # some favorite statistics
 
 The density plots of the temperatures of Des Moines and San Francisco reveal that Des Moines has a greater \emph{variability} or \emph{spread}.
 
-<<dotplot-example, fig.width=8, echo=FALSE>>=
+<<dotplot-example, opts.label="fig1", echo=FALSE>>=
 dotPlot(~ DesMoines, width=1, cex=.05, xlim=c(20, 90), data=April14Temps)
 dotPlot(~ SanFrancisco, width=1, cex=.1, xlim=c(20, 90), data=April14Temps)
 @
@@ -372,7 +372,7 @@ var(~DesMoines, data=April14Temps)        # variance = sd^2
 @
 
 \subsubsection*{Example 2.17}
-<<Example2.17>>>=
+<<Example2.17, opts.label="fig3">>=
 densityplot(~ Pulse, data=StudentSurvey)
 histogram(~ Pulse, data=StudentSurvey)
 plotDist("norm")
@@ -395,7 +395,7 @@ sd(~ Sales, data=RetailSales)
 \subsubsection*{Example 2.19}
 
 Z-scores can be computed as follows:
-<<>>=
+<<z-score>>=
 ( 204 - mean(~Systolic, data=ICUAdmissions) ) / sd(~Systolic, data=ICUAdmissions)
 ( 52- mean(~HeartRate, data=ICUAdmissions) ) / sd(~HeartRate, data=ICUAdmissions)
 @
@@ -455,12 +455,12 @@ iqr(~SanFrancisco, data = April14Temps)
 \section{Outliers, Boxplots, and Quantitative/Categorical Relationships}
 
 \subsection*{Detection of Outliers}
-
 Generally, outliers are considered to be values 
 \begin{itemize}
-\item less than Q_1 - 1.5(IQR), and 
 \item 
-greater than Q_3 + 1.5(IQR).
+less than $Q_1 - 1.5 \cdot (IQR)$, and
+\item
+greater than $Q_3 + 1.5 \cdot (IQR)$.  
 \end{itemize}
 
 \subsubsection{Example 2.25}
@@ -480,14 +480,14 @@ There is no function in \R\ that directly results in outliers because practicall
 A way to visualize the five number summary and outliers for a variable is to create a boxplot.
 
 \subsubsection*{Example 2.26}
-<<boxplot>>=
+<<boxplot, opts.label="fig1">>=
 favstats(~Longevity, data=MammalLongevity)
 bwplot(~Longevity, data=MammalLongevity)
 @
 
 \subsubsection*{Example 2.27}
 We can similarity investigate the \emph{Smokers} variable in \dataframe{USStates}.
-<<boxplot2>>=
+<<boxplot2, opts.label="fig1">>=
 bwplot(~Smokers, data=USStates)
 fivenum(~Smokers, data=USStates)
 @
@@ -500,7 +500,7 @@ subset(USStates, Smokers>28)
 
 \subsubsection*{Example 2.28}
 
-<<boxplot3>>=
+<<boxplot3, opts.label="fig1">>=
 bwplot(~Budget, data=HollywoodMovies2011)
 subset(HollywoodMovies2011, Budget>225)
 head(HollywoodMovies2011)
@@ -517,7 +517,7 @@ plotname( ~ variable | condition, data=dataName )
 Depending on the type of plot, you will want to use conditioning.
 <<conditionalplots>>=
 bwplot(Gender ~ TV, data=StudentSurvey)
-dotPlot(~TV|Gender, layout=c(1,2), width=1, cex=.1, data = StudentSurvey)
+dotPlot(~TV|Gender, layout=c(1,2), width=1, cex=.25, data = StudentSurvey)
 @
 %more about layout at the end?
 
@@ -642,7 +642,7 @@ The equation for the regression line, or the \emph{prediction equation} is
 
 So now, we need to find the values for a, the intercept, and b, the slope using the function to fit linear models.
 
-\subsubection*{Example 2.41}
+\subsubsection*{Example 2.41}
 <<Example2.41>>=
 lm(Tip ~ Bill, data=RestaurantTips)
 coef(lm(Tip ~ Bill, data=RestaurantTips))  # just show me the coefficients
@@ -827,11 +827,11 @@ These can be used to change the line type, line width, plot character, and
 color.  To specify multiples (one for each group), use the \function{c()} function 
 (see below).
 
-<<pch-lwd-lty,cache=TRUE,fig.width=3,fig.height=2.2>>=
+<<pch-lwd-lty,cache=TRUE>>=
 densityplot( ~age, data=HELPrct, groups=sex, lty=1, lwd=c(2,4) )
 histogram( ~ age, data=HELPrct, col='green')
 @
-<<col,fig.width=6,fig.height=2.6,tidy=FALSE>>=
+<<col,opts.label="fig1",tidy=FALSE>>=
 # There are 25 numbered plot symbols; pch=plot character
 xyplot( mcs ~ age, data=HELPrct, groups=sex, 
 	    pch=c(1,2), col=c('brown', 'darkgreen'), cex=.75 )  
