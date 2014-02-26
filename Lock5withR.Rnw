@@ -181,8 +181,9 @@ fig.show='hold',
 keep.source=TRUE,
 comment=NA
 )
+opts_template$set(fig4 = list(fig.height = 4, fig.width = 6, out.width=".65\\textwidth"))
 opts_template$set(fig3 = list(fig.height = 5*.35, fig.width = 8*.35, out.width=".31\\textwidth"))
-opts_template$set(fig2 = list(fig.height = 3, fig.width = 2, out.width=".47\\textwidth"))
+opts_template$set(fig2 = list(fig.height = 2, fig.width = 3, out.width=".47\\textwidth"))
 opts_template$set(fig1 = list(fig.height = 3, fig.width = 8, out.width=".95\\textwidth"))
 opts_template$set(figbig = list(fig.height = 9, fig.width = 12, out.width=".95\\textwidth"))
 knit_hooks$set(seed = function(before, options, envir) {
