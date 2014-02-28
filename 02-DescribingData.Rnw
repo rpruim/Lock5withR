@@ -405,7 +405,8 @@ Z-scores can be computed as follows:
 
 \subsubsection*{Example 2.20}
 
-The text uses a histogram to estimate the \term{percentile} of the daily closing price for the S&P 500 but we can also find the exact percentiles using the \function{quantile()} function. 
+The text uses a histogram to estimate the \term{percentile} of the daily closing price for the 
+S\&P 500 but we can also find the exact percentiles using the \function{quantile()} function. 
 <<percentile>>=
 histogram(~Close, type="count", data=SandP500)
 quantile(SandP500$Close, probs=seq(0, 1, 0.25))
@@ -629,7 +630,7 @@ cor(Alcohol ~ Calories, data=subset(NutritionStudy60, Alcohol<25))
 
 When the relationship between variables is sufficiently \emph{linear}, you may be able to predict the value of a variable using the other variable. This is possible by fitting a \emph{regression line}. To plot this in \R, all we need to do is add an additional argument, \argument{type=c("p", "r")}, to the xyplot.
 
-\subsubsection*{Example 2.39 & 2.40}
+\subsubsection*{Example 2.39 \& 2.40}
 <<linearregression>>=
 xyplot(Tip ~ Bill, type=c("p", "r"), data=RestaurantTips)
 cor(Tip ~ Bill, data=RestaurantTips)
