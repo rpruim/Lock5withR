@@ -131,7 +131,7 @@ Testing one proportion.
 <<seed=1234>>=
 RandomizationDist <- do(1000) * rflip(10, .5)  # 10 because n=10
 head(RandomizationDist)
-histogram(~prop, label=TRUE, data=RandomizationDist)
+histogram(~prop, label=TRUE, type="count", data=RandomizationDist)
 @
 
 <<Example4.19>>=
@@ -154,7 +154,7 @@ Testing one proportion.
 <<Example4.20>>=
 prop( ~ (prop >= 0.8), data=RandomizationDist )
 prop( ~ (prop <= 0.2), data=RandomizationDist )
-histogram(~prop, label=TRUE, groups=(prop <= 0.2 | prop >= 0.8), data=RandomizationDist)
+histogram(~prop, label=TRUE, type="count", groups=(prop <= 0.2 | prop >= 0.8), data=RandomizationDist)
 @
 
 <<>>=

@@ -1,8 +1,8 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
 
+\setcounter{chapter}{0}
 \Chapter{Collecting Data}
 
-%INCLUDE REAL INTRODUCTION TO CHAPTER 1
 %In this chapter we discuss graphical and numerical summaries of data.  These notes focus primarily on
 %how to get \R\ to do the work for you.  The text book includes more information about why and when
 %to use various kinds of summaries.
@@ -209,7 +209,7 @@ of the population we are trying to study, leading us to draw inaccurate or
 incorrect conclusions.
 \fi
 
-%ex 1.15 select a random sample of 5 of AllCountries
+%ex 1.15 select a random sample of 5 of AllCountries (show how to take a random sample? this is in chp3)
 
 
 \section{Experiments and Observational Studies}
