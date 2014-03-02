@@ -228,6 +228,11 @@ knit_hooks$set(chunk = function (x, options) {
 else x 
 }
 )
+
+knit_hooks$set(document = function(x) { 
+			   sub('\\usepackage[]{color}', '\\usepackage[]{xcolor}', 
+			   x, fixed = TRUE) 
+}) 
 @ 
 \def\intersect{\tand}
 
@@ -252,7 +257,7 @@ else x
 <<child="03-CIs.Rnw">>=
 @
 
-<<child="04-HypothesisTests.Rnw", eval=FALSE>>=
+<<child="04-HypothesisTests.Rnw", eval=TRUE>>=
 @
 
 
