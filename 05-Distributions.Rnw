@@ -1,8 +1,35 @@
 \Sexpr{set_parent('Lock5withR')}
-
+\setcounter{chapter}{4}
 \Chapter{Approximating with a Distribution}
 
+\section{Density Curves}
 
+\subsection*{Example 5.1}
+<<>>=
+Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta)) 
+head(Bootstrap, 3)
+densityplot(~result, data=Bootstrap)
+favstats(~result, data=Bootstrap)
+plotnorm(mean=29.15, sd=.90, lower=30, upper=31)
+@
+
+<<>>=
+pnorm(30, 29.15, .90)
+1-pnorm(31, 29.15, .90)
+pnorm(31,29.15,.90) - pnorm(30,29.15,.90)
+@
+
+> xpnorm( c(30,31), 29.15, .9)
+> histogram(~result, data=Bootstrap)
+> histogram(~result, data=Bootstrap, fit=TRUE)
+> args(panel.xhistogram)
+> histogram(~result, data=Bootstrap, density=TRUE)
+> plotFun( x^2 ~x)
+> plotFun( dnorm(x,0,1) ~x)
+> plotFun( dnorm(x,0,1) ~x, x.lim=c(-4,4))
+> plotFun( dnorm(x,2,1) ~x, x.lim=c(-4,4), add=TRUE, col="red")
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 <<plotnorm,echo=FALSE>>=
 plotnorm <- function(
 		mean=0, sd=1,
