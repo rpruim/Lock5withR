@@ -122,7 +122,7 @@ Testing one proportion.
   \item
     $H_0$: $p = 0.5$;  $H_a$: $p > 0.5$
 	\item
-		Test statistic:  $\hat p = 0.5$ (the sample proportion) %check book again
+		Test statistic:  $\hat p = 0.8, 0.6, 0.4$ (the sample proportion of 8/10, 6/10, 4/10 heads)
 	\item
 		We simulate a world in which $p = 0.5$:
 
@@ -146,7 +146,7 @@ Testing one proportion.
   \item
     $H_0$: $p = 0.5$;  $H_a$: $p \neq 0.5$
   \item
-		Test statistic:  $\hat p = 0.8$ (the sample proportion)
+		Test statistic:  $\hat p = 0.8$ (the sample proportion of 8/10 heads)
 	\item
 		We simulate a world in which $p = 0.5$:
 <<Example4.20a>>=
@@ -213,7 +213,7 @@ dotPlot(~smile, width=.03, cex=.5, groups= (smile >=0.76), data=Randomization.Sm
 \section{Creating Randomization Distributions}
 
 In order to use these methods to estimate a p-value, we must be able to generate a randomization distribution.
-In the case of a test with null hypothesis claiming that a proportion has a particular value (e.g, $H_O$: $p=0.5$),
+In the case of a test with null hypothesis claiming that a proportion has a particular value (e.g, $H_0$: $p=0.5$),
 this is pretty easy.  If the population has proportion 0.50, we can simulate sampling from that proportion
 by flipping a fair coin.  If the proportion is some value other than 0.50, we simply flip a coin that has the appropriate
 probability of resulting in heads.  So the general template for creating such a randomization distribution is
@@ -227,19 +227,19 @@ In other situations, it can be more challenging to create a randomization distri
 does not directly specify all of the information needed to simulate samples.
 \begin{itemize}
 	\item
-		$H_O$: $p_1 = p_2$
+		$H_0$: $p_1 = p_2$
 
 		This would be simple \emph{if} we new the value of $p_1$ and $p_2$ (we could use \function{rflip()} twice, once
 		for each group), 
 	\item
-		$H_O$: $\mu = $ some number
+		$H_0$: $\mu = $ some number
 
 		Just knowing the mean does not tell us enough about the distribution.
 		We need to know about its shape.  (We might need to know the standard
 		deviation, for example, or whether the distribution is skewed.)
 
 	\item
-		$H_O$: $\mu_1 \neq \mu_2$ some number.
+		$H_0$: $\mu_1 \neq \mu_2$ some number.
 
 		Now we don't know the common mean and we don't know the things mentioned in the previous example either.
 
