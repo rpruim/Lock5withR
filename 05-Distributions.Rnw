@@ -104,11 +104,11 @@ Z-scores provide a second way to compute normal probabilities.
 \subsubsection*{Example 5.5}
 
 <<Example5.5, tidy=FALSE>>=
-(30 - 29.11) / 0.93              # z-score for 30 min
-(31 - 29.11) / 0.93              # z-score for 31 min
+z30 <- (30 - 29.11) / 0.93; z30  # z-score for 30 min
+z31 <- (31 - 29.11) / 0.93; z31  # z-score for 31 min
 xpnorm(c(30, 31), 29.11, 0.93)   # original normal distribution proportion between 30 and 31 min
-xpnorm(c(0.957, 2.032))          # standardized distribution proportion between 30 and 31 min
-pnorm(2.032) - pnorm(0.957)
+xpnorm(c(z30, z31))          # standardized distribution proportion between 30 and 31 min
+pnorm(z31) - pnorm(z30)
 @
 %how to highlight opposite tail of xpnorm?
 <<Example5.5b, tidy=FALSE>>=
@@ -121,10 +121,63 @@ pnorm(31, 29.11, 0.93, lower.tail=FALSE)
 \subsubsection*{Example 5.6}
 
 <<Example5.6>>=
-z <- qnorm(0.2)
+z <- qnorm(0.2); z
 75 + z * 10
 @
 
+
+\section{Confidence Intervals and P-values Using Normal Distributions}
+
+%\subsection*{Central Limit Theorem}
+\subsection*{Confidence Intervals Based on a Normal Distribution}
+
+%use z-scores instead?
+\subsubsection*{Example 5.7}
+<<Example5.7,opts.label="fig1",cache=TRUE,seed=1234>>=
+Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta)) 
+dotPlot(~result, data=Bootstrap, n=50)
+@
+
+<<Example5.7b>>=
+xqnorm(c(0.025, 0.975), 29.11, 0.915)   # 95% confidence interval for the normal distribution
+@
+
+<<Example5.7c>>=
+qnorm(0.005, 29.11, 0.915) # lower endpoint for 99% confidence interval
+qnorm(0.995, 29.11, 0.915) # upper endpoint for 99% confidence interval
+
+qnorm(0.05, 29.11, 0.915) # lower endpoint for 90% confidence interval
+qnorm(0.95, 29.11, 0.915) # upper endpoint for 90% confidence interval
+@
+
+\subsubsection*{Example 5.8}
+<<Example5.8>>=
+qnorm(0.005, 13.10, 0.20) # lower endpoint for 99% confidence interval
+qnorm(0.995, 13.10, 0.20) # upper endpoint for 99% confidence interval
+@
+
+\subsection*{P-values Based on a Normal Distribution}
+%redo simulation for a mean?
+\subsubsection*{Example 5.9}
+<<Example5.9, cache=TRUE, seed=1234>>=
+Randomization.Temp <- do(10000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 )
+histogram(~result, width=.025, data=Randomization.Temp)
+plotFun( dnorm(x,98.6,0.1066) ~x, add=TRUE)
+@
+<<Example5.9b>>=
+pnorm(98.26, 98.6, 0.1066)
+2 * pnorm(98.26, 98.6, 0.1066)
+@
+<<Example5.9c>>=
+z = (98.26 - 98.6) / 0.1066; z
+pnorm(z)
+2 * pnorm(z)
+@
+
+\subsubsection*{Example 5.10}
+<<Example5.10>>=
+pnorm(0.66, 0.65, 0.013, lower.tail=FALSE)
+@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \iffalse
 <<plotnorm,echo=FALSE>>=
