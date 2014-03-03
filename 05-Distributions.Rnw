@@ -1,35 +1,132 @@
-\Sexpr{set_parent('Lock5withR')}
+\Sexpr{set_parent('Lock5withR.Rnw')}
 \setcounter{chapter}{4}
 \Chapter{Approximating with a Distribution}
 
 \section{Density Curves}
 
-\subsection*{Example 5.1}
-<<>>=
+\subsubsection*{Example 5.1}
+<<Example5.1a, cache=TRUE, seed=1234>>=
 Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta)) 
 head(Bootstrap, 3)
+histogram(~result, density=TRUE, data=Bootstrap)
 densityplot(~result, data=Bootstrap)
-favstats(~result, data=Bootstrap)
-plotnorm(mean=29.15, sd=.90, lower=30, upper=31)
+@
+%help with mismatched numbers
+<<Example5.1b>>=
+prop( ~ (result <= 30), data=Bootstrap )                # proportion less than 30 min
+prop( ~ (result >= 31), data=Bootstrap )                # proportion greater than 31 min
+prop( ~ (result >= 30 & result <= 31), data=Bootstrap ) # proportion between 30 and 31 min
 @
 
-<<>>=
-pnorm(30, 29.15, .90)
-1-pnorm(31, 29.15, .90)
-pnorm(31,29.15,.90) - pnorm(30,29.15,.90)
+
+\subsection*{Normal Distribution}
+
+Normal distributions
+\begin{itemize}
+\item  are symmetric, unimodel, and bell-shaped
+\item can have any combination of mean and standard deviation (as long as the standard deviation is positive)
+\item satisfy the 68--95--99.7 rule:
+
+Approximately 68\% of any normal distribution lies within 1 standard deviation of the mean.
+
+Approximately 95\% of any normal distribution lies within 2 standard deviations of the mean.
+
+Approximately 99.7\% of any normal distribution lies within 3 standard deviations of the mean.
+\end{itemize}
+
+Many naturally occurring distributions are approximately normally distributed. Normal distributions are also an important part of statistical inference.
+
+\subsubsection*{Figure 5.5}
+
+<<Figure5.5a>>=
+plotFun( dnorm(x,0,1) ~x, x.lim=c(-5,6))
+plotFun( dnorm(x,2,1) ~x, add=TRUE, col="red")
 @
 
-> xpnorm( c(30,31), 29.15, .9)
-> histogram(~result, data=Bootstrap)
-> histogram(~result, data=Bootstrap, fit=TRUE)
-> args(panel.xhistogram)
-> histogram(~result, data=Bootstrap, density=TRUE)
-> plotFun( x^2 ~x)
-> plotFun( dnorm(x,0,1) ~x)
-> plotFun( dnorm(x,0,1) ~x, x.lim=c(-4,4))
-> plotFun( dnorm(x,2,1) ~x, x.lim=c(-4,4), add=TRUE, col="red")
+<<Figure5.5b>>=
+plotFun( dnorm(x,0,0.5) ~x, x.lim=c(-5,5))
+plotFun( dnorm(x,0,1) ~x, add=TRUE, col="red")
+plotFun( dnorm(x,0,2) ~x, add=TRUE, col="green")
+@
+
+\subsubsection*{Example 5.2}
+
+<<Example5.2, opts.label="fig3">>=
+plotFun( dnorm(x,75,10) ~x, x.lim=c(40,110))
+plotFun( dnorm(x,7.1,1.1) ~x, x.lim=c(2.7,11.5))
+plotFun( dnorm(x,0,0.02) ~x, x.lim=c(-.07,.07))
+@
+
+\subsection*{Finding Normal Probabilities and Percentiles}
+
+The two main functions we need for working with normal distributions are \function{pnorm} and \function{qnorm}.
+\function{pnorm} computes the proportion of a normal distribution below a specified value:
+
+
+\[
+\mbox{\texttt{pnorm(x,mean=$\mu$, sd=$\sigma$)}} = \Prob(X \le x)
+\]
+when $X \sim \Norm(\mu, \sigma)$.
+
+We can obtain arbitrary probabilities using \verb!pnorm()!
+
+\subsubsection*{Example 5.3}
+%Text in graph doesn't fit 
+<<Example5.3>>=
+pnorm(90, 75, 10, lower.tail=FALSE) # proportion of scores above 90
+xpnorm(90, 75, 10, lower.tail=FALSE)
+@
+The \function{xpnorm()} function gives a bit more verbose output and also gives you a picture. Notice the \argument{lower.tail=FALSE}. This is added because the default for \function{pnorm} and \function{xpnorm} finds the lower tail, not the upper tail. However, we can also subtract the proportion of the lower tail from 1 to find the the proportion of the upper tail.
+
+\subsubsection*{Example 5.4}
+
+\function{qnorm()} goes the other direction:  You provide the quantile (percentile expressed as a decimal) and \R\ gives you the value.
+
+<<Example5.4>>=
+xqnorm(0.2, 75, 10)  # 20th percentile in Norm(75, 10)
+qnorm(0.2, 75, 10)
+@
+
+\subsection*{Standard Normal N(0,1)}
+
+Because probabilities in a normal distribution depend only on the number of standard deviations above and below the mean,
+it is useful to define $Z$-scores (also called standardized scores) as follows:
+
+\[
+\mbox{$Z$-score} = \frac{ \mbox{value} - \mbox{mean} } { \mbox{standard deviation} }
+\]
+
+If we know the population mean and standard deviation, we can plug those in.  When we do not, we will use 
+the mean and standard deviation of a random sample as an estimate.
+
+Z-scores provide a second way to compute normal probabilities.
+
+\subsubsection*{Example 5.5}
+
+<<Example5.5, tidy=FALSE>>=
+(30 - 29.11) / 0.93              # z-score for 30 min
+(31 - 29.11) / 0.93              # z-score for 31 min
+xpnorm(c(30, 31), 29.11, 0.93)   # original normal distribution proportion between 30 and 31 min
+xpnorm(c(0.957, 2.032))          # standardized distribution proportion between 30 and 31 min
+pnorm(2.032) - pnorm(0.957)
+@
+%how to highlight opposite tail of xpnorm?
+<<Example5.5b, tidy=FALSE>>=
+xpnorm(0.957)                    # proportion with z-score below 0.957
+xpnorm(2.032, lower.tail=FALSE)  # proportion with z-score above 2.032
+pnorm(30, 29.11, 0.93)          
+pnorm(31, 29.11, 0.93, lower.tail=FALSE)
+@
+
+\subsubsection*{Example 5.6}
+
+<<Example5.6>>=
+z <- qnorm(0.2)
+75 + z * 10
+@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
 <<plotnorm,echo=FALSE>>=
 plotnorm <- function(
 		mean=0, sd=1,
@@ -187,3 +284,4 @@ pnorm (1.5)                # proportion with z-score below 1.5
 @
 
 
+\fi
