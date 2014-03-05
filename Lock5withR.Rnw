@@ -1,5 +1,6 @@
 
 \documentclass[twoside]{book}
+
 \usepackage[margin=.9in]{geometry}
 \usepackage{kpfonts}
 \usepackage{amsmath}
@@ -21,7 +22,6 @@
 \def\myindex#1{\index{#1}}
 
 %\usepackage{tikz}
-
 
 \usepackage{multicol}
 \usepackage{longtable}
@@ -261,7 +261,7 @@ knit_hooks$set(document = function(x) {
 @
 
 
-<<child="05-Distributions.Rnw", eval=FALSE>>=
+<<child="05-Distributions.Rnw", eval=TRUE>>=
 @
 
 <<child="06-InferenceMeansProportions.Rnw", eval=FALSE>>=
