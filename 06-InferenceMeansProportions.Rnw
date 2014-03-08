@@ -280,10 +280,37 @@ densityplot(~Alkalinity, data=FloridaLakes) # to check for normality
 
 <<Example6.18b>>=
 favstats(~Alkalinity, data=FloridaLakes)
-t.test(~Alkalinity, alternative = c("greater"), mu = 35, data = FloridaLakes)
+t.test(~Alkalinity, alternative = "greater", mu = 35, data = FloridaLakes)
 @
 Notice the "greater" for the alternative hypothesis.
 %should I add directions?
+
+\section{Distribution of Differences in Proportions}
+
+\subsubsection*{Example 6.19}
+
+<<Example6.19>>=
+OneTrueLove <- read.file( "OneTrueLove.csv" )
+head(OneTrueLove)
+tally(Response~Gender, format="count", margins=TRUE, data=OneTrueLove)
+prop(Response~Gender, data=OneTrueLove)
+diff(prop(Response~Gender, data=OneTrueLove))
+@
+
+\subsubsection*{Figure 6.20}
+<<Figure6.20, cache=TRUE>>=
+Boot.Love <- do(5000)*diff(prop(Response~Gender, data=resample(OneTrueLove)))
+head(Boot.Love, 3)
+histogram(~Agree.Male, data=Boot.Love)
+plotFun(dnorm(x, 0.050, 0.0176)~x, add=TRUE) # add normal distribution from Example 6.20
+@
+
+\subsubsection*{Example 6.20}
+<<Example6.20>>=
+SE <- sqrt(0.257*(1-0.257)/1412 + 0.307*(1-0.307)/1213); SE
+plotFun(dnorm(x, 0.050, 0.0176)~x, add=TRUE) # add normal distribution to histogram
+@
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -311,7 +338,7 @@ using the following standard error formula:
 \[
 SE = \sqrt{ \frac{ p (1-p) } {n} }
 \]
-Actually that's not quite right.  We could use this if we new $p$ (the population proportion), but we never will.
+Actually that's not quite right.  We could use this if we knew $p$ (the population proportion), but we never will.
 
 Instead, we will use one of these approximations:
 \begin{itemize}
