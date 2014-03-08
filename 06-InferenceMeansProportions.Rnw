@@ -135,7 +135,7 @@ prop( ~ (prop >= p.hat), data=Randomization)
 
 \subsection*{How Large a Sample Size is Needed?}
 \subsubsection*{Figure 6.6}
-<<Figure6.6,opts.label="fig3">>=
+<<Figure6.6,cache=TRUE,opts.label="fig3">>=
 n1 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 1))
 histogram(~result, data=n1)
 n5 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 5))
@@ -203,6 +203,59 @@ pnorm(1.5, lower.tail=FALSE)
 %how to fill in tails
 <<Example6.12c>>=
 plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
+@
+
+
+\section{Confidence Interval for a Mean Using the t-Distribution}
+
+\subsection*{Confidence Interval for a Mean Using the t-Distribution}
+
+\subsubsection*{Example 6.13}
+
+<<Example6.13a>>=
+head(Flight179, 3)
+dotPlot(~Flight179, cex = 0.25, data = Flight179) # to check distribution
+@
+\RStudio\ can do all of the calculations for you if you give it the raw data:
+<<Example6.13b>>=
+favstats(~Flight179, data = Flight179)
+t.test(~Flight179, data=Flight179)
+@
+You can also zoom in just the information you want:
+<<Example6.13c>>=
+confint(t.test(~Flight179, data=Flight179))
+@
+
+\subsubsection*{Example 6.14}
+
+<<Example6.14>>=
+head(CommuteAtlanta, 3)
+densityplot(~Time, data = CommuteAtlanta) # to check distribution
+@
+<<Example6.14b>>=
+favstats(~Time, data=CommuteAtlanta)
+confint(t.test(~Time, conf.level = 0.99, data=CommuteAtlanta))
+confint(t.test(~Time, conf.level = 0.95, data=CommuteAtlanta))
+@
+
+\subsubsection*{Example 6.15}
+
+<<Example6.15>>=
+head(ManhattanApartments, 3)
+dotPlot(~Rent, width=200, cex=.25,  data=ManhattanApartments) # to check distribution
+@
+<<Example6.15b, cache=TRUE>>=
+Boot.Rent <- do(1000) * mean( ~Rent, data=resample(ManhattanApartments)) 
+head(Boot.Rent, 3)
+favstats(~result, data=Boot.Rent)
+cdata(0.95, result, data=Boot.Rent)
+@
+
+\subsection*{Determining Sample Size for Estimating a Mean}
+
+\subsubsection*{Example 6.16}
+<<Example6.16>>=
+n <- (1.96 * 20.18 / 2) ^ 2; n
 @
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
