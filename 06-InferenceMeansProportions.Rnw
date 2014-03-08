@@ -258,6 +258,33 @@ cdata(0.95, result, data=Boot.Rent)
 n <- (1.96 * 20.18 / 2) ^ 2; n
 @
 
+\section{Test for a Single Mean}
+\subsubsection*{Example 6.17}
+<<Example6.17>>=
+head(BodyTemp50)
+dotPlot(~BodyTemp, cex = .15, width = .1, data = BodyTemp50) # to check for normality
+@
+
+<<Example6.17b>>=
+favstats(~BodyTemp, data = BodyTemp50)
+t.test(~BodyTemp, mu = 98.6, data = BodyTemp50)
+pval(t.test(~BodyTemp, mu = 98.6, data=BodyTemp50)) # to find the p-value directly
+@
+%how to graph t-distribution like xpnorm?
+
+\subsubsection*{Example 6.18}
+<<Example6.18>>=
+head(FloridaLakes, 3)
+densityplot(~Alkalinity, data=FloridaLakes) # to check for normality
+@
+
+<<Example6.18b>>=
+favstats(~Alkalinity, data=FloridaLakes)
+t.test(~Alkalinity, alternative = c("greater"), mu = 35, data = FloridaLakes)
+@
+Notice the "greater" for the alternative hypothesis.
+%should I add directions?
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \iffalse
