@@ -127,6 +127,83 @@ head(Randomization, 3)
 prop( ~ (prop >= p.hat), data=Randomization)
 @
 
+\section*{Distribution of a Sample Mean}
+
+\subsection*{Computing the Standard Error}
+%Include figure 6.5?
+%Example 6.10
+
+\subsection*{How Large a Sample Size is Needed?}
+\subsubsection*{Figure 6.6}
+<<Figure6.6,opts.label="fig3">>=
+n1 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 1))
+histogram(~result, data=n1)
+n5 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 5))
+histogram(~result, data=n5)
+n15 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 15))
+histogram(~result, data=n15)
+n30 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 30))
+histogram(~result, data=n30)
+n125 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 125))
+histogram(~result, data=n125)
+n500 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 500))
+histogram(~result, data=n500)
+@
+\subsection*{The t-Distribution}
+
+If we are working with one quantitative variable, we can compute confidence intervals and p-values
+using the following standard error formula:
+\[
+SE = \frac{\sigma}{ \sqrt{n}} 
+\]
+Once again, there is a small problem: we won't know $\sigma$.  So we will estimate $\sigma$ using our data:
+\[
+\displaystyle SE \approx \frac{s}{\sqrt{n}}
+\]
+Unfortunately, the distribution of 
+\[
+\frac{\mean x - \mu}{ s/\sqrt{n}}
+\]
+does not have a normal distribution.  Instead the distribution is a bit ``shorter and fatter" than the normal
+distribution.  The correct distribution is called the t-distribution with $n-1$ degrees of freedom. 
+All t-distributions are symmetric and centered at zero.  The smaller the degrees of freedom, the shorter and fatter 
+the t-distribution.
+
+\subsubsection*{Example 6.11}
+
+<<Example6.11a>>=
+df <- 50 - 1; df
+SE <- 10.5 / sqrt (50); SE
+@
+<<Example6.11b>>=
+df <- 8 - 1; df
+SE <- 1.25 / sqrt (8); SE
+@
+%Include figure 6.7?
+
+\subsubsection*{Figure 6.8}
+<<Figure6.8>>=
+plotFun(dnorm(x, 0, 1) ~x, x.lim=c(-4, 4))
+plotFun(dt(x, df=15) ~x, add=TRUE, lty=2)
+plotFun(dt(x, df=5) ~x, add=TRUE, lty=3, col="red")
+@
+
+\subsubsection*{Example 6.12}
+
+<<Example6.12a>>=
+qt(.975, df=15)
+pt(1.5, df=15, lower.tail=FALSE)
+@
+Similar to the normal distribution, the function for t-distribution is set to find probability of the lower tail.
+
+<<Example6.12b>>=
+qnorm(.975)
+pnorm(1.5, lower.tail=FALSE)
+@
+%how to fill in tails
+<<Example6.12c>>=
+plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
+@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
