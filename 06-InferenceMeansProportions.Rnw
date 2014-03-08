@@ -1,8 +1,49 @@
-\Sexpr{set_parent('Lock5withR')}
+\Sexpr{set_parent('Lock5withR.Rnw')}
+\setcounter{chapter}{5}
+
+\Chapter{Inference for Means and Proportions}
+
+\section{Distribution of a Sample Proportion}
+
+When sampling distributions, bootstrap distributions, and randomization distributions are well approximated
+by normal distributions, and when we have a way of computing the standard error, we can use normal distributions
+to compute confidence intervals and p-values using the following general templates:
+
+\begin{itemize} 
+  \item confidence interval: 
+		\[ 
+		\mbox{statistic} \pm \mbox{critical value} \cdot  SE 
+		\]
+
+	\item hypothesis testing: 
+		\[ 
+		\mbox{test statistic} = \frac{ \mbox{statistic} - \mbox{null parameter}} { SE } 
+		\]
+\end{itemize} 
+
+%Include figure 6.1?
+
+%Example 6.1
+
+\subsection*{How Large a Sample Size is Needed?}
+
+%Include figure 6.2?
+
+\subsubsection*{Example 6.2}
+
+<<Example6.2, tidy=FALSE>>=
+p.hat <- 0.80; p.hat
+p.hat * 400               # check >= 10
+(1 - p.hat) * 400         # check >= 10
+SE <- sqrt( .80 * .20 / 400 ); SE
+plotFun(dnorm(x,0.80,0.02) ~ x, x.lim = c(0.72, 0.88))
+@
 
 
-\Chapter{Inference with Normal Distributions}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\iffalse
 When sampling distributions, bootstrap distributions, and randomization distributions are well approximated
 by normal distributions, and when we have a way of computing the standard error, we can use normal distributions
 to compute confidence intervals and p-values using the following general templates:
@@ -451,3 +492,4 @@ Tim Hesterberg (a statistician at Google) has argued that (1) this rule of thumb
 sample sizes, we really need to be convinced (for reasons other than our data) that the population should be 
 expected to be approximately normally distributed.
 
+\fi
