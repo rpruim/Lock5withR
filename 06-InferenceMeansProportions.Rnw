@@ -40,6 +40,51 @@ plotFun(dnorm(x,0.80,0.02) ~ x, x.lim = c(0.72, 0.88))
 @
 
 
+\section{Confidence Interval for a Single Proportion}
+
+\subsection*{Confidence Interval for a Single Proportion}
+
+\subsubsection*{Example 6.3}
+<<Example6.3, tidy=FALSE>>=
+p.hat <- 52/100; p.hat            
+SE <- sqrt( p.hat * (1 - p.hat) / 100 ); SE    # est. SE
+p.hat - 1.96 * SE                              # lower end of CI 
+p.hat + 1.96 * SE                              # upper end of CI
+@
+
+\subsubsection*{Example 6.4}
+
+<<Example6.4a, tidy=FALSE>>=
+p.hat <- 0.28; p.hat            
+SE <- sqrt( p.hat * (1 - p.hat) / 800 ); SE    # est. SE
+p.hat - 1.96 * SE                              # lower end of CI 
+p.hat + 1.96 * SE                              # upper end of CI
+@
+
+<<Example6.4b, tidy=FALSE>>=
+p.hat <- 0.82; p.hat            
+SE <- sqrt( p.hat * (1 - p.hat) / 800 ); SE    # est. SE
+p.hat - 1.96 * SE                              # lower end of CI 
+p.hat + 1.96 * SE                              # upper end of CI
+@
+
+\subsection*{Determining Sample Size for Estimating a Proportion}
+
+\subsubsection*{Example 6.5}
+
+<<Example6.5>>=
+z.star <- qnorm( 0.995 ); z.star               # critical value for 99% confidence
+p.hat <- 0.28; p.hat                          
+n <- ((z.star / 0.01)^2) * p.hat * (1 - p.hat); n                          
+@
+
+\subsubsection*{Example 6.6}
+
+<<Example6.5>>=
+z.star <- qnorm( 0.975 ); z.star               # critical value for 95% confidence
+p.hat <- 0.5; p.hat                          
+n <- ((z.star / 0.03)^2) * p.hat * (1 - p.hat); n                          
+@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
