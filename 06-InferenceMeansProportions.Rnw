@@ -80,11 +80,53 @@ n <- ((z.star / 0.01)^2) * p.hat * (1 - p.hat); n
 
 \subsubsection*{Example 6.6}
 
-<<Example6.5>>=
+<<Example6.6>>=
 z.star <- qnorm( 0.975 ); z.star               # critical value for 95% confidence
 p.hat <- 0.5; p.hat                          
 n <- ((z.star / 0.03)^2) * p.hat * (1 - p.hat); n                          
 @
+
+
+\section{Test for a Single Proportion}
+
+\subsubsection*{Example 6.7}
+
+<<Example6.7>>=
+p.hat <- 0.19; p.hat
+p <- 0.20; p
+SE <- sqrt(p * (1 - p) / 1013); SE
+z <- (p.hat - p) / SE; z
+pnorm(z)
+@
+
+\subsubsection*{Example 6.8}
+%book and Pruim approximation method different
+<<Example6.8, tidy=FALSE>>=
+p.hat <- 66/119; p.hat
+p <- 1/3; p
+p * 119                   # check >= 10
+(1 - p) * 119             # check >= 10
+SE <- sqrt(p * (1 - p) / 119); SE
+z <- (p.hat - p) / SE; z
+pnorm(z)                  # large side (rounded)
+1 - pnorm(z)              # small side (less rounding)
+2 * (1 - pnorm(z))        # p-value = 2 * small side
+@
+
+\subsubsection*{Example 6.9}
+
+<<Example6.9a>>=
+p.hat <- 8/9; p.hat
+p <- 0.5; p
+p * 9                   # check >= 10
+@
+
+<<Example6.9b, cache=TRUE>>=
+Randomization <- do(1000) * rflip(9, 0.5)
+head(Randomization, 3)
+prop( ~ (prop >= p.hat), data=Randomization)
+@
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
