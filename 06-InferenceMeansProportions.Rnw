@@ -312,6 +312,23 @@ plotFun(dnorm(x, 0.050, 0.0176)~x, add=TRUE) # add normal distribution to histog
 @
 
 
+\section{Confidence Interval for a Difference in Proportions}
+
+\subsubsection*{Example 6.21}
+%z.star is a little different from book
+<<Example6.21>>=
+p1 <- 158/444
+p2 <- 109/922
+diff <- (p1 - p2); diff
+z.star <- qnorm(0.95); z.star
+SE <- sqrt(p1*(1-p1)/444 + p2*(1-p2)/922)
+diff - z.star * SE         # lower end of CI 
+diff + z.star * SE         # upper end of CI
+@
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \iffalse
