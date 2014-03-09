@@ -21,8 +21,6 @@ to compute confidence intervals and p-values using the following general templat
 		\]
 \end{itemize} 
 
-%Include figure 6.1?
-
 %Example 6.1
 
 \subsection*{How Large a Sample Size is Needed?}
@@ -50,6 +48,7 @@ p.hat <- 52/100; p.hat
 SE <- sqrt( p.hat * (1 - p.hat) / 100 ); SE    # est. SE
 p.hat - 1.96 * SE                              # lower end of CI 
 p.hat + 1.96 * SE                              # upper end of CI
+confint(prop.test(52, 100, correct=FALSE))
 @
 
 \subsubsection*{Example 6.4}
@@ -59,6 +58,7 @@ p.hat <- 0.28; p.hat
 SE <- sqrt( p.hat * (1 - p.hat) / 800 ); SE    # est. SE
 p.hat - 1.96 * SE                              # lower end of CI 
 p.hat + 1.96 * SE                              # upper end of CI
+confint(prop.test(224, 800))                   # 224 = 0.28 * 800
 @
 
 <<Example6.4b, tidy=FALSE>>=
@@ -66,6 +66,7 @@ p.hat <- 0.82; p.hat
 SE <- sqrt( p.hat * (1 - p.hat) / 800 ); SE    # est. SE
 p.hat - 1.96 * SE                              # lower end of CI 
 p.hat + 1.96 * SE                              # upper end of CI
+confint(prop.test(656, 800))                   # 656 = 0.82 * 800
 @
 
 \subsection*{Determining Sample Size for Estimating a Proportion}
@@ -97,7 +98,9 @@ p <- 0.20; p
 SE <- sqrt(p * (1 - p) / 1013); SE
 z <- (p.hat - p) / SE; z
 pnorm(z)
+prop.test(192, 1013, alt = "less", p=0.20) # 192 = 0.19 * 1013
 @
+Notice the "less" for the alternative hypothesis.
 
 \subsubsection*{Example 6.8}
 %book and Pruim approximation method different
@@ -111,6 +114,7 @@ z <- (p.hat - p) / SE; z
 pnorm(z)                  # large side (rounded)
 1 - pnorm(z)              # small side (less rounding)
 2 * (1 - pnorm(z))        # p-value = 2 * small side
+prop.test(66, 119, p=1/3)
 @
 
 \subsubsection*{Example 6.9}
@@ -130,7 +134,7 @@ prop( ~ (prop >= p.hat), data=Randomization)
 \section*{Distribution of a Sample Mean}
 
 \subsection*{Computing the Standard Error}
-%Include figure 6.5?
+
 %Example 6.10
 
 \subsection*{How Large a Sample Size is Needed?}
@@ -179,7 +183,6 @@ SE <- 10.5 / sqrt (50); SE
 df <- 8 - 1; df
 SE <- 1.25 / sqrt (8); SE
 @
-%Include figure 6.7?
 
 \subsubsection*{Figure 6.8}
 <<Figure6.8>>=
@@ -280,7 +283,7 @@ densityplot(~Alkalinity, data=FloridaLakes) # to check for normality
 
 <<Example6.18b>>=
 favstats(~Alkalinity, data=FloridaLakes)
-t.test(~Alkalinity, alternative = "greater", mu = 35, data = FloridaLakes)
+t.test(~Alkalinity, alt = "greater", mu = 35, data = FloridaLakes)
 @
 Notice the "greater" for the alternative hypothesis.
 %should I add directions?
@@ -308,7 +311,6 @@ plotFun(dnorm(x, 0.050, 0.0176)~x, add=TRUE) # add normal distribution from Exam
 \subsubsection*{Example 6.20}
 <<Example6.20>>=
 SE <- sqrt(0.257*(1-0.257)/1412 + 0.307*(1-0.307)/1213); SE
-plotFun(dnorm(x, 0.050, 0.0176)~x, add=TRUE) # add normal distribution to histogram
 @
 
 
@@ -325,8 +327,109 @@ SE <- sqrt(p1*(1-p1)/444 + p2*(1-p2)/922)
 diff - z.star * SE         # lower end of CI 
 diff + z.star * SE         # upper end of CI
 @
+%Is there a test for the a difference in props without raw data?
+
+\section{Test For a Difference in Proportions}
+
+<<Data6.4, tidy=FALSE>>=
+SplitSteal <- rbind( 
+  do(187) * data.frame( agegroup = "Under40",     decision="Split"),
+  do(195) * data.frame( agegroup = "Under40",     decision="Steal"),
+  do(116) * data.frame( agegroup = "Over40",     decision="Split"),
+  do(76)  * data.frame( agegroup = "Over40",     decision="Steal")
+  )
+@
+
+\subsubsection*{Example 6.22}
+
+<<Example6.22>>=
+prop(decision~agegroup, data=SplitSteal) # sample prop within each group
+prop(~decision, data=SplitSteal) # pooled proportion
+@
+
+\subsubsection*{Example 6.23}
+
+<<Example6.23>>=
+diff <- diff(prop(decision~agegroup, data=SplitSteal)); diff
+prop.test(decision~agegroup, correct=FALSE, data=SplitSteal)
+@
+
+\section{Distribution of Differences in Means}
+
+\subsection*{The t-Distribution}
+
+\subsubsection*{Figure 6.21}
+
+<<Figure6.21, cache=TRUE>>=
+BootE <- do(1000) * diff(mean(Exercise~Gender, data=resample(ExerciseHours)))
+head(BootE, 3)
+histogram(~M, data=BootE)
+plotFun(dnorm(x, 3.0, 2.39)~x, add=TRUE) # add normal distribution from Example 6.24
+@
+
+<<Figure6.21b, cache=TRUE>>=
+Random.Smiles <- do(1000) * diff(mean(Leniency ~ shuffle(Group), data = Smiles))
+head(Random.Smiles, 3)
+histogram(~smile, data=Random.Smiles)
+plotFun(dnorm(x, 0, 0.39)~x, add=TRUE) # add normal distribution from Example 6.24
+@
+
+\subsubsection*{Example 6.24}
+
+<<Example6.24>>=
+favstats(Exercise~Gender, data=ExerciseHours)
+SE <- sqrt(8.80^2/20 + 7.41^2/30); SE
+favstats(Leniency~Group, data=Smiles)
+SE <- sqrt(1.68^2/34 + 1.52^2/34); SE
+@
 
 
+\section{Confidence Interval for a Difference in Means}
+
+\subsubsection*{Example 6.26}
+
+<<Example6.26>>=
+head(CommuteStLouis)
+favstats(~Time, data=CommuteStLouis)
+favstats(~Time, data=CommuteAtlanta)
+@
+%how to do test for difference in means for different datasets?
+
+\section{Test for a Difference in Means}
+
+\subsubsection*{Example 6.27}
+
+<<Example6.27>>=
+head(Smiles, 3)
+bwplot(Group~Leniency, data=Smiles) # to check for normality
+t.test(Leniency~Group, alt="less", data=Smiles)
+@
+
+\section{Paired Difference in Means}
+
+\subsubsection*{Example 6.28}
+
+<<Example6.28>>=
+head(Wetsuits, 3)
+@
+
+\subsubsection*{Example 6.29}
+
+<<Example6.29>>=
+t.test(Wetsuit, NoWetsuit, paired=TRUE, data=Wetsuits)
+@
+
+\subsubsection*{Example 6.29}
+
+%<<Example6.29>>=
+
+%@
+
+\subsubsection*{Example 6.30}
+
+%<<Example6.30>>=
+
+%@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
