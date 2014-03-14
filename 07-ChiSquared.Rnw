@@ -1,4 +1,89 @@
-\Chapter{Chi-Squared Tests}
+\Sexpr{set_parent('Lock5withR.Rnw')}
+\setcounter{chapter}{6}
+
+\Chapter{Chi-Squared Tests for Categorical Variables}
+
+\section{Testing Goodness-of-Fit for a Single Categorical Variable}
+
+\subsubsection*{Example 7.1}
+
+<<Example7.1>>=
+tally(~Answer, format="proportion", data=APMultipleChoice)
+@
+
+%\subsection*{Null and Alternative Hypotheses}
+%Example 7.2
+
+%\subsection*{Expected Counts}
+%Example 7.3
+%Example 7.4
+
+\subsection*{Chi-square Statistic}
+
+\begin{boxedText}
+The \term{Chi-squared test statistic}:
+\[
+\chi^2 = \sum \frac{(\mbox{observed} - \mbox{expected})^2 }{ \mbox{expected} }
+\]
+There is one term in this sum \emph{for each cell in our data table}, and
+
+\begin{itemize}
+\item observed $=$ the tally in that cell (a count from our raw data)
+\item expected $=$ the number we would ``expect" if the percentages 
+followed our null hypothesis exactly.  (Note: the expected counts might
+not be whole numbers.)
+\end{itemize}
+\end{boxedText}
+
+\subsubsection*{Example 7.5}
+
+<<Example7.5>>=
+chisq <- (85-80)^2/80 + (90-80)^2/80 + (79-80)^2/80 + (78-80)^2/80 + (68-80)^2/80; chisq
+@
+
+%\subsubsection*{Figure 7.1}
+
+%\subsubsection*{Figure 7.2}
+
+%\subsubsection*{Figure 7.3}
+
+\subsubsection*{Example 7.6}
+
+<<Example7.6>>=
+jury <- c( 780, 117, 114, 384, 58)
+chisq.test( jury, p=c(.54, .18, .12, .15, .01) )
+xchisq.test( jury, p=c(.54, .18, .12, .15, .01) ) # for expected counts
+@
+
+Things to notice:
+\begin{itemize}
+\item
+\verb!jury <- c( 780, 117, 114, 384, 58)! is the way to enter this kind of data
+by hand. 
+\item
+This time we need to tell \R\ what the null hypothesis is.  That's what
+\verb! p=c(.54, .18, .12, .15, .01)! is for.
+\end{itemize}
+
+%Example 7.7
+\subsection*{Goodness-of-Fit for Two Categories}
+
+When there are only two categories, the Chi-squared goodeness of fit test is equivalent
+to the 1-proportion test.
+So we can redo our rock-paper-scissors example using the Chi-squared test.
+Notice that \function{prop.test()} uses the count in one category and total but 
+that \function{chisq.test()} uses cell counts.
+
+\subsubsection*{Example 7.8}
+
+<<Example7.8>>=
+prop.test(84, 200, correct=FALSE)
+chisq.test(c(84, 116), p=c(.5, .5))
+@
+
+
+\iffalse
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Goodness of Fit Testing for Simple Hypotheses}
 
 Goodness of fit tests test how well a distribution fits some hypothesis.
@@ -615,3 +700,4 @@ fisher.test(playTable)
 prop.test(play ~ playVer, data=survey2)
 @
 
+\fi
