@@ -48,8 +48,10 @@ p.hat <- 52/100; p.hat
 SE <- sqrt( p.hat * (1 - p.hat) / 100 ); SE    # est. SE
 p.hat - 1.96 * SE                              # lower end of CI 
 p.hat + 1.96 * SE                              # upper end of CI
-confint(prop.test(52, 100, correct=FALSE))
+confint(prop.test(52, 100))
 @
+
+%confint(prop.test(52, 100, correct=FALSE))?
 
 \subsubsection*{Example 6.4}
 
@@ -131,13 +133,14 @@ head(Randomization, 3)
 prop( ~ (prop >= p.hat), data=Randomization)
 @
 
-\section*{Distribution of a Sample Mean}
+\section{Distribution of a Sample Mean}
 
-\subsection*{Computing the Standard Error}
+%\subsection*{Computing the Standard Error}
 
 %Example 6.10
 
 \subsection*{How Large a Sample Size is Needed?}
+
 \subsubsection*{Figure 6.6}
 <<Figure6.6,cache=TRUE,opts.label="fig3">>=
 n1 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 1))
@@ -153,6 +156,7 @@ histogram(~result, data=n125)
 n500 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 500))
 histogram(~result, data=n500)
 @
+
 \subsection*{The t-Distribution}
 
 If we are working with one quantitative variable, we can compute confidence intervals and p-values
@@ -204,8 +208,10 @@ qnorm(.975)
 pnorm(1.5, lower.tail=FALSE)
 @
 %how to fill in tails
-<<Example6.12c>>=
+<<Example6.12c, fig.keep='last'>>=
 plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
+plotDist("t", params=list(df=15), type="h", groups= x > 2.131)
+ladd(grid.text("you can add text like this",2.1,.1, default.units="native", hjust=0))
 @
 
 
@@ -319,24 +325,20 @@ SE <- sqrt(0.257*(1-0.257)/1412 + 0.307*(1-0.307)/1213); SE
 \subsubsection*{Example 6.21}
 %z.star is a little different from book
 <<Example6.21>>=
-p1 <- 158/444
-p2 <- 109/922
-diff <- (p1 - p2); diff
-z.star <- qnorm(0.95); z.star
-SE <- sqrt(p1*(1-p1)/444 + p2*(1-p2)/922)
-diff - z.star * SE         # lower end of CI 
-diff + z.star * SE         # upper end of CI
+success <- c(158, 109) 
+n <- c(444,922) 
+prop.test(success, n)
 @
-%Is there a test for the a difference in props without raw data?
+%check again
 
 \section{Test For a Difference in Proportions}
 
 <<Data6.4, tidy=FALSE>>=
 SplitSteal <- rbind( 
-  do(187) * data.frame( agegroup = "Under40",     decision="Split"),
-  do(195) * data.frame( agegroup = "Under40",     decision="Steal"),
-  do(116) * data.frame( agegroup = "Over40",     decision="Split"),
-  do(76)  * data.frame( agegroup = "Over40",     decision="Steal")
+  do(187) * data.frame( agegroup = "Under40",   decision="Split"),
+  do(195) * data.frame( agegroup = "Under40",   decision="Steal"),
+  do(116) * data.frame( agegroup = "Over40",    decision="Split"),
+  do(76)  * data.frame( agegroup = "Over40",    decision="Steal")
   )
 @
 
@@ -356,23 +358,23 @@ prop.test(decision~agegroup, correct=FALSE, data=SplitSteal)
 
 \section{Distribution of Differences in Means}
 
-\subsection*{The t-Distribution}
-
 \subsubsection*{Figure 6.21}
 
 <<Figure6.21, cache=TRUE>>=
 BootE <- do(1000) * diff(mean(Exercise~Gender, data=resample(ExerciseHours)))
 head(BootE, 3)
-histogram(~M, data=BootE)
+histogram(~M, width=0.5, data=BootE)
 plotFun(dnorm(x, 3.0, 2.39)~x, add=TRUE) # add normal distribution from Example 6.24
 @
 
 <<Figure6.21b, cache=TRUE>>=
 Random.Smiles <- do(1000) * diff(mean(Leniency ~ shuffle(Group), data = Smiles))
 head(Random.Smiles, 3)
-histogram(~smile, data=Random.Smiles)
+histogram(~smile, n=24, data=Random.Smiles)
 plotFun(dnorm(x, 0, 0.39)~x, add=TRUE) # add normal distribution from Example 6.24
 @
+
+\subsection*{The t-Distribution}
 
 \subsubsection*{Example 6.24}
 
@@ -392,8 +394,10 @@ SE <- sqrt(1.68^2/34 + 1.52^2/34); SE
 head(CommuteStLouis)
 favstats(~Time, data=CommuteStLouis)
 favstats(~Time, data=CommuteAtlanta)
+confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time))
+confint(t.test( ~(CommuteAtlanta$Time - CommuteStLouis$Time)))
 @
-%how to do test for difference in means for different datasets?
+authNote{This may not be correct-- difference in means in different datasets, paired=TRUE?}
 
 \section{Test for a Difference in Means}
 
@@ -411,28 +415,26 @@ t.test(Leniency~Group, alt="less", data=Smiles)
 
 <<Example6.28>>=
 head(Wetsuits, 3)
+t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit)
 @
 
 \subsubsection*{Example 6.29}
 
 <<Example6.29>>=
-t.test(Wetsuit, NoWetsuit, paired=TRUE, data=Wetsuits)
+head(Wetsuits, 3)
+t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired=TRUE)
 @
-
-\subsubsection*{Example 6.29}
-
-%<<Example6.29>>=
-
-%@
 
 \subsubsection*{Example 6.30}
 
-%<<Example6.30>>=
+<<Example6.30>>=
+confint(t.test( ~(Wetsuit - NoWetsuit), data=Wetsuits ))
+@
 
-%@
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \iffalse
 When sampling distributions, bootstrap distributions, and randomization distributions are well approximated

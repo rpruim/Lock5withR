@@ -3,6 +3,8 @@
 
 \Chapter{Chi-Squared Tests for Categorical Variables}
 
+Goodness of fit tests test how well a distribution fits some hypothesis.
+
 \section{Testing Goodness-of-Fit for a Single Categorical Variable}
 
 \subsubsection*{Example 7.1}
@@ -30,15 +32,18 @@ There is one term in this sum \emph{for each cell in our data table}, and
 \begin{itemize}
 \item observed $=$ the tally in that cell (a count from our raw data)
 \item expected $=$ the number we would ``expect" if the percentages 
-followed our null hypothesis exactly.  (Note: the expected counts might
-not be whole numbers.)
+followed our null hypothesis exactly.  (Note: the expected counts might not be whole numbers.)
 \end{itemize}
 \end{boxedText}
 
 \subsubsection*{Example 7.5}
 
+You could calculate the chi-square statistic manually but of course, \R\ can automate this whole process for us if we provide the data table and the null hypothesis. Notice that to use \function{chisq.test}, you must enter the data like \verb!answer <- c( 85, 90, 79, 78, 68)!. The default null hypothesis is that all the probabilities are equal.
+
 <<Example7.5>>=
-chisq <- (85-80)^2/80 + (90-80)^2/80 + (79-80)^2/80 + (78-80)^2/80 + (68-80)^2/80; chisq
+head(APMultipleChoice)
+answer <- c( 85, 90, 79, 78, 68)
+chisq.test(answer)
 @
 
 %\subsubsection*{Figure 7.1}
@@ -47,32 +52,40 @@ chisq <- (85-80)^2/80 + (90-80)^2/80 + (79-80)^2/80 + (78-80)^2/80 + (68-80)^2/8
 
 %\subsubsection*{Figure 7.3}
 
+\subsection*{Chi-square Distribution}
+
+Our test statistic will be large when the observed counts and expected counts are quite different.  It will be small when the observed counts and expected counts are quite close.  So we will reject when the test statistic is large. To know how large is large enough, we need to know the sampling distribution.
+
+\begin{boxedText}
+If $H_0$ is true and the sample is large enough, then the sampling distribution for the Chi-squared test statistic will be approximately a Chi-squared distribution.  
+\smallskip
+\begin{itemize}
+\item
+The \term{degrees of freedom} for this type of goodness of fit test is one less than the number of cells.
+\item
+The approximation gets better and better as the sample size gets larger.
+\end{itemize}
+\end{boxedText}
+
+The mean of a Chi-squared distribution is equal to its degrees of freedom. This can help us get a rough idea about whether our test statistic is unusually large or not.
+
 \subsubsection*{Example 7.6}
 
 <<Example7.6>>=
 jury <- c( 780, 117, 114, 384, 58)
 chisq.test( jury, p=c(.54, .18, .12, .15, .01) )
-xchisq.test( jury, p=c(.54, .18, .12, .15, .01) ) # for expected counts
+xchisq.test( jury, p=c(.54, .18, .12, .15, .01) ) # to list expected counts
 @
 
-Things to notice:
-\begin{itemize}
-\item
-\verb!jury <- c( 780, 117, 114, 384, 58)! is the way to enter this kind of data
-by hand. 
-\item
-This time we need to tell \R\ what the null hypothesis is.  That's what
-\verb! p=c(.54, .18, .12, .15, .01)! is for.
-\end{itemize}
+Notice in this example, we need to tell \R\ what the null hypothesis is.
+
+How unusual is it to get a test statistic at least as large as 
+ours? We compare to a Chi-squared distribution with 4 degrees of freedom. The mean value of such a statistic is 4, and our test statistic is much larger, so we anticipate that our value is extremely unusual.  
 
 %Example 7.7
 \subsection*{Goodness-of-Fit for Two Categories}
 
-When there are only two categories, the Chi-squared goodeness of fit test is equivalent
-to the 1-proportion test.
-So we can redo our rock-paper-scissors example using the Chi-squared test.
-Notice that \function{prop.test()} uses the count in one category and total but 
-that \function{chisq.test()} uses cell counts.
+When there are only two categories, the Chi-squared goodeness of fit test is equivalent to the 1-proportion test. Notice that \function{prop.test()} uses the count in one category and total but that \function{chisq.test()} uses cell counts.
 
 \subsubsection*{Example 7.8}
 
