@@ -92,11 +92,79 @@ When there are only two categories, the Chi-squared goodeness of fit test is equ
 <<Example7.8>>=
 prop.test(84, 200, correct=FALSE)
 chisq.test(c(84, 116), p=c(.5, .5))
+binom.test(84, 200)
 @
+
+Although all three tests test the same hypotheses and give similar p-values (in this
+example), the binomial test is generally used because
+\begin{itemize}
+\item
+The binomial test is exact for all sample sizes while the Chi-squared test and 1-proportion test
+are only approximate, and the approximation is poor when sample sizes are small.
+\item
+  The binomial test and 1-proportion test also produce confidence intervals.
+\end{itemize}
+
+\section{Testing for an Association Between Two Categorical Variables}
+
+\subsubsection*{Example 7.9}
+
+<<Example7.9>>=
+OneTrueLove <- read.file( "OneTrueLove.csv" )
+tally(~Response, format="proportion", data=OneTrueLove)
+tally(~ Response + Gender, format="proportion", margin=TRUE, data=OneTrueLove)
+@
+
+%\subsection*{Null and Alternative Hypothesis}
+%\subsection*{Expected Counts for a Two-Way Table}
+\subsection*{Chi-square Test for Association}
+
+\subsubsection*{Example 7.10}
+
+<<Example7.10>>=
+head(WaterTaste, 3)
+water <- tally(~UsuallyDrink + First, data=WaterTaste); water
+
+water <- rbind( c(14,15,8,4), c(11,26,16,6) ) # to combine Tap and Filtered
+water
+colnames(water) <- c('Aquafina', 'Fiji', 'SamsChoice', 'Tap') # add column names
+rownames(water) <- c('Bottled', 'Tap/Filtered') # add row names
+water
+xchisq.test(water)
+@
+
+\subsection*{Special Case for a 2 x 2 Table}
+
+There is also an exact test that works only in the case of a $2\times2$ table (much like the binomial test can be used instead of a goodness of fit test if there are only two categories).  The test is called \term{Fisher's Exact Test}.
+
+In this case we see that the simulated p-value from the Chi-squared Test is nearly the same as the exact p-value from Fisher's Exact Test.  This is because Fisher's test is using mathematical formulas to compute probabilities of \emph{all} randomizations -- it is essentially the same as doing infinitely many randomizations!  
+
+Note: For a $2\times2$ table, we could also use the method of 2-proportions (\function{prop.test()}, manual resampling, or formula-based).  The approximations based on the normal distribution will be poor in the same situations where the Chi-squared test gives a poor approximation.
+
+\subsubsection*{Example 7.11}
+<<Example7.11>>=
+SplitStealTable <- rbind( c(187,195), c(116,76) ); SplitStealTable
+colnames(SplitStealTable) <- c('Split', 'Steal')
+rownames(SplitStealTable) <- c('Younger', 'Older'); SplitStealTable
+fisher.test(SplitStealTable)
+xchisq.test(SplitStealTable)
+@
+
+<<Example7.11b, tidy=FALSE>>=
+SplitStealData <- rbind( 
+  do(187) * data.frame( agegroup = "Under40",   decision="Split"),
+  do(195) * data.frame( agegroup = "Under40",   decision="Steal"),
+  do(116) * data.frame( agegroup = "Over40",    decision="Split"),
+  do(76)  * data.frame( agegroup = "Over40",    decision="Steal")
+  )
+prop.test(decision ~ agegroup, data = SplitStealData)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \iffalse
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Goodness of Fit Testing for Simple Hypotheses}
 
 Goodness of fit tests test how well a distribution fits some hypothesis.
