@@ -189,7 +189,7 @@ SE <- 1.25 / sqrt (8); SE
 @
 
 \subsubsection*{Figure 6.8}
-<<Figure6.8>>=
+<<Figure6.8, fig.keep='last'>>=
 plotFun(dnorm(x, 0, 1) ~x, x.lim=c(-4, 4))
 plotFun(dt(x, df=15) ~x, add=TRUE, lty=2)
 plotFun(dt(x, df=5) ~x, add=TRUE, lty=3, col="red")
@@ -208,7 +208,7 @@ qnorm(.975)
 pnorm(1.5, lower.tail=FALSE)
 @
 %how to fill in tails
-<<Example6.12c, fig.keep='last'>>=
+<<Example6.12c,fig.keep='last'>>=
 plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
 plotDist("t", params=list(df=15), type="h", groups= x > 2.131)
 ladd(grid.text("you can add text like this",2.1,.1, default.units="native", hjust=0))
@@ -325,13 +325,15 @@ SE <- sqrt(0.257*(1-0.257)/1412 + 0.307*(1-0.307)/1213); SE
 \subsubsection*{Example 6.21}
 %z.star is a little different from book
 <<Example6.21>>=
-success <- c(158, 109) 
-n <- c(444,922) 
-prop.test(success, n)
+success <- c(158, 109)
+n <- c(444,922)
+prop.test(success, n, conf.level=0.90, correct=FALSE)
 @
-%check again
+%make note of creating data, correct=FALSE?
 
 \section{Test For a Difference in Proportions}
+
+\subsubsection*{Data 6.4}
 
 <<Data6.4, tidy=FALSE>>=
 SplitSteal <- rbind( 
@@ -360,14 +362,14 @@ prop.test(decision~agegroup, correct=FALSE, data=SplitSteal)
 
 \subsubsection*{Figure 6.21}
 
-<<Figure6.21, cache=TRUE>>=
+<<Figure6.21, cache=TRUE, fig.keep='last'>>=
 BootE <- do(1000) * diff(mean(Exercise~Gender, data=resample(ExerciseHours)))
 head(BootE, 3)
 histogram(~M, width=0.5, data=BootE)
 plotFun(dnorm(x, 3.0, 2.39)~x, add=TRUE) # add normal distribution from Example 6.24
 @
 
-<<Figure6.21b, cache=TRUE>>=
+<<Figure6.21b, cache=TRUE, fig.keep='last'>>=
 Random.Smiles <- do(1000) * diff(mean(Leniency ~ shuffle(Group), data = Smiles))
 head(Random.Smiles, 3)
 histogram(~smile, n=24, data=Random.Smiles)
@@ -394,10 +396,8 @@ SE <- sqrt(1.68^2/34 + 1.52^2/34); SE
 head(CommuteStLouis)
 favstats(~Time, data=CommuteStLouis)
 favstats(~Time, data=CommuteAtlanta)
-confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time))
-confint(t.test( ~(CommuteAtlanta$Time - CommuteStLouis$Time)))
+confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time, conf.level=0.90))
 @
-authNote{This may not be correct-- difference in means in different datasets, paired=TRUE?}
 
 \section{Test for a Difference in Means}
 
@@ -406,6 +406,8 @@ authNote{This may not be correct-- difference in means in different datasets, pa
 <<Example6.27>>=
 head(Smiles, 3)
 bwplot(Group~Leniency, data=Smiles) # to check for normality
+@
+<<Example6.27b>>=
 t.test(Leniency~Group, alt="less", data=Smiles)
 @
 
@@ -428,6 +430,7 @@ t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired=TRUE)
 \subsubsection*{Example 6.30}
 
 <<Example6.30>>=
+confint(t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired=TRUE))
 confint(t.test( ~(Wetsuit - NoWetsuit), data=Wetsuits ))
 @
 
