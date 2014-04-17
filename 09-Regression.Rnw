@@ -161,6 +161,19 @@ xyplot( PctTip ~ Bill, data=RestaurantTips, type=c('p','r') )
 
 \subsection*{Partitioning Variability}
 
+We can also think about regression as a way to analyze the variability in the response. This is a lot like the ANOVA tables we have seen before.  This time:
+
+\begin{align*}
+  SST &= \sum (y - \mean{y})^2
+	\\
+	SSE &= \sum (y - \hat{y})^2
+	\\
+	SSM &= \sum (\hat{y} - \mean{y})^2
+	\\
+	SST &= SSM + SSE
+\end{align*}
+As before, when $SSM$ is large and $SSE$ is small, then the model ($\hat y = \hat\beta_0 + \hat\beta_1 x$) explains a lot of the variability and little is left unexplained ($SSE$).  On the other hand, if $SSM$ is small and $SSE$ is large, then the model explains only a little of the variability and most of it is due to things not explained by the model.
+
 \subsubsection*{Example 9.10}
 
 <<Example9.10>>=
@@ -205,6 +218,12 @@ summary(lm(Calories ~ Sodium, Cereal))
 anova(lm(Calories ~ Sodium, Cereal))
 @
 
+The percentage of explained variability is denoted $r^2$ or $R^2$:
+
+\[
+R^2 = \frac{SSM}{SST} = \frac{SSM}{SSM + SSE}
+\]
+
 \subsubsection*{Example 9.13}
 
 The summary of the linear model shows us the \term{coefficient of determination} but we can also find it manually.
@@ -241,6 +260,78 @@ SE <- SD / (77.4 * sqrt(30 - 1)) # SD from Example 9.15
 SE
 @
 
+\section{Confidence and Prediction Intervals}
+
+\subsection*{Interpreting Confidence and Prediction Intervals}
+
+It may be very interesting to make predictions when the explanatory variable has some other value, however. There are two ways to do this in \R.  One uses the \function{predict()} function.  It is simpler, however, to use the \function{makeFun()} function in the \pkg{mosaic} package, so that's the approach we will use here.
+
+Prediction intervals 
+\begin{enumerate}
+\item are much wider than confidence intervals
+\item are very sensitive to the assumption that the population normal for each value of the predictor.
+\item are (for a 95\% confidence level) a little bit wider than 
+\[
+\hat y \pm 2 SE
+\]
+where $SE$ is the ``residual standard error'' reported in the summary output.
+\begin{enumerate}
+\item[]
+The prediction interval is a little wider because it takes into account 
+the uncertainty in our estimated slope and intercept as well as the 
+variability of responses around the true regression line.
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+%Example 9.17
+
+\subsubsection*{Example 9.18}
+
+First, let's build our linear model and store it.
+<<Example9.18>>=
+ink.model <- lm(Price~PPM, data=InkjetPrinters)
+summary(ink.model)
+@
+
+Now let's create a function that will estimate values of \variable{Price} for a given
+value of \variable{PPM}:
+<<Example9.18b>>=
+ink <- makeFun(ink.model)
+@
+We can now input a PPM and see what our least squares regression line predicts for the price:
+<<Example9.18c>>=
+ink(PPM=3.0)   # estimate Price when PPM is 3.0
+@
+
+\R\ can compute two kinds of confidence intervals for the response for a given value
+\begin{enumerate}
+\item
+A confidence interval for the \emph{mean response} for  a \emph{given explanatory value} 
+can be computed by adding \verb!interval='confidence'!.  
+<<Example9.18d>>=
+ink(PPM=3.0, interval='confidence')
+@
+\item
+An interval for an \emph{individual response} (called a prediction interval to 
+avoid confusion with the confidence interval above) 
+can be computed by adding \verb!interval='prediction'! instead.  
+<<Example9.18e>>=
+ink(PPM=3.0, interval='prediction')
+@
+\end{enumerate}
+
+\subsubsection*{Figure 9.13}
+
+The figure below shows the confidence (dotted) and prediction (dashed) intervals as bands around the regression line.  
+<<Figure9.13>>=
+xyplot(Price ~ PPM, data=InkjetPrinters, panel=panel.lmbands, cex=.6, alpha=.5)
+@
+As the graph illustrates, the intervals are narrow near the center of the data and wider near the edges of the data. It is not safe to extrapolate beyond the data (without additional information), since there is no data to let us know whether the pattern of the data extends.
+
+%Example 9.19
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
 
 \section{Inference (Confidence Intervals and Hypothesis Tests)}
 
@@ -401,54 +492,8 @@ changes for each unit increase in the predictor.
 The intercept on the other hand, tells us what happens when the predictor is 0,
 which may be very uninteresting, especially if the predictor can't be 0.  
 (Suppose your predictor is your pulse, for example.)
-\section{ANOVA for Regression}
 
-We can also think about regression as a way to analyze the variability in the response.
-<<>>=
-anova( lm( AvgMercury ~ pH, data=FloridaLakes ) )
-@
 
-This is a lot like the ANOVA tables we have seen before.  This time:
-
-\begin{align*}
-	SST &= \sum (y - \mean{y})^2
-	\\
-	SSE &= \sum (y - \hat{y})^2
-	\\
-	SSM &= \sum (\hat{y} - \mean{y})^2
-	\\
-	SST &= SSM + SSE
-\end{align*}
-As before, when $SSM$ is large and $SSE$ is small, then the model ($\hat y = \hat\beta_0 + \hat\beta_1 x$)
-explains a lot of the variability and little is left unexplained ($SSE$).  On the other hand, if $SSM$ is small
-and $SSE$ is large, then the model explains only a little of the variability and most of it is due to things not
-explained by the model.
-
-The percentage of explained variability is denoted $r^2$ or $R^2$:
-
-\[
-R^2 = \frac{SSM}{SST} = \frac{SSM}{SSM + SSE}
-\]
-
-For our the Florida lakes study, we see that 
-\begin{itemize}
-	\item
-		$SSM = 2.00$
-	\item
-		$SSE = 4.05$
-	\item
-		$SST = 2.00 + 4.05 = 6.05$
-	\item
-		$R^2 = \frac{SSM}{SST} = \frac{2}{6.05} = \Sexpr{2/6.05}$
-
-		This number is listed as ``Multiple R-squared" on the summary output.
-
-		So pH explains roughly 1/3 of the variability in mercury levels.  The other two thirds of 
-		the variability in mercury levels is due to other things.  (We can think of many things that
-		might matter: size of the lake, depth of the lake, types of fish in the lake, types of 
-		plants in the lake, proximity to industrialization -- highways, streets, manufacturing plants, etc.)
-		More complex studies might investigate the effects of several such factors simultaneously.
-\end{itemize}
 
 
 
@@ -491,78 +536,6 @@ if we know $\mean x$, $s_x$, $\mean y$, $s_y$, and $r$.
 
 
 
-\section{Making Predictions}
-
-\subsection{Point Estimates for Response}
-It may be very interesting to make predictions when the explanatory variable has some other value, however.
-There are two ways to do this in \R.  One uses the \function{predict()} function.  It is simpler, however,
-to use the \function{makeFun()} function in the \pkg{mosaic} package, so that's the approach we will use here.
-
-First, let's build our linear model and store it.
-<<>>=
-lakes.model <- lm( AvgMercury ~ pH, data=FloridaLakes )
-coef(lakes.model)
-@
-
-Now let's create a function that will estimate values of \variable{AvgMercury} for a given
-value of \variable{pH}:
-<<>>=
-mercury <- makeFun( lakes.model )
-@
-We can now input a pH value and see what our least squares regression line predicts for the average mercury level
-in the fish:
-<<>>=
-mercury(pH=5)   # estimate AvgMercury when pH is 5
-mercury(pH=7)   # estimate AvgMercury when pH is 5
-@
-
-\subsection{Interval Estimates for the Mean and Individual Response}
-\R\ can compute two kinds of confidence intervals for the response for a given value
-\begin{enumerate}
-\item
-A confidence interval for the \emph{mean response} for  a \emph{given explanatory value} 
-can be computed by adding \verb!interval='confidence'!.  
-<<>>=
-mercury(pH=5, interval='confidence')
-@
-\item
-An interval for an \emph{individual response} (called a prediction interval to 
-avoid confusion with the confidence interval above) 
-can be computed by adding \verb!interval='prediction'! instead.  
-<<>>=
-mercury(pH=5, interval='prediction')
-@
-
-Prediction intervals 
-\begin{enumerate}
-\item are much wider than confidence intervals
-\item are very sensitive to the assumption that the population normal for each value of the predictor.
-\item are (for a 95\% confidence level) a little bit wider than 
-\[
-\hat y \pm 2 SE
-\]
-where $SE$ is the ``residual standard error'' reported in the summary output.
-\begin{enumerate}
-\item[]
-The prediction interval is a little wider because it takes into account 
-the uncertainty in our estimated slope and intercept as well as the 
-variability of responses around the true regression line.
-\end{enumerate}
-\end{enumerate}
-\end{enumerate}
-
-The figure below shows the confidence (dotted) and prediction (dashed) intervals 
-as bands around the regression line.  
-\begin{center}
-<<lion-lmbands>>=
-require(fastR)
-xyplot( AvgMercury ~ pH, data=FloridaLakes, panel=panel.lmbands, cex=.6, alpha=.5)
-@
-\end{center}
-As the graph illustrates, the intervals are narrow near 
-the center of the data and wider near the edges of the data.  
-It is not safe to extrapolate beyond the data (without additional information), 
-since there is no data to let us know whether the pattern of the data extends.
 
 \section{Regression Cautions}
 
@@ -715,10 +688,6 @@ If we look at square roots of standardized residuals this effect is not as prono
 plot( lakes.model2, w=3 )
 @
 On balance, the log transformation seems to improve the situation and is to be preferred over the original model.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\iffalse
 
 \subsubsection{Florida Lakes}
 
