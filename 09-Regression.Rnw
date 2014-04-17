@@ -157,6 +157,91 @@ xyplot( Tip ~ Bill, data=RestaurantTips, type=c('p','r') )
 xyplot( PctTip ~ Bill, data=RestaurantTips, type=c('p','r') )
 @
 
+\section{ANOVA for Regression}
+
+\subsection*{Partitioning Variability}
+
+\subsubsection*{Example 9.10}
+
+<<Example9.10>>=
+summary(lm(Calories ~ Sugars, Cereal))
+anova(lm(Calories ~ Sugars, Cereal))
+@
+
+\subsection*{F-Statistic}
+
+\begin{itemize}
+  \item
+		\fit{$MSM = SSM / DFM = SSM / (\mbox{number of groups} - 1)$}
+	\item
+		\resid{$MSE = SSE / DFE = SSE / (n - \mbox{number of groups}) $}
+\end{itemize}
+MS stands for ``mean square"
+
+Our test statistic is 
+\[
+F = \frac{\fit{MSM}}{\resid{MSE}} 
+\]
+
+\subsubsection*{Example 9.11}
+
+<<Example9.11>>=
+SSM <- 15317
+MSM <- SSM / ( 2-1); MSM
+SSE <- 19834
+MSE <- SSE / (30-2); MSE
+@
+
+<<Example9.11b>>=
+F <- MSM / MSE; F
+pf(F, 1, 28, lower.tail = FALSE)
+@
+%any way to get total sum of squares?
+
+\subsubsection*{Example 9.12}
+
+<<Example9.12>>=
+summary(lm(Calories ~ Sodium, Cereal))
+anova(lm(Calories ~ Sodium, Cereal))
+@
+
+\subsubsection*{Example 9.13}
+
+The summary of the linear model shows us the \term{coefficient of determination} but we can also find it manually.
+
+<<Example9.13>>=
+SSM <- 15317
+SST <- SSM + 19834
+R2 <- SSM / SST; R2
+@
+
+<<Example9.13b>>=
+SSM <- 3241
+SST <- SSM + 31909
+R2 <- SSM / SST; R2
+@
+
+\subsection*{Computational Details}
+%Example 9.14
+
+\subsubsection*{Example 9.15}
+
+Again, the summary of the linear model gives us the standard deviation of the error but we can calculate it manually.
+
+<<Example9.15>>=
+SSE <- 31909
+SD  <- sqrt(SSE / (30 - 2)); SD
+@
+
+\subsubsection*{Example 9.16}
+
+<<Example9.16>>=
+favstats(~Sodium, data=Cereal)
+SE <- SD / (77.4 * sqrt(30 - 1)) # SD from Example 9.15
+SE
+@
+
+
 \section{Inference (Confidence Intervals and Hypothesis Tests)}
 
 \subsection{Bootstrap}
