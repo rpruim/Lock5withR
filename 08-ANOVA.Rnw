@@ -1,5 +1,6 @@
-\Sexpr{set_parent('Lock5withR')}
-\Chapter{Comparing More Than Two Means Using ANOVA}
+\Sexpr{set_parent('Lock5withR.Rnw')}
+\setcounter{chapter}{7}
+\Chapter{ANOVA to Compare Means}
 
 \def\fit#1{\textcolor{green!60!black}{#1}}
 \def\resid#1{\textcolor{red!80!black}{#1}}
@@ -31,7 +32,7 @@
 %\newcommand{\Normal}{\operatorname{N}}
 %\newcommand{\sfrac}[2]{#1/#2}
 
-\section{The Basic ANOVA situation}
+\section{Analysis of Variance}
 
 \begin{itemize}
 \item
@@ -70,18 +71,20 @@
 
 \end{itemize}
 
-\subsection{An Example: Ants and Sandwiches}
+\subsection*{Null and Alternative Hypotheses}
 
+\subsubsection*{Example 8.1}
 
-<<ants-summary2-6>>=
+<<Example8.1>>=
 favstats( Ants ~ Filling, data=SandwichAnts )
 @
 
-<<ants1-6,fig.height=2,fig.width=4>>=
+<<Example8.1b, opts.label="fig4">>=
 xyplot( Ants ~ Filling, SandwichAnts, type=c('p','a') )
 bwplot( Ants ~ Filling, SandwichAnts )
 @
 
+\subsection*{Why Analyze Variability for a Difference in Means}
 Question: Are these differences significant?
 Or would we expect sample differences this large by random chance even 
 if (in the population) the mean amount of shift is equal for all three groups?
@@ -93,8 +96,10 @@ Whether differences between the groups are significant depends on three things:
    \item  the amount of variation within each group
    \item  the sample sizes
    \end{enumerate}
+   
+\subsubsection*{Example 8.3}
 
-<<ants-anova-6>>=
+<<Example8.3>>=
 anova( lm ( Ants ~ Filling, SandwichAnts ) )
 @
 
@@ -111,7 +116,7 @@ all the details of how the test statistic is computed.
 
 \newpage
    
-\subsection{ The ANOVA test statistic  }
+\subsection*{The F-Statistics}
 
 
 \subsubsection{The ingredients}
@@ -127,9 +132,200 @@ The ANOVA test statistic (called $F$) is based on three ingredients:
 
 Each of these will be involved in the calculation of $F$.
 
-The $F$ statistic is a bit complicated to compute.  We'll generally let the
-computer handle that for us.  But is useful to see one small example to see
-how the ingredients are baked into a test statistic.
+%Example 8.4
+\subsubsection*{Figure 8.3}
+
+<<Figure8.3, cache=TRUE>>=
+rand <- do(1000) * anova(lm(Ants ~ shuffle(Filling), data=SandwichAnts))
+tally( ~ (F >= 5.63), data = rand )
+prop( ~ (F >= 5.63), data = rand )
+dotPlot( ~ F, width=0.20, groups = (F <=5.63), data=rand)
+@
+
+%histogram("f", df1=2, df2=21)
+%plotDist("f", df1=2, df2=21)
+%plotDist("chisq", df=4)
+
+
+\subsection*{The F-distribution}
+
+Under certain conditions, the $F$ statistic has a known distribution (called the $F$ distribution).  Those conditions 
+are
+\begin{enumerate}
+  \item 
+		The null hypothesis is true (i.e., each group has the same mean)
+	\item
+		Each group is sampled from a normal population
+	\item
+		Each population group has the same standard deviation
+\end{enumerate}
+When these conditions are met, we can use the $F$-distribution to compute the p-value without generating 
+the randomization distribution.
+\begin{itemize}
+	\item
+$F$ distributions have two parameters -- the degrees of freedom
+for the numerator and for the denominator.  
+
+In our example, this is $2$ for the numerator and $7$ for the denominator.  
+
+\item When $H_0$ is true, the numerator and denominator both have a mean of 1, 
+	so $F$ will tend to be close to 1.  
+	
+\item
+	When $H_0$ is false, there is more difference between the groups, so the numerator
+	tends to be larger.
+
+	This means we will reject the null hypothesis when $F$ gets large enough.
+
+	\item
+	The p-value is computed using \function{pf()}.
+\end{itemize}
+
+\subsubsection*{Figure 8.4}
+
+<<Figure8.4>>=
+plotDist("f", df1=2, df2=21)
+@
+%how to fit histogram?
+
+\subsection*{More Examples of ANOVA}
+
+\subsubsection*{Example 8.5}
+
+<<Example8.5>>=
+head(StudentSurvey)
+favstats(~Pulse, data=StudentSurvey)
+favstats(Pulse~Award, data=StudentSurvey)
+anova(lm(Pulse~Award, StudentSurvey))
+@
+\subsubsection*{Figure 8.5}
+
+<<Figure8.5>>=
+bwplot(Award ~ Pulse, data=StudentSurvey)
+@
+
+\subsection*{ANOVA Calculations}
+
+\begin{itemize}
+  \item
+		Between group variability: 
+		\fit{$G = \texttt{groupMean} - \texttt{grandMean}$}
+
+		This measures how different a group is from the overall average.
+
+	\item
+		Within group variability: 
+		\resid{$E = \texttt{response} - \texttt{groupMean}$}
+
+		This measures how different and individual is from its group average.
+		$E$ stands for ``error'', but just as in ``standard error" it is not a 
+		``mistake''.  It is simply measure how different an individual response is
+		from the model prediction (in this case, the group mean).
+
+		The individual values of \resid{$E$} are called \term{residuals}.
+\end{itemize}
+
+
+\subsubsection*{Example 8.6}
+
+Let's first compute the grand mean and group means.
+<<Example8.6>>=
+SandwichAnts
+mean(Ants, data=SandwichAnts)  # grand mean
+mean(Ants ~ Filling, data=SandwichAnts)  # group means
+@
+And add those to our data frame
+<<Example8.6b>>=
+SA <- transform(SandwichAnts, groupMean = c(30.75, 34.00, 49.25, 30.75, 34.00, 49.25, 30.75, 34.00, 49.25, 30.75, 34.00, 49.25, 30.75, 34.00, 49.25, 30.75, 34.00, 49.25, 30.75, 34.00, 49.25, 30.75, 34.00, 49.25) )
+SA <- transform(SA, grandMean = rep( 38, 24 ) )
+SA
+@
+
+<<Example8.6c>>=
+SA <- transform(SA, M = groupMean - grandMean)
+SA <- transform(SA, E = Ants - groupMean)
+SA
+@
+
+As we did with variance, we will square these differences:
+<<Example8.6d>>=
+SA <- transform(SA, M2 = (groupMean - grandMean)^2)
+SA <- transform(SA, E2 = (Ants - groupMean)^2)
+SA
+@
+
+And then add them up (SS stands for ``sum of squares")
+<<Example8.6e>>=
+SST <- sum( ~((Ants - grandMean)^2), data=SA); SST
+SSM <- sum( ~M2, data=SA ); SSM    # also called SSG
+SSE <- sum( ~E2, data=SA ); SSE
+@
+
+
+\section{Pairwise Comparisons and Inference After ANOVA}
+
+\subsection*{Using ANOVA for Inferences about Group Means}
+
+We can construct a confidence interval for any of the means by just 
+taking a subset of the data and using \function{t.test()}, but there 
+are some problems with this approach.  Most importantly,
+\begin{quote}
+We were primarily interested in comparing the means across 
+the groups.  Often people will display confidence intervals for 
+each group and look for ``overlapping'' intervals.  But this is 
+not the best way to look for differences.
+\end{quote}
+Nevertheless, you will sometimes see graphs showing multiple confidence
+intervals and labeling them to indicate which means appear to be 
+different from which.  (See the solution to problem 15.3 for an example.)
+
+\subsubsection*{Example 8.7}
+
+<<Example8.7>>=
+summary(lm(Ants ~ Filling, SandwichAnts))
+PB <- subset(SandwichAnts, Filling == "Peanut Butter")
+t.test(~Ants, data=PB)
+@
+%how to do anova for just peanut butter? must make new or transform dataset?
+
+\subsubsection*{Example 8.8}
+
+<<Example8.8>>=
+noHP <- subset(SandwichAnts, Filling != "Ham & Pickles")
+t.test(Ants ~ Filling, data=noHP)
+@
+%df is incorrect through use of t.test
+
+\subsubsection*{Example 8.9}
+
+%<<Example8.9>>=
+%anova(lm(Ants ~ Filling, subset(SandwichAnts, Filling ==)))
+%@
+
+\subsection*{Lots of Pairwise Comparisons}
+
+\subsubsection*{Example 8.10}
+
+<<Example8.10>>=
+head(TextbookCosts)
+anova(lm(Cost ~ Field, TextbookCosts))
+summary(lm(Cost ~ Field, TextbookCosts))
+confint(lm(Cost ~ Field, TextbookCosts))
+@
+
+\subsubsection*{Figure 8.8}
+
+<<Figure8.8>>=
+bwplot(Field ~ Cost, data=TextbookCosts)
+@
+
+\subsection*{The Problem of Multiplicity}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\iffalse
+
+The $F$ statistic is a bit complicated to compute.  We'll generally let the computer handle that for us.  But is useful to see one small example to see how the ingredients are baked into a test statistic.
 
 \subsubsection{A Small Dataset}
 
@@ -537,3 +733,98 @@ Testing ``one against all the others'' goes by the name of Dunnet's method,
 for example.   This is useful when one group represents a control against which
 various treatments are being compared.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{A Small Dataset}
+
+Suppose we have three groups with the following response values.
+\begin{itemize}
+   \item  Group A: 5.3, 6.0, 6.7 \hfill [$\bar y_1= 6.0$] 
+   \item  Group B: 5.5, 6.2, 6.4, 5.5 \hfill [$\bar y_2= 5.8$]
+   \item  Group C: 7.5, 7.2, 7.8 \hfill [$\bar y_3= 7.5$]
+\end{itemize}
+
+\subsubsection{Computing $F$}
+First, let's represent our small data set in the more usual way:
+<<>>=
+response <- c( 5.4, 6.1, 6.8, 5.4, 6.1, 6.3, 5.4, 7.5, 7.2, 7.8 )
+group <- c( "A","A","A", "B","B","B","B", "C","C","C" )
+small <- data.frame( response = response, group = group )
+small
+@
+Now let's compute the grand mean and group means.
+<<>>=
+mean( response, data=small)  # grand mean
+mean( response ~ group, data=small)  # group means
+@
+And add those to our data frame
+<<>>=
+small <- transform(small, groupMean = c( 6.1, 6.1, 6.1, 5.8, 5.8, 5.8, 5.8, 7.5, 7.5, 7.5 ) )
+small <- transform(small, grandMean = rep( 6.4, 10 ) )
+small
+@
+
+Now we are ready to put the ingredients together:
+\begin{itemize}
+  \item
+		Between group variability: 
+		\fit{$G = \texttt{groupMean} - \texttt{grandMean}$}
+
+		This measures how different a group is from the overall average.
+
+	\item
+		Within group variability: 
+		\resid{$E = \texttt{response} - \texttt{groupMean}$}
+
+		This measures how different and individual is from its group average.
+		$E$ stands for ``error'', but just as in ``standard error" it is not a 
+		``mistake''.  It is simply measure how different an individual response is
+		from the model prediction (in this case, the group mean).
+
+		The individual values of \resid{$E$} are called \term{residuals}.
+\end{itemize}
+
+<<>>=
+small <- transform(small, M = groupMean - grandMean)
+small <- transform(small, E = response - groupMean)
+small
+@
+
+As we did with variance, we will square these differences:
+
+<<>>=
+small <- transform(small, M2 = (groupMean - grandMean)^2)
+small <- transform(small, E2 = (response - groupMean)^2)
+small
+@
+
+And then add them up (SS stands for ``sum of squares")
+
+<<tidy=FALSE>>=
+SSM <- sum( ~M2, data=small ); SSM    # also called SSG
+0.16 * 3 + 0.36 * 4 + 1.21 * 3 # alternate way to calculate
+SSE <- sum( ~E2, data=small ); SSE
+@
+
+Now we adjust for sample size using
+\begin{itemize}
+	\item
+		\fit{$MSM = SSM / DFM = SSM / (\mbox{number of groups} - 1)$}
+	\item
+		\resid{$MSE = SSE / DFE = SSE / (n - \mbox{number of groups}) $}
+\end{itemize}
+MS stands for ``mean square"
+<<tidy=FALSE>>=
+MSM <- SSM / ( 3-1); MSM
+MSE <- SSE / (10-3); MSE
+@
+
+Finally, our test statistic is 
+\[
+F = \frac{\fit{MSM}}{\resid{MSE}} 
+\]
+<<tidy=FALSE>>=
+F <- MSM / MSE; F
+@
+
+\fi
