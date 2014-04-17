@@ -1,9 +1,10 @@
-\Sexpr{set_parent('Lock5withR')}
-\Chapter{Regression}
+\Sexpr{set_parent('Lock5withR.Rnw')}
+\setcounter{chapter}{8}
+\Chapter{Inference for Regression}
 
-\section{Simple Linear Regression}
+\section{Inference for Slope and Correlation}
 
-\subsection{The Simple Linear Regression Model}
+\subsection*{Simple Linear Model}
 
 \[
 Y = \beta_0 + \beta_1 x + \epsilon  \qquad \mbox{where $\epsilon \sim \Norm(0,\sigma)$.}
@@ -25,9 +26,6 @@ The standard deviation of the responses is the same for each predictor value.
 One of the goals in simple linear regression is to estimate this linear relationship -- that
 is to estimate the intercept and the slope.
 
-
-\subsection{The Least Squares Method}
-
 Of course, there are lots of lines.
 We want to determine the line that fits the data best. But what does that mean?
 
@@ -48,57 +46,22 @@ $b_0$ and $b_1$ possible.  These best values define the least squares regression
 Fortunately, statistical software packages do all this work for us.  In \R,
 the command that does this is \function{lm()}.
 
-\subsection{Getting R to Compute Regression Lines}
+\subsubsection*{Example 9.1}
 
-\subsubsection{Florida Lakes}
-
-<<>>=
-xyplot( AvgMercury ~ pH, data=FloridaLakes, type=c('p','r') )
-lm( AvgMercury ~ pH, data=FloridaLakes )
-@
-<<include=FALSE>>=
-lake.coefs <- do(1) * lm( AvgMercury ~ pH, data=FloridaLakes )
-@
-You can get terser output with
-<<>>=
-coef( lm( AvgMercury ~ pH, data=FloridaLakes ) )  # just show me the coefficients
-@
-
-From these coefficients, we see that our regression equation is 
-
-\[
-\widehat{\mbox{AvgMercury}} = \Sexpr{lake.coefs$Intercept} + \Sexpr{lake.coefs$pH} \cdot \mbox{pH}
-\]
-
-So for example, this suggests that the average average mercury level 
-(yes, that's two averages\footnote{For each lake, the average mercury level is calculated.  Different 
-lakes will have different average mercury levels.  Our regression line is estimating the average
-of these averages for lakes with a certain pH.}) 
-for lake with a pH of 6 is approximately
-\[
-\widehat{\mbox{AvgMercury}} 
-= 
-\Sexpr{lake.coefs$Intercept} + \Sexpr{lake.coefs$pH} \cdot \mbox{6.0}
-=
-\Sexpr{lake.coefs$Intercept + lake.coefs$pH * 6.0}
-\]
-
-\subsubsection{Inkjet Printers}
-Here's another example in which we want to predict the price of an inkjet printer from the number of pages
-it prints per minute (ppm).
-
-<<>>=
-xyplot( Price ~ PPM, data=InkjetPrinters, type=c('p','r') )
+<<Example9.1>>=
 lm( Price ~ PPM, data=InkjetPrinters )
 @
 <<include=FALSE>>=
 ink.coefs <- do(1) * lm( Price ~ PPM, data=InkjetPrinters )
 @
 You can get terser output with
-<<>>=
+<<Example9.1b>>=
 coef( lm( Price ~ PPM, data=InkjetPrinters ) )
 @
-
+You can also get more information with
+<<Example9.1c>>=
+summary( lm( Price ~ PPM, data=InkjetPrinters ) )
+@
 So our regression equation is 
 
 \[
@@ -114,6 +77,85 @@ For example, this suggests that the average price for inkjet printers that print
 \Sexpr{ink.coefs$Intercept + ink.coefs$PPM * 3.0}
 \]
 
+\subsection*{Inference for Slope}
+
+\subsubsection*{Figure 9.1}
+<<Figure9.1>>=
+xyplot( Price ~ PPM, data=InkjetPrinters, type=c('p','r') )
+@
+
+\subsubsection*{Figure 9.2}
+
+<<Figure9.2>>=
+
+@
+
+\subsubsection*{Example 9.2}
+
+<<Example9.2>>=
+summary( lm( Price ~ PPM, data=InkjetPrinters) ) 
+confint( lm( Price ~ PPM, data=InkjetPrinters) , "PPM")
+@
+
+\subsubsection*{Example 9.3}
+
+<<Example9.3>>=
+head(RestaurantTips)
+summary( lm( Tip ~ Bill, data=RestaurantTips) ) 
+confint( lm( Tip ~ Bill, data=RestaurantTips) , "Bill", level=0.90)
+@
+
+\subsubsection*{Example 9.4}
+
+%Test!
+
+<<Example9.4>>=
+summary( lm( PctTip ~ Bill, data=RestaurantTips) ) 
+@
+
+\subsection*{t-Test for Correlation}
+
+\subsubsection*{Example 9.5}
+
+<<Example9.5>>=
+summary( lm( CostBW ~ PPM, data=InkjetPrinters) ) 
+@
+%how to do test for correlation?
+
+\subsubsection*{Example 9.6}
+
+<<Example9.6>>=
+summary( lm( PctTip ~ Bill, data=RestaurantTips) ) 
+@
+
+\subsection*{Coefficient of Determination: R-squared}
+
+\subsubsection*{Example 9.7}
+
+<<Example9.7>>=
+summary( lm( Price ~ PPM, data=InkjetPrinters ) )
+@
+
+\subsection*{Checking Conditions for a Simple Linear Model}
+
+\subsubsection*{Figure 9.3}
+
+\subsubsection*{Figure 9.4}
+
+\subsubsection*{Example 9.8}
+
+<<Example9.8>>=
+xyplot( Price ~ PPM, data=InkjetPrinters, type=c('p','r') )
+@
+
+\subsubsection*{Figure 9.5}
+
+\subsubsection*{Example 9.9}
+
+<<Example9.9>>=
+xyplot( Tip ~ Bill, data=RestaurantTips, type=c('p','r') )
+xyplot( PctTip ~ Bill, data=RestaurantTips, type=c('p','r') )
+@
 
 \section{Inference (Confidence Intervals and Hypothesis Tests)}
 
@@ -589,3 +631,41 @@ plot( lakes.model2, w=3 )
 @
 On balance, the log transformation seems to improve the situation and is to be preferred over the original model.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\iffalse
+
+\subsubsection{Florida Lakes}
+
+<<>>=
+xyplot( AvgMercury ~ pH, data=FloridaLakes, type=c('p','r') )
+lm( AvgMercury ~ pH, data=FloridaLakes )
+@
+<<include=FALSE>>=
+lake.coefs <- do(1) * lm( AvgMercury ~ pH, data=FloridaLakes )
+@
+You can get terser output with
+<<>>=
+coef( lm( AvgMercury ~ pH, data=FloridaLakes ) )  # just show me the coefficients
+@
+
+From these coefficients, we see that our regression equation is 
+
+\[
+\widehat{\mbox{AvgMercury}} = \Sexpr{lake.coefs$Intercept} + \Sexpr{lake.coefs$pH} \cdot \mbox{pH}
+\]
+
+So for example, this suggests that the average average mercury level 
+(yes, that's two averages\footnote{For each lake, the average mercury level is calculated.  Different 
+lakes will have different average mercury levels.  Our regression line is estimating the average
+of these averages for lakes with a certain pH.}) 
+for lake with a pH of 6 is approximately
+\[
+\widehat{\mbox{AvgMercury}} 
+= 
+\Sexpr{lake.coefs$Intercept} + \Sexpr{lake.coefs$pH} \cdot \mbox{6.0}
+=
+\Sexpr{lake.coefs$Intercept + lake.coefs$pH * 6.0}
+\]
+
+\fi
