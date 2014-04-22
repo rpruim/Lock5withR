@@ -1,12 +1,15 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
+
 \setcounter{chapter}{4}
 \Chapter{Approximating with a Distribution}
 
-\section{Density Curves}
+\section{Normal Distributions}
+
+\subsection*{Density Curves}
 
 \subsubsection*{Example 5.1}
-<<Example5.1a, cache=TRUE, seed=1234>>=
-Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta)) 
+<<Example5.1, cache=TRUE, seed=1234>>=
+Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta))
 head(Bootstrap, 3)
 histogram(~result, density=TRUE, data=Bootstrap)
 densityplot(~result, data=Bootstrap)
@@ -19,7 +22,7 @@ prop( ~ (result >= 30 & result <= 31), data=Bootstrap ) # proportion between 30 
 @
 
 
-\subsection*{Normal Distribution}
+\subsection*{Normal Distributions}
 
 Normal distributions
 \begin{itemize}
@@ -38,12 +41,12 @@ Many naturally occurring distributions are approximately normally distributed. N
 
 \subsubsection*{Figure 5.5}
 
-<<Figure5.5a>>=
+<<Figure5.5>>=
 plotFun( dnorm(x,0,1) ~x, x.lim=c(-5,6))
 plotFun( dnorm(x,2,1) ~x, add=TRUE, col="red")
 @
 
-<<Figure5.5b>>=
+<<Figure5.5b, opts.label="fig3">>=
 plotFun( dnorm(x,0,0.5) ~x, x.lim=c(-5,5))
 plotFun( dnorm(x,0,1) ~x, add=TRUE, col="red")
 plotFun( dnorm(x,0,2) ~x, add=TRUE, col="green")
@@ -71,8 +74,8 @@ when $X \sim \Norm(\mu, \sigma)$.
 We can obtain arbitrary probabilities using \verb!pnorm()!
 
 \subsubsection*{Example 5.3}
-%Text in graph doesn't fit 
-<<Example5.3>>=
+
+<<Example5.3, opts.label="fig4">>=
 pnorm(90, 75, 10, lower.tail=FALSE) # proportion of scores above 90
 xpnorm(90, 75, 10, lower.tail=FALSE)
 @
@@ -82,9 +85,9 @@ The \function{xpnorm()} function gives a bit more verbose output and also gives 
 
 \function{qnorm()} goes the other direction:  You provide the quantile (percentile expressed as a decimal) and \R\ gives you the value.
 
-<<Example5.4>>=
-xqnorm(0.2, 75, 10)  # 20th percentile in Norm(75, 10)
-qnorm(0.2, 75, 10)
+<<Example5.4, opts.label="fig4">>=
+qnorm(0.2, 75, 10) # 20th percentile in Norm(75, 10)
+xqnorm(0.2, 75, 10)  
 @
 
 \subsection*{Standard Normal N(0,1)}
@@ -103,15 +106,15 @@ Z-scores provide a second way to compute normal probabilities.
 
 \subsubsection*{Example 5.5}
 
-<<Example5.5, tidy=FALSE>>=
+<<Example5.5, tidy=FALSE, opts.label="fig4">>=
 z30 <- (30 - 29.11) / 0.93; z30  # z-score for 30 min
 z31 <- (31 - 29.11) / 0.93; z31  # z-score for 31 min
 xpnorm(c(30, 31), 29.11, 0.93)   # original normal distribution proportion between 30 and 31 min
-xpnorm(c(z30, z31))          # standardized distribution proportion between 30 and 31 min
+xpnorm(c(z30, z31))              # standardized distribution proportion between 30 and 31 min
 pnorm(z31) - pnorm(z30)
 @
-%how to highlight opposite tail of xpnorm?
-<<Example5.5b, tidy=FALSE>>=
+
+<<Example5.5b, tidy=FALSE, opts.label="fig4">>=
 xpnorm(0.957)                    # proportion with z-score below 0.957
 xpnorm(2.032, lower.tail=FALSE)  # proportion with z-score above 2.032
 pnorm(30, 29.11, 0.93)          
@@ -128,14 +131,12 @@ z <- qnorm(0.2); z
 
 \section{Confidence Intervals and P-values Using Normal Distributions}
 
-%\subsection*{Central Limit Theorem}
 \subsection*{Confidence Intervals Based on a Normal Distribution}
 
-%use z-scores instead?
 \subsubsection*{Example 5.7}
 <<Example5.7,opts.label="fig1",cache=TRUE,seed=1234>>=
 Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta)) 
-dotPlot(~result, data=Bootstrap, n=50)
+dotPlot(~result, n=50, data=Bootstrap)
 @
 
 <<Example5.7b>>=
@@ -159,17 +160,16 @@ qnorm(0.995, 13.10, 0.20) # upper endpoint for 99% confidence interval
 \subsection*{P-values Based on a Normal Distribution}
 %redo simulation for a mean?
 \subsubsection*{Example 5.9}
-<<Example5.9, cache=TRUE, seed=1234>>=
+<<Example5.9, cache=TRUE, seed=1234, opt.label="fig1">>=
 Randomization.Temp <- do(10000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 )
-histogram(~result, width=.025, data=Randomization.Temp)
-plotFun( dnorm(x,98.6,0.1066) ~x, add=TRUE)
+histogram(~result, width=.025, fit = "normal", data=Randomization.Temp)
 @
 <<Example5.9b>>=
 pnorm(98.26, 98.6, 0.1066)
 2 * pnorm(98.26, 98.6, 0.1066)
 @
 <<Example5.9c>>=
-z = (98.26 - 98.6) / 0.1066; z
+z <- (98.26 - 98.6) / 0.1066; z
 pnorm(z)
 2 * pnorm(z)
 @
@@ -178,7 +178,7 @@ pnorm(z)
 <<Example5.10>>=
 pnorm(0.66, 0.65, 0.013, lower.tail=FALSE)
 @
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \iffalse
 <<plotnorm,echo=FALSE>>=
 plotnorm <- function(
