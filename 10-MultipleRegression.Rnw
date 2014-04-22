@@ -1,0 +1,159 @@
+\Sexpr{set_parent('Lock5withR.Rnw')}
+\setcounter{chapter}{9}
+\Chapter{Multiple Regression}
+
+\section{Multiple Predictors}
+
+\subsection*{Multiple Regression Model}
+
+\subsubsection*{Example 10.1}
+
+<<Example10.1>>=
+lm(Price ~ PPM + CostBW, InkjetPrinters)
+ink <- makeFun(lm(Price ~ PPM + CostBW, data = InkjetPrinters))
+ink(PPM = 3.0, CostBW = 3.7)
+@
+
+\subsection*{Testing Individual Terms in a Model}
+
+\subsubsection*{Example 10.2}
+
+<<Example10.2>>=
+summary(lm(Price ~ PPM + CostBW, data = InkjetPrinters))
+@
+
+\subsubsection*{Example 10.3}
+
+<<Example10.3>>=
+summary(lm(Bodyfat ~ Weight + Height, data = BodyFat))
+@
+
+\subsubsection*{Example 10.4}
+
+<<Example10.4>>=
+summary(lm(Bodyfat ~ Weight + Height + Abdomen, data = BodyFat))
+@
+
+%Example 10.5
+
+\subsection*{ANOVA for a Multiple Regression Model}
+
+\subsubsection*{Example 10.6}
+
+<<Example10.6>>=
+anova(lm(Price ~ PPM, data = InkjetPrinters))
+anova(lm(Price ~ PPM + CostBW, data = InkjetPrinters))
+@
+%anova for multiple regression model (F-stat)
+
+\subsubsection*{Example 10.7}
+
+<<Example10.7>>=
+summary(lm(Price ~ PhotoTime + CostColor, data = InkjetPrinters))
+anova(lm(Price ~ PhotoTime + CostColor, data = InkjetPrinters))
+@
+
+\subsubsection*{Example 10.8}
+
+<<Example10.8>>=
+rsquared(lm(Price ~ PPM + CostBW, data = InkjetPrinters))
+rsquared(lm(Price ~ PhotoTime + CostColor, data = InkjetPrinters))
+@
+
+\section{Checking Conditions for a Regression Model}
+
+%\subsection*{Residuals vs Fitted Values Plot}
+
+%Example 10.9
+%Example 10.10
+%Figure 10.1
+%Figure 10.2
+
+\subsection*{Histogram/Dotplot/Boxplot of Residuals}
+
+%Example 10.11
+%Figure 10.3
+
+\subsubsection*{Example 10.12}
+
+<<Example10.12, opts.label="fig1">>=
+ink.model <- lm(Price ~ PPM, data = InkjetPrinters)
+dotPlot(~resid(ink.model), cex = .05, nint = 40)
+@
+
+<<Example10.12b>>=
+xyplot(resid(ink.model) ~ fitted(ink.model), type=c("p", "r"))
+@
+
+\subsection*{Checking Conditions for a Multiple Regression Model}
+
+\subsubsection*{Example 10.13}
+
+<<Example10.13>>=
+body.model <- lm(Bodyfat ~ Weight + Abdomen, data = BodyFat)
+summary(body.model)
+histogram(~ resid(body.model), breaks = 10)
+xyplot(resid(body.model) ~ fitted(body.model), type=c("p", "r"))
+@
+
+\section{Using Multiple Regression}
+
+\subsection*{Choosing a Model}
+
+\subsubsection*{Example 10.14}
+
+<<Example10.14>>=
+summary(lm(Bodyfat ~ Weight + Height + Abdomen + Age + Wrist, data = BodyFat))
+summary(lm(Bodyfat ~ Weight + Abdomen + Age + Wrist, data = BodyFat))
+@
+
+\subsubsection*{Example 10.15}
+
+<<Example10.15>>=
+summary(lm(Bodyfat ~ Weight + Abdomen + Wrist, data = BodyFat))
+@
+
+\subsection*{Categorical Variables}
+
+\subsubsection*{Figure 10.9}
+
+<<Figure10.9>>=
+bwplot(Salary ~ Gender, horizontal = FALSE, data = SalaryGender)
+@
+
+\subsubsection*{Example 10.16}
+
+<<Example10.16>>=
+summary(lm(Salary ~ Gender, data = SalaryGender))
+@
+
+\subsubsection*{Example 10.17}
+
+<<Example10.17>>=
+summary(lm(Salary ~ PhD, data = SalaryGender))
+confint(lm(Salary ~ PhD, data = SalaryGender))
+@
+
+\subsection*{Accounting for Confounding Variables}
+
+\subsubsection*{Example 10.18}
+
+<<Example10.18>>=
+summary(lm(Salary ~ Gender + PhD + Age, data = SalaryGender))
+@
+
+\subsection*{Association between Explanatory Variables}
+
+\subsubsection*{Example 10.19}
+
+<<Example10.19>>=
+summary(lm(Final ~ Exam1 + Exam2, data = StatGrades))
+@
+
+\subsubsection*{Figure 10.10}
+
+<<Figure10.10>>=
+xyplot(Final ~ Exam1, type = c("p", "r"), data = StatGrades)
+xyplot(Final ~ Exam2, type = c("p", "r"), data = StatGrades)
+xyplot(Exam2 ~ Exam1, type = c("p", "r"), data = StatGrades)
+@
