@@ -12,7 +12,7 @@
 %INTRODUCTION TO SECTION
 %sub-subsections
 
-\subsubsection*{A Student Survey}
+\subsection*{Cases and Variables}
 
 Data sets in \R\ are usually stored as \term{data frames} in a rectangular arrangement with rows 
 corresponding to observational units and columns corresponding to variables.  A number of data
@@ -22,35 +22,6 @@ sets are built into \R\ and its packages. The package for our text is \pkg{Lock5
 require(Lock5Data)  # Tell R to use the package for our text book
 data(StudentSurvey) # load the StudentSurvey data set
 @
-
-Let's take a look at the data frame for the Student Survey example in the text. If we type the name of the data set, \R\ will display it in its entirety for us. However, \dataframe{StudentSurvey} is a larger data set, so it is more useful to look at some sort of summary or subset of the data. %1.4 p14
-<<>>=
-head(StudentSurvey) # first six cases of the data set
-@
-
-We can easily classify variables as either \term{categorical} or \term{quantitative} by studying the result of \function{head()}, but there are some summaries of the data set which reveal such information.
-<<>>=
-str(StudentSurvey) # structure of the data set
-summary(StudentSurvey) # summary of each variable
-@
-
-Here are some more summaries:
-<<>>=
-nrow(StudentSurvey) # number of rows
-ncol(StudentSurvey) # number of columns
-dim(StudentSurvey) # number of rows and columns
-@
-
-\subsubsection*{Data on Countries}
-
-<<>>=
-head(AllCountries)
-summary(AllCountries)
-@
-%Info just on Iceland--observation 86
-%something about data()?
-
-\section{Sampling from a Population}
 
 %population vs. sample 
 \begin{boxedText}
@@ -74,7 +45,25 @@ being studied.  Popular names include subjects, individuals, and cases.
 Whatever you call them, it is important that you always understand what
 your observational units are.
 
-\subsection*{Variable terminology}
+Let's take a look at the data frame for the Student Survey example in the text. If we type the name of the data set, \R\ will display it in its entirety for us. However, \dataframe{StudentSurvey} is a larger data set, so it is more useful to look at some sort of summary or subset of the data. %1.4 p14
+<<Data1.1>>=
+head(StudentSurvey) # first six cases of the data set
+@
+
+We can easily classify variables as either \term{categorical} or \term{quantitative} by studying the result of \function{head()}, but there are some summaries of the data set which reveal such information.
+<<Data1.1b>>=
+str(StudentSurvey) # structure of the data set
+summary(StudentSurvey) # summary of each variable
+@
+
+Here are some more summaries:
+<<Data1.1c>>=
+nrow(StudentSurvey) # number of rows
+ncol(StudentSurvey) # number of columns
+dim(StudentSurvey) # number of rows and columns
+@
+
+\subsection*{Categorical and Quantitative Variables}
 \begin{description}
 
 \item [categorical variable] a variable that places observational units into
@@ -88,7 +77,7 @@ variables.
 \fi
 
 \item [quantitative variable] a variable that records measurements along some
-	scale (examples: weight, height, age, temperature) or counts something
+  scale (examples: weight, height, age, temperature) or counts something
 	(examples: number of siblings, number of colonies of bacteria, etc.)
 
 \iftrue
@@ -98,13 +87,53 @@ Values of discrete variables are limited to some list and ``in-between values"
 are not possible. Counts are a good example of discrete variables.
 \fi
 
+\end{description}
+
+\subsection*{Investigating Variables and Relationships between Variables}
+
+<<Data1.2>>=
+head(AllCountries)
+summary(AllCountries)
+AllCountries[86, ]
+@
+
+\subsection*{Using Data to Answer a Question}
+
+\begin{description}
+
 \item[response variable]
 a variable we are trying to predict or explain
 \item[explanatory variable]
 a variable used to predict or explain a response variable
 \end{description}
 
-\subsection*{Estimation}
+
+\section{Sampling from a Population}
+
+\subsection*{Samples from Populations}
+
+\begin{description}
+\item[population] 
+the collection of animals, plants, objects, etc.
+that we want to know about
+\item[sample]
+the (smaller) set of animals, plants, objects, etc. about which we have data
+\item[parameter]
+a number that describes a population or model.
+\item[statistic]
+a number that describes a sample.
+\end{description}
+
+Much of statistics centers around this question:
+\begin{center}
+\large
+\fbox{
+\rule[-2.5mm]{0pt}{8mm}
+\emph{What can we learn about a population from a sample?} \ 
+}
+\end{center}
+
+\subsection*{Sampling Bias}
 
 Often we are interested in knowing (approximately) the 
 value of some parameter.  A statistic used for this purpose is called
@@ -132,30 +161,7 @@ the measure of how close estimates are to the thing being estimated
 (called the \term{estimand}).
 \end{description}
 
-\section{Samples and Populations}
-\begin{description}
-\item[population] 
-the collection of animals, plants, objects, etc.
-that we want to know about
-\item[sample]
-the (smaller) set of animals, plants, objects, etc. about which we have data
-\item[parameter]
-a number that describes a population or model.
-\item[statistic]
-a number that describes a sample.
-\end{description}
-
-Much of statistics centers around this question:
-\begin{center}
-\large
-\fbox{
-\rule[-2.5mm]{0pt}{8mm}
-\emph{What can we learn about a population from a sample?} \ 
-}
-\end{center}
-
-
-\subsection*{Sampling}
+\subsection*{Simple Random Sample}
 
 \term{Sampling} is the process of selecting a sample.  
 Statisticians use 
@@ -209,12 +215,33 @@ of the population we are trying to study, leading us to draw inaccurate or
 incorrect conclusions.
 \fi
 
-%ex 1.15 select a random sample of 5 of AllCountries (show how to take a random sample? this is in chp3)
+\subsubsection*{Example 1.15}
+
+<<Example1.15>>=
+sample(AllCountries, 5)
+@
 
 
 \section{Experiments and Observational Studies}
+%random selection and randomized experiment
+%matched pairs?
 
-\subsection*{Types of Statistical Studies}
+\subsection*{Confounding Variables}
+
+<<Data1.5>>=
+head(LifeExpectancyVehicles, 10)
+@
+%fix for every 4 years?
+%confounding variables
+
+\subsubsection*{Figure 1.2}
+
+<<Figure1.2, tidy=FALSE>>=
+xyplot(LifeExpectancy ~ Vehicles, xlab = "Vehicles (millions)", ylab = "Life Expectancy", 
+       data = LifeExpectancyVehicles)
+@
+
+\subsection*{Observational Studies vs Experiments}
 
 Statisticians use the word experiment to mean something very specific.
 \emph{In an \term{experiment}, the researcher determines the values of 
@@ -222,21 +249,7 @@ one or more (explanatory) variables}, typically by random assignment.
 If there is no such assignment by the researcher, the study is an
 \term{observational study}.
 
-%random selection and randomized experiment
-%matched pairs?
 
-\subsubsection*{Vehicles and Life Expectancy}
-
-<<>>=
-head(LifeExpectancyVehicles, 10)
-@
-%fix for every 4 years?
-%confounding variables
-
-<<tidy=FALSE>>=
-xyplot(LifeExpectancy ~ Vehicles, xlab = "Vehicles (millions)", ylab = "Life Expectancy", 
-       data = LifeExpectancyVehicles)
-@
 
 Many of the datasets in \R\ have useful help files that describe the data and explain 
 how they were collected or give references to the original studies. You can access this 
