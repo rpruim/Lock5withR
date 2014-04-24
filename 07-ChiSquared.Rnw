@@ -3,6 +3,11 @@
 
 \Chapter{Chi-Squared Tests for Categorical Variables}
 
+%plotDist("chisq", df=4, type="h")
+%do(10) *  chisq.test(tally( ~ resample(toupper(letters[1:5]), 400) ) )$statistic
+%rmultinom(10,400, prob=c(.2,.2,.2,.2,.2))
+%histogram(~M, width=0.5, data=BootE, density=TRUE)
+
 Goodness of fit tests test how well a distribution fits some hypothesis.
 
 \section{Testing Goodness-of-Fit for a Single Categorical Variable}
@@ -48,11 +53,19 @@ chisq.test(answer)
 
 %\subsubsection*{Figure 7.1}
 
-%\subsubsection*{Figure 7.2}
-
-%\subsubsection*{Figure 7.3}
-
 \subsection*{Chi-square Distribution}
+
+<<Figure7.2>>=
+chisq.sample <- do(1000) *  chisq.test(tally( ~ resample(toupper(letters[1:5]), 400) ) )$statistic
+histogram(~X.squared, data = chisq.sample)
+@
+
+\subsubsection*{Figure 7.3}
+
+<<Figure7.3, fig.keep='last'>>=
+plotDist("chisq", params=list(df=4), type=c("h","l"), groups=  x > 3.425, lty=1)
+ladd(grid.text("3.425",3.425,.175, default.units="native", hjust=0))
+@
 
 Our test statistic will be large when the observed counts and expected counts are quite different.  It will be small when the observed counts and expected counts are quite close.  So we will reject when the test statistic is large. To know how large is large enough, we need to know the sampling distribution.
 
@@ -71,18 +84,29 @@ The mean of a Chi-squared distribution is equal to its degrees of freedom. This 
 
 \subsubsection*{Example 7.6}
 
+\begin{enumerate}
+  \item
+    $H_0$: $p_w= 0.54$, $p_b= 0.18$, $p_h= 0.12$, $p_a= 0.15$, $p_o= 0.01$;  
+    
+    $H_a$: $p_i$ \neq  specified
+    
+	\item 
+    Observed count: $w=780$, $b=117$, $h=114$, $a=384$, $o=58$
+	\item 
+    Chi-squared test:
 <<Example7.6>>=
 jury <- c( 780, 117, 114, 384, 58)
 chisq.test( jury, p=c(.54, .18, .12, .15, .01) )
 xchisq.test( jury, p=c(.54, .18, .12, .15, .01) ) # to list expected counts
 @
-
 Notice in this example, we need to tell \R\ what the null hypothesis is.
 
 How unusual is it to get a test statistic at least as large as 
-ours? We compare to a Chi-squared distribution with 4 degrees of freedom. The mean value of such a statistic is 4, and our test statistic is much larger, so we anticipate that our value is extremely unusual.  
+ours? We compare to a Chi-squared distribution with 4 degrees of freedom. The mean value of such a statistic is 4, and our test statistic is much larger, so we anticipate that our value is extremely unusual.
+\end{enumerate}
 
 %Example 7.7
+
 \subsection*{Goodness-of-Fit for Two Categories}
 
 When there are only two categories, the Chi-squared goodeness of fit test is equivalent to the 1-proportion test. Notice that \function{prop.test()} uses the count in one category and total but that \function{chisq.test()} uses cell counts.
@@ -90,7 +114,7 @@ When there are only two categories, the Chi-squared goodeness of fit test is equ
 \subsubsection*{Example 7.8}
 
 <<Example7.8>>=
-prop.test(84, 200, correct=FALSE)
+prop.test(84, 200)
 chisq.test(c(84, 116), p=c(.5, .5))
 binom.test(84, 200)
 @
@@ -105,6 +129,7 @@ are only approximate, and the approximation is poor when sample sizes are small.
   The binomial test and 1-proportion test also produce confidence intervals.
 \end{itemize}
 
+
 \section{Testing for an Association Between Two Categorical Variables}
 
 \subsubsection*{Example 7.9}
@@ -115,8 +140,15 @@ tally(~Response, format="proportion", data=OneTrueLove)
 tally(~ Response + Gender, format="proportion", margin=TRUE, data=OneTrueLove)
 @
 
+\subsubsection*{Figure 7.4}
+
+<<Figure7.4>>=
+bargraph(~Response|Gender, type="count", data = OneTrueLove)
+@
+
 %\subsection*{Null and Alternative Hypothesis}
 %\subsection*{Expected Counts for a Two-Way Table}
+
 \subsection*{Chi-square Test for Association}
 
 \subsubsection*{Example 7.10}
@@ -124,12 +156,15 @@ tally(~ Response + Gender, format="proportion", margin=TRUE, data=OneTrueLove)
 <<Example7.10>>=
 head(WaterTaste, 3)
 water <- tally(~UsuallyDrink + First, data=WaterTaste); water
-
+@
+<<Example7.10b>>=
 water <- rbind( c(14,15,8,4), c(11,26,16,6) ) # to combine Tap and Filtered
 water
 colnames(water) <- c('Aquafina', 'Fiji', 'SamsChoice', 'Tap') # add column names
 rownames(water) <- c('Bottled', 'Tap/Filtered') # add row names
 water
+@
+<<Example7.10c, warning=FALSE>>=
 xchisq.test(water)
 @
 
@@ -146,17 +181,21 @@ Note: For a $2\times2$ table, we could also use the method of 2-proportions (\fu
 SplitStealTable <- rbind( c(187,195), c(116,76) ); SplitStealTable
 colnames(SplitStealTable) <- c('Split', 'Steal')
 rownames(SplitStealTable) <- c('Younger', 'Older'); SplitStealTable
+@
+<<Example7.11b>>=
 fisher.test(SplitStealTable)
 xchisq.test(SplitStealTable)
 @
-
-<<Example7.11b, tidy=FALSE>>=
+To use the test for proportions as done in Example 6.23,
+<<Example7.11c, tidy=FALSE>>=
 SplitStealData <- rbind( 
   do(187) * data.frame( agegroup = "Under40",   decision="Split"),
   do(195) * data.frame( agegroup = "Under40",   decision="Steal"),
   do(116) * data.frame( agegroup = "Over40",    decision="Split"),
   do(76)  * data.frame( agegroup = "Over40",    decision="Steal")
   )
+@
+<<Example7.11d>>=
 prop.test(decision ~ agegroup, data = SplitStealData)
 @
 
