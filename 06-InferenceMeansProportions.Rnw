@@ -5,9 +5,7 @@
 
 \section{Distribution of a Sample Proportion}
 
-When sampling distributions, bootstrap distributions, and randomization distributions are well approximated
-by normal distributions, and when we have a way of computing the standard error, we can use normal distributions
-to compute confidence intervals and p-values using the following general templates:
+When sampling distributions, bootstrap distributions, and randomization distributions are well approximated by normal distributions, and when we have a way of computing the standard error, we can use normal distributions to compute confidence intervals and p-values using the following general templates:
 
 \begin{itemize} 
   \item confidence interval: 
@@ -21,11 +19,50 @@ to compute confidence intervals and p-values using the following general templat
 		\]
 \end{itemize} 
 
-%Example 6.1
+\subsubsection*{Example 6.1}
+
+<<Example6.1>>=
+SE <- sqrt(0.25 *(1 - 0.25) / 50); SE
+SE <- sqrt(0.25 *(1 - 0.25) / 200); SE
+SE <- sqrt(0.4 *(1 - 0.4) / 50); SE
+@
 
 \subsection*{How Large a Sample Size is Needed?}
 
-%Include figure 6.2?
+\subsubsection*{Figure 6.2}
+
+<<Figure6.2, cache=TRUE, opts.label="fig3">>=
+P.05 <- do(2000) * rflip(50, .05)
+dotPlot(~prop, data=P.05)
+
+P.10 <- do(2000) * rflip(50, .10)
+dotPlot(~prop, data=P.10)
+
+P.25 <- do(2000) * rflip(50, .25)
+dotPlot(~prop, data=P.25)
+
+P.50 <- do(2000) * rflip(50, .50)
+dotPlot(~prop, data=P.50)
+
+P.90 <- do(2000) * rflip(50, .90)
+dotPlot(~prop, data=P.90)
+
+P.99 <- do(2000) * rflip(50, .99)
+dotPlot(~prop, data=P.99)
+@
+
+\subsubsection*{Figure 6.3}
+
+<<Figure6.3, cache=TRUE, opts.label="fig3">>=
+n10 <- do(2000) * rflip(10, .10)
+dotPlot(~prop, data=n10)
+
+n25 <- do(2000) * rflip(25, .10)
+dotPlot(~prop, data=n25)
+
+n200 <- do(2000) * rflip(200, .10)
+dotPlot(~prop, data=n200)
+@
 
 \subsubsection*{Example 6.2}
 
@@ -43,19 +80,24 @@ plotFun(dnorm(x,0.80,0.02) ~ x, x.lim = c(0.72, 0.88))
 \subsection*{Confidence Interval for a Single Proportion}
 
 \subsubsection*{Example 6.3}
+
 <<Example6.3, tidy=FALSE>>=
 p.hat <- 52/100; p.hat            
 SE <- sqrt( p.hat * (1 - p.hat) / 100 ); SE    # est. SE
 p.hat - 1.96 * SE                              # lower end of CI 
 p.hat + 1.96 * SE                              # upper end of CI
-confint(prop.test(52, 100))
 @
 
-%confint(prop.test(52, 100, correct=FALSE))?
+\R can automate finding the confidence interval. Notice the \argument{correct = FALSE} in the second line. The default for the proportion test includes a continuity correction for more accurate results. You can perform the test without the correction for answers closer to the ones in the textbook.
+<<Example6.3b>>=
+confint(prop.test(52, 100))
+confint(prop.test(52, 100, correct=FALSE))
+@
+
 
 \subsubsection*{Example 6.4}
 
-<<Example6.4a, tidy=FALSE>>=
+<<Example6.4, tidy=FALSE>>=
 p.hat <- 0.28; p.hat            
 SE <- sqrt( p.hat * (1 - p.hat) / 800 ); SE    # est. SE
 p.hat - 1.96 * SE                              # lower end of CI 
@@ -94,18 +136,31 @@ n <- ((z.star / 0.03)^2) * p.hat * (1 - p.hat); n
 
 \subsubsection*{Example 6.7}
 
+\begin{enumerate}
+  \item
+    $H_0$: $p = 0.20$;  $H_a$: $p < 0.20$
+  \item
+  	Test statistic:  $\hat p = 0.19$ (the sample approval rating)
+	\item
+		Test for a single proportion:
 <<Example6.7>>=
 p.hat <- 0.19; p.hat
 p <- 0.20; p
+p * 1013                   # check >= 10
+(1 - p) * 1013             # check >= 10
 SE <- sqrt(p * (1 - p) / 1013); SE
 z <- (p.hat - p) / SE; z
 pnorm(z)
+@
+Again, \R can automate the test for us.
+<<Example6.7b>>=
 prop.test(192, 1013, alt = "less", p=0.20) # 192 = 0.19 * 1013
 @
-Notice the "less" for the alternative hypothesis.
+Notice the ``less" for the alternative hypothesis because this is a lower tail alternative.
+\end{enumerate}
 
 \subsubsection*{Example 6.8}
-%book and Pruim approximation method different
+
 <<Example6.8, tidy=FALSE>>=
 p.hat <- 66/119; p.hat
 p <- 1/3; p
@@ -121,7 +176,7 @@ prop.test(66, 119, p=1/3)
 
 \subsubsection*{Example 6.9}
 
-<<Example6.9a>>=
+<<Example6.9>>=
 p.hat <- 8/9; p.hat
 p <- 0.5; p
 p * 9                   # check >= 10
@@ -135,9 +190,14 @@ prop( ~ (prop >= p.hat), data=Randomization)
 
 \section{Distribution of a Sample Mean}
 
-%\subsection*{Computing the Standard Error}
+\subsection*{Computing the Standard Error}
 
-%Example 6.10
+\subsubsection*{Example 6.10}
+
+<<Example6.10>>=
+SE <- 32000 / sqrt(100); SE
+SE <- 32000 / sqrt(400); SE
+@
 
 \subsection*{How Large a Sample Size is Needed?}
 
@@ -179,7 +239,7 @@ the t-distribution.
 
 \subsubsection*{Example 6.11}
 
-<<Example6.11a>>=
+<<Example6.11>>=
 df <- 50 - 1; df
 SE <- 10.5 / sqrt (50); SE
 @
@@ -190,14 +250,14 @@ SE <- 1.25 / sqrt (8); SE
 
 \subsubsection*{Figure 6.8}
 <<Figure6.8, fig.keep='last'>>=
-plotFun(dnorm(x, 0, 1) ~x, x.lim=c(-4, 4))
+plotFun(dnorm(x, 0, 1) ~x, x.lim=c(-4, 4), col="black")
 plotFun(dt(x, df=15) ~x, add=TRUE, lty=2)
 plotFun(dt(x, df=5) ~x, add=TRUE, lty=3, col="red")
 @
 
 \subsubsection*{Example 6.12}
 
-<<Example6.12a>>=
+<<Example6.12>>=
 qt(.975, df=15)
 pt(1.5, df=15, lower.tail=FALSE)
 @
@@ -207,13 +267,20 @@ Similar to the normal distribution, the function for t-distribution is set to fi
 qnorm(.975)
 pnorm(1.5, lower.tail=FALSE)
 @
-%how to fill in tails
-<<Example6.12c,fig.keep='last'>>=
+
+\subsubsection*{Figure 6.9}
+
+<<Figure6.9,fig.keep='last'>>=
 plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
-plotDist("t", params=list(df=15), type="h", groups= x > 2.131)
-ladd(grid.text("you can add text like this",2.1,.1, default.units="native", hjust=0))
+plotDist("t", params=list(df=15), type=c("h","l"), groups= (-2.131 < x & x < 2.131), lty=1)
+ladd(grid.text("2.131",2.1,.1, default.units="native", hjust=0))
 @
 
+<<Figure6.9b,fig.keep='last'>>=
+plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
+plotDist("t", params=list(df=15), type=c("h","l"), groups= x > 1.5, lty=1)
+ladd(grid.text("1.5",1.5,.1, default.units="native", hjust=0))
+@
 
 \section{Confidence Interval for a Mean Using the t-Distribution}
 
@@ -221,9 +288,9 @@ ladd(grid.text("you can add text like this",2.1,.1, default.units="native", hjus
 
 \subsubsection*{Example 6.13}
 
-<<Example6.13a>>=
+<<Example6.13>>=
 head(Flight179, 3)
-dotPlot(~Flight179, cex = 0.25, data = Flight179) # to check distribution
+dotPlot(~Flight179, cex = 0.25, data = Flight179) # to check for normality
 @
 \RStudio\ can do all of the calculations for you if you give it the raw data:
 <<Example6.13b>>=
@@ -239,7 +306,7 @@ confint(t.test(~Flight179, data=Flight179))
 
 <<Example6.14>>=
 head(CommuteAtlanta, 3)
-densityplot(~Time, data = CommuteAtlanta) # to check distribution
+densityplot(~Time, data = CommuteAtlanta) # to check for normality
 @
 <<Example6.14b>>=
 favstats(~Time, data=CommuteAtlanta)
@@ -251,7 +318,7 @@ confint(t.test(~Time, conf.level = 0.95, data=CommuteAtlanta))
 
 <<Example6.15>>=
 head(ManhattanApartments, 3)
-dotPlot(~Rent, width=200, cex=.25,  data=ManhattanApartments) # to check distribution
+dotPlot(~Rent, width=200, cex=.15,  data=ManhattanApartments) # to check for normality
 @
 <<Example6.15b, cache=TRUE>>=
 Boot.Rent <- do(1000) * mean( ~Rent, data=resample(ManhattanApartments)) 
@@ -267,7 +334,9 @@ cdata(0.95, result, data=Boot.Rent)
 n <- (1.96 * 20.18 / 2) ^ 2; n
 @
 
+
 \section{Test for a Single Mean}
+
 \subsubsection*{Example 6.17}
 <<Example6.17>>=
 head(BodyTemp50)
@@ -279,7 +348,14 @@ favstats(~BodyTemp, data = BodyTemp50)
 t.test(~BodyTemp, mu = 98.6, data = BodyTemp50)
 pval(t.test(~BodyTemp, mu = 98.6, data=BodyTemp50)) # to find the p-value directly
 @
-%how to graph t-distribution like xpnorm?
+
+\subsubsection*{Figure 6.17}
+
+<<Figure6.17,fig.keep='last'>>=
+plotFun(dt(x, df=49) ~x, x.lim=c(-4, 4))
+plotDist("t", params=list(df=49), type=c("h","l"), groups= (-3.14 < x & x < 3.14), lty=1)
+ladd(grid.text("3.14",3,.025, default.units="native", hjust=0))
+@
 
 \subsubsection*{Example 6.18}
 <<Example6.18>>=
@@ -291,8 +367,7 @@ densityplot(~Alkalinity, data=FloridaLakes) # to check for normality
 favstats(~Alkalinity, data=FloridaLakes)
 t.test(~Alkalinity, alt = "greater", mu = 35, data = FloridaLakes)
 @
-Notice the "greater" for the alternative hypothesis.
-%should I add directions?
+Notice the ``greater" for the alternative hypothesis.
 
 \section{Distribution of Differences in Proportions}
 
@@ -310,8 +385,7 @@ diff(prop(Response~Gender, data=OneTrueLove))
 <<Figure6.20, cache=TRUE>>=
 Boot.Love <- do(5000)*diff(prop(Response~Gender, data=resample(OneTrueLove)))
 head(Boot.Love, 3)
-histogram(~Agree.Male, data=Boot.Love)
-plotFun(dnorm(x, 0.050, 0.0176)~x, add=TRUE) # add normal distribution from Example 6.20
+histogram(~Agree.Male, fit="normal", data=Boot.Love)
 @
 
 \subsubsection*{Example 6.20}
@@ -322,14 +396,21 @@ SE <- sqrt(0.257*(1-0.257)/1412 + 0.307*(1-0.307)/1213); SE
 
 \section{Confidence Interval for a Difference in Proportions}
 
+\subsubsection*{Data 6.3}
+
+<<Data6.3>>=
+success <- c(158, 109)
+n <- c(444,922)
+@
+
 \subsubsection*{Example 6.21}
-%z.star is a little different from book
+
 <<Example6.21>>=
 success <- c(158, 109)
 n <- c(444,922)
-prop.test(success, n, conf.level=0.90, correct=FALSE)
+prop.test(success, n, conf.level=0.90)
 @
-%make note of creating data, correct=FALSE?
+
 
 \section{Test For a Difference in Proportions}
 
@@ -337,10 +418,10 @@ prop.test(success, n, conf.level=0.90, correct=FALSE)
 
 <<Data6.4, tidy=FALSE>>=
 SplitSteal <- rbind( 
-  do(187) * data.frame( agegroup = "Under40",   decision="Split"),
-  do(195) * data.frame( agegroup = "Under40",   decision="Steal"),
-  do(116) * data.frame( agegroup = "Over40",    decision="Split"),
-  do(76)  * data.frame( agegroup = "Over40",    decision="Steal")
+  do(187) * data.frame( agegroup = "Under40", decision = "Split"),
+  do(195) * data.frame( agegroup = "Under40", decision = "Steal"),
+  do(116) * data.frame( agegroup = "Over40",  decision = "Split"),
+  do(76)  * data.frame( agegroup = "Over40",  decision = "Steal")
   )
 @
 
@@ -355,25 +436,24 @@ prop(~decision, data=SplitSteal) # pooled proportion
 
 <<Example6.23>>=
 diff <- diff(prop(decision~agegroup, data=SplitSteal)); diff
-prop.test(decision~agegroup, correct=FALSE, data=SplitSteal)
+prop.test(decision~agegroup, data=SplitSteal)
 @
+
 
 \section{Distribution of Differences in Means}
 
 \subsubsection*{Figure 6.21}
 
-<<Figure6.21, cache=TRUE, fig.keep='last'>>=
-BootE <- do(1000) * diff(mean(Exercise~Gender, data=resample(ExerciseHours)))
+<<Figure6.21, cache=TRUE>>=
+BootE <- do(2000) * diff(mean(Exercise~Gender, data=resample(ExerciseHours)))
 head(BootE, 3)
-histogram(~M, width=0.5, data=BootE)
-plotFun(dnorm(x, 3.0, 2.39)~x, add=TRUE) # add normal distribution from Example 6.24
+histogram(~M, width=0.5, fit="normal", data=BootE)
 @
 
-<<Figure6.21b, cache=TRUE, fig.keep='last'>>=
-Random.Smiles <- do(1000) * diff(mean(Leniency ~ shuffle(Group), data = Smiles))
+<<Figure6.21b, cache=TRUE>>=
+Random.Smiles <- do(2000) * diff(mean(Leniency ~ shuffle(Group), data = Smiles))
 head(Random.Smiles, 3)
-histogram(~smile, n=24, data=Random.Smiles)
-plotFun(dnorm(x, 0, 0.39)~x, add=TRUE) # add normal distribution from Example 6.24
+histogram(~smile, n=24,, fit="normal", data=Random.Smiles)
 @
 
 \subsection*{The t-Distribution}
@@ -387,6 +467,8 @@ favstats(Leniency~Group, data=Smiles)
 SE <- sqrt(1.68^2/34 + 1.52^2/34); SE
 @
 
+%Example 6.25
+
 
 \section{Confidence Interval for a Difference in Means}
 
@@ -396,8 +478,13 @@ SE <- sqrt(1.68^2/34 + 1.52^2/34); SE
 head(CommuteStLouis)
 favstats(~Time, data=CommuteStLouis)
 favstats(~Time, data=CommuteAtlanta)
+bwplot(~Time, xlim=c(0, 200), data = CommuteAtlanta) # to check for normality
+bwplot(~Time, xlim=c(0, 200), data = CommuteStLouis) # to check for normality
+@
+<<Example6.26b>>=
 confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time, conf.level=0.90))
 @
+
 
 \section{Test for a Difference in Means}
 
@@ -411,12 +498,17 @@ bwplot(Group~Leniency, data=Smiles) # to check for normality
 t.test(Leniency~Group, alt="less", data=Smiles)
 @
 
+
 \section{Paired Difference in Means}
 
 \subsubsection*{Example 6.28}
 
 <<Example6.28>>=
 head(Wetsuits, 3)
+dotPlot(~ Wetsuit, xlim = c(1.1, 1.8), cex=.25, data = Wetsuits) # to check for normality
+dotPlot(~ NoWetsuit, xlim = c(1.1, 1.8), cex=.25, data = Wetsuits) # to check for normality
+@
+<<Example6.28b>>=
 t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit)
 @
 
@@ -426,6 +518,8 @@ t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit)
 head(Wetsuits, 3)
 t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired=TRUE)
 @
+
+%Figure6.28
 
 \subsubsection*{Example 6.30}
 
