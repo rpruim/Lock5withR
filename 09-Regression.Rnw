@@ -86,9 +86,11 @@ xyplot( Price ~ PPM, data=InkjetPrinters, type=c('p','r') )
 
 \subsubsection*{Figure 9.2}
 
-<<Figure9.2>>=
-
+<<Figure9.2, eval=FALSE>>=
+Boot.Ink <- do(1000) * lm(Price ~ PPM, data=resample(InkjetPrinters))
+Rand.Ink <- do(1000) * lm(Price ~ shuffle(PPM), data=InkjetPrinters)
 @
+%how to get just the slope?
 
 \subsubsection*{Example 9.2}
 
@@ -107,11 +109,17 @@ confint( lm( Tip ~ Bill, data=RestaurantTips) , "Bill", level=0.90)
 
 \subsubsection*{Example 9.4}
 
-%Test!
-
+\begin{enumerate}
+  \item
+    $H_0$: $\beta_1 = 0$;  $H_a$: $\beta_1 \neq 0$
+  \item
+    Test statistic:  $b_1 = 0.0488$ (sample slope)
+	\item
+		t-test for slope:
 <<Example9.4>>=
 summary( lm( PctTip ~ Bill, data=RestaurantTips) ) 
 @
+\end{enumerate}
 
 \subsection*{t-Test for Correlation}
 
@@ -138,24 +146,21 @@ summary( lm( Price ~ PPM, data=InkjetPrinters ) )
 
 \subsection*{Checking Conditions for a Simple Linear Model}
 
-\subsubsection*{Figure 9.3}
+%\subsubsection*{Figure 9.3}
 
-\subsubsection*{Figure 9.4}
+%\subsubsection*{Figure 9.4}
 
-\subsubsection*{Example 9.8}
+%\subsubsection*{Example 9.8}
 
-<<Example9.8>>=
-xyplot( Price ~ PPM, data=InkjetPrinters, type=c('p','r') )
-@
-
-\subsubsection*{Figure 9.5}
+%\subsubsection*{Figure 9.5}
 
 \subsubsection*{Example 9.9}
 
 <<Example9.9>>=
-xyplot( Tip ~ Bill, data=RestaurantTips, type=c('p','r') )
-xyplot( PctTip ~ Bill, data=RestaurantTips, type=c('p','r') )
+xyplot( Tip ~ Bill, data=RestaurantTips, type=c('p','r'), cex=0.5 )
+xyplot( PctTip ~ Bill, data=RestaurantTips, type=c('p','r'), cex=0.5)
 @
+
 
 \section{ANOVA for Regression}
 
@@ -232,12 +237,14 @@ The summary of the linear model shows us the \term{coefficient of determination}
 SSM <- 15317
 SST <- SSM + 19834
 R2 <- SSM / SST; R2
+rsquared(lm(Calories ~ Sugars, data = Cereal))
 @
 
 <<Example9.13b>>=
 SSM <- 3241
 SST <- SSM + 31909
 R2 <- SSM / SST; R2
+rsquared(lm(Calories ~ Sodium, data = Cereal))
 @
 
 \subsection*{Computational Details}
@@ -259,6 +266,7 @@ favstats(~Sodium, data=Cereal)
 SE <- SD / (77.4 * sqrt(30 - 1)) # SD from Example 9.15
 SE
 @
+
 
 \section{Confidence and Prediction Intervals}
 
@@ -283,6 +291,7 @@ variability of responses around the true regression line.
 \end{enumerate}
 \end{enumerate}
 \end{enumerate}
+
 %Example 9.17
 
 \subsubsection*{Example 9.18}
@@ -296,11 +305,11 @@ summary(ink.model)
 Now let's create a function that will estimate values of \variable{Price} for a given
 value of \variable{PPM}:
 <<Example9.18b>>=
-ink <- makeFun(ink.model)
+Ink.Price <- makeFun(ink.model)
 @
 We can now input a PPM and see what our least squares regression line predicts for the price:
 <<Example9.18c>>=
-ink(PPM=3.0)   # estimate Price when PPM is 3.0
+Ink.Price(PPM=3.0)   # estimate Price when PPM is 3.0
 @
 
 \R\ can compute two kinds of confidence intervals for the response for a given value
@@ -309,14 +318,14 @@ ink(PPM=3.0)   # estimate Price when PPM is 3.0
 A confidence interval for the \emph{mean response} for  a \emph{given explanatory value} 
 can be computed by adding \verb!interval='confidence'!.  
 <<Example9.18d>>=
-ink(PPM=3.0, interval='confidence')
+Ink.Price(PPM=3.0, interval='confidence')
 @
 \item
 An interval for an \emph{individual response} (called a prediction interval to 
 avoid confusion with the confidence interval above) 
 can be computed by adding \verb!interval='prediction'! instead.  
 <<Example9.18e>>=
-ink(PPM=3.0, interval='prediction')
+Ink.Price(PPM=3.0, interval='prediction')
 @
 \end{enumerate}
 
