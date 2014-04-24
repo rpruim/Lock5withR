@@ -1,4 +1,5 @@
 \Sexpr{set_parent('Lock5withR.Rnw')}
+
 \setcounter{chapter}{7}
 \Chapter{ANOVA to Compare Means}
 
@@ -79,23 +80,28 @@
 favstats( Ants ~ Filling, data=SandwichAnts )
 @
 
-<<Example8.1b, opts.label="fig4">>=
+<<Example8.1b>>=
 xyplot( Ants ~ Filling, SandwichAnts, type=c('p','a') )
 bwplot( Ants ~ Filling, SandwichAnts )
 @
 
-\subsection*{Why Analyze Variability for a Difference in Means}
-Question: Are these differences significant?
-Or would we expect sample differences this large by random chance even 
-if (in the population) the mean amount of shift is equal for all three groups?
+%\subsection*{Why Analyze \emph{Variability} for a Difference in \emph{Means}?}
 
-Whether differences between the groups are significant depends on three things:
+%Question: Are these differences significant?
+%Or would we expect sample differences this large by random chance even 
+%if (in the population) the mean amount of shift is equal for all three groups?
 
-   \begin{enumerate}
-   \item  the difference in the means
-   \item  the amount of variation within each group
-   \item  the sample sizes
-   \end{enumerate}
+%Whether differences between the groups are significant depends on three things:
+%
+%   \begin{enumerate}
+%   \item  the difference in the means
+%   \item  the amount of variation within each group
+%   \item  the sample sizes
+%   \end{enumerate}
+   
+%Example 8.2
+
+\subsection*{Partitioning Variability}
    
 \subsubsection*{Example 8.3}
 
@@ -105,21 +111,15 @@ anova( lm ( Ants ~ Filling, SandwichAnts ) )
 
 The p-value listed in this output is the p-value for our null hypothesis that
 the mean population response is the same in each treatment group.
-In this case we would reject the null hypothesis at either the $\alpha=0.05$
-or $\alpha=0.01$ levels.
+In this case we would reject the null hypothesis at the $\alpha=0.05$ level.
 
 In the next section we'll look at this test in more detail, but notice that if 
 you know the assumptions of a test, the null hypothesis being tested, and 
 the p-value, you can generally interpret the results even if you don't know 
 all the details of how the test statistic is computed.
-
-
-\newpage
    
-\subsection*{The F-Statistics}
+\subsection*{The F-Statistic}
 
-
-\subsubsection{The ingredients}
 The ANOVA test statistic (called $F$) is based on three ingredients:
 \begin{enumerate}
 	\item
@@ -133,6 +133,7 @@ The ANOVA test statistic (called $F$) is based on three ingredients:
 Each of these will be involved in the calculation of $F$.
 
 %Example 8.4
+
 \subsubsection*{Figure 8.3}
 
 <<Figure8.3, cache=TRUE>>=
@@ -145,7 +146,6 @@ dotPlot( ~ F, width=0.20, groups = (F <=5.63), data=rand)
 %histogram("f", df1=2, df2=21)
 %plotDist("f", df1=2, df2=21)
 %plotDist("chisq", df=4)
-
 
 \subsection*{The F-distribution}
 
@@ -183,21 +183,23 @@ In our example, this is $2$ for the numerator and $7$ for the denominator.
 
 \subsubsection*{Figure 8.4}
 
-<<Figure8.4>>=
-plotDist("f", df1=2, df2=21)
+<<Figure8.4, fig.keep='last'>>=
+histogram( ~ F, width=.75, center=.25, data=rand)
+plotDist("f", df1=2, df2=21, add=TRUE)
 @
-%how to fit histogram?
+%histogram of randomization with 2 and 21 df?
 
 \subsection*{More Examples of ANOVA}
 
 \subsubsection*{Example 8.5}
 
 <<Example8.5>>=
-head(StudentSurvey)
+head(StudentSurvey, 3)
 favstats(~Pulse, data=StudentSurvey)
 favstats(Pulse~Award, data=StudentSurvey)
 anova(lm(Pulse~Award, StudentSurvey))
 @
+
 \subsubsection*{Figure 8.5}
 
 <<Figure8.5>>=
@@ -224,7 +226,6 @@ bwplot(Award ~ Pulse, data=StudentSurvey)
 
 		The individual values of \resid{$E$} are called \term{residuals}.
 \end{itemize}
-
 
 \subsubsection*{Example 8.6}
 
@@ -282,25 +283,27 @@ different from which.  (See the solution to problem 15.3 for an example.)
 \subsubsection*{Example 8.7}
 
 <<Example8.7>>=
-summary(lm(Ants ~ Filling, SandwichAnts))
+anova(lm(Ants ~ Filling, SandwichAnts))
 PB <- subset(SandwichAnts, Filling == "Peanut Butter")
 t.test(~Ants, data=PB)
 @
-%how to do anova for just peanut butter? must make new or transform dataset?
+%how to do correct t-test with df=21
 
 \subsubsection*{Example 8.8}
 
 <<Example8.8>>=
-noHP <- subset(SandwichAnts, Filling != "Ham & Pickles")
-t.test(Ants ~ Filling, data=noHP)
+noPB <- subset(SandwichAnts, Filling != "Peanut Butter")
+t.test(Ants ~ Filling, data=noPB)
 @
-%df is incorrect through use of t.test
+%wrong
 
 \subsubsection*{Example 8.9}
 
-%<<Example8.9>>=
-%anova(lm(Ants ~ Filling, subset(SandwichAnts, Filling ==)))
-%@
+<<Example8.9>>=
+noHP <- subset(SandwichAnts, Filling != "Ham & Pickles")
+t.test(Ants ~ Filling, data=noHP)
+@
+%wrong
 
 \subsection*{Lots of Pairwise Comparisons}
 
@@ -319,7 +322,7 @@ confint(lm(Cost ~ Field, TextbookCosts))
 bwplot(Field ~ Cost, data=TextbookCosts)
 @
 
-\subsection*{The Problem of Multiplicity}
+%\subsection*{The Problem of Multiplicity}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
