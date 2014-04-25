@@ -106,7 +106,8 @@ bwplot( Ants ~ Filling, SandwichAnts )
 \subsubsection*{Example 8.3}
 
 <<Example8.3>>=
-anova( lm ( Ants ~ Filling, SandwichAnts ) )
+Ants.Model <- lm (Ants ~ Filling, data = SandwichAnts)
+anova(Ants.Model)
 @
 
 The p-value listed in this output is the p-value for our null hypothesis that
@@ -136,16 +137,12 @@ Each of these will be involved in the calculation of $F$.
 
 \subsubsection*{Figure 8.3}
 
-<<Figure8.3, cache=TRUE>>=
-rand <- do(1000) * anova(lm(Ants ~ shuffle(Filling), data=SandwichAnts))
-tally( ~ (F >= 5.63), data = rand )
-prop( ~ (F >= 5.63), data = rand )
-dotPlot( ~ F, width=0.20, groups = (F <=5.63), data=rand)
+<<Figure8.3, cache=TRUE, opts.label="fig4">>=
+Rand.Ants <- do(1000) * anova(lm(Ants ~ shuffle(Filling), data=SandwichAnts))
+tally( ~ (F >= 5.63), data = Rand.Ants)
+prop( ~ (F >= 5.63), data = Rand.Ants)
+dotPlot( ~ F, width=0.20, groups = (F <=5.63), data=Rand.Ants)
 @
-
-%histogram("f", df1=2, df2=21)
-%plotDist("f", df1=2, df2=21)
-%plotDist("chisq", df=4)
 
 \subsection*{The F-distribution}
 
@@ -184,10 +181,9 @@ In our example, this is $2$ for the numerator and $7$ for the denominator.
 \subsubsection*{Figure 8.4}
 
 <<Figure8.4, fig.keep='last'>>=
-histogram( ~ F, width=.75, center=.25, data=rand)
+histogram( ~ F, width=4/7, center=.25, data=Rand.Ants)
 plotDist("f", df1=2, df2=21, add=TRUE)
 @
-%histogram of randomization with 2 and 21 df?
 
 \subsection*{More Examples of ANOVA}
 
@@ -283,27 +279,44 @@ different from which.  (See the solution to problem 15.3 for an example.)
 \subsubsection*{Example 8.7}
 
 <<Example8.7>>=
-anova(lm(Ants ~ Filling, SandwichAnts))
-PB <- subset(SandwichAnts, Filling == "Peanut Butter")
-t.test(~Ants, data=PB)
+anova(Ants.Model)
+MSE<- 138.7
+mean(Ants~Filling, data = SandwichAnts)
+mean <- 34.0
+t.star <- qt(.975, df=21); t.star
+mean - t.star * (sqrt(MSE) / sqrt(8))
+mean + t.star * (sqrt(MSE) / sqrt(8))
 @
-%how to do correct t-test with df=21
+
+<<Example8.7b, opts.label="fig4">>=
+TukeyHSD(Ants.Model)
+plot(TukeyHSD(Ants.Model))
+@
 
 \subsubsection*{Example 8.8}
 
 <<Example8.8>>=
-noPB <- subset(SandwichAnts, Filling != "Peanut Butter")
-t.test(Ants ~ Filling, data=noPB)
+MSE<- 138.7
+mean(Ants~Filling, data = SandwichAnts)
+diff.mean <- (30.75 - 49.25)
+t.star <- qt(.975, df=21); t.star
 @
-%wrong
+<<Example8.8b>>=
+diff.mean - t.star * (sqrt(MSE * (1/8 + 1/8)))
+diff.mean + t.star * (sqrt(MSE * (1/8 + 1/8)))
+@
 
 \subsubsection*{Example 8.9}
 
 <<Example8.9>>=
-noHP <- subset(SandwichAnts, Filling != "Ham & Pickles")
-t.test(Ants ~ Filling, data=noHP)
+MSE<- 138.7
+mean(Ants~Filling, data = SandwichAnts)
+diff.mean <- (30.75 - 34.0)
 @
-%wrong
+<<Example8.9b>>=
+t <- diff.mean / sqrt(MSE * (1/8 + 1/8)); t
+pt(t, df = 21) * 2
+@
 
 \subsection*{Lots of Pairwise Comparisons}
 
@@ -311,9 +324,12 @@ t.test(Ants ~ Filling, data=noHP)
 
 <<Example8.10>>=
 head(TextbookCosts)
-anova(lm(Cost ~ Field, TextbookCosts))
-summary(lm(Cost ~ Field, TextbookCosts))
-confint(lm(Cost ~ Field, TextbookCosts))
+Books.Model <- lm(Cost ~ Field, data = TextbookCosts)
+anova(Books.Model)
+summary(Books.Model)
+@
+<<Example8.10b>>=
+TukeyHSD(Books.Model)
 @
 
 \subsubsection*{Figure 8.8}
@@ -321,6 +337,7 @@ confint(lm(Cost ~ Field, TextbookCosts))
 <<Figure8.8>>=
 bwplot(Field ~ Cost, data=TextbookCosts)
 @
+
 
 %\subsection*{The Problem of Multiplicity}
 
