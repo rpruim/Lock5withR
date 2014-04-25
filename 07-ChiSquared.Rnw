@@ -3,10 +3,8 @@
 
 \Chapter{Chi-Squared Tests for Categorical Variables}
 
-%plotDist("chisq", df=4, type="h")
 %do(10) *  chisq.test(tally( ~ resample(toupper(letters[1:5]), 400) ) )$statistic
 %rmultinom(10,400, prob=c(.2,.2,.2,.2,.2))
-%histogram(~M, width=0.5, data=BootE, density=TRUE)
 
 Goodness of fit tests test how well a distribution fits some hypothesis.
 
@@ -55,14 +53,16 @@ chisq.test(answer)
 
 \subsection*{Chi-square Distribution}
 
-<<Figure7.2>>=
+\subsubsection*{Figure 7.2}
+
+<<Figure7.02>>=
 chisq.sample <- do(1000) *  chisq.test(tally( ~ resample(toupper(letters[1:5]), 400) ) )$statistic
 histogram(~X.squared, data = chisq.sample)
 @
 
 \subsubsection*{Figure 7.3}
 
-<<Figure7.3, fig.keep='last'>>=
+<<Figure7.03, fig.keep='last'>>=
 plotDist("chisq", params=list(df=4), type=c("h","l"), groups=  x > 3.425, lty=1)
 ladd(grid.text("3.425",3.425,.175, default.units="native", hjust=0))
 @
@@ -88,7 +88,7 @@ The mean of a Chi-squared distribution is equal to its degrees of freedom. This 
   \item
     $H_0$: $p_w= 0.54$, $p_b= 0.18$, $p_h= 0.12$, $p_a= 0.15$, $p_o= 0.01$;  
     
-    $H_a$: $p_i$ \neq  specified
+    $H_a$: At least one $p_i$ is not as specified.
     
 	\item 
     Observed count: $w=780$, $b=117$, $h=114$, $a=384$, $o=58$
@@ -142,7 +142,7 @@ tally(~ Response + Gender, format="proportion", margin=TRUE, data=OneTrueLove)
 
 \subsubsection*{Figure 7.4}
 
-<<Figure7.4>>=
+<<Figure7.04>>=
 bargraph(~Response|Gender, type="count", data = OneTrueLove)
 @
 

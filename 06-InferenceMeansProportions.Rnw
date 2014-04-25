@@ -31,37 +31,37 @@ SE <- sqrt(0.4 *(1 - 0.4) / 50); SE
 
 \subsubsection*{Figure 6.2}
 
-<<Figure6.2, cache=TRUE, opts.label="fig3">>=
+<<Figure6.02, cache=TRUE, opts.label="fig3">>=
 P.05 <- do(2000) * rflip(50, .05)
-dotPlot(~prop, data=P.05)
+dotPlot(~prop, width = .02, cex = 25, data=P.05)
 
 P.10 <- do(2000) * rflip(50, .10)
-dotPlot(~prop, data=P.10)
+dotPlot(~prop, width = .02, cex = 15, data=P.10)
 
 P.25 <- do(2000) * rflip(50, .25)
-dotPlot(~prop, data=P.25)
+dotPlot(~prop, width = .02, cex = 10, data=P.25)
 
 P.50 <- do(2000) * rflip(50, .50)
-dotPlot(~prop, data=P.50)
+dotPlot(~prop, width = .02, cex = 5, data=P.50)
 
 P.90 <- do(2000) * rflip(50, .90)
-dotPlot(~prop, data=P.90)
+dotPlot(~prop, width = .02, cex = 10, data=P.90)
 
 P.99 <- do(2000) * rflip(50, .99)
-dotPlot(~prop, data=P.99)
+dotPlot(~prop, width = .02, cex = 25, data=P.99)
 @
 
 \subsubsection*{Figure 6.3}
 
-<<Figure6.3, cache=TRUE, opts.label="fig3">>=
+<<Figure6.03, cache=TRUE, opts.label="fig3">>=
 n10 <- do(2000) * rflip(10, .10)
-dotPlot(~prop, data=n10)
+dotPlot(~prop, width = .1, cex = 25, data=n10)
 
 n25 <- do(2000) * rflip(25, .10)
-dotPlot(~prop, data=n25)
+dotPlot(~prop, width = .04, cex = 10, data=n25)
 
 n200 <- do(2000) * rflip(200, .10)
-dotPlot(~prop, data=n200)
+dotPlot(~prop, width = .005, cex = 5, data=n200)
 @
 
 \subsubsection*{Example 6.2}
@@ -202,7 +202,7 @@ SE <- 32000 / sqrt(400); SE
 \subsection*{How Large a Sample Size is Needed?}
 
 \subsubsection*{Figure 6.6}
-<<Figure6.6,cache=TRUE,opts.label="fig3">>=
+<<Figure6.06,cache=TRUE,opts.label="fig3">>=
 n1 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 1))
 histogram(~result, data=n1)
 n5 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 5))
@@ -249,7 +249,7 @@ SE <- 1.25 / sqrt (8); SE
 @
 
 \subsubsection*{Figure 6.8}
-<<Figure6.8, fig.keep='last'>>=
+<<Figure6.08, fig.keep='last'>>=
 plotFun(dnorm(x, 0, 1) ~x, x.lim=c(-4, 4), col="black")
 plotFun(dt(x, df=15) ~x, add=TRUE, lty=2)
 plotFun(dt(x, df=5) ~x, add=TRUE, lty=3, col="red")
@@ -270,13 +270,13 @@ pnorm(1.5, lower.tail=FALSE)
 
 \subsubsection*{Figure 6.9}
 
-<<Figure6.9,fig.keep='last'>>=
+<<Figure6.09,fig.keep='last'>>=
 plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
 plotDist("t", params=list(df=15), type=c("h","l"), groups= (-2.131 < x & x < 2.131), lty=1)
 ladd(grid.text("2.131",2.1,.1, default.units="native", hjust=0))
 @
 
-<<Figure6.9b,fig.keep='last'>>=
+<<Figure6.09b,fig.keep='last'>>=
 plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
 plotDist("t", params=list(df=15), type=c("h","l"), groups= x > 1.5, lty=1)
 ladd(grid.text("1.5",1.5,.1, default.units="native", hjust=0))
