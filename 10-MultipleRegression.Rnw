@@ -42,16 +42,20 @@ summary(lm(Bodyfat ~ Weight + Height + Abdomen, data = BodyFat))
 \subsubsection*{Example 10.6}
 
 <<Example10.6>>=
-anova(lm(Price ~ PPM, data = InkjetPrinters))
-anova(lm(Price ~ PPM + CostBW, data = InkjetPrinters))
+Mod0 <- lm(Price ~ 1, data = InkjetPrinters)
+Mod1 <- lm(Price ~ PPM, data = InkjetPrinters)
+Mod2 <- lm(Price ~ PPM + CostBW, data = InkjetPrinters)
+anova(Mod0, Mod1)
+anova(Mod0, Mod2)
 @
-%anova for multiple regression model (F-stat)
 
 \subsubsection*{Example 10.7}
 
 <<Example10.7>>=
-summary(lm(Price ~ PhotoTime + CostColor, data = InkjetPrinters))
-anova(lm(Price ~ PhotoTime + CostColor, data = InkjetPrinters))
+Mod0 <- lm(Price ~ 1, data = InkjetPrinters)
+Mod1 <- lm(Price ~ PhotoTime + CostColor, data = InkjetPrinters)
+summary(Mod1)
+anova(Mod0, Mod1)
 @
 
 \subsubsection*{Example 10.8}
