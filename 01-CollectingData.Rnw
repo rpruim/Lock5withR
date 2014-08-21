@@ -3,88 +3,77 @@
 \setcounter{chapter}{0}
 \Chapter{Collecting Data}
 
-%In this chapter we discuss graphical and numerical summaries of data.  These notes focus primarily on
-%how to get \R\ to do the work for you.  The text book includes more information about why and when
-%to use various kinds of summaries.
+%In this chapter we discuss graphical and numerical summaries of data.  These notes focus primarily on how to get \R\ to do the work for you.  The text book includes more information about why and when to use various kinds of summaries.
 
 \section{The Structure of Data}
 
-%INTRODUCTION TO SECTION
-%sub-subsections
-
 \subsection*{Cases and Variables}
 
-Data sets in \R\ are usually stored as \term{data frames} in a rectangular arrangement with rows 
-corresponding to observational units and columns corresponding to variables.  A number of data
-sets are built into \R\ and its packages. The package for our text is \pkg{Lock5Data} which comes with a number of data sets. %1.4 p.13
+Data sets in \R\ are usually stored as \term{data frames} in a rectangular arrangement with rows corresponding to observational units and columns corresponding to variables.  A number of data sets are built into \R\ and its packages. The package for our text is \pkg{Lock5Data} which comes with a number of data sets. %1.4 p.13
 
 <<>>=
 require(Lock5Data)  # Tell R to use the package for our text book
 data(StudentSurvey) # load the StudentSurvey data set
 @
 
-%population vs. sample 
 \begin{boxedText}
 Imagine data as a 2-dimensional structure (like a spreadsheet).
 \medskip
 \begin{itemize}
 \item 
-Rows correspond to 
-\term{observational units} (people, animals, plants, or other objects we
-are collecting data about).
+Rows correspond to \term{observational units} (people, animals, plants, or other objects we are collecting data about).
 \item
 Columns correspond to \term{variables} (measurements collected on each observational unit).
 \item
-  At the intersection of a row and a column is the \term{value} of the variable
-  for a particular observational unit.
+At the intersection of a row and a column is the \term{value} of the variable for a particular observational unit.
 \end{itemize}
 \end{boxedText}
 
-Observational units go by many names, depending on the kind of thing
-being studied.  Popular names include subjects, individuals, and cases.
-Whatever you call them, it is important that you always understand what
-your observational units are.
+Observational units go by many names, depending on the kind of thing being studied.  Popular names include subjects, individuals, and cases. Whatever you call them, it is important that you always understand what your observational units are.
 
 Let's take a look at the data frame for the Student Survey example in the text. If we type the name of the data set, \R\ will display it in its entirety for us. However, \dataframe{StudentSurvey} is a larger data set, so it is more useful to look at some sort of summary or subset of the data. %1.4 p14
-<<Data1.1>>=
+
+\subsubection*{Table 1.1}
+<<Table1.1>>=
 head(StudentSurvey) # first six cases of the data set
 @
 
 We can easily classify variables as either \term{categorical} or \term{quantitative} by studying the result of \function{head()}, but there are some summaries of the data set which reveal such information.
-<<Data1.1b>>=
+<<Data1.1>>=
 str(StudentSurvey) # structure of the data set
 summary(StudentSurvey) # summary of each variable
 @
 
 Here are some more summaries:
-<<Data1.1c>>=
+<<Data1.1b>>=
 nrow(StudentSurvey) # number of rows
 ncol(StudentSurvey) # number of columns
 dim(StudentSurvey) # number of rows and columns
 @
 
+Many of the datasets in \R\ have useful help files that describe the data and explain how they were collected or give references to the original studies. You can access this information for the \dataframe{AllCountries} data set by typing
+<<Data1.1c, tidy=FALSE, eval=FALSE>>=
+?StudentSurvey
+@
+
+We'll learn how to make more customized summaries (numerical and graphical) soon. For now, it is only important to observe how the organization of data in \R\ reflects the observational units and variables in the data set.
+
+This is important if you want to construct your own data set (in Excel or a google spreadhseet, for example) that you will later import into \R. You want to be sure that the structure of your spread sheet uses rows and columns in this same way, and that you don't put any extra stuff into the spread sheet.  It is a good idea to include an extra row at the top which names the variables. Take a look at Chapter 0 to learn how to get the data from Excel into \R.
+
 \subsection*{Categorical and Quantitative Variables}
+
 \begin{description}
 
-\item [categorical variable] a variable that places observational units into
-one of two or more categories (examples: color, sex, case/control status, species, etc.)
+\item [categorical variable] a variable that places observational units into one of two or more categories (examples: color, sex, case/control status, species, etc.)
 
 \iftrue
-These can be further sub-divided into ordinal and nominal variables.
-If the categories have a natural and meaningful order, we will call them
-\term{ordered} or \term{ordinal} variables.  Otherwise, they are \term{nominal}
-variables.
+These can be further sub-divided into ordinal and nominal variables. If the categories have a natural and meaningful order, we will call them \term{ordered} or \term{ordinal} variables.  Otherwise, they are \term{nominal} variables.
 \fi
 
-\item [quantitative variable] a variable that records measurements along some
-  scale (examples: weight, height, age, temperature) or counts something
-	(examples: number of siblings, number of colonies of bacteria, etc.)
+\item [quantitative variable] a variable that records measurements along some scale (examples: weight, height, age, temperature) or counts something (examples: number of siblings, number of colonies of bacteria, etc.)
 
 \iftrue
-Quantitative variables can be \term{continuous} or \term{discrete}.
-Continuous variables can (in principle) take on any real-number value in some range.
-Values of discrete variables are limited to some list and ``in-between values"
-are not possible. Counts are a good example of discrete variables.
+Quantitative variables can be \term{continuous} or \term{discrete}. Continuous variables can (in principle) take on any real-number value in some range. Values of discrete variables are limited to some list and ``in-between values" are not possible. Counts are a good example of discrete variables.
 \fi
 
 \end{description}
@@ -100,7 +89,6 @@ AllCountries[86, ]
 \subsection*{Using Data to Answer a Question}
 
 \begin{description}
-
 \item[response variable]
 a variable we are trying to predict or explain
 \item[explanatory variable]
@@ -114,8 +102,7 @@ a variable used to predict or explain a response variable
 
 \begin{description}
 \item[population] 
-the collection of animals, plants, objects, etc.
-that we want to know about
+the collection of animals, plants, objects, etc. that we want to know about
 \item[sample]
 the (smaller) set of animals, plants, objects, etc. about which we have data
 \item[parameter]
@@ -135,14 +122,7 @@ Much of statistics centers around this question:
 
 \subsection*{Sampling Bias}
 
-Often we are interested in knowing (approximately) the 
-value of some parameter.  A statistic used for this purpose is called
-an \term{estimate}.  For example, if you want to know the mean 
-length of the tails of lemurs (that's a \emph{parameter}), you might take 
-a sample of lemurs and measure their tails.  The mean length of the 
-tails of the lemurs in your sample is a \emph{statistic}.  It is also an 
-\emph{estimate}, because 
-we use it to estimate the parameter.
+Often we are interested in knowing (approximately) the value of some parameter.  A statistic used for this purpose is called an \term{estimate}.  For example, if you want to know the mean length of the tails of lemurs (that's a \emph{parameter}), you might take a sample of lemurs and measure their tails.  The mean length of the tails of the lemurs in your sample is a \emph{statistic}.  It is also an \emph{estimate}, because we use it to estimate the parameter.
 
 Statistical estimation methods attempt to 
 \begin{itemize}
@@ -153,89 +133,65 @@ increase \term{precision}.
 \end{itemize}
 
 \begin{description}
-\item[bias] the systematic tendency of sample estimates to either
-overestimate or underestimate population parameters; that is, a
-\emph{systematic tendency to be off in a particular direction}.
+\item[bias] 
+the systematic tendency of sample estimates to either overestimate or underestimate population parameters; that is, a \emph{systematic tendency to be off in a particular direction}.
 \item[precision]
-the measure of how close estimates are to the thing being estimated
-(called the \term{estimand}).
+the measure of how close estimates are to the thing being estimated (called the \term{estimand}).
 \end{description}
 
 \subsection*{Simple Random Sample}
 
-\term{Sampling} is the process of selecting a sample.  
-Statisticians use 
-\term{random samples} 
+\term{Sampling} is the process of selecting a sample.  Statisticians use \term{random samples} 
 \begin{itemize}
-\item  to avoid (or at least reduce) \term{bias}, and 
+\item  
+to avoid (or at least reduce) \term{bias}, and 
 \item
-so they can quantify \term{sampling variability} (the amount samples 
-differ from each other), which in turn allows us to 
-quantify precision.
+so they can quantify \term{sampling variability} (the amount samples differ from each other), which in turn allows us to quantify precision.
 \end{itemize}
 
-The simplest kind of random sample is called a \term{simple random sample}
-(aren't statisticians clever about naming things?).  A simple random sample is
-equivalent to putting all individuals in the population into a big hat, mixing
-thoroughly, and selecting some out of the hat to be in the sample.  In
-particular, in a simple random sample, \emph{every individual has an equal
-chance to be in the sample}, in fact, every subset of the population of a fixed
-size has an equal chance to be in the sample.
+The simplest kind of random sample is called a \term{simple random sample} (aren't statisticians clever about naming things?).  A simple random sample is equivalent to putting all individuals in the population into a big hat, mixing thoroughly, and selecting some out of the hat to be in the sample.  In particular, in a simple random sample, \emph{every individual has an equal chance to be in the sample}, in fact, every subset of the population of a fixed size has an equal chance to be in the sample.
 
 Other sampling methods include
 \begin{description}
 \item[convenience sampling] using whatever individuals are easy to obtain
 
-This is usually a terrible idea.  If the convenient members of the population
-differ from the inconvenient members, then the sample will not be representative
-of the population.
+This is usually a terrible idea.  If the convenient members of the population differ from the inconvenient members, then the sample will not be representative of the population.
 
 \item[volunteer sampling] using people who volunteer to be in the sample
 
-This is usually a terrible idea.  Most likely the volunteers will differ in 
-some ways from the non-volunteers, so again the sample will not be representative
-of the population.
+This is usually a terrible idea.  Most likely the volunteers will differ in some ways from the non-volunteers, so again the sample will not be representative of the population.
 
 \item[systematic sampling] sampling done in some systematic way 
 (every tenth unit, for example).  
 
 This can sometimes be a reasonable approach.
 
-\item[stratified sampling] sampling separately in distinct sub-populations 
-(called \emph{strata}) 
+\item[stratified sampling] sampling separately in distinct sub-populations (called \emph{strata}) 
 
-This is more complicated (and sometimes necessary) but 
-fine as long as the sampling methods in each stratum are good and 
-the analysis takes the sampling method into account.
+This is more complicated (and sometimes necessary) but fine as long as the sampling methods in each stratum are good and the analysis takes the sampling method into account.
 \end{description}
 
 \iffalse
-If a poor sampling method is chosen, the sample may not be representative 
-of the population we are trying to study, leading us to draw inaccurate or 
-incorrect conclusions.
+If a poor sampling method is chosen, the sample may not be representative of the population we are trying to study, leading us to draw inaccurate or incorrect conclusions.
 \fi
 
 \subsubsection*{Example 1.15}
-
 <<Example1.15>>=
 sample(AllCountries, 5)
 @
 
 
 \section{Experiments and Observational Studies}
-%random selection and randomized experiment
-%matched pairs?
 
 \subsection*{Confounding Variables}
 
-<<Data1.5>>=
+\subsubsection*{Table 1.2}
+<<Table1.2>>=
 head(LifeExpectancyVehicles, 10)
 @
 %fix for every 4 years?
-%confounding variables
 
 \subsubsection*{Figure 1.2}
-
 <<Figure1.2, tidy=FALSE>>=
 xyplot(LifeExpectancy ~ Vehicles, xlab = "Vehicles (millions)", ylab = "Life Expectancy", 
        data = LifeExpectancyVehicles)
@@ -243,35 +199,4 @@ xyplot(LifeExpectancy ~ Vehicles, xlab = "Vehicles (millions)", ylab = "Life Exp
 
 \subsection*{Observational Studies vs Experiments}
 
-Statisticians use the word experiment to mean something very specific.
-\emph{In an \term{experiment}, the researcher determines the values of 
-one or more (explanatory) variables}, typically by random assignment.
-If there is no such assignment by the researcher, the study is an
-\term{observational study}.
-
-
-
-Many of the datasets in \R\ have useful help files that describe the data and explain 
-how they were collected or give references to the original studies. You can access this 
-information for the \dataframe{AllCountries} data set by typing
-<<tidy=FALSE,eval=FALSE>>=
-?AllCountries
-@
-
-We'll learn how to make more customized summaries (numerical and graphical)
-soon. For now, it is only important to observe how the organization of data in
-\R\ reflects the observational units and variables in the data set.
-
-This is important if you want to construct your own data set 
-(in Excel or a google spreadhseet, for example) that you will later import into \R.
-You want to be sure that the structure of your spread sheet uses rows and columns 
-in this same way, and that you don't put any extra stuff into the spread sheet.  It is a 
-good idea to include an extra row at the top which names the variables. Take a look at
-Chapter 0 to learn how to get the data from Excel into \R.
-
-%Going back to the \dataframe{CricketChirps} data, here's how it might look if we collect that 
-%same data in Excel:
-
-%\begin{center}
-  %\includegraphics[width=4in]{images/CricketsExcel}
-%\end{center}
+Statisticians use the word experiment to mean something very specific. \emph{In an \term{experiment}, the researcher determines the values of one or more (explanatory) variables}, typically by random assignment. If there is no such assignment by the researcher, the study is an \term{observational study}.
