@@ -6,10 +6,7 @@
 \section{Sampling Distributions}
 
 The key idea in this chapter is the notion of a sampling distribution.  Do not confuse it with 
-the population (what we would like to know about) or the sample (what we actually have data about).
-If we could repeatedly sample from a population, and if we computed a statistic from each sample,
-the distribution of those statistics would be the sampling distribution.  Sampling distributions
-tell us how things vary from sample to sample and are the key to interpreting data.
+the population (what we would like to know about) or the sample (what we actually have data about). If we could repeatedly sample from a population, and if we computed a statistic from each sample, the distribution of those statistics would be the sampling distribution.  Sampling distributions tell us how things vary from sample to sample and are the key to interpreting data.
 
 %Example 3.1
 %Example 3.2
@@ -23,6 +20,7 @@ mean(~FTGradEnrollment, data=StatisticsPhD) # mean enrollment in original popula
 @
 
 \subsubsection*{Example 3.5}
+
 To select a random sample of a certain size in \R, we can use the \function{sample()} function.
 <<Example3.5, cache=TRUE>>=
 sample10 <- sample(StatisticsPhD, 10); sample10
@@ -34,27 +32,29 @@ Note that this sample has been assigned a name to which we can refer back to fin
 mean(~FTGradEnrollment, data=sample(StatisticsPhD, 10))  # mean enrollment in another sample 
 @
 
+<<Table3.2,include=FALSE>>=
+<<Example3.5>>
+@
+<<Table3.3,include=FALSE>>=
+<<Example3.5>>
+@
+
 \subsubsection*{Figure 3.1}
 
 We should check that that our sample distribution has an appropriate shape:
-<<Figure3.1, opts.label="fig1", cache=TRUE>>=
+<<Figure3.1, opts.label="fig4", cache=TRUE>>=
 # Now we'll do it 1000 times
 sampledist <- do(1000) * mean(~FTGradEnrollment, data=sample(StatisticsPhD, 10))
 head(sampledist, 3)
-dotPlot(~result, n=50, data=sampledist)
+dotPlot(~result, width=.005, data=sampledist)
 @
 
 In many (but not all) situations, the sampling distribution is 
 \begin{itemize}
   \item unimodal,
   \item symmetric, and
-	\item bell-shaped
+	\item bell-shaped (The technical phrase is ``approximately normal''.)
 \end{itemize}
-(The technical phrase is ``approximately normal''.)  In these situations, a 95\% confidence interval can be estimated 
-with
-\[ 
-\mbox{statistic} \pm 2 SE
-\]
 
 \subsubsection*{Example 3.6}
 
@@ -65,6 +65,10 @@ head(sampledist.deg, 3)
 dotPlot(~ prop, width=.005, data=sampledist.deg)
 @
 
+<<Figure3.2,include=FALSE>>=
+<<Example3.6>>
+@
+
 \subsection*{Measuring Sampling Variability: The Standard Error}
 
 \begin{boxedText}
@@ -72,12 +76,11 @@ dotPlot(~ prop, width=.005, data=sampledist.deg)
 	denoted $SE$.
 \end{boxedText}
 
-The standard error is our primary way of measuring how much variability there is from sample statistic
-to sample statistic, and therefore how precise our estimates are.
+The standard error is our primary way of measuring how much variability there is from sample statistic to sample statistic, and therefore how precise our estimates are.
 
 \subsubsection*{Example 3.7}
-Calculating the SE is the same as calculating the standard deviation of a sampling distribution, so we use \function{sd()}.
 
+Calculating the SE is the same as calculating the standard deviation of a sampling distribution, so we use \function{sd()}.
 <<Example3.7>>=
 SE <- sd(~result, data=sampledist); SE    # sample from Example 3.5
 SE2 <- sd(~prop, data=sampledist.deg); SE2     # sample from Example 3.6
@@ -115,13 +118,11 @@ An \term{interval estimate}
 gives a range of plausible values for a population parameter.  
 \end{boxedText}
 
-This is better than a single number (also called a point estimate) because it gives some 
-indication of the precision of the estimate.
+This is better than a single number (also called a point estimate) because it gives some indication of the precision of the estimate.
 
 One way to express an interval estimate is with a point estimate and a \term{margin of error}.
 
-We can convert margin of error into an interval by adding and subtracting the margin of error to/from
-the statistic.
+We can convert margin of error into an interval by adding and subtracting the margin of error to/from the statistic.
 
 \subsubsection*{Example 3.12}
 
@@ -173,6 +174,7 @@ x.bar + MoE                # upper limit of 95% CI
 @
 
 \subsection*{Understanding Confidence Intervals}
+
 \subsubsection*{Example 3.15}
 
 <<Example3.15>>=
@@ -194,7 +196,7 @@ p3+MoE
 
 \subsubsection*{Figure 3.12}
 
-<<Figure3.12, opts.label="fig4">>=
+<<Figure3.12, opts.lable="fig4">>=
 p <- 0.275
 SE <- 0.03
 MoE <- 2 * SE
@@ -202,8 +204,10 @@ p - MoE
 p + MoE
 dotPlot(~ prop, width=.005, groups = (0.215 <= prop & prop <= 0.335), data=sampledist.deg)
 @
+Notice how we defined groups in this dotplot. We are grouping proportions that less than 0.215 and more than 0.335.
 
 \subsubsection*{Figure 3.13}
+
 We can create the data needed for plots like Figure 3.13 using \function{CIsim()}.  The plot
 itself uses \function{xYplot()} from the \pkg{Hmisc} package.
 <<Figure3.13, message=FALSE, seed=1234, opts.label="fig1">>=
@@ -255,11 +259,15 @@ diff.x + MoE
 Here's the clever idea:  We don't have the population, but we have a sample.  Probably the sample it similar to the population in many ways.  So let's sample from our sample.  We'll call it \textbf{resampling} (also called \textbf{bootstrapping}). We want samples the same size as our original sample, so we will need to sample with replacement.  This means that we may pick some members of the population more than once and others not at all.  We'll do this many times, however, so each member of our sample will get its fair share. (Notice the similarity to and difference from sampling from populations in the previous sections.) 
 
 \subsubsection*{Figure 3.14}
-<<Figure3.14, opts.lable="fig1">>=
-dotPlot(~Time, width=1, cex=.5, data=CommuteAtlanta)
+
+<<Figure3.14, opts.label="fig1">>=
+dotPlot(~Time, width=1, data=CommuteAtlanta)
 @
 
 \subsection*{Bootstrap Samples}
+
+\subsubsection*{Table 3.7}
+
 The computer can easily do all of the resampling by using the \function{resample()}.
 <<Table3.7>>=
 mean(~Time, data = resample(CommuteAtlanta)) # mean commute time in one resample
@@ -269,26 +277,33 @@ mean(~Time, data = resample(CommuteAtlanta))
 
 \subsection*{Bootstrap Distribution}
 
+\subsubsection*{Figure 3.16}
+
 The example below uses data from 500 Atlanta commuters.
-<<Figure3.16, cache=TRUE, opts.lable="fig1">>=
+<<Figure3.16, cache=TRUE, opts.label="fig1">>=
 # Now we'll do it 1000 times
 Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta))
 head(Bootstrap, 3)
 # We should check that that our bootstrap distribution has an appropriate shape:
-dotPlot(~result, n=50, data=Bootstrap)
+dotPlot(~result, width = 0.005, data=Bootstrap)
 @
 
 \subsubsection*{Example 3.19}
+
 <<Example3.19, cache=TRUE, opts.label="fig4">>=
 BootP <- do(1000) * rflip(100, .52)
 head(BootP, 3)
 dotPlot(~ prop, width=.01, data=BootP)
 @
 
+<<Figure3.18,include=FALSE>>=
+<<Example3.19>>
+@
+
 \subsubsection*{Example 3.20}
+
 Variables can be created in \R\ using the \function{c()} function then collected into
 a data frame using the \function{data.frame()} function.
-
 <<Example3.20>>=
 Laughter <- data.frame( NumLaughs =  c(16, 22, 9, 31, 6, 42) )
 mean( ~ NumLaughs, data=Laughter )
@@ -303,6 +318,7 @@ mean( ~NumLaughs, data=resample(Laughter))
 \subsection*{Estimating Standard Error Based on a Bootstrap Distribution}
 
 \subsubsection*{Example 3.21}
+
 Since the shape of the bootstrap distribution from Example 3.19 looks good, we can estimate the standard error.
 <<Example3.21>>=
 SE <- sd(~prop, data=BootP); SE
@@ -321,13 +337,14 @@ x.bar + MoE                                     # upper limit of 95% CI
 @
 
 <<Example3.22b>>=
-p.hat = 0.52
-SE = sd( ~prop, data=BootP); SE      
-MoE = 2 * SE; MoE                          
+p.hat <- 0.52
+SE <- sd( ~prop, data=BootP); SE      
+MoE <- 2 * SE; MoE                          
 p.hat - MoE                                 
 p.hat + MoE                                 
 @
-The same steps used in this example, get used in a wide variety of confidence interval situations.
+The steps used in this example get used in a wide variety of confidence interval situations.
+
 \begin{enumerate}
   \item 
 		Compute the statistic from the original sample.
@@ -352,8 +369,7 @@ The same steps used in this example, get used in a wide variety of confidence in
 
 \subsubsection*{Example 3.23}
 
-Another way to create a 95\% confidence interval is to use the middle 95\% of the bootstrap distribution.
-The \function{cdata()} function can compute this for us as follows:
+Another way to create a 95\% confidence interval is to use the middle 95\% of the bootstrap distribution. The \function{cdata()} function can compute this for us as follows:
 <<Example3.23>>=
 cdata(0.95, result, data=Bootstrap)
 @
@@ -362,7 +378,7 @@ This is not exactly the same as the interval of the original sample, but it is p
 \subsubsection*{Figure 3.22}
 
 <<Figure3.22, opts.label="fig1">>=
-dotPlot(~ result, width=.2, groups = (27.47 <= result & result <= 31.00), data=Bootstrap)
+dotPlot(~ result, width=.1, groups = (27.43 <= result & result <= 31.05), data=Bootstrap)
 @
 Notice the \argument{groups=} for marking the confidence interval.
 
@@ -370,22 +386,24 @@ Notice the \argument{groups=} for marking the confidence interval.
 
 One advantage of this method is that it is easy to change the confidence level. 
 
-To make a 90\% confidence interval, we use the middle 90\% of the sample distribution instead.
+To make a 90\% and 99\% confidence interval, we use the middle 90\% and 99\% of the sample distribution instead.
 <<Example3.24, opts.label="fig1">>=
-cdata(0.99, result, data=Bootstrap)
-dotPlot(~ result, width=.2, groups = (26.79 <= result & result <= 31.46), data=Bootstrap)
-
 cdata(0.90, result, data=Bootstrap)
-dotPlot(~ result, width=.2, groups = (27.64 <= result & result <= 30.55), data=Bootstrap)
+dotPlot(~ result, width=.1, groups = (27.70 <= result & result <= 30.71), data=Bootstrap)
+
+cdata(0.99, result, data=Bootstrap)
+dotPlot(~ result, width=.1, groups = (26.98 <= result & result <= 31.63), data=Bootstrap)
 @
-Notice that this interval is narrower.  This will always be the case.  Higher levels of confidence 
-lead to wider confidence intervals.
+
+<<Figure3.23,include=FALSE>>=
+<<Example3.23>>
+@
 
 \subsection*{Finding Confidence Intervals for Many Different Parameters}
 
 \subsubsection*{Figure 3.24}
 
-<<Figure3.25>>=
+<<Figure3.24>>=
 bwplot(Gender~Exercise, data=ExerciseHours)
 @
 
@@ -400,9 +418,9 @@ stat <- diff(mean(Exercise~Gender, data=ExerciseHours)); stat
 BootE <- do(3000) * diff(mean(Exercise~Gender, data=resample(ExerciseHours)))
 head(BootE, 3)
 @
-<<Example3.25copts.label="fig4">>=
+<<Example3.25c, opts.label="fig4">>=
 cdata(0.95, M, data=BootE)
-dotPlot(~M, width=.25, cex=.5, groups =(-1.44 <= M & M <= 7.534), 
+dotPlot(~M, width=.25, cex=.75, groups =(-1.717 <= M & M <= 7.633), 
         xlab="Difference in mean", data=BootE)
 @
 <<Example3.25d>>=
@@ -426,7 +444,11 @@ head(BootM, 3)
 @
 <<Example3.26b, opts.label="fig4">>=
 cdata(0.98, result, data=BootM)
-dotPlot(~result, width=.005, groups =(-.9394 <= result & result <= -.7060), xlab="r", data=BootM)
+dotPlot(~result, width=.005, groups =(-.940 <= result & result <= -.705), xlab="r", data=BootM)
+@
+
+<<Figure3.27, include=FALSE>>=
+<<Example3.26b>>
 @
 
 \subsection*{Another Look at the Effect of Sample Size}
@@ -436,17 +458,25 @@ dotPlot(~result, width=.005, groups =(-.9394 <= result & result <= -.7060), xlab
 BootP400 <- do(1000) * rflip(400, .52)
 head(BootP400, 3)
 cdata(0.95, prop, data=BootP400)
-dotPlot(~ prop, width=.005, groups= (0.47 <= prop & prop<= 0.5675), data=BootP400)
+dotPlot(~ prop, width=.005, groups= (0.472 <= prop & prop<= 0.568), data=BootP400)
+@
+<<Figure3.28,include=FALSE>>=
+<<Example3.27>>
 @
 
 \subsection*{One Caution on Constructing Bootstrap Confidence Intervals}
 
 \subsubsection*{Example 3.28}
-<<Example3.28, opts.label="fig4">>=
+
+<<Example3.28, opts.label="fig4", cache=TRUE>>=
 median(~ Price, data=MustangPrice )
 Boot.Mustang <- do(5000) * median( ~Price, data=resample(MustangPrice) )
 head(Boot.Mustang, 3)
 histogram( ~ result, n=50, data=Boot.Mustang)
+@
+
+<<Figure3.29, include=FALSE>>=
+<<Example3.28>>
 @
 
 This time the histogram does not have the desired shape.  There are two problems:
@@ -456,9 +486,7 @@ This time the histogram does not have the desired shape.  There are two problems
 	\item
 		The distribution has spikes and gaps.
 
-Since the median must be
-an element of the sample when the sample size is 25, there are only 25 possible values for the median (and some of 
-these are \emph{very} unlikely.
+Since the median must be an element of the sample when the sample size is 25, there are only 25 possible values for the median (and some of these are \emph{very} unlikely. 
 \end{enumerate}
-Since the bootstrap distribution does not look like a normal distribution (bell-shaped, symmetric), we cannot safely use 
-our methods for creating a confidence interval.
+
+Since the bootstrap distribution does not look like a normal distribution (bell-shaped, symmetric), we cannot safely use our methods for creating a confidence interval.
