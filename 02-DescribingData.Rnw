@@ -27,6 +27,8 @@ From the dataset we named as \dataframe{OneTrueLove}, we can use the \function{p
 prop(~ Response, data=OneTrueLove)
 @
 
+\subsubsection*{Table 2.1}
+
 We can also tabulate the categorical variable to display the \emph{frequency} by using the \function{tally()} function. The default in tallying is to not include the row totals, or column totals when there are two variables. These are called marginal totals and if you want them, you can change the default.
 <<Table2.1>>=
 tally(~ Response, margin=TRUE, data=OneTrueLove)
@@ -47,7 +49,7 @@ tally(~ Response, format="proportion", margin=TRUE, data=OneTrueLove)
 
 \subsubsection*{Figure 2.1}
 
-To visualize counts or proportions, \R\ provides many different chart and plot functions, including \emph{bar charts} and \emph{pie charts}. Bar charts, also known as bar graphs, are a way of displaying the distribution of a categorical variable.
+\R\ provides many different chart and plot functions, including \emph{bar charts} and \emph{pie charts}, to visualize counts or proportions. Bar charts, also known as bar graphs, are a way of displaying the distribution of a categorical variable.
 
 <<Figure2.1>>=
 bargraph(~ Response, data=OneTrueLove)
@@ -66,10 +68,16 @@ bargraph(~ Response, data=OneTrueLove, horizontal=TRUE)
 
 \subsection*{Two Categorical Variables: Two-Way Tables}
 
-Often, it is useful to compute cross tables for two (or more) variables. We can again use \function{tally()} for several ways to investigate a two-way table. 
+Often, it is useful to compute cross tables for two (or more) variables. We can again use \function{tally()} for several ways to investigate a two-way table.
+
+\subsubsection*{Table 2.3}
+
 <<Table2.3>>=
 tally(~ Response + Gender, data=OneTrueLove)
 @
+
+\subsubsection*{Table 2.4}
+
 <<Table2.4>>=
 tally(~ Response + Gender, margins=TRUE, data=OneTrueLove)
 @
@@ -97,6 +105,7 @@ tally(~ Gender, format="percent", data=OneTrueLove)
 @
 
 \subsubsection*{Example 2.6}
+
 <<Example2.6>>=
 tally(~Gender + Award, margin=TRUE, data=StudentSurvey)
 @
@@ -117,11 +126,11 @@ To calculate the difference of certain statistics, we can use the \function{diff
 diff(prop(Award~Gender, level="Olympic", data=StudentSurvey))
 @
 
-We will contine more with proportions in Chapter 3. 
+We will continue more with proportions in Chapter 3. 
 
 \subsubsection*{Figure 2.2}
 
-A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}. We use te \argument{groups} argument for this. What groups does depends a bit on the type of graph. Using \argument{groups} with \function{histogram()} doesn't work so well because it is difficult to overlay histograms.%
+A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}. We use the \argument{groups} argument for this. What \argument{groups} does depends a bit on the type of graph. Using \argument{groups} with \function{histogram()} doesn't work so well because it is difficult to overlay histograms.%
 \footnote{The \pkg{mosaic} function
 \function{histogram()} does do something meaningful with \argument{groups}
 in some situations.}
@@ -160,6 +169,12 @@ of the distribution (e.g., symmetric, skewed).
 
 \subsection*{The Shape of a Distribution}
 
+\subsubsection*{Table 2.14}
+
+<<Table2.14>>=
+MammalLongevity
+@
+
 Statisticians have devised a number of graphs to help us see distributions visually.  
 The general syntax for making a graph of one variable in a data frame is
 <<eval=FALSE>>=
@@ -182,23 +197,19 @@ This should look familiar from the previous section.
 
 \subsubsection*{Figure 2.6}
 
-Let's make a \emph{dot plot} of the variable Longevity in the \dataframe{MammalLongevity} data set for a quick and simple look at the distribution. We use the syntax provided above with two additional arguments to make the figure look the way we want it to. The next few sections will explain a few of the different arguments available for plots in \R.
-<<Table2.14>>=
-MammalLongevity
-@
+Let's make a \emph{dot plot} of the variable Longevity in the \dataframe{MammalLongevity} data set for a quick and simple look at the distribution. We use the syntax provided above with two additional arguments to make the figure look the way we want it to. The next few sections will explain a few of the different arguments available for plots in \R. 
 <<Figure2.6, opts.label="fig1">>=
-dotPlot(~ Longevity, width=1, cex=.1, data = MammalLongevity)
+dotPlot(~ Longevity, width=1, cex=.35, data = MammalLongevity)
 @
 
-\subsubsection*{Histograms and Density Plots}
+\subsubsection*{Table 2.15}
 
 Although \function{tally()} works with quantitative variables as well as categorical variables, this is only useful when there are not too many different values for the variable.
 <<Table2.15>>=
 tally(~ Longevity, margin=TRUE, data=MammalLongevity)
 @
 
-Sometimes, it is more convenient to group them into bins.  We just have to tell \R\ what the bins are.
-For example, suppose we wanted to group together by 5.
+Sometimes, it is more convenient to group them into bins.  We just have to tell \R\ what the bins are. For example, suppose we wanted to group together by 5.
 \Rindex{cut()}%
 \Rindex{tally()}%
 <<Table2.15b>>=
@@ -215,24 +226,21 @@ tally(~ binned.long2)      # no data frame given because it is not in a data fra
 We won't use this very often however, since seeing this information in a histogram is typically more useful.  
 
 \subsubsection*{Figure 2.7}
+
 Histograms are a way of displaying the distribution of a quantitative variable.
 <<Figure2.7>>=
 histogram(~Longevity, data = MammalLongevity)
 histogram(~Longevity, width = 5, type = "count", center = 2.5, label = TRUE, data = MammalLongevity)
 @
 
-We can control the (approximate) number of bins using the \option{nint} 
-argument, which may be abbreviated as \option{n}.
-The number of bins (and to a lesser extent the positions of the bins)
-can make a histogram look quite different.
+We can control the (approximate) number of bins using the \option{nint} argument, which may be abbreviated as \option{n}. The number of bins (and to a lesser extent the positions of the bins) can make a histogram look quite different.
 <<Figure2.7b, opts.label="fig3">>=
 histogram(~ Longevity, type="count", data=MammalLongevity, n=8)
 histogram(~ Longevity, type="count", data=MammalLongevity, n=15)
 histogram(~ Longevity, type="count", data=MammalLongevity, n=30)
 @
 
-We can also describe the bins in terms of center and width instead of in terms of the number
-of bins.  This is especially nice for count or other integer data.
+We can also describe the bins in terms of center and width instead of in terms of the number of bins.  This is especially nice for count or other integer data.
 <<Figure2.7c, opts.label="fig3">>=
 histogram(~ Longevity, type="count", data=MammalLongevity, width=10)
 histogram(~ Longevity, type="count", data=MammalLongevity, width=5)
@@ -240,14 +248,15 @@ histogram(~ Longevity, type="count", data=MammalLongevity, width=2)
 @
 
 %Example 2.9
+
 \subsubsection*{Figure 2.8}
 
-Note the various options available for the \function{histogram()} function enable us to replicate Figure 2.8 some including centering, adding counts, labels, and limit to the y-axis (similar for x-axis) .
+The various options available for the \function{histogram()} function enable us to replicate Figure 2.8, some including centering, adding counts, labels, and limit to the y-axis (similar for x-axis).
 <<Figure2.8, opts.label="fig3", tidy=FALSE>>=
-histogram(~Pulse, type = "count", width = 5, data = StudentSurvey)
-histogram(~Exercise, type = "count", width = 2, center = 2, 
+histogram(~ Pulse, type = "count", width = 5, data = StudentSurvey)
+histogram(~ Exercise, type = "count", width = 2, center = 2, 
           right = FALSE, ylim = c(0,70), data = StudentSurvey) 
-histogram(~Piercings, width = 1, data = StudentSurvey)
+histogram(~ Piercings, width = 1, data = StudentSurvey)
 @
 
 Sometimes a \term{frequency polygon} provides a more useful view.
@@ -257,8 +266,7 @@ The only thing that changes is \function{histogram()} becomes \function{freqpoly
 freqpolygon(~ Exercise, width = 5, data=StudentSurvey)
 @
 
-What is a frequency polygon?  The picture below shows how it is related to a histogram.  The frequency
-polygon is just a dot-to-dot drawing through the centers of the tops of the bars of the histogram.
+What is a frequency polygon?  The picture below shows how it is related to a histogram.  The frequency polygon is just a dot-to-dot drawing through the centers of the tops of the bars of the histogram.
 <<freqpolygon-illustrated, echo=FALSE>>=
 freqpolygon(~Exercise, data=StudentSurvey, breaks=seq(0,45,by=4), lwd=3, 
             par.settings=col.whitebg(), 
@@ -268,18 +276,13 @@ freqpolygon(~Exercise, data=StudentSurvey, breaks=seq(0,45,by=4), lwd=3,
              )
 @
 
-\R\ also provides a ``smooth'' version called a density plot; just change 
-the function name from \function{histogram()} to \function{densityplot()}.
+\R\ also provides a ``smooth'' version called a density plot; just change the function name from \function{histogram()} to \function{densityplot()}.
 <<densityplot>>=
 densityplot(~ Longevity, data=MammalLongevity)
 densityplot(~ BirthRate, data=AllCountries )
 @
 
-If we make a histogram (or any of these other plots) 
-of our data, we can describe the overall shape of the distribution.
-Keep in mind that the shape of a particular histogram may depend on the choice of bins.
-Choosing too many or too few bins can hide the true shape of the distribution.  (When in doubt, make
-more than one histogram.)
+If we make a histogram (or any of these other plots) of our data, we can describe the overall shape of the distribution. Keep in mind that the shape of a particular histogram may depend on the choice of bins. Choosing too many or too few bins can hide the true shape of the distribution.  (When in doubt, make more than one histogram.)
 
 Here are some words we use to describe shapes of distributions.
 \begin{description}
@@ -300,7 +303,7 @@ the data.
 
 Recall that a statistic is a number computed from data. The \term{mean} and the \term{median} are key statistics which describe the center of a distribution. We can see through Example 2.11 that numerical summaries are computed using the same template as graphical summaries.
 
-Note however, that the example asks about subsets of \dataframe{ICUAdmissions}--specifically about 20-year-old and 55-year-old patients. In this case, we can manipulate the data (to name a new data set) with the subset command. Here are some examples.
+Note that the example asks about subsets of \dataframe{ICUAdmissions}--specifically about 20-year-old and 55-year-old patients. In this case, we can manipulate the data (to name a new data set) with the subset command. Here are some examples.
 \begin{enumerate}
   \item 
     Select only the males from the \dataframe{ICUAdmissions} data set.
@@ -342,15 +345,17 @@ median(~HeartRate, data=ICU55)
 
 %Example 2.13
 
-\subsubsection*{Example 2.14}
-<<Example2.14>>=
+\subsubsection*{Figure 2.10}
+<<Figure2.10>>=
 head(FloridaLakes)
 histogram(~Alkalinity, width=10, type="count", data=FloridaLakes)
+@
+
+\subsubsection*{Example 2.14}
+<<Example2.14>>=
 mean(~Alkalinity, data=FloridaLakes)
 median(~Alkalinity, data=FloridaLakes)
 @
-
-
 
 \section{One Quantitative Variable: Measures of Spread}
 
@@ -369,9 +374,10 @@ The density plots of the temperatures of Des Moines and San Francisco reveal tha
 
 \subsubsection*{Figure 2.18}
 
-<<Figure2.18, opts.label="fig1", echo=FALSE>>=
-dotPlot(~ DesMoines, width=1, cex=.05, xlim=c(35, 80), data=April14Temps)
-dotPlot(~ SanFrancisco, width=1, cex=.05, xlim=c(35, 80), data=April14Temps)
+The \argument{cex} argument controls ``character expansion" and can be used to make the plotting ``characters" larger or smaller by specifying the scaling ratio. \argument{xlim} sets the limits for the x-axis.
+<<Figure2.18, opts.label="fig1">>=
+dotPlot(~ DesMoines, width=1, cex=.25, xlim=c(35, 80), data=April14Temps)
+dotPlot(~ SanFrancisco, width=1, cex=.35, xlim=c(35, 80), data=April14Temps)
 @
 
 \subsubsection*{Example 2.16}
@@ -384,6 +390,8 @@ var(~DesMoines, data=April14Temps)        # variance = sd^2
 @
 
 \subsubsection*{Example 2.17}
+
+To see that the distribution is indeed symmetric and approximately bell-shaped, you can use the argument \argument{fit} to overlay a ``normal" curve.
 <<Example2.17>>=
 histogram(~ Pulse, fit="normal", data=StudentSurvey)
 mean <- mean(~Pulse, data=StudentSurvey); mean
@@ -401,8 +409,10 @@ histogram(~ Sales, type = "count", data=RetailSales)
 \subsubsection*{Example 2.18}
 
 <<Example2.18>>=
-mean(~ Sales, data=RetailSales)
-sd(~ Sales, data=RetailSales)
+mean <- mean(~ Sales, data=RetailSales); mean
+sd <- sd(~ Sales, data=RetailSales); sd
+mean - 2*sd
+mean + 2*sd
 @
 
 \subsubsection*{Example 2.19}
@@ -418,7 +428,7 @@ Z-scores can be computed as follows:
 \subsubsection*{Figure 2.21}
 
 <<Figure2.21>>=
-histogram(~Close, type="count", data=SandP500)
+histogram(~Close, type="count", width = 20, center = 10, data=SandP500)
 @
 
 \subsubsection*{Example 2.20}
@@ -448,9 +458,8 @@ fivenum(~Longevity, data=MammalLongevity)
 min(~Longevity, data=MammalLongevity) 
 max(~Longevity, data=MammalLongevity) 
 range(~Longevity, data=MammalLongevity)  # subtract to get the numerical range value
-iqr(~Longevity, data=MammalLongevity)   # inter-quartile range 
+iqr(~Longevity, data=MammalLongevity)   # interquartile range 
 @
-
 Note the difference in the quartile and IQR from the textbook. This results because there are several different methods to determine the quartile. 
 
 \subsubsection*{Example 2.23}
@@ -459,9 +468,9 @@ Note the difference in the quartile and IQR from the textbook. This results beca
 fivenum(~DesMoines, data = April14Temps)
 fivenum(~SanFrancisco, data = April14Temps)
 range(~DesMoines, data = April14Temps)
-74.9-37.2
+diff(range(~DesMoines, data = April14Temps))
 range(~SanFrancisco, data = April14Temps)
-61.0-48.7
+diff(range(~SanFrancisco, data = April14Temps))
 iqr(~DesMoines, data = April14Temps)
 iqr(~SanFrancisco, data = April14Temps)
 @
@@ -502,10 +511,20 @@ favstats(~Longevity, data=MammalLongevity)
 bwplot(~Longevity, data=MammalLongevity)
 @
 
-\subsubsection*{Example 2.27}
-We can similarity investigate the \emph{Smokers} variable in \dataframe{USStates}.
-<<Example2.27, opts.label="fig1">>=
+<<Figure2.31, include=FALSE>>=
+<<Example2.26>>
+@
+
+\subsubsection*{Figure 2.32}
+
+<<Figure2.32, opts.label="fig1">>=
 bwplot(~Smokers, data=USStates)
+@
+
+\subsubsection*{Example 2.27}
+
+We can similarity investigate the \emph{Smokers} variable in \dataframe{USStates}.
+<<Example2.27>>=
 fivenum(~Smokers, data=USStates)
 @
 
@@ -515,10 +534,15 @@ subset(USStates, Smokers<15)
 subset(USStates, Smokers>28)
 @
 
+\subsubsection*{Figure 2.33}
+
+<<Figure2.33, opts.label="fig1">>=
+bwplot(~Budget, data=HollywoodMovies2011)
+@
+
 \subsubsection*{Example 2.28}
 
-<<boxplot3, opts.label="fig1">>=
-bwplot(~Budget, data=HollywoodMovies2011)
+<<Example2.28>>=
 subset(HollywoodMovies2011, Budget>225)
 head(HollywoodMovies2011)
 @
@@ -536,7 +560,7 @@ plotname( ~ variable | condition, data=dataName )
 Depending on the type of plot, you will want to use conditioning.
 <<Figure2.34>>=
 bwplot(Gender ~ TV, data=StudentSurvey)
-dotPlot(~TV|Gender, layout=c(1,2), width=1, cex=.25, data = StudentSurvey)
+dotPlot(~TV|Gender, layout=c(1,2), width=1, cex=1, data = StudentSurvey)
 @
 
 We can do the same thing for bar graphs.
@@ -574,20 +598,23 @@ ElectionMargin
 
 \subsection*{Visualizing a Relationship between Two Quantitative Variables: Scatterplots}
 
-The most common way to look at two quantitative variables is with a 
-scatterplot.  The \pkg{lattice} function for this is \function{xyplot()}, 
-and the basic syntax is
+The most common way to look at two quantitative variables is with a scatterplot.  The \pkg{lattice} function for this is \function{xyplot()}, and the basic syntax is
 <<eval=FALSE>>=
 xyplot(yvar ~ xvar, data=dataName)
 @
 
-Notice that now we have something on both sides of the \~{} since we need to tell
-\R\ about two variables.
+Notice that now we have something on both sides of the \~{} since we need to tell \R\ about two variables.
 
 \subsubsection*{Example 2.33}
+
 <<Example2.33>>=
 xyplot(Margin ~ Approval, data=ElectionMargin)
 @
+
+<<Table2.29,include=FALSE>>=
+<<Example2.33>>
+@
+
 
 %Grouping and conditioning work just as before.
 %With large data set, it can be helpful to make the dots semi-transparent so it is easier to see where there are overlaps.  This is done with \argument{alpha}. We can also make the dots smaller (or larger) using \argument{cex}.
@@ -599,11 +626,16 @@ xyplot(Margin ~ Approval, data=ElectionMargin)
 %Example 2.34
 
 \subsubsection*{Figure 2.49}
+
 <<Figure2.49>>=
 xyplot(AvgMercury ~ pH, data = FloridaLakes)
 xyplot(AvgMercury ~ Alkalinity, data = FloridaLakes)
 xyplot(Alkalinity ~ pH, data = FloridaLakes)
 xyplot(AvgMercury ~ ThreeYrStdMercury, data = FloridaLakes)
+@
+
+<<Example2.34,include=FALSE>>=
+<<Figure2.49>>
 @
 
 \subsection*{Summarizing a Relationship between Two Quantitative Variables: Correlation}
@@ -617,11 +649,21 @@ cor(Alkalinity ~ pH, data = FloridaLakes)
 cor(AvgMercury ~ ThreeYrStdMercury, data = FloridaLakes)
 @
 
+\subsubsection*{Table 2.31}
+
+<<Table2.31>>=
+CricketChirps
+@
+
+\subsubsection*{Figure 2.50}
+
+<<Figure2.50>>=
+xyplot(Temperature ~ Chirps, data = CricketChirps)
+@
+
 \subsubsection*{Example 2.35}
 
 <<Example2.35>>=
-CricketChirps
-xyplot(Temperature ~ Chirps, data = CricketChirps)
 cor(Temperature ~ Chirps, data = CricketChirps)
 @
 
@@ -643,15 +685,30 @@ xyplot(Alcohol ~ Calories, data=subset(NutritionStudy60, Alcohol<25))
 cor(Alcohol ~ Calories, data=subset(NutritionStudy60, Alcohol<25))
 @
 
+<<Figure2.53, include=FALSE>>=
+<<Example2.38>>
+<<Example2.38b>>
+@
+
 
 \section{Two Quantitative Variables: Linear Regression}
 
-When the relationship between variables is sufficiently \emph{linear}, you may be able to predict the value of a variable using the other variable. This is possible by fitting a \emph{regression line}. To plot this in \R, all we need to do is add an additional argument, \argument{type=c("p", "r")}, to the xyplot.
+\subsubsection*{Figure 2.63}
+
+<<Figure2.63>>=
+xyplot(Tip ~ Bill, cex = .5, data=RestaurantTips)
+@
 
 \subsubsection*{Example 2.39}
+
+When the relationship between variables is sufficiently \emph{linear}, you may be able to predict the value of a variable using the other variable. This is possible by fitting a \emph{regression line}. To plot this in \R, all we need to do is add an additional argument, \argument{type=c("p", "r")}, to the xyplot.
 <<Example2.39>>=
-xyplot(Tip ~ Bill, type=c("p", "r"), data=RestaurantTips)
+xyplot(Tip ~ Bill, cex = 0.5, type=c("p", "r"), data=RestaurantTips)
 cor(Tip ~ Bill, data=RestaurantTips)
+@
+
+<<Figure2.64,include=FALSE>>=
+<<Example2.39>>
 @
 
 %Example 2.40
@@ -664,6 +721,7 @@ The equation for the regression line, or the \emph{prediction equation} is
 So now, we need to find the values for a, the intercept, and b, the slope using the function to fit linear models.
 
 \subsubsection*{Example 2.41}
+
 <<Example2.41>>=
 lm(Tip ~ Bill, data=RestaurantTips)
 coef(lm(Tip ~ Bill, data=RestaurantTips))  # just show me the coefficients
@@ -700,14 +758,18 @@ Resid.b <- 1.00 - 1.44
 Resid.b
 Resid.c <- 10.00 - 4.02
 Resid.c
-# resid(lm(Tip~Bill, data=RestaurantTips))
 @
-%easy way to calculate residuals?
+%easy way to calculate residuals? resid(lm(Tip~Bill, data=RestaurantTips))
 
 \subsubsection*{Example 2.43}
+
 <<Example2.43>>=
 Elect.mod <- lm(Margin~Approval, data=ElectionMargin)
 resid(lm(Margin~Approval, data=ElectionMargin))
+@
+
+<<Table2.34,include=FALSE>>=
+<<Example2.43>>
 @
 
 %Example 2.44
@@ -723,6 +785,10 @@ Mer.Fun <- makeFun(lm(AvgMercury ~ pH, data=FloridaLakes))
 Mer.Fun(pH = 7.5) # predicted mercury level at 7.5 pH
 Resid <- 1.10 - 0.388 # residual at 7.5 pH
 Resid
+@
+
+<<Figure2.67,include=FALSE>>=
+<<Example2.45>>
 @
 
 \subsubsection*{Example 2.46}
