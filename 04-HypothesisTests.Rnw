@@ -28,6 +28,7 @@ The following 4-step outline is a useful way to organize the ideas of hypothesis
 %Example 4.3
 
 \subsubsection*{Figure 4.1}
+
 <<Figure4.1>>=
 xyplot(ZPenYds ~ NFL_Malevolence, type = c("p", "r"), data = MalevolentUniformsNFL)
 @
@@ -44,10 +45,7 @@ xyplot(ZPenYds ~ NFL_Malevolence, type = c("p", "r"), data = MalevolentUniformsN
 
 \section{Measuring Evidence with P-values}
 
-Randomization distributions are a bit like bootstrap distributions except that
-instead of resampling from our sample (in an attempt to approximate resampling
-from the population), we need to sample from a situation in which our null
-hypothesis is true.
+Randomization distributions are a bit like bootstrap distributions except that instead of resampling from our sample (in an attempt to approximate resampling from the population), we need to sample from a situation in which our null hypothesis is true.
 
 \subsection*{P-values from Randomization Distributions}
 
@@ -56,12 +54,13 @@ hypothesis is true.
 Testing one proportion.
 \begin{enumerate}
   \item
-  	$H_0$: $p = 0.5$;  $H_a$: $p > 0.5$
+  	$H_0$: $p = 0.5$
+    
+    $H_a$: $p > 0.5$
 	\item
 		Test statistic:  $\hat p = 16/25$ (the sample proportion)
 	\item
 		We can simulate a world in which $p = 0.5$ using \function{rflip()}:
-
 <<Example4.13, cache=TRUE>>=
 Randomization.Match <- do(10000) * rflip(25, .5)  # 25 because n=25
 head(Randomization.Match)
@@ -72,6 +71,10 @@ Here we find the proportion of the simulations which resulted in 16 or more matc
 <<Example4.13b>>=
 prop( ~ (prop >= 0.64), data=Randomization.Match ) # 16/25
 histogram(~prop, width=0.04, groups = (prop >= 0.64), data=Randomization.Match)
+@
+
+<<Figure4.7, include=FALSE>>=
+<<Example4.13b>>
 @
 \end{enumerate}
 
@@ -86,6 +89,10 @@ histogram(~prop, width=0.04, groups = (prop >= 0.60), data=Randomization.Match )
 histogram(~prop, width=0.04, groups = (prop >= 0.76), data=Randomization.Match )
 @
 
+<<Figure4.9, include=FALSE>>=
+<<Example4.15>>
+@
+
 \subsubsection*{Example 4.16}
 
 <<Example4.16>>=
@@ -95,17 +102,26 @@ histogram(~prop, width=0.04, v=c(0.88), data=Randomization.Match )
 
 %Example 4.17
 
+\subsubsection*{Figure 4.10}
+
+<<Figure4.10, opts.label="fig1">>=
+dotPlot(~Taps|Group, layout=c(1,2), width=1, cex=.3, data=CaffeineTaps)
+@
+
+
 \subsubsection*{Example 4.18}
+
 Testing two means.
-<<Example4.18, opts.label="fig1">>=
+<<Example4.18>>=
 mean(Taps ~ Group, data=CaffeineTaps)
 diff( mean(Taps ~ Group, data=CaffeineTaps) )
-dotPlot(~Taps|Group, layout=c(1,2), width=1, cex=.1, data=CaffeineTaps)
 @
 
 \begin{enumerate}
   \item
-    $H_0$: $\mu_1 = \mu_2$;  $H_a$: $\mu_1 > \mu_2$
+    $H_0$: $\mu_1 = \mu_2$
+    
+    $H_a$: $\mu_1 > \mu_2$
 	\item
 		Test statistic:  $\bar x_1 - \bar x_2 = 3.5$ (the difference in sample means)
 	\item
@@ -117,7 +133,12 @@ dotPlot(~No.Caffeine, width = 0.2, data=Randomization.Caff)
 @
 
 <<Example4.18c>>=
-prop( ~ (No.Caffeine > 3.5), data=Randomization.Caff )
+prop( ~ (No.Caffeine >= 3.5), data=Randomization.Caff )
+dotPlot(~No.Caffeine, width = 0.2, groups = (No.Caffeine >=3.5), data=Randomization.Caff)
+@
+
+<<Figure4.11, include=FALSE>>=
+<<Example4.18c>>
 @
 \end{enumerate}
 
@@ -128,16 +149,20 @@ prop( ~ (No.Caffeine > 3.5), data=Randomization.Caff )
 Testing one proportion.
 \begin{enumerate}
   \item
-    $H_0$: $p = 0.5$;  $H_a$: $p > 0.5$
+    $H_0$: $p = 0.5$
+    
+    $H_a$: $p > 0.5$
 	\item
 		Test statistic:  $\hat p = 0.8, 0.6, 0.4$ (the sample proportion of 8/10, 6/10, 4/10 heads)
 	\item
 		We simulate a world in which $p = 0.5$:
-
-<<Example4.19, seed=1234, cache=TRUE>>=
+<<Example4.19, seed=12345, cache=TRUE>>=
 RandomizationDist <- do(1000) * rflip(10, .5)  # 10 because n=10
 head(RandomizationDist)
 histogram(~prop, label=TRUE, type="count", data=RandomizationDist)
+@
+<<Figure4.12,include=FALSE>>=
+<<Example4.19>>
 @
 <<Example4.19b>>=
 prop( ~ (prop >= 0.8), data=RandomizationDist )
@@ -147,42 +172,49 @@ prop( ~ (prop >= 0.4), data=RandomizationDist )
 \end{enumerate}
 
 \subsubsection*{Example 4.20}
-Testing one proportion.
 
+Testing one proportion.
 \begin{enumerate}
   \item
-    $H_0$: $p = 0.5$;  $H_a$: $p \neq 0.5$
+    $H_0$: $p = 0.5$
+    
+    $H_a$: $p \neq 0.5$
   \item
 		Test statistic:  $\hat p = 0.8$ (the sample proportion of 8/10 heads)
 	\item
-		We simulate a world in which $p = 0.5$:
+		We use the simulated world in which $p = 0.5$:
 <<Example4.20, tidy=FALSE>>=
-prop(~(prop >= 0.8), data = RandomizationDist )
-prop(~(prop <= 0.2), data = RandomizationDist )
-histogram(~prop, label = TRUE, type = "count", groups = (prop <= 0.2 | prop >= 0.8), 
-          data=RandomizationDist)
+prop(~ (prop >= 0.8), data = RandomizationDist)
+prop(~ (prop <= 0.2), data = RandomizationDist)
 @
+
 <<Example4.20b>>=
 # a 2-sided p-value is the sum of the values above
-prop( ~ (prop <= 0.2 | prop >= 0.8), data=RandomizationDist )
+prop(~ (prop <= 0.2 | prop >= 0.8), data = RandomizationDist)
 # We can also approximate the p-value by doubling one side
-2 * prop( ~ prop >= 0.80, data=RandomizationDist )
+2 * prop(~ prop >= 0.80, data = RandomizationDist)
+@
+%Why wrong histogram?
+
+<<Figure4.13,include=FALSE>>=
+<<Example4.20>>
 @
 \end{enumerate}
 
 \section{Determining Statisical Significance}
+
 %Example 4.21
 %Example 4.22
 %Example 4.23
 %Example 4.24
 %Example 4.25
 %Example 4.26
+
 \subsection*{Less Formal Statistical Decisions}
 
 \subsubsection*{Example 4.27}
 
 Testing two means.
-
 <<Example4.27>>=
 head(Smiles)
 mean(Leniency ~ Group, data=Smiles)
@@ -191,20 +223,25 @@ diff(mean(Leniency ~ Group, data=Smiles))
 
 \begin{enumerate}
   \item
-    $H_0$: $\mu_1 = \mu_2$;  $H_a$: $\mu_1 \neq \mu_2$
+    $H_0$: $\mu_1 = \mu_2$
+    
+    $H_a$: $\mu_1 \neq \mu_2$
   \item
   	Test statistic:  $\bar x_1 - \bar x_2 = 0.79$ (the difference in sample means)
 	\item
 		We simulate a world in which $\mu_1 = \mu_2$:
-<<Example4.27b, cache=TRUE, tidy=FALSE>>=
+<<Example4.27b, cache=TRUE>>=
 Randomization.Smiles <- do(1000) * diff(mean(Leniency ~ shuffle(Group), data = Smiles))
 head(Randomization.Smiles, 3)
-dotPlot(~smile, width = 0.03, cex = 0.5, groups = (smile >= 0.79), 
-        xlab = "Diff", data=Randomization.Smiles)
 @
-<<Example4.27c>>=
-prop( ~ (smile <= -0.79 | smile >= 0.79), data=Randomization.Smiles )
-2 * prop( ~ smile >= 0.79, data=Randomization.Smiles )
+<<Example4.27c, tidy=FALSE>>=
+prop(~ (smile <= -0.79 | smile >= 0.79), data = Randomization.Smiles)
+2 * prop(~ smile >= 0.79, data = Randomization.Smiles )
+dotPlot(~ smile, width = 0.03, cex = 0.5, groups = (smile >= 0.79), 
+        xlab = "Diff", data = Randomization.Smiles)
+@
+<<Figure4.24,include=FALSE>>=
+<<Example4.27c>>
 @
 
 Now we find the p-value to test a difference of 0.76:
@@ -215,7 +252,6 @@ dotPlot(~smile, width=.03, cex=.5, groups= (smile >=0.76), data=Randomization.Sm
 @
 \end{enumerate}
 
-
 \section{Creating Randomization Distributions}
 
 In order to use these methods to estimate a p-value, we must be able to generate a randomization distribution. In the case of a test with null hypothesis claiming that a proportion has a particular value (e.g, $H_0$: $p=0.5$), this is pretty easy.  If the population has proportion 0.50, we can simulate sampling from that proportion by flipping a fair coin.  If the proportion is some value other than 0.50, we simply flip a coin that has the appropriate probability of resulting in heads.  So the general template for creating such a randomization distribution is
@@ -225,8 +261,7 @@ do(1000) * rflip( n, hypothesized_proportion )
 @
 where \texttt{n} is the size of the original sample.
 
-In other situations, it can be more challenging to create a randomization distribution because the null hypothesis 
-does not directly specify all of the information needed to simulate samples.
+In other situations, it can be more challenging to create a randomization distribution because the null hypothesis does not directly specify all of the information needed to simulate samples.
 \begin{itemize}
 	\item
 		$H_0$: $p_1 = p_2$
@@ -244,8 +279,6 @@ does not directly specify all of the information needed to simulate samples.
 		$H_0$: $\mu_1 \neq \mu_2$ some number.
 
 		Now we don't know the common mean and we don't know the things mentioned in the previous example either.
-
-
 \end{itemize}
 
 So how do we come up with randomization distribution?
@@ -270,10 +303,7 @@ So how do we come up with randomization distribution?
 \subsection*{Randomization Test for a Difference in Proportions: Cocaine Addiction}
 
 \subsubsection*{Data 4.7} 
-Data 4.7 in the text describes some data that are not in a data frame.  This
-often happens when a data set has only categorical variables because a simple
-table completely describes the distributions involved.  Here's the table from the book:\footnote{The book
-includes data on an additional treatment group which we are omitting here.}
+Data 4.7 in the text describes some data that are not in a data frame.  This often happens when a data set has only categorical variables because a simple table completely describes the distributions involved.  Here's the table from the book:\footnote{The book includes data on an additional treatment group which we are omitting here.}
 
 \begin{center}
   \begin{tabular}{ccc}
@@ -304,7 +334,6 @@ Cocaine <- rbind(
 \subsubsection*{Example 4.29}
 
 Testing two proportions.
-
 <<Example4.29>>=
 tally( response ~ treatment, data=Cocaine )
 prop( response ~ treatment,  data=Cocaine )
@@ -313,19 +342,24 @@ diff( prop( response ~ treatment, data=Cocaine ))
 
 \begin{enumerate}
   \item
-    $H_0$: $p_1 = p_2$;  $H_a$: $p_1 < p_2$
+    $H_0$: $p_1 = p_2$
+    
+    $H_a$: $p_1 < p_2$
 	\item
 		Test statistic:  $\hat p_1 = \hat p_2$ (the difference in sample proportions)
 	\item
-		We simulate a world in which $p_1 = p_2$ or $p_1 - p_2$ = 0:
+		We simulate a world in which $p_1 = p_2$ or $p_1 - p_2 = 0$:
 <<Example4.29b, cache=TRUE>>=
 Randomization.Coc <- do (5000) * diff( prop( response ~ shuffle(treatment), data=Cocaine ) )
 head(Randomization.Coc)
-histogram( ~ Relapse.Placebo, data=Randomization.Coc, v=c(-0.0833), width=0.08)
 @
 
 <<Example4.29c>>=
 prop( ~ (Relapse.Placebo < -0.0833 ), data=Randomization.Coc )
+histogram( ~ Relapse.Placebo, data=Randomization.Coc, v=c(-0.0833), width=0.08)
+@
+<<Figure4.28, include=FALSE>>=
+<<Example4.29c>>
 @
 \end{enumerate}
 
@@ -336,7 +370,6 @@ prop( ~ (Relapse.Placebo < -0.0833 ), data=Randomization.Coc )
 \subsubsection*{Example 4.31}
 
 Testing correlation.
-
 <<Example4.31>>=
 xyplot(ZPenYds ~ NFL_Malevolence, type=c("p", "r"), data=MalevolentUniformsNFL)
 cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
@@ -344,7 +377,9 @@ cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
 
 \begin{enumerate}
   \item
-    $H_0$: $\rho = 0$;  $H_a$: $\rho > 0$
+    $H_0$: $\rho = 0$
+    
+    $H_a$: $\rho > 0$
 	\item
 		Test statistic:  $r = 0.43$ (the sample correlation)
 	\item
@@ -353,11 +388,15 @@ cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
 Randomization.Mal <- do(10000) * cor(NFL_Malevolence ~ shuffle(ZPenYds), 
                                       data = MalevolentUniformsNFL)
 head(Randomization.Mal)
-histogram(~result, v = c(0.43), width = 0.05, data = Randomization.Mal)
 @
 
 <<Example4.32c>>=
 prop( ~ (result > 0.43 ), data=Randomization.Mal )
+histogram(~result, v = c(0.43), width = 0.05, data = Randomization.Mal)
+@
+
+<<Figure4.29, include=FALSE>>=
+<<Example4.32c>>
 @
 \end{enumerate}
 
@@ -372,10 +411,15 @@ Testing one mean.
 mean(~BodyTemp, data=BodyTemp50)
 dotPlot(~BodyTemp, v=c(98.26), width=.1, cex=.2, data=BodyTemp50)
 @
+<<Figure4.30,include=FALSE>>=
+<<Example4.33>>
+@
 
 \begin{enumerate}
   \item
-    $H_0$: $\mu = 98.6$;  $H_a$: $\mu \neq 98.6$
+    $H_0$: $\mu = 98.6$
+    
+    $H_a$: $\mu \neq 98.6$
   \item
 		Test statistic:  $\bar x = 98.26$ (the sample mean)
     
@@ -396,11 +440,15 @@ Randomization.Temp <- do(10000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) )
 head(Randomization.Temp, 3)
 mean( ~ result, data=Randomization.Temp )
 cdata(0.95, result, data=Randomization.Temp )
-histogram(~result, width=.01, v=c(98.40, 98.6, 98.81), data=Randomization.Temp)
 @
 From this we can estimate the p-value:
-<<Example4.33d>>=
+<<Example4.33d, opts.label="fig4">>=
 prop( ~ abs(result - 98.6) > 0.34, data = Randomization.Temp )
+histogram(~result, width=.01, v=c(98.40, 98.6, 98.81), data=Randomization.Temp)
+@
+
+<<Figure4.31,include=FALSE>>=
+<<Example4.33d>>
 @
 \end{enumerate}
 
@@ -415,7 +463,9 @@ An equivalent way to do the preceding test is based on a different way of expres
 hypotheses.
 \begin{enumerate}
   \item
-    $H_0$: $\mu - 98.6 = 0$;  $H_a$: $\mu - 98.6 \neq 0$
+    $H_0$: $\mu - 98.6 = 0$
+    
+    $H_a$: $\mu - 98.6 \neq 0$
   \item
 		Test statistic:  $\bar x - 98.6 = -0.34$
 	\item
@@ -424,11 +474,11 @@ hypotheses.
 Randomization.Temp2 <- do(5000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) - 98.26 ) 
 head(Randomization.Temp2, 3)
 mean( ~ result, data=Randomization.Temp2 )
-histogram(~result, width=.01, v=c(0.34, -0.34), data=Randomization.Temp2)
 @
 From this we can estimate the p-value:
-<<Example4.33f>>=
+<<Example4.33f, , opts.label="fig4">>=
 prop( ~ abs(result) > 0.34, data = Randomization.Temp2 )
+histogram(~result, width=.01, v=c(0.34, -0.34), data=Randomization.Temp2)
 @
 \end{enumerate}
 
@@ -438,15 +488,13 @@ Often there are multiple ways to express the same hypothesis test.
 
 \section{Confidence Intervals and Hypothesis Tests}
 
-If your randomization distribution is centered at the wrong value, then it isn't simulating a world
-in which the null hypothesis is true.  This would happen, for example, if we got confused about 
-randomization vs. bootstrapping.
+If your randomization distribution is centered at the wrong value, then it isn't simulating a world in which the null hypothesis is true.  This would happen, for example, if we got confused about randomization vs. bootstrapping.
 
 \subsection*{Randomization and Bootstrap Distributions}
 
 \subsubsection*{Figure 4.32}
 
-<<Figure4.32, seed=1234, cache=TRUE, opts.label="fig4">>=
+<<Figure4.32, seed=1234, cache=TRUE,opts.label="fig4">>=
 Boot.Temp <- do (5000) * mean(~ BodyTemp, data=resample(BodyTemp50))
 head(Boot.Temp,3)
 mean(~ result, data=Boot.Temp)
@@ -461,7 +509,9 @@ from the null hypothesis.
 
 \begin{enumerate}
   \item
-    $H_0$: $\mu = 98.4$;  $H_a$: $\mu \neq 98.4$
+    $H_0$: $\mu = 98.4$
+    
+    $H_a$: $\mu \neq 98.4$
   \item
   	Test statistic:  $\bar x = 98.26$ (the sample mean)
 	\item
