@@ -71,6 +71,11 @@ p.hat <- 0.80; p.hat
 p.hat * 400               # check >= 10
 (1 - p.hat) * 400         # check >= 10
 SE <- sqrt( .80 * .20 / 400 ); SE
+@
+
+\subsubsection*{Figure 6.4}
+
+<<Figure6.4>>=
 plotFun(dnorm(x,0.80,0.02) ~ x, x.lim = c(0.72, 0.88))
 @
 
@@ -88,7 +93,7 @@ p.hat - 1.96 * SE                              # lower end of CI
 p.hat + 1.96 * SE                              # upper end of CI
 @
 
-\R can automate finding the confidence interval. Notice the \argument{correct = FALSE} in the second line. The default for the proportion test includes a continuity correction for more accurate results. You can perform the test without the correction for answers closer to the ones in the textbook.
+\R\ can automate finding the confidence interval. Notice the \argument{correct = FALSE} in the second line. The default for the proportion test includes a continuity correction for more accurate results. You can perform the test without the correction for answers closer to the ones in the textbook.
 <<Example6.3b>>=
 confint(prop.test(52, 100))
 confint(prop.test(52, 100, correct=FALSE))
@@ -138,7 +143,9 @@ n <- ((z.star / 0.03)^2) * p.hat * (1 - p.hat); n
 
 \begin{enumerate}
   \item
-    $H_0$: $p = 0.20$;  $H_a$: $p < 0.20$
+    $H_0$: $p = 0.20$
+    
+    $H_a$: $p < 0.20$
   \item
   	Test statistic:  $\hat p = 0.19$ (the sample approval rating)
 	\item
@@ -152,7 +159,7 @@ SE <- sqrt(p * (1 - p) / 1013); SE
 z <- (p.hat - p) / SE; z
 pnorm(z)
 @
-Again, \R can automate the test for us.
+Again, \R\ can automate the test for us.
 <<Example6.7b>>=
 prop.test(192, 1013, alt = "less", p=0.20) # 192 = 0.19 * 1013
 @
@@ -249,6 +256,7 @@ SE <- 1.25 / sqrt (8); SE
 @
 
 \subsubsection*{Figure 6.8}
+
 <<Figure6.08, fig.keep='last'>>=
 plotFun(dnorm(x, 0, 1) ~x, x.lim=c(-4, 4), col="black")
 plotFun(dt(x, df=15) ~x, add=TRUE, lty=2)
@@ -279,7 +287,7 @@ ladd(grid.text("2.131",2.1,.1, default.units="native", hjust=0))
 <<Figure6.09b,fig.keep='last'>>=
 plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
 plotDist("t", params=list(df=15), type=c("h","l"), groups= x > 1.5, lty=1)
-ladd(grid.text("1.5",1.5,.1, default.units="native", hjust=0))
+ladd(grid.text("1.5",1.5,.2, default.units="native", hjust=0))
 @
 
 \section{Confidence Interval for a Mean Using the t-Distribution}
@@ -288,15 +296,22 @@ ladd(grid.text("1.5",1.5,.1, default.units="native", hjust=0))
 
 \subsubsection*{Example 6.13}
 
-<<Example6.13>>=
+<<Example6.13, opts.label="fig1">>=
 head(Flight179, 3)
-dotPlot(~Flight179, cex = 0.25, data = Flight179) # to check for normality
+dotPlot(~Flight179, cex = 0.5, data = Flight179) # to check for normality
 @
+
+<<Figure6.11,include=FALSE>>=
+<<Example6.13>>
+@
+
+
 \RStudio\ can do all of the calculations for you if you give it the raw data:
 <<Example6.13b>>=
 favstats(~Flight179, data = Flight179)
 t.test(~Flight179, data=Flight179)
 @
+
 You can also zoom in just the information you want:
 <<Example6.13c>>=
 confint(t.test(~Flight179, data=Flight179))
@@ -316,10 +331,15 @@ confint(t.test(~Time, conf.level = 0.95, data=CommuteAtlanta))
 
 \subsubsection*{Example 6.15}
 
-<<Example6.15>>=
+<<Example6.15, opts.label="fig1">>=
 head(ManhattanApartments, 3)
-dotPlot(~Rent, width=200, cex=.15,  data=ManhattanApartments) # to check for normality
+dotPlot(~Rent, width=200, cex=.3,  data=ManhattanApartments) # to check for normality
 @
+
+<<Figure6.13,include=FALSE>>=
+<<Example6.15>>
+@
+
 <<Example6.15b, cache=TRUE>>=
 Boot.Rent <- do(1000) * mean( ~Rent, data=resample(ManhattanApartments)) 
 head(Boot.Rent, 3)
@@ -338,10 +358,15 @@ n <- (1.96 * 20.18 / 2) ^ 2; n
 \section{Test for a Single Mean}
 
 \subsubsection*{Example 6.17}
-<<Example6.17>>=
+<<Example6.17, opts.label="fig1">>=
 head(BodyTemp50)
 dotPlot(~BodyTemp, cex = .15, width = .1, data = BodyTemp50) # to check for normality
 @
+
+<<Figure6.16,include=FALSE>>=
+<<Example6.17>>
+@
+
 
 <<Example6.17b>>=
 favstats(~BodyTemp, data = BodyTemp50)
@@ -354,7 +379,7 @@ pval(t.test(~BodyTemp, mu = 98.6, data=BodyTemp50)) # to find the p-value direct
 <<Figure6.17,fig.keep='last'>>=
 plotFun(dt(x, df=49) ~x, x.lim=c(-4, 4))
 plotDist("t", params=list(df=49), type=c("h","l"), groups= (-3.14 < x & x < 3.14), lty=1)
-ladd(grid.text("3.14",3,.025, default.units="native", hjust=0))
+ladd(grid.text("3.14",3,.05, default.units="native", hjust=0))
 @
 
 \subsubsection*{Example 6.18}
@@ -382,6 +407,7 @@ diff(prop(Response~Gender, data=OneTrueLove))
 @
 
 \subsubsection*{Figure 6.20}
+
 <<Figure6.20, cache=TRUE>>=
 Boot.Love <- do(5000)*diff(prop(Response~Gender, data=resample(OneTrueLove)))
 head(Boot.Love, 3)
@@ -481,6 +507,11 @@ favstats(~Time, data=CommuteAtlanta)
 bwplot(~Time, xlim=c(0, 200), data = CommuteAtlanta) # to check for normality
 bwplot(~Time, xlim=c(0, 200), data = CommuteStLouis) # to check for normality
 @
+
+<<Figure6.23,include=FALSE>>=
+<<Example6.26>>
+@
+
 <<Example6.26b>>=
 confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time, conf.level=0.90))
 @
@@ -494,6 +525,12 @@ confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time, conf.level=0.90))
 head(Smiles, 3)
 bwplot(Group~Leniency, data=Smiles) # to check for normality
 @
+
+<<Figure6.25,include=FALSE>>=
+<<Example6.27>>
+@
+
+
 <<Example6.27b>>=
 t.test(Leniency~Group, alt="less", data=Smiles)
 @
@@ -503,23 +540,31 @@ t.test(Leniency~Group, alt="less", data=Smiles)
 
 \subsubsection*{Example 6.28}
 
-<<Example6.28>>=
+<<Example6.28, opts.label="fig1">>=
 head(Wetsuits, 3)
 dotPlot(~ Wetsuit, xlim = c(1.1, 1.8), cex=.25, data = Wetsuits) # to check for normality
 dotPlot(~ NoWetsuit, xlim = c(1.1, 1.8), cex=.25, data = Wetsuits) # to check for normality
 @
+
+<<Figure6.27,include=FALSE>>=
+<<Example6.28>>
+@
+
 <<Example6.28b>>=
 t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit)
 @
 
 \subsubsection*{Example 6.29}
 
-<<Example6.29>>=
+<<Example6.29, opts.label="fig1">>=
 head(Wetsuits, 3)
 t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired=TRUE)
+dotPlot(Wetsuits$Wetsuit - Wetsuits$NoWetsuit, width = .01, cex = .3)
 @
 
-%Figure6.28
+<<Figure6.28,include=FALSE>>=
+<<Example6.29>>
+@
 
 \subsubsection*{Example 6.30}
 
