@@ -188,6 +188,8 @@ sample(AllCountries, 5)
 \subsubsection*{Table 1.2}
 <<Table1.2>>=
 head(LifeExpectancyVehicles, 10)
+sub <- filter(LifeExpectancyVehicles, Year %% 4==2)
+sub
 @
 %fix for every 4 years?
 
