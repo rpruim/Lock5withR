@@ -14,7 +14,12 @@ head(Bootstrap, 3)
 histogram(~result, density=TRUE, data=Bootstrap)
 densityplot(~result, data=Bootstrap)
 @
-%help with mismatched numbers
+
+<<Figure5.2,include=FALSE>>=
+<<Example5.1>>
+@
+
+
 <<Example5.1b>>=
 prop( ~ (result <= 30), data=Bootstrap )                # proportion less than 30 min
 prop( ~ (result >= 31), data=Bootstrap )                # proportion greater than 31 min
@@ -60,11 +65,15 @@ plotFun( dnorm(x,7.1,1.1) ~x, x.lim=c(2.7,11.5))
 plotFun( dnorm(x,0,0.02) ~x, x.lim=c(-.07,.07))
 @
 
+<<Figure5.6,include=FALSE>>=
+<<Example5.2>>
+@
+
+
 \subsection*{Finding Normal Probabilities and Percentiles}
 
 The two main functions we need for working with normal distributions are \function{pnorm} and \function{qnorm}.
 \function{pnorm} computes the proportion of a normal distribution below a specified value:
-
 
 \[
 \mbox{\texttt{pnorm(x,mean=$\mu$, sd=$\sigma$)}} = \Prob(X \le x)
@@ -81,26 +90,31 @@ xpnorm(90, 75, 10, lower.tail=FALSE)
 @
 The \function{xpnorm()} function gives a bit more verbose output and also gives you a picture. Notice the \argument{lower.tail=FALSE}. This is added because the default for \function{pnorm} and \function{xpnorm} finds the lower tail, not the upper tail. However, we can also subtract the proportion of the lower tail from 1 to find the the proportion of the upper tail.
 
+<<Figure5.7,include=FALSE>>=
+<<Example5.3>>
+@
+
 \subsubsection*{Example 5.4}
 
 \function{qnorm()} goes the other direction:  You provide the quantile (percentile expressed as a decimal) and \R\ gives you the value.
-
 <<Example5.4, opts.label="fig4">>=
 qnorm(0.2, 75, 10) # 20th percentile in Norm(75, 10)
 xqnorm(0.2, 75, 10)  
 @
 
+<<Figure5.8,include=FALSE>>=
+<<Example5.4>>
+@
+
 \subsection*{Standard Normal N(0,1)}
 
-Because probabilities in a normal distribution depend only on the number of standard deviations above and below the mean,
-it is useful to define $Z$-scores (also called standardized scores) as follows:
+Because probabilities in a normal distribution depend only on the number of standard deviations above and below the mean, it is useful to define $Z$-scores (also called standardized scores) as follows:
 
 \[
 \mbox{$Z$-score} = \frac{ \mbox{value} - \mbox{mean} } { \mbox{standard deviation} }
 \]
 
-If we know the population mean and standard deviation, we can plug those in.  When we do not, we will use 
-the mean and standard deviation of a random sample as an estimate.
+If we know the population mean and standard deviation, we can plug those in.  When we do not, we will use the mean and standard deviation of a random sample as an estimate.
 
 Z-scores provide a second way to compute normal probabilities.
 
@@ -114,11 +128,19 @@ xpnorm(c(z30, z31))              # standardized distribution proportion between 
 pnorm(z31) - pnorm(z30)
 @
 
+<<Figure5.9,include=FALSE>>=
+<<Example5.5>>
+@
+
 <<Example5.5b, tidy=FALSE, opts.label="fig4">>=
-xpnorm(0.957)                    # proportion with z-score below 0.957
-xpnorm(2.032, lower.tail=FALSE)  # proportion with z-score above 2.032
+xpnorm(0.957)                      # proportion with z-score below 0.957
+xpnorm(2.032, lower.tail = FALSE)  # proportion with z-score above 2.032
 pnorm(30, 29.11, 0.93)          
-pnorm(31, 29.11, 0.93, lower.tail=FALSE)
+pnorm(31, 29.11, 0.93, lower.tail = FALSE)
+@
+
+<<Figure5.10,include=FALSE>>=
+<<Example5.5b>>
 @
 
 \subsubsection*{Example 5.6}
@@ -136,11 +158,19 @@ z <- qnorm(0.2); z
 \subsubsection*{Example 5.7}
 <<Example5.7,opts.label="fig1",cache=TRUE,seed=1234>>=
 Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta)) 
-dotPlot(~result, n=50, data=Bootstrap)
+dotPlot(~result, width = 0.1, data=Bootstrap)
+@
+
+<<Figure5.15,include=FALSE>>=
+<<Example5.7>>
 @
 
 <<Example5.7b>>=
 xqnorm(c(0.025, 0.975), 29.11, 0.915)   # 95% confidence interval for the normal distribution
+@
+
+<<Figure5.16,include=FALSE>>=
+<<Example5.7b>>
 @
 
 <<Example5.7c>>=
@@ -158,7 +188,7 @@ qnorm(0.995, 13.10, 0.20) # upper endpoint for 99% confidence interval
 @
 
 \subsection*{P-values Based on a Normal Distribution}
-%redo simulation for a mean?
+
 \subsubsection*{Example 5.9}
 <<Example5.9, cache=TRUE, seed=1234, opt.label="fig1">>=
 Randomization.Temp <- do(10000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 )
