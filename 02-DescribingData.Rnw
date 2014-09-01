@@ -759,7 +759,6 @@ Resid.b
 Resid.c <- 10.00 - 4.02
 Resid.c
 @
-%easy way to calculate residuals? resid(lm(Tip~Bill, data=RestaurantTips))
 
 \subsubsection*{Example 2.43}
 
