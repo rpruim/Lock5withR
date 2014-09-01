@@ -159,7 +159,7 @@ Testing one proportion.
 <<Example4.19, seed=12345, cache=TRUE>>=
 RandomizationDist <- do(1000) * rflip(10, .5)  # 10 because n=10
 head(RandomizationDist)
-histogram(~prop, label=TRUE, type="count", data=RandomizationDist)
+histogram(~prop, label=TRUE, width = 1/10, data=RandomizationDist)
 @
 <<Figure4.12,include=FALSE>>=
 <<Example4.19>>
