@@ -1,5 +1,3 @@
-#' @import lubridate
-
 #' Lock5 Datasets
 #' 
 #' Datasets for Statistics: Unlocking the Power of Data \cr by Lock, Lock,
