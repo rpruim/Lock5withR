@@ -13,3 +13,4 @@ UnTracked
 *.ind
 Book/cache
 Book/figure
+*-concordance.tex
