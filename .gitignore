@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+*.Rproj
+*~
+UnTracked
+*.notes
+*.synctex*
+*.ilg
+*.log
+*.aux
