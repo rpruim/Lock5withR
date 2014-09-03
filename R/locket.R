@@ -75,7 +75,7 @@ locket <- function (name, execute = TRUE, view = !execute, echo = TRUE,
   op <- options(device.ask.default = ask)
   on.exit(options(op), add = TRUE)
   if (echo) {
-    cat("\n\n", "\tsnippet(", name, ")\n", "\t------- ", 
+    cat("\n\n", "\tlocket(", name, ")\n", "\t------ ", 
         rep.int("~", nchar(name, type = "w")), "\n", sep = "")
   }
   if (view) {
