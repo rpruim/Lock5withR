@@ -9,3 +9,7 @@ UnTracked
 *.ilg
 *.log
 *.aux
+*.idx
+*.ind
+Book/cache
+Book/figure
