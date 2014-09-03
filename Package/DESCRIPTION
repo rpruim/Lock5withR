@@ -1,0 +1,16 @@
+Package: Lock5withR
+Type: Package
+Title: Datasets for "Statistics: UnLocking the Power of Data"
+Version: 0.9
+Date: 2014-09-03
+Author: Randall Pruim
+Maintainer: Randall Pruim <rpruim@calvin.edu>
+Description: Datasets and other utilities for "Statistics: Unlocking the Power of Data" by
+    Lock, Lock, Lock, Lock and Lock
+License: GPL-2
+Suggests:
+    lattice,
+    lubridate,
+    mosaic
+LazyLoad: yes
+LazyData: yes
