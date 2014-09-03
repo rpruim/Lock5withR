@@ -33,7 +33,7 @@ Observational units go by many names, depending on the kind of thing being studi
 
 Let's take a look at the data frame for the Student Survey example in the text. If we type the name of the data set, \R\ will display it in its entirety for us. However, \dataframe{StudentSurvey} is a larger data set, so it is more useful to look at some sort of summary or subset of the data. %1.4 p14
 
-\subsubection*{Table 1.1}
+\subsubsection*{Table 1.1}
 <<Table1.1>>=
 head(StudentSurvey) # first six cases of the data set
 @
