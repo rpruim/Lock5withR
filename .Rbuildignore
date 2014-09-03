@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^RBuildIngore$
+^.*~$
+^.*\.tar.gz$
+^Book$
+^bin$
+^UnTracked$
+^.*\.Rcheck$
