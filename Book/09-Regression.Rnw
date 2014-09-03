@@ -294,7 +294,6 @@ the uncertainty in our estimated slope and intercept as well as the
 variability of responses around the true regression line.
 \end{enumerate}
 \end{enumerate}
-\end{enumerate}
 
 %Example 9.17
 
