@@ -41,7 +41,7 @@ In the \tab{Packages} tab, check the boxes next to the following packages to loa
 \begin{itemize}
   \item mosaic  (a package from Project MOSAIC, should autoload on the server)
 %  \item fastR   (a package from a different text book)
-	\item Lock5Data     (a package for our text book)
+	\item Lock5withR     (a package for our text book)
 \end{itemize}
 
 \section{Using R Markdown}
@@ -79,7 +79,7 @@ R Markdown files do not have access to things you have done in your console.  (T
 
 <<>>=
 require(mosaic)       # load the mosaic package
-require(Lock5Data)    # get data sets from the book
+require(Lock5withR)    # get data sets from the book
 @
 
 \subsection*{Printing your document}
@@ -231,11 +231,11 @@ asking yourself two questions:
 \section{Data in \R}
 
 \subsection*{Data in Packages}
-Most often, data sets in \R\ are stored in a structure called a \term{data frame}.  There are a number of data sets built into \R\ and many more that come in various add on packages.  The \pkg{Lock5Data} package, for example, contains all the data sets from our text book. In the book, data set names are printed in bold text.
+Most often, data sets in \R\ are stored in a structure called a \term{data frame}.  There are a number of data sets built into \R\ and many more that come in various add on packages.  The \pkg{Lock5withR} package, for example, contains all the data sets from our text book. In the book, data set names are printed in bold text.
 
 You can see a list of them using 
 <<datasets,eval=FALSE>>=
-data(package="Lock5Data")
+data(package="Lock5withR")
 @
 
 You can find a longer list of all data sets available in any loaded package using 

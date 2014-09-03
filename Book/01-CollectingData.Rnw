@@ -9,10 +9,10 @@
 
 \subsection*{Cases and Variables}
 
-Data sets in \R\ are usually stored as \term{data frames} in a rectangular arrangement with rows corresponding to observational units and columns corresponding to variables.  A number of data sets are built into \R\ and its packages. The package for our text is \pkg{Lock5Data} which comes with a number of data sets. %1.4 p.13
+Data sets in \R\ are usually stored as \term{data frames} in a rectangular arrangement with rows corresponding to observational units and columns corresponding to variables.  A number of data sets are built into \R\ and its packages. The package for our text is \pkg{Lock5withR} which comes with a number of data sets. %1.4 p.13
 
 <<>>=
-require(Lock5Data)  # Tell R to use the package for our text book
+require(Lock5withR)  # Tell R to use the package for our text book
 data(StudentSurvey) # load the StudentSurvey data set
 @
 
