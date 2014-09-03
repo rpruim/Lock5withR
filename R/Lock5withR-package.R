@@ -44,7 +44,7 @@ NA
 #' full list of variables are at 
 #' \url{http://www.census.gov/acs/www/Downloads/datadocumentation/pums/DataDict/PUMSDataDict10.pdf}.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -89,7 +89,7 @@ NULL
 #' }
 #' @source Data collected from the World Bank website, worldbank.org.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -111,7 +111,7 @@ NULL
 #' @source Sample exams from several disciplines at
 #' \url{http://apcentral.collegeboard.com}
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -141,7 +141,7 @@ NULL
 #' 
 #' data(April14Temps)
 #' 
-NULL
+NA
 
 
 
@@ -175,7 +175,7 @@ NULL
 #' @source
 #' \url{http://www.baseball-reference.com/leagues/MLB/2011-standard-batting.shtml}
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -205,7 +205,7 @@ NULL
 #'   }
 #' @source \url{http://www.baseball-reference.com/boxes/2011.shtml}
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -229,7 +229,7 @@ NULL
 #' }
 #' @source Thanks to Prof. Richard Cleary for providing the data
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -265,7 +265,7 @@ NULL
 #' in British Medical Journal, BMJ 2010;341:c6801.
 #' @source Thanks to Dr. Groves for providing his data.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -292,7 +292,7 @@ NULL
 #' @examples
 #' 
 #' data(BodyFat)
-NULL
+NA
 
 
 
@@ -314,7 +314,7 @@ NULL
 #' @source Shoemaker, "What's Normal: Temperature, Gender and Heartrate", 
 #' Journal of Statistics Education, Vol. 4, No. 2 (1996)
 #' @keywords datasets
-NULL
+NA
 
 
 #' Bootstrap Correlations for Atlanta Commutes
@@ -336,7 +336,7 @@ NULL
 #' 
 #' data(BootAtlantaCorr)
 #' 
-NULL
+NA
 
 
 
@@ -365,7 +365,7 @@ NULL
 #' @source Hand, Daly, Lund, McConway and Ostrowski, Handbook of Small Data
 #' Sets, Chapman and Hall, London (1994), pp. 40
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -395,7 +395,7 @@ NULL
 #' \url{http://app.gen.umn.edu/artist/caos.html}
 #' @source A sample of 10 students from an introductory statisics course.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -417,7 +417,7 @@ NULL
 #' @source Dr. Pieter Tans, NOAA/ESRL (www.esrl.noaa.gov/gmd/ccgg/trends/).
 #' Values recorded at the Mauna Loa Observatory in Hawaii.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -449,7 +449,7 @@ NULL
 #' @source Cereal data obtained from nutrition labels at
 #' \url{http://www.nutritionresource.com/foodcomp2.cfm?id=0800}
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -475,7 +475,7 @@ NULL
 #' 
 #' data(CO2)
 #' 
-NULL
+NA
 
 
 
@@ -503,7 +503,7 @@ NULL
 #' @source Gawin, F., et.al., "Desipramine Facilitation of Initial Cocaine
 #' Abstinence", Archives of General Psychiatry, 1989; 46(2): 117 - 121.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -533,7 +533,7 @@ NULL
 #' recreated from the published summary statistics, and are estimates of the
 #' actual data.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -562,7 +562,7 @@ NULL
 #' 
 #' data(CommuteAtlanta)
 #' 
-NULL
+NA
 
 
 
@@ -593,7 +593,7 @@ NULL
 #' @source Sample chosen using DataFerret at
 #' \url{http://www.thedataweb.org/index.html}.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -618,7 +618,7 @@ NULL
 #' @source Bartal I.B., Decety J., and Mason P., "Empathy and Pro-Social
 #' Behavior in Rats," Science, 2011; 224(6061):1427-1430.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -641,7 +641,7 @@ NULL
 #' @source From E.A Bessey and C.A Bessey, Further Notes on Thermometer
 #' Crickets, American Naturalist, (1898) 32, 263-264.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -677,7 +677,7 @@ NULL
 #' 
 #' data(Digits)
 #' 
-NULL
+NA
 
 
 
@@ -708,7 +708,7 @@ NULL
 #' 
 #' data(DogOwner)
 #' 
-NULL
+NA
 
 
 
@@ -743,7 +743,7 @@ NULL
 #' 
 #' data(ElectionMargin)
 #' 
-NULL
+NA
 
 
 
@@ -784,7 +784,7 @@ NULL
 #' capitalization.)  The lowercase versions have more intuitive codings and can 
 #' be used to interpret the numerical codes.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -820,7 +820,7 @@ NULL
 #' 
 #' data(ExerciseHours)
 #' 
-NULL
+NA
 
 
 
@@ -849,7 +849,7 @@ NULL
 #' Royal Society, 7 April 2012; 279(1732): 1327-1334. Data approximated from
 #' information in the article.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -873,7 +873,7 @@ NULL
 #' time of food intake," Proceedings of the National Academy of Sciences,
 #' October 26, 2010; 107(43): 18664-18669.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -901,7 +901,7 @@ NULL
 #' 
 #' data(FishGills12)
 #' 
-NULL
+NA
 
 
 
@@ -928,7 +928,7 @@ NULL
 #' @examples
 #' 
 #' data(FishGills3)
-NULL
+NA
 
 
 
@@ -961,7 +961,7 @@ NULL
 #' 
 #' data(Flight179)
 #' 
-NULL
+NA
 
 
 
@@ -1009,7 +1009,7 @@ NULL
 #' 
 #' data(FloridaLakes)
 #' 
-NULL
+NA
 
 
 
@@ -1042,7 +1042,7 @@ NULL
 #' 
 #' data(GlobalInternet)
 #' 
-NULL
+NA
 
 
 
@@ -1070,7 +1070,7 @@ NULL
 #' @source A first day survey over several different introductory statistics
 #' classes.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -1106,7 +1106,7 @@ NULL
 #' 29, 2010.
 #' @source Data downloaded from \url{http://www.happyplanetindex.org/data/}
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -1132,7 +1132,7 @@ NULL
 #' 
 #' data(HockeyPenalties)
 #' 
-NULL
+NA
 
 
 
@@ -1177,7 +1177,7 @@ NULL
 #' data(HollywoodMovies2011)
 #' ## maybe str(HollywoodMovies2011) ; plot(HollywoodMovies2011) ...
 #' 
-NULL
+NA
 
 
 
@@ -1208,7 +1208,7 @@ NULL
 #' 
 #' data(HomesForSale)
 #' 
-NULL
+NA
 
 
 
@@ -1239,7 +1239,7 @@ NULL
 #' 
 #' data(HomesForSaleCA)
 #' 
-NULL
+NA
 
 
 
@@ -1262,7 +1262,7 @@ NULL
 #' 
 #' data(HomesForSaleCanton)
 #' 
-NULL
+NA
 
 
 
@@ -1294,7 +1294,7 @@ NULL
 #' 
 #' data(HomesForSaleNY)
 #' 
-NULL
+NA
 
 
 
@@ -1325,7 +1325,7 @@ NULL
 #' @source Seeley, T., Honeybee Democracy, Princeton University Press,
 #' Princeton, NJ, 2010, p. 128
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -1351,7 +1351,7 @@ NULL
 #' @source Seeley, T., Honeybee Democracy, Princeton University Press,
 #' Princeton, NJ, 2010, p. 128
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -1376,7 +1376,7 @@ NULL
 #' @source Nathan's Famous webste at
 #' \url{http://nathansfamous.com/PageFetch/getpage.php?pgid=38}
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -1460,7 +1460,7 @@ NULL
 #' 
 #' data(ICUAdmissions)
 #' 
-NULL
+NA
 
 
 
@@ -1494,7 +1494,7 @@ NULL
 #' 
 #' data(ImmuneTea)
 #' 
-NULL
+NA
 
 
 
@@ -1522,7 +1522,7 @@ NULL
 #' @source Inkjet printer reviews found at
 #' \url{http://www.pcmag.com/reviews/printers}, August 2011.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -1546,7 +1546,7 @@ NULL
 #' data(LifeExpectancyVehicles)
 #' ## maybe str(LifeExpectancyVehicles) ; plot(LifeExpectancyVehicles) ...
 #' 
-NULL
+NA
 
 
 
@@ -1587,7 +1587,7 @@ NULL
 #' time of food intake," Proceedings of the National Academy of Sciences,
 #' October 26, 2010; 107(43): 18664-18669.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -1622,7 +1622,7 @@ NULL
 #' 
 #' data(MalevolentUniformsNFL)
 #' 
-NULL
+NA
 
 
 
@@ -1657,7 +1657,7 @@ NULL
 #' 
 #' data(MalevolentUniformsNHL)
 #' 
-NULL
+NA
 
 
 
@@ -1685,7 +1685,7 @@ NULL
 #' 
 #' data(MammalLongevity)
 #' 
-NULL
+NA
 
 
 
@@ -1707,7 +1707,7 @@ NULL
 #' @source Apartments advertised on Craig's List at \url{http://newyork.craigslist.org},
 #' July 5, 2011.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -1733,7 +1733,7 @@ NULL
 #' 
 #' data(MarriageAges)
 #' 
-NULL
+NA
 
 
 
@@ -1756,7 +1756,7 @@ NULL
 #' @source 2011 Masters tournament results at
 #' \url{http://www.masters.com/en_US/discover/past_winners.html}
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -1787,7 +1787,7 @@ NULL
 #' Papaxanthis C., "Muscle Fatigue Affects Mental Simulation of Action," The
 #' Journal of Neuroscience, July 20, 2011, 31(29):10712-10720.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -1872,7 +1872,7 @@ NULL
 #' 
 #' data(MiamiHeat)
 #' 
-NULL
+NA
 
 
 
@@ -1930,7 +1930,7 @@ NULL
 #' 
 #' data(MindsetMatters)
 #' 
-NULL
+NA
 
 
 
@@ -1957,7 +1957,7 @@ NULL
 #' 
 #' data(MinistersRum)
 #' 
-NULL
+NA
 
 
 
@@ -1987,7 +1987,7 @@ NULL
 #' 
 #' data(MustangPrice)
 #' 
-NULL
+NA
 
 
 
@@ -2050,7 +2050,7 @@ NULL
 #' 
 #' data(NBAPlayers2011)
 #' 
-NULL
+NA
 
 
 
@@ -2084,7 +2084,7 @@ NULL
 #' 
 #' data(NBAStandings)
 #' 
-NULL
+NA
 
 
 
@@ -2119,7 +2119,7 @@ NULL
 #' @keywords datasets
 #' 
 
-NULL
+NA
 
 
 
@@ -2186,7 +2186,7 @@ NULL
 #' 
 #' data(NutritionStudy)
 #' 
-NULL
+NA
 
 
 
@@ -2218,7 +2218,7 @@ NULL
 #' 
 #' data(OlympicMarathon)
 #' 
-NULL
+NA
 
 
 
@@ -2244,7 +2244,7 @@ NULL
 #' 
 #' data(OttawaSenators)
 #' 
-NULL
+NA
 
 
 
@@ -2267,7 +2267,7 @@ NULL
 #' @source Pizza Girl: Statistical Analysis at
 #' \url{http://slice.seriouseats.com/archives/2010/04/statistical-analysis-of-a-pizza-delivery-shift-20100429.html}.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -2296,7 +2296,7 @@ NULL
 #' 
 #' data(QuizPulse10)
 #' 
-NULL
+NA
 
 
 
@@ -2322,7 +2322,7 @@ NULL
 #' 
 #' data(RandomP50N200)
 #' 
-NULL
+NA
 
 
 
@@ -2365,7 +2365,7 @@ NULL
 #' 
 #' data(RestaurantTips)
 #' 
-NULL
+NA
 
 
 
@@ -2396,7 +2396,7 @@ NULL
 #'   xyplot(Sales ~ Date, RetailSales, type='l', groups=Month)
 #' }
 #' 
-NULL
+NA
 
 
 
@@ -2428,7 +2428,7 @@ NULL
 #' 
 #' data(RockandRoll)
 #' 
-NULL
+NA
 
 
 
@@ -2454,7 +2454,7 @@ NULL
 #' }
 #' @source \url{http://www.census.gov/acs/www/data_documentation/public_use_microdata_sample/}
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -2497,7 +2497,7 @@ NULL
 #' 
 #' data(SampCountries)
 #' 
-NULL
+NA
 
 
 
@@ -2535,7 +2535,7 @@ NULL
 #'     auto.key=list(lines=TRUE, points=FALSE))
 #'  }
 #' 
-NULL
+NA
 
 
 
@@ -2581,7 +2581,7 @@ NULL
 #' 
 #' data(SandwichAnts)
 #' 
-NULL
+NA
 
 
 
@@ -2626,7 +2626,7 @@ NULL
 #' 
 #' data(SandwichAnts2)
 #' 
-NULL
+NA
 
 
 
@@ -2647,7 +2647,7 @@ NULL
 #' @source Random sample taken from all skateboards available for sale on eBay
 #' on February 12, 2012.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -2677,7 +2677,7 @@ NULL
 #' 
 #' data(SleepCaffeine)
 #' 
-NULL
+NA
 
 
 
@@ -2735,7 +2735,7 @@ NULL
 #' Times, Sleep, and Academic Performance in College: A Path Analysis," April
 #' 2012; 29(3): 318-335.  Thanks to the authors for supplying the data.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -2768,7 +2768,7 @@ NULL
 #' 
 #' data(Smiles)
 #' 
-NULL
+NA
 
 
 
@@ -2825,7 +2825,7 @@ NULL
 #' @source Gelman, A. and Hill, J., Data analysis using regression and
 #' multilevel/hierarchical models, Cambridge University Press: New York, 2007
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -2850,7 +2850,7 @@ NULL
 #' }
 #' @source Random selection of students in an introductory statistics course.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -2885,7 +2885,7 @@ NULL
 #' 
 #' data(StatisticsPhD)
 #' 
-NULL
+NA
 
 
 
@@ -2911,7 +2911,7 @@ NULL
 #' 
 #' data(StockChanges)
 #' 
-NULL
+NA
 
 
 
@@ -2942,7 +2942,7 @@ NULL
 #' @source Leavitt, J. and Christenfeld, N., "Story Spoilers Don't Spoil
 #' Stories," Psychological Science, published OnlineFirst, August 12, 2011.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -2979,7 +2979,7 @@ NULL
 #' 
 #' data(StressedMice)
 #' 
-NULL
+NA
 
 
 
@@ -3032,7 +3032,7 @@ NULL
 #' 
 #' data(StudentSurvey)
 #' 
-NULL
+NA
 
 
 
@@ -3063,7 +3063,7 @@ NULL
 #' data(TenCountries)
 #' ## maybe str(TenCountries) ; plot(TenCountries) ...
 #' 
-NULL
+NA
 
 
 
@@ -3093,7 +3093,7 @@ NULL
 #' 
 #' data(TextbookCosts)
 #' 
-NULL
+NA
 
 
 
@@ -3119,7 +3119,7 @@ NULL
 #' 
 #' data(ToenailArsenic)
 #' 
-NULL
+NA
 
 
 
@@ -3154,7 +3154,7 @@ NULL
 #' 
 #' data(TrafficFlow)
 #' 
-NULL
+NA
 
 
 
@@ -3212,7 +3212,7 @@ NULL
 #' 
 #' data(USStates)
 #' 
-NULL
+NA
 
 
 
@@ -3248,7 +3248,7 @@ NULL
 #' @source Sih, A. and Watters, J., "The mix matters: behavioural types and
 #' group dynamics in water striders," Behaviour, 2005; 142(9-10): 1423.
 #' @keywords datasets
-NULL
+NA
 
 
 
@@ -3294,7 +3294,7 @@ NULL
 #' 
 #' data(WaterTaste)
 #' 
-NULL
+NA
 
 
 
@@ -3331,7 +3331,7 @@ NULL
 #' 
 #' data(Wetsuits)
 #' 
-NULL
+NA
 
 
 
