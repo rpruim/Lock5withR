@@ -1,0 +1,14 @@
+n1 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 1))
+histogram(~result, data=n1)
+n5 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 5))
+histogram(~result, data=n5)
+n15 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 15))
+histogram(~result, data=n15)
+n30 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 30))
+histogram(~result, data=n30)
+n125 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 125))
+histogram(~result, data=n125)
+n500 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 500))
+histogram(~result, data=n500)
+
+

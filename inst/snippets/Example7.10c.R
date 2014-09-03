@@ -1,0 +1,3 @@
+xchisq.test(water)
+
+
