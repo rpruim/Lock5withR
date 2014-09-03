@@ -279,8 +279,8 @@ knit_hooks$set(document = function(x) {
 <<child="10-MultipleRegression.Rnw">>=
 @
 
-<<child="11-Probability.Rnw", eval=FALSE>>=
-@
+% <<child="11-Probability.Rnw", eval=FALSE>>=
+% @
 
 
 \bibliographystyle{amsalpha}
