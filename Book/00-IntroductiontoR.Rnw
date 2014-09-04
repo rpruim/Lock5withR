@@ -37,82 +37,14 @@ You should change your password.  Here's how.
 
 \R\ is divided up into packages.  A few of these are loaded every time you run \R, but most have to be selected.  This way you only have as much of \R\ as you need.
 
-In the \tab{Packages} tab, check the boxes next to the following packages to load them:
+In the \tab{Packages} tab, 
+check the boxes next to the following packages to load them:
 \begin{itemize}
-  \item mosaic  (a package from Project MOSAIC, should autoload on the server)
-%  \item fastR   (a package from a different text book)
 	\item Lock5withR     (a package for our text book)
+  \item mosaic  (a package from Project MOSAIC, should autoload on the server)
+  \item mosaicData  (Project MOSAIC data sets)
 \end{itemize}
 
-\section{Using R Markdown}
-
-Although you can export plots from \RStudio\ for use in other applications, there is anotherway of preparing documents that has many advantages.  \RStudio\ provides several ways to create documents that include text, \R\ code, \R\ output, graphics, even mathematical notation all in one document.  The simplest of these is R Markdown.  
-
-To create a new R Markdown document, go to ``File", ``New", then ``R Markdown":
-\begin{center}
-  \includegraphics[width=3in]{images/NewRMarkdown}
-\end{center}
-
-When you do this, a file editing pane will open with a template inserted.  If you click on ``Knit HTML", \RStudio\ will turn this into an HTML file and display it for you.  Give it a try. You will be asked to name your file if you haven't already done so.  If you are using the \RStudio\ server in a browser, then your file will live on the server (``in the cloud'') rather than on your computer.
-
-If you look at the template file you will see that the file has two kinds of sections.  Some of this file is just normal text (with some extra symbols to make things bold, add in headings, etc.)  You can get a list of all of these mark up options by selecting the ``Mardown Quick Reference" in the question mark menu.
-
-\begin{center}
-  \includegraphics[width=2in]{images/MardownQuickReference}
-\end{center}
-
-The second type of section is an \R\ code chunk.  These are colored differently to make them easier to see.  You can insert a new code chunk by selecting ``Insert Chunk" from the ``Chunks" 
-menu:
-\begin{center}
-	\includegraphics[width=2in]{images/InsertChunk}
-\end{center}
-\noindent
-(You can also type \verb!```{r}! to begin and \verb!```! to end the code chunk if you would rather type.) You can put any \R\ code in these code chunks and the results (text output or graphics) as well as the \R\ code will be displayed in your HTML file.
-
-There are options to do things like (a) run \R\ code without displayng it, (b) run \R\ code without
-displaying the output, (c) controling size of plots, etc., etc.  
-But for starting out, this is really all you need to know.
-
-\subsection*{R Markdown files must be self-contained}
-
-R Markdown files do not have access to things you have done in your console.  (This is good, else your document would change based on things not in the file.)  This means that you must explicitly load data, and require packages \emph{in the R Markdown file} in order to use them.  In this class, this means that most of your R Markdown files will have a chunk near the beginning that includes
-
-<<>>=
-require(mosaic)       # load the mosaic package
-require(Lock5withR)    # get data sets from the book
-@
-
-\subsection*{Printing your document}
-
-The preview window has an icon that looks like an arrow pointing at a window.  If you click on that the document will open in a regular browser window.  From there you can use your browser's print features to print the document.
-
-\section{Getting Help in RStudio}
-
-\subsection*{The \RStudio\ help system}
-
-There are several ways to get \RStudio\ to help you when you forget something. Most objects in packages have help files that you can access by typing something like:
-<<help-questionmark,eval=FALSE,tidy=FALSE>>=
-?bargraph
-?histogram
-?HELPrct
-@
-
-You can search the help system using
-<<help-GR,eval=FALSE>>=
-help.search('Grand Rapids')    # Does R know anything about Grand Rapids?
-@
-This can be useful if you don't know the name of the function or data set you are looking for.
-
-\subsection*{History}
-If you know you have done something before, but can't remember how, you can search your history.  The history tab shows a list of recently executed commands.  There is also a search bar to help you find things from longer ago.
-
-\subsection*{Error messages}
-When things go wrong, \R\ tries to help you out by providing an error message. If you can't make sense of the message, you can try copying and pasting your command and the error message and sending to me in an email.  One common error message is illustrated below.
-<<error-message>>=
-fred <- 23
-frd
-@
-The object \code{frd} is not found because it was mistyped.  It should have been \code{fred}.  If you see an ``object not found'' message, check your typing and check to make sure that the necessary packages have been loaded.
 
 \subsection*{Using R as a calculator}
 
@@ -148,6 +80,35 @@ The semi-colon can be used to place multiple commands on one line.  One frequent
 @
 
 
+\section{Getting Help in RStudio}
+
+\subsection*{The \RStudio\ help system}
+
+There are several ways to get \RStudio\ to help you when you forget something. Most objects in packages have help files that you can access by typing something like:
+<<help-questionmark,eval=FALSE,tidy=FALSE>>=
+?bargraph
+?histogram
+?HELPrct
+@
+
+You can search the help system using
+<<help-GR,eval=FALSE>>=
+help.search('Grand Rapids')    # Does R know anything about Grand Rapids?
+@
+This can be useful if you don't know the name of the function or data set you are looking for.
+
+\subsection*{History}
+If you know you have done something before, but can't remember how, you can search your history.  The history tab shows a list of recently executed commands.  There is also a search bar to help you find things from longer ago.
+
+\subsection*{Error messages}
+When things go wrong, \R\ tries to help you out by providing an error message. If you can't make sense of the message, you can try copying and pasting your command and the error message and sending to me in an email.  One common error message is illustrated below.
+<<error-message>>=
+fred <- 23
+frd
+@
+The object \code{frd} is not found because it was mistyped.  It should have been \code{fred}.  If you see an ``object not found'' message, check your typing and check to make sure that the necessary packages have been loaded.
+
+
 \section{Four Things to Know About \R}
 Computers are great for doing complicated computations quickly, but you have to speak to them on their terms.  Here are few things that will help you communicate with \R.
 \begin{enumerate}
@@ -179,54 +140,6 @@ If you begin a command and hit the TAB key, \R\ will show you a list of possible
 	signs along the left edge), you can hit the escape key to get back to
 	a clean prompt.
 \end{enumerate}
-
-
-\section{The Most Important Template}
-
-Most of what we will do in this chapter makes use of a single \R\ template:
-
-\def\phbox#1{\fbox{\phantom{#1}}}
-\def\ttfbox#1{\fbox{\texttt{#1}}}
-\[
-\phbox{goal} \; ( \; \phbox{yl} \; \sim \; \phbox{yl} \;, \; \texttt{data}=\phbox{mydata} \; )
-\]
-
-It is useful if we name the slots in this template:
-
-\[
-\ttfbox{goal} \; (  \;\ttfbox{y}  \;\sim  \;\ttfbox{x} \;, \; \texttt{data}=\ttfbox{mydata} \; )
-\]
-
-Actually, there are some variations on this template:
-<<eval=FALSE>>=
-### Simpler version
-goal( ~ x, data = mydata )
-
-### Fancier version: 
-goal( y ~ x | z , data = mydata )
- 
-### Unified version: 
-goal( formula , data = mydata )
-@
-
-To use the template, you just need to know what goes in each slot.  This can be determined by
-asking yourself two questions:
-\begin{enumerate}
-  \item
-		What do you want \R\ to do? 
-		\begin{itemize}
-			\item this determines what function to use (goal).
-		\end{itemize}
-	\item
-		What must \R\ know to do that?
-		\begin{itemize}
-			\item this determines the inputs to the function
-			\item for describing data, must must identify \emph{which data frame}
-				and \emph{which variable(s)}.
-		\end{itemize}
-
-\end{enumerate}
-
 
 \section{Data in \R}
 
@@ -358,8 +271,7 @@ You can avoid all the uploading step if you use a Google spreadsheet and import 
 <<tidy=FALSE>>=
 # The URL will be really long and ugly...
 Asters3 <- fetchGoogle(
-  "https://docs.google.com/spreadsheet/
-  pub?key=0ApQwsmr3d8V2cmprN01YNnNqMEkxbHlNMHBQWmx0VkE&output=csv")
+  "https://docs.google.com/spreadsheet/pub?key=0ApQwsmr3d8V2cmprN01YNnNqMEkxbHlNMHBQWmx0VkE&output=csv")
 @
 	\textbf{Don't forget the quotation marks!}  (They won't be part of what you copy from Google.)
 
@@ -374,8 +286,10 @@ someData <- read.file("file.csv")
 
 This can be used to read data directly from a URL as well.  For example, here is some data from the US Census Bureau:
 <<tidy=FALSE>>=
-Population <- read.file("http://www.census.gov/popest/data/national/totals/2012/files
-                        /NST_EST2012_ALLDATA.csv")
+Population <- read.file(
+  "https://www.census.gov/popest/data/national/totals/2012/files/NST_EST2012_ALLDATA.csv",
+  as.is=TRUE   # don't convert strings to factors
+)
 dim(Population)
 head(Population, 4)
 @
@@ -395,9 +309,23 @@ Here some examples:
 		\url{http://www.exploredata.net/Downloads} has data from WHO, a genome expression study, and a microbiome study.
 \end{itemize}
 
-But be aware that some of these files might need to be cleaned up a bit before they are usable for statistics.  Also, some internet files are very large and may take a while to download.  Many sites will give an indication of the size of the data set so you know what you are in for.   The better sites will include links to a code book (a description of all the variables, units used, how and when the data were collected, and any other information relevant to interpreting the data). Such a document is available for the population data loaded above.  You can find it at \url{http://www.census.gov/popest/data/national/totals/2012/files/NST-EST2012-alldata.pdf}
+But be aware that some of these files might need to be cleaned up a bit before
+they are usable for statistics.  Also, some internet files are very large and
+may take a while to download.  Many sites will give an indication of the size
+of the data set so you know what you are in for.   The better sites will
+include links to a code book (a description of all the variables, units used,
+how and when the data were collected, and any other information relevant to
+interpreting the data). Such a document is available for the population data
+loaded above.  You can find it at
+\url{http://www.census.gov/popest/data/national/totals/2012/files/NST-EST2012-alldata.pdf}
 
-There are similar functions for reading various other sorts of data.  There is even a \function{read.xls()} functionin the \pkg{gdata} package that can read directly from Excel spreadsheets without having to first export them to csv format.  There are also utilities for converting to and from native data formats of other statistical programs (like SAS, SPSS, etc.).  But since these typically all know how to read and write csv files, learning a workflow that goes through CSV is a broadly applicable skill.
+There are similar functions for reading various other sorts of data.  There is
+even a \function{read.xls()} function in the \pkg{gdata} package that can read
+directly from Excel spreadsheets without having to first export them to csv
+format.  There are also utilities for converting to and from native data
+formats of other statistical programs (like SAS, SPSS, etc.).  But since these
+typically all know how to read and write csv files, learning a workflow that
+goes through CSV is a broadly applicable skill.
 
 \subsubsection*{Missing Data}
 
@@ -424,33 +352,148 @@ someData <- read.file('file.csv',
 @
 }
 
-\subsection*{Manipulating your data}
 
-\subsubsection*{Creating new variables}
+\section{The Most Important Template}
 
-We can add a new variable to data set using \function{transform()}:
+Most of what we will do in this chapter makes use of a single \R\ template:
+
+\def\phbox#1{\fbox{\phantom{#1}}}
+\def\ttfbox#1{\fbox{\texttt{#1}}}
+\[
+\phbox{goal} \; ( \; \phbox{yl} \; \sim \; \phbox{yl} \;, \; \texttt{data}=\phbox{mydata} \; )
+\]
+
+It is useful if we name the slots in this template:
+
+\[
+\ttfbox{goal} \; (  \;\ttfbox{y}  \;\sim  \;\ttfbox{x} \;, \; \texttt{data}=\ttfbox{mydata} \; )
+\]
+
+Actually, there are some variations on this template:
+<<eval=FALSE>>=
+### Simpler version -- for just one variable
+goal( ~ x, data = mydata )
+
+### Fancier version: 
+goal( y ~ x | z , data = mydata )
+ 
+### Unified version: 
+goal( formula , data = mydata )
+@
+
+To use the template (we'll call it the formula template because there is always
+a formula involved), you just need to know what goes in each slot.  This can be determined by asking yourself two questions:
+\begin{enumerate}
+  \item
+		What do you want \R\ to do? 
+		\begin{itemize}
+			\item this determines what function to use (goal).
+		\end{itemize}
+	\item
+		What must \R\ know to do that?
+		\begin{itemize}
+			\item this determines the inputs to the function
+			\item for describing data, must must identify \emph{which data frame}
+				and \emph{which variable(s)}.
+		\end{itemize}
+
+\end{enumerate}
+
+Let's try an example.  Suppose we want to make this plot
+<<echo=FALSE>>=
+require(mosaicData)
+xyplot( births ~ date, data=Births78 )
+@
+
+\begin{enumerate}
+\item What is our goal?
+
+Our goal is to make a scatter plot.
+The function that does this is called \function{xyplot()}.  That takes care 
+of the first slot.
+
+\item What does \R\ need to know to do this?
+
+It needs to know what data set to use, and which varialbes to use on the 
+x and y axes.  These data are in the \dataframe{Births78} data set in the 
+\pkg{mosaic} package.  Let's take a quick look at the data:
+<<births-head>>=
+require(mosaicData)  # load the package that contains our data set
+head(Births78)
+@
+We want the date on the x-axis and the number of births on the y axis, so
+the full command is
+<<births-scatterplot>>=
+xyplot(births ~ date, data=Births78)
+@
+
+This same template can be used for a wide variety of graphical and 
+numerical summaries.  For example, to compute the mean number of births, we can 
+change \function{xyplot()} to \function{mean()} and provide \variable{births}
+but not \variable{date}:
+<<>>=
+mean( ~ births, data=Births78)
+@
+Notice that when there is only one variable, it goes on the right side of the 
+wiggle (\code{\tilde{}}).
+
+We'll see more examples of this template as we go along.
+
+\end{enumerate}
+
+
+\section{Manipulating your data}
+
+\subsection*{Creating a subset}
+
+The \function{filter()} command can be used to create subsets.  The population
+data set we downloaded has population for states and various other regions.  If we
+just want the states, we can select the items where the \variable{State} variable is 
+greater than 0.  (Notice the double equals for testing equality.)
+<<filter>>=
+States <- filter(Population, State>0)
+dim(States)
+@
+That two states too many.  We can scan the list to see what else is in there.
+<<extra-states>>=
+States$name
+@
+The two extras are Washington, DC and Peurto Rico.
+
+\subsection*{Choosing specific columns}
+\function{filter()} chooses rows from a data frame.  \function{select()} selects
+columns.  This can be handy if you have a data set with many more variables than you are interested in.  Let's pick just a handful from the \dataframe{Population} data
+set.
+<<select>>=
+States2 <- select(States, 
+                  Name, 
+                  POPESTIMATE2010, POPESTIMATE2011, POPESTIMATE2012)
+@
+
+\subsection*{Dropping Variables}
+
+Sometimes it is easier to think about dropping variables.
+We can use \function{select()} for this as well:
+<<>>=
+iris2 <- select(iris, - Sepal.Width, - Sepal.Length)  # the minus sign means drop 
+head(iris2, 3)
+@
+
+\subsection*{Creating new variables}
+
+We can add a new variable to data set using \function{mutate()}:
 <<tidy=FALSE>>=
 head(iris,3)
-iris2  <- transform(iris, 
+iris3  <- mutate(iris, 
                     Sepal.Ratio = Sepal.Length / Sepal.Width,
                     Petal.Ratio = Petal.Length / Petal.Width )
-head(iris2,3)
-States <- transform(States, 
+head(iris3,3)
+States3 <- mutate(States2, 
                     Pop.Increase = 100 * (POPESTIMATE2012 - POPESTIMATE2010)/POPESTIMATE2010 )
-histogram( ~ Pop.Increase, data=States, width=0.5, 
+histogram( ~ Pop.Increase, data=States3, width=0.5, 
                            main="% Population increase (2010 to 2012)" )
 @
 Generally, it is a good idea to keep raw data (like \variable{Sepal.Length} and \variable{Sepal.Width} in your data file, but let \R\ do the computation of derived variables for you.  Among other advantages, if you ever fix an error in a \variable{Sepal.Length} measurement, you don't have to worry about remembering to also recompute the ratio.  Futhermore, your \R\ code documents how the derived value was computed.
-
-\subsubsection*{Dropping Variables}
-
-Less frequently, you might want to remove a variable from a data frame.  We can use \function{subset()} for this as well:
-<<>>=
-iris3 <- subset(iris2, select = - Sepal.Ratio)  # the minus sign means drop 
-head(iris3, 3)
-@
-
-%\subsection{Summarizing and Aggregating with \pkg{plyr}}
 
 \subsection*{Saving Data}
 
@@ -473,7 +516,7 @@ The downside is that these files are only readable in \R.
 
 <<savingData,exec=FALSE,echo=TRUE>>=
 save(iris3, file="iris3.rda")   # the traditional file extension is rda for R native data.
-load("iris3.rda")          # loads previously saved data
+load("iris3.rda")               # loads previously saved data
 @
 
 For more on importing and exporting data, especially from other formats, see the \textit{R Data Import/Export} manual available on \href{http://cran.r-project.org/manuals.html}{CRAN}.
@@ -501,6 +544,47 @@ Now we are ready to begin our analysis.
 <<fusion1-xtabs>>=
 tally(~t2d + genotype, fusion1m)
 @
+\section{Using R Markdown}
+
+Although you can export plots from \RStudio\ for use in other applications, there is anotherway of preparing documents that has many advantages.  \RStudio\ provides several ways to create documents that include text, \R\ code, \R\ output, graphics, even mathematical notation all in one document.  The simplest of these is R Markdown.  
+
+To create a new R Markdown document, go to ``File", ``New", then ``R Markdown":
+\begin{center}
+  \includegraphics[width=3in]{images/NewRMarkdown}
+\end{center}
+
+When you do this, a file editing pane will open with a template inserted.  If you click on ``Knit HTML", \RStudio\ will turn this into an HTML file and display it for you.  Give it a try. You will be asked to name your file if you haven't already done so.  If you are using the \RStudio\ server in a browser, then your file will live on the server (``in the cloud'') rather than on your computer.
+
+If you look at the template file you will see that the file has two kinds of sections.  Some of this file is just normal text (with some extra symbols to make things bold, add in headings, etc.)  You can get a list of all of these mark up options by selecting the ``Mardown Quick Reference" in the question mark menu.
+
+\begin{center}
+  \includegraphics[width=2in]{images/MardownQuickReference}
+\end{center}
+
+The second type of section is an \R\ code chunk.  These are colored differently to make them easier to see.  You can insert a new code chunk by selecting ``Insert Chunk" from the ``Chunks" 
+menu:
+\begin{center}
+  \includegraphics[width=2in]{images/InsertChunk}
+\end{center}
+\noindent
+(You can also type \verb!```{r}! to begin and \verb!```! to end the code chunk if you would rather type.) You can put any \R\ code in these code chunks and the results (text output or graphics) as well as the \R\ code will be displayed in your HTML file.
+
+There are options to do things like (a) run \R\ code without displayng it, (b) run \R\ code without
+displaying the output, (c) controling size of plots, etc., etc.  
+But for starting out, this is really all you need to know.
+
+\subsection*{R Markdown files must be self-contained}
+
+R Markdown files do not have access to things you have done in your console.  (This is good, else your document would change based on things not in the file.)  This means that you must explicitly load data, and require packages \emph{in the R Markdown file} in order to use them.  In this class, this means that most of your R Markdown files will have a chunk near the beginning that includes
+
+<<>>=
+require(mosaic)        # load the mosaic package
+require(Lock5withR)    # get data sets from the book
+@
+
+\subsection*{Printing your document}
+
+The preview window has an icon that looks like an arrow pointing at a window.  If you click on that the document will open in a regular browser window.  From there you can use your browser's print features to print the document.
 
 
 \section{Statistics: Answering Questions With Data}

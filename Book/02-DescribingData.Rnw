@@ -21,6 +21,7 @@ Alternatively, we can read from a URL like this
 OneTrueLove2 <- 
   read.file("https://raw.githubusercontent.com/rpruim/Lock5withR/master/Book/OneTrueLove.csv")
 @
+\iffalse
 In this case, the file is also distributed with the \pkg{Lock5withR} package, so
 we can read it like this too:
 <<Data2.1c>>=
@@ -29,6 +30,7 @@ docFile("OneTrueLove.csv", package="Lock5withR")
 OneTrueLove3 <- read.file(docFile("OneTrueLove.csv", package="Lock5withR"))
 OneTrueLove4 <- read.file("OneTrueLove.csv", package="Lock5withR")
 @
+\fi
 
 %Example 2.1
 %Example 2.2
