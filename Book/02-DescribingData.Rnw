@@ -11,10 +11,23 @@ In this chapter we discuss graphical and numerical summaries of data.
 
 \section{Categorical Variables}
 
-Let us investigate categorical variables in \R\ by taking a look at the data set for the One True Love survey. Notice that the data set is not readily available in our textbook's package. However, the authors do provide us with the necessary information to create our own data spreadsheet (in either Excel or Google) and import it into \R. (See Chapter 0 for instructions.)
-
+Let us investigate categorical variables in \R\ by taking a look at the data set for the One True Love survey. Notice that the data set is not readily available in our textbook's package. However, the authors do provide us with the necessary information to create our own data spreadsheet (in either Excel or Google) and import it into \R. (See Chapter 0 for instructions.)  
 <<Data2.1>>=
 OneTrueLove <- read.file( "OneTrueLove.csv" )
+@
+
+Alternatively, we can read from a URL like this
+<<Data2.1b>>=
+OneTrueLove2 <- 
+  read.file("https://raw.githubusercontent.com/rpruim/Lock5withR/master/Book/OneTrueLove.csv")
+@
+In this case, the file is also distributed with the \plg{Lock5withR} package, so
+we can read it like this too:
+<<Data2.1c>>=
+# docFile() will tell us where the file is on our computer
+docFile("OneTrueLove.csv", package="Lock5withR")
+OneTrueLove3 <- read.file(docFile("OneTrueLove.csv", package="Lock5withR"))
+OneTrueLove4 <- read.file("OneTrueLove.csv", package="Lock5withR")
 @
 
 %Example 2.1
