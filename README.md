@@ -23,6 +23,6 @@ install_github("rpruim/Lock5withR", build_vignettes=TRUE)
 
 This document shows how to use R and the `mosaic` package (available on CRAN) for all of the examples in the text. It can be used as a reference for instructors, who may choose to do some things slightly differently, or as a reference for students if the instructor follows the style quite closely.
 
-This document is avaialable at [https://github.com/rpruim/Lock5withR/blob/master/Book/Lock5withR.pdf](https://github.com/rpruim/Lock5withR/blob/master/Book/Lock5withR.pdf)
+This document is avaialable at [https://github.com/rpruim/Lock5withR/raw/master/Book/Lock5withR.pdf](https://github.com/rpruim/Lock5withR/raw/master/Book/Lock5withR.pdf)
 
 
