@@ -41,3 +41,21 @@ require(mosaic)
 ```{r}
 locket("Example2.11")
 ```
+
+### Relationship to `Lock5Data`
+
+The Locks have created an R package called `Lock5Data` that contains the data sets from their text.
+Some of these data sets have been modified in `Lock5withR` to make them easier to use with R.  Modified data sets include the following:
+
+```
+AllCountries       BikeCommute         BodyTemp50          CaffeineTaps 
+CarbonDioxide      CO2                 EmployedACS         Flight179 
+GPAGender          ICUAdmissions       MiamiHeat           MindsetMatters 
+NFLScores2011      NutritionStudy      RestaurantTips      RetailSales 
+SalaryGender       SampCountries       SandP500            SleepStudy 
+SpeedDating        StudentSurvey       USStates            WaterTaste 
+Wetsuits
+```
+Typically changes involved the inclusion of additional variables with better encodings.  Somtimes 
+variables are replaced.  In the case of `CO2` the data set has been renamed `AtmosphericCO2` to 
+avoid a name collision with a data set in the `datasets` package.
