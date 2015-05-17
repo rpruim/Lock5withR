@@ -2,6 +2,9 @@
 output:
   md_document:
     variant: markdown_github
+  html_document:
+    fig.width: 5
+    fig.height: 3
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -59,3 +62,5 @@ Wetsuits
 Typically changes involved the inclusion of additional variables with better encodings.  Somtimes 
 variables are replaced.  In the case of `CO2` the data set has been renamed `AtmosphericCO2` to 
 avoid a name collision with a data set in the `datasets` package.
+
+The `locket()` function is only available in `Lock5withR`.

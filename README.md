@@ -60,3 +60,5 @@ The Locks have created an R package called `Lock5Data` that contains the data se
     Wetsuits
 
 Typically changes involved the inclusion of additional variables with better encodings. Somtimes variables are replaced. In the case of `CO2` the data set has been renamed `AtmosphericCO2` to avoid a name collision with a data set in the `datasets` package.
+
+The `locket()` function is only available in `Lock5withR`.
