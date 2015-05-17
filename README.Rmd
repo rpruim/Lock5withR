@@ -1,0 +1,43 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+Lock5withR
+==========
+
+R Companion to 
+[Statistics: Unlocking the Power of Data](http://lock5stat.com/)
+by Lock, Lock, Lock, Lock, and Lock.
+
+## Compantion Text
+
+## R Package
+
+The `Lock5withR` package can be installed from github using
+
+```{r eval=FALSE}
+devtools::install_github("rpruim/Lock5withR")
+```
+
+This package contains all of the data sets used in the package and the `locket()` function which 
+can be used to run any code chunk from the campanion.  For example:
+
+```{r message=FALSE}
+require(Lock5withR)
+require(mosaic)
+```
+```{r}
+locket("Example2.11")
+```

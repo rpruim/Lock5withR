@@ -7,3 +7,5 @@
 ^bin$
 ^UnTracked$
 ^.*\.Rcheck$
+^README\.Rmd$
+^README-.*\.png$
