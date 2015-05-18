@@ -1,10 +1,11 @@
 ---
 output:
-  md_document:
-    variant: markdown_github
   html_document:
+    keep_md: yes
     fig.width: 5
     fig.height: 3
+  md_document:
+    variant: markdown_github
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -20,12 +21,20 @@ knitr::opts_chunk$set(
 Lock5withR
 ==========
 
-R Companion to 
+This R Companion to 
 [Statistics: Unlocking the Power of Data](http://lock5stat.com/)
-by Lock, Lock, Lock, Lock, and Lock.
+by Lock, Lock, Lock, Lock, and Lock provides
 
-## Compantion Text
+ * a companion text 
+ * an R package (`Lock5withR`)
 
+## Companion Text
+
+ * *Lock5 with R*, a companion to *Statistics: Unlocking the Power of Data* 
+ is available 
+ [as a PDF](https://github.com/rpruim/Lock5withR/blob/master/Book/Lock5withR.pdf) 
+ * The authors are Randall Pruim and Lana Park.  
+ 
 ## R Package
 
 The `Lock5withR` package can be installed from github using
@@ -51,12 +60,12 @@ The Locks have created an R package called `Lock5Data` that contains the data se
 Some of these data sets have been modified in `Lock5withR` to make them easier to use with R.  Modified data sets include the following:
 
 ```
-AllCountries       BikeCommute         BodyTemp50          CaffeineTaps 
-CarbonDioxide      CO2                 EmployedACS         Flight179 
-GPAGender          ICUAdmissions       MiamiHeat           MindsetMatters 
-NFLScores2011      NutritionStudy      RestaurantTips      RetailSales 
-SalaryGender       SampCountries       SandP500            SleepStudy 
-SpeedDating        StudentSurvey       USStates            WaterTaste 
+AllCountries    BikeCommute      BodyTemp50       CaffeineTaps 
+CarbonDioxide   CO2              EmployedACS      Flight179 
+GPAGender       ICUAdmissions    MiamiHeat        MindsetMatters 
+NFLScores2011   NutritionStudy   RestaurantTips   RetailSales 
+SalaryGender    SampCountries    SandP500         SleepStudy 
+SpeedDating     StudentSurvey    USStates         WaterTaste 
 Wetsuits
 ```
 Typically changes involved the inclusion of additional variables with better encodings.  Somtimes 
