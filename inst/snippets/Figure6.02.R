@@ -16,4 +16,3 @@ dotPlot(~prop, width = .02, cex = 10, data=P.90)
 P.99 <- do(2000) * rflip(50, .99)
 dotPlot(~prop, width = .02, cex = 25, data=P.99)
 
-

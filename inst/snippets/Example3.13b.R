@@ -3,4 +3,3 @@ MoE <- 0.10
 p.hat - MoE
 p.hat + MoE
 
-

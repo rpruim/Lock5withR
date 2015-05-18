@@ -5,4 +5,3 @@ trellis.par.set(theme=col.mosaic())
 # switch back to my saved settings
 trellis.par.set(mySettings)
 
-

@@ -4,4 +4,3 @@ colnames(phs) <- c("heart attack","no heart attack")     # add column names
 phs 
 xchisq.test(phs)
 
-

@@ -2,5 +2,3 @@ xyplot(LifeExpectancy ~ Vehicles, xlab = "Vehicles (millions)", ylab = "Life Exp
        data = LifeExpectancyVehicles)
 
 
-
-

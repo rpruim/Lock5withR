@@ -4,4 +4,3 @@ x.bar - t.star * se
 # upper limit
 x.bar + t.star * se
 
-

@@ -6,4 +6,3 @@ xyplot(Sepal.Length ~ Sepal.Width, groups=Species, data=iris,
 	alpha=.5,        
 	auto.key=list(columns=3))   
 
-

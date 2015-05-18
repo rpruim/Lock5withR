@@ -3,4 +3,3 @@ tally( ~ (F >= 5.63), data = Rand.Ants)
 prop( ~ (F >= 5.63), data = Rand.Ants)
 dotPlot( ~ F, width=0.20, groups = (F <=5.63), data=Rand.Ants)
 
-

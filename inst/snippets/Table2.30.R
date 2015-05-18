@@ -4,4 +4,3 @@ cor(AvgMercury ~ Alkalinity, data = FloridaLakes)
 cor(Alkalinity ~ pH, data = FloridaLakes)
 cor(AvgMercury ~ ThreeYrStdMercury, data = FloridaLakes)
 
-

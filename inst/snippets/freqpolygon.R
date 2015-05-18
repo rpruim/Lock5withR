@@ -5,4 +5,3 @@ freqpolygon(~Exercise, data=StudentSurvey, breaks=seq(0,45,by=4), lwd=3,
   panel.freqpolygon(x,...)}
              )
 
-

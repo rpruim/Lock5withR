@@ -4,5 +4,3 @@ head(Boot.Mustang, 3)
 histogram( ~ result, n=50, data=Boot.Mustang)
 
 
-
-

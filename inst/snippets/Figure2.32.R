@@ -1,3 +1,2 @@
 bwplot(~Smokers, data=USStates)
 
-

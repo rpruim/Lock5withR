@@ -5,4 +5,3 @@ grid.text(y=.7,'Never do this!', gp=gpar(col='red',cex=2,alpha=.6))
 trellis.unfocus()
 trellis.par.set(theme=col.mosaic())
 
-

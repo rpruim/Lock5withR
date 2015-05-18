@@ -3,4 +3,3 @@ head(Randomization.Temp, 3)
 mean( ~ result, data=Randomization.Temp )
 cdata(0.95, result, data=Randomization.Temp )
 
-

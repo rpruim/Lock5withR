@@ -4,4 +4,3 @@ MoE <- 2 * SE
 x.bar - MoE
 x.bar + MoE
 
-

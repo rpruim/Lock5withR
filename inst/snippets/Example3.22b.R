@@ -4,4 +4,3 @@ MoE <- 2 * SE; MoE
 p.hat - MoE                                 
 p.hat + MoE                                 
 
-

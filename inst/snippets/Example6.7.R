@@ -6,4 +6,3 @@ SE <- sqrt(p * (1 - p) / 1013); SE
 z <- (p.hat - p) / SE; z
 pnorm(z)
 
-

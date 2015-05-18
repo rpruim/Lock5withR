@@ -3,4 +3,3 @@ Tip.Fun(Bill = 59.33) # predicted tip when bill is $59.33
 Tip.Fun(Bill = 9.52)
 Tip.Fun(Bill = 23.70)
 
-

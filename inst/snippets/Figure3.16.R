@@ -4,4 +4,3 @@ head(Bootstrap, 3)
 # We should check that that our bootstrap distribution has an appropriate shape:
 dotPlot(~result, width = 0.005, data=Bootstrap)
 
-

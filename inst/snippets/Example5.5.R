@@ -4,4 +4,3 @@ xpnorm(c(30, 31), 29.11, 0.93)   # original normal distribution proportion betwe
 xpnorm(c(z30, z31))              # standardized distribution proportion between 30 and 31 min
 pnorm(z31) - pnorm(z30)
 
-

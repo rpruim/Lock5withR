@@ -5,4 +5,3 @@ ddd <- with(anscombe, data.frame(
 	)
 xyplot( y ~ x| factor(set), data=ddd, type=c('p','r'), as.table=TRUE, lty=2 )
 
-

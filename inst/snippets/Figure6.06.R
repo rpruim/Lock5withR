@@ -11,4 +11,3 @@ histogram(~result, data=n125)
 n500 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 500))
 histogram(~result, data=n500)
 
-

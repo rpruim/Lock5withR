@@ -1,3 +1,2 @@
 fivenum(~Smokers, data=USStates)
 
-

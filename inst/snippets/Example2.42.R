@@ -5,4 +5,3 @@ Resid.b
 Resid.c <- 10.00 - 4.02
 Resid.c
 
-

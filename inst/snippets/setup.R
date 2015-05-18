@@ -77,4 +77,3 @@ knit_hooks$set(document = function(x) {
 			   x, fixed = TRUE) 
 }) 
 
-

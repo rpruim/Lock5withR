@@ -5,4 +5,3 @@ p - MoE
 p + MoE
 dotPlot(~ prop, width=.005, groups = (0.215 <= prop & prop <= 0.335), data=sampledist.deg)
 
-

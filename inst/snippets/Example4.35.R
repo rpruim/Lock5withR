@@ -9,4 +9,3 @@ histogram(~result, width=.01, v=c(98.26, 98.4),
           groups=(98.05 <=result & result <= 98.46), 
           xlim=c(97.8, 99.0), data=Boot.Temp) # bootstrap
 
-

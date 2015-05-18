@@ -2,4 +2,3 @@ dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=sampledist.1000)
 dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=sampledist.200)
 dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=sampledist.50)
 
-

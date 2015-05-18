@@ -3,4 +3,3 @@ Mod1 <- lm(Price ~ PhotoTime + CostColor, data = InkjetPrinters)
 summary(Mod1)
 anova(Mod0, Mod1)
 
-

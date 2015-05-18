@@ -12,4 +12,3 @@ small <- data.frame(
 	group = toupper(letters[c(1,1,1,2,2,2,2,3,3,3)])
 	)
 
-

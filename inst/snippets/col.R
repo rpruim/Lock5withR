@@ -2,4 +2,3 @@
 xyplot( mcs ~ age, data=HELPrct, groups=sex, 
 	    pch=c(1,2), col=c('brown', 'darkgreen'), cex=.75 )  
 
-

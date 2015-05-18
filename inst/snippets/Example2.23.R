@@ -7,4 +7,3 @@ diff(range(~SanFrancisco, data = April14Temps))
 iqr(~DesMoines, data = April14Temps)
 iqr(~SanFrancisco, data = April14Temps)
 
-

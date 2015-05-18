@@ -2,4 +2,3 @@ SA <- transform(SandwichAnts, groupMean = c(30.75, 34.00, 49.25, 30.75, 34.00, 4
 SA <- transform(SA, grandMean = rep( 38, 24 ) )
 SA
 
-

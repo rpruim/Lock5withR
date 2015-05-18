@@ -1,4 +1,3 @@
-plotFun( dnorm(x,0,1) ~x, x.lim=c(-5,6))
-plotFun( dnorm(x,2,1) ~x, add=TRUE, col="red")
-
+plotDist("norm", mean=0, sd=1, xlim=c(-5, 6))
+plotDist("norm", mean=2, sd=1, col="red", add=TRUE)
 

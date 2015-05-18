@@ -4,4 +4,3 @@ sd <- sd(~Pulse, data=StudentSurvey); sd
 mean - 2*sd
 mean + 2*sd
 
-

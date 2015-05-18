@@ -5,4 +5,3 @@ uniroot(f2, c(1,50000))$root
 f3 <- makeFun( qnorm(.99) * sqrt(.1 * .9/ n) - 0.005 ~ n )
 uniroot(f3, c(1,50000))$root
 
-

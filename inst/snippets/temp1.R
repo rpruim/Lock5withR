@@ -8,4 +8,3 @@ t <- ( x.bar - 98.6 ) / se; t
 # 2-sided p-value
 2 * pt( - abs(t), df=49 )
 
-

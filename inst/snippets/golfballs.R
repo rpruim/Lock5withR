@@ -1,3 +1,2 @@
 chisq.test( golfballs )
 
-

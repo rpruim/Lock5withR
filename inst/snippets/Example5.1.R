@@ -3,4 +3,3 @@ head(Bootstrap, 3)
 histogram(~result, density=TRUE, data=Bootstrap)
 densityplot(~result, data=Bootstrap)
 
-

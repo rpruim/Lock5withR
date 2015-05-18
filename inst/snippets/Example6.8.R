@@ -9,4 +9,3 @@ pnorm(z)                  # large side (rounded)
 2 * (1 - pnorm(z))        # p-value = 2 * small side
 prop.test(66, 119, p=1/3)
 
-

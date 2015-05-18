@@ -2,4 +2,3 @@ sampledist.deg <- do(1000) * rflip(200, 0.275) # 1000 samples, each of size 200 
 head(sampledist.deg, 3)
 dotPlot(~ prop, width=.005, data=sampledist.deg)
 
-

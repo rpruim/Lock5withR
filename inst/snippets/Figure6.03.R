@@ -7,4 +7,3 @@ dotPlot(~prop, width = .04, cex = 10, data=n25)
 n200 <- do(2000) * rflip(200, .10)
 dotPlot(~prop, width = .005, cex = 5, data=n200)
 
-

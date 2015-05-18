@@ -5,4 +5,3 @@ SplitSteal <- rbind(
   do(76)  * data.frame( agegroup = "Over40",  decision = "Steal")
   )
 
-

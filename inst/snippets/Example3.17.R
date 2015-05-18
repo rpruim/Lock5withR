@@ -4,4 +4,3 @@ MoE <- 2 * SE
 diff.x - MoE
 diff.x + MoE
 
-

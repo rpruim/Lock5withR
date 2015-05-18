@@ -6,4 +6,3 @@ xYplot(Cbind(estimate,lower,upper) ~ sample,
   par.settings=col.mosaic(), 
   groups=cover)
 
-

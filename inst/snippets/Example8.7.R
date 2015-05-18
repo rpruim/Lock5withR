@@ -6,4 +6,3 @@ t.star <- qt(.975, df=21); t.star
 mean - t.star * (sqrt(MSE) / sqrt(8))
 mean + t.star * (sqrt(MSE) / sqrt(8))
 
-

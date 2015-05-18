@@ -5,4 +5,3 @@ Cocaine <- rbind(
   do(4)  * data.frame( treatment = "Placebo",     response="No Relapse")
   )
 
-

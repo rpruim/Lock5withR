@@ -5,4 +5,3 @@ Rand.Ink <- do(1000) * lm(Price ~ shuffle(PPM), data=InkjetPrinters)
 favstats(~PPM, data = Rand.Ink)
 dotPlot(~PPM, width =2, data = Rand.Ink)
 
-
