@@ -29,8 +29,10 @@ The `Lock5withR` package can be installed from github using
 devtools::install_github("rpruim/Lock5withR")
 ```
 
-This package contains all of the data sets used in the package and the `locket()` function which 
-can be used to run any code chunk from the campanion.  For example:
+This package contains all of the data sets used in the package and the `locket()` function which can be used to run any of 
+417 code chunks from the campanion.  
+
+For example:
 
 
 ```r
