@@ -144,7 +144,11 @@
 
 %%%%%%%%%%%%%%%%%%%%%% title page info %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{Lock5 with R: A companion to Unlocking the Power of Data}
+\title{Lock5 with R \\
+\ \\
+a companion to \\
+\  \\
+Statistics: Unlocking the Power of Data}
 
 \author{Randall Pruim and Lana Park}
 
