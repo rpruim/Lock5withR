@@ -408,7 +408,7 @@ of the first slot.
 
 It needs to know what data set to use, and which varialbes to use on the 
 x and y axes.  These data are in the \dataframe{Births78} data set in the 
-\pkg{mosaic} package.  Let's take a quick look at the data:
+\pkg{mosaicData} package.  Let's take a quick look at the data:
 <<births-head>>=
 require(mosaicData)  # load the package that contains our data set
 head(Births78)
@@ -427,7 +427,7 @@ but not \variable{date}:
 mean( ~ births, data=Births78)
 @
 Notice that when there is only one variable, it goes on the right side of the 
-wiggle (\code{\tilde{}}).
+wiggle (code{\textasciitilde}).
 
 We'll see more examples of this template as we go along.
 
