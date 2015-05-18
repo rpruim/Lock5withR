@@ -43,26 +43,27 @@ Approximately 99.7\% of any normal distribution lies within 3 standard deviation
 \end{itemize}
 
 Many naturally occurring distributions are approximately normally distributed. Normal distributions are also an important part of statistical inference.
+The \function{plotDist()} function can be used to plot many common distributions.
 
 \subsubsection*{Figure 5.5}
 
 <<Figure5.5>>=
-plotFun( dnorm(x,0,1) ~x, x.lim=c(-5,6))
-plotFun( dnorm(x,2,1) ~x, add=TRUE, col="red")
+plotDist("norm", mean=0, sd=1, xlim=c(-5, 6))
+plotDist("norm", mean=2, sd=1, col="red", add=TRUE)
 @
 
 <<Figure5.5b, opts.label="fig3">>=
-plotFun( dnorm(x,0,0.5) ~x, x.lim=c(-5,5))
-plotFun( dnorm(x,0,1) ~x, add=TRUE, col="red")
-plotFun( dnorm(x,0,2) ~x, add=TRUE, col="green")
+plotDist("norm", mean = 0, sd = 0.5, xlim=c(-5,5))
+plotDist("norm", mean = 0, sd = 1, add=TRUE, col="red")
+plotDist("norm", mean = 0, sd = 2, add=TRUE, col="green")
 @
 
 \subsubsection*{Example 5.2}
 
-<<Example5.2, opts.label="fig3">>=
-plotFun( dnorm(x,75,10) ~x, x.lim=c(40,110))
-plotFun( dnorm(x,7.1,1.1) ~x, x.lim=c(2.7,11.5))
-plotFun( dnorm(x,0,0.02) ~x, x.lim=c(-.07,.07))
+<<Example5.2, opts.label="fig3", fig.keep='all', fig.show='hold'>>=
+plotDist("norm", mean = 75, sd = 10, xlim=c(40,110))
+plotDist("norm", mean = 7.1, sd = 1.1, xlim=c(2.7,11.5))
+plotDist("norm", mean = 0, sd = 0.02, xlim=c(-.07,.07))
 @
 
 <<Figure5.6,include=FALSE>>=
