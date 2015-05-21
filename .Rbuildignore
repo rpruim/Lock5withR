@@ -9,3 +9,5 @@
 ^.*\.Rcheck$
 ^README\.Rmd$
 ^README-.*\.png$
+^\.travis\.yml$
+^README\.html$
