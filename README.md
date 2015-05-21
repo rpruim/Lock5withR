@@ -3,6 +3,8 @@
 
 
 
+[![Travis-CI Build Status](https://travis-ci.org/rpruim/Lock5withR.svg?branch=master)](https://travis-ci.org/rpruim/Lock5withR)
+
 Lock5withR
 ==========
 
