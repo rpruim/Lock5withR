@@ -208,27 +208,29 @@ Notice how we defined groups in this dotplot. We are grouping proportions that l
 
 \subsubsection*{Figure 3.13}
 
-We can create the data needed for plots like Figure 3.13 using \function{CIsim()}.  The plot
-itself uses \function{xYplot()} from the \pkg{Hmisc} package.
+We can create the data needed for plots like Figure 3.13 using \function{CIsim()}.  
+% The plot itself uses \function{xYplot()} from the \pkg{Hmisc} package.
 <<Figure3.13, message=FALSE, seed=1234, opts.label="fig1">>=
-results <- CIsim(200, samples=3, rdist=rbinom, args=list(size=1, prob=0.275), 
-                 method=binom.test, method.args=list(success=1), verbose=FALSE, estimand=0.275)
-require(Hmisc)
-xYplot(Cbind(estimate,lower,upper) ~ sample,
-  data=results,
-  par.settings=col.mosaic(), 
-  groups=cover)
+CIsim(200, samples=3, rdist=rbinom, args=list(size=1, prob=0.275), 
+      method=binom.test, method.args=list(success=1), 
+	  verbose=FALSE, estimand=0.275)
 @
+%require(Hmisc)
+%xYplot(Cbind(estimate,lower,upper) ~ sample,
+%  data=results,
+%  par.settings=col.mosaic(), 
+%  groups=cover)
 
 <<Figure3.13b, message=FALSE, seed=1234, opts.label="fig1">>=
-results <- CIsim(200, samples=100, rdist=rbinom, args=list(size=1, prob=0.275), 
-                 method=binom.test, method.args=list(success=1), verbose=FALSE, estimand=0.275)
-require(Hmisc)
-xYplot(Cbind(estimate,lower,upper) ~ sample,
-  data=results,
-  par.settings=col.mosaic(), 
-  groups=cover)
+CIsim(200, samples=100, rdist=rbinom, args=list(size=1, prob=0.275), 
+      method=binom.test, method.args=list(success=1), 
+	  verbose=FALSE, estimand=0.275)
 @
+%require(Hmisc)
+%xYplot(Cbind(estimate,lower,upper) ~ sample,
+%  data=results,
+%  par.settings=col.mosaic(), 
+%  groups=cover)
 
 \subsection*{Interpreting Confidence Intervals}
 
