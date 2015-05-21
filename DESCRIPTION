@@ -5,8 +5,9 @@ Version: 1.0
 Date: 2015-05-18
 Author: Randall Pruim
 Maintainer: Randall Pruim <rpruim@calvin.edu>
-Description: Datasets and other utilities for "Statistics: Unlocking the Power
-    of Data" by Lock, Lock, Lock, Lock and Lock
+Description: This package contains datasets and other 
+    utilities for "Statistics: Unlocking the Power of Data" 
+    by Lock, Lock, Lock, Lock and Lock.
 License: GPL-2
 Imports:
     lubridate
