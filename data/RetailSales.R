@@ -6,6 +6,5 @@ RetailSales <- transform(RetailSales,
                     levels = c("Jan", "Feb", "Mar", "Apr", "May", "June", 
                                "July", "Aug", "Sep", "Oct", "Nov", "Dec"))
 )    # Get Months in Order
-require(lubridate)
 RetailSales <- transform(RetailSales, 
-    Date = mdy( paste(Month, "-", Year, sep=""), truncated=1) )
+    Date = lubridate::mdy( paste(Month, "-", Year, sep=""), truncated=1) )
