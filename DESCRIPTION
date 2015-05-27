@@ -9,9 +9,8 @@ Description: This package contains datasets and other
     utilities for "Statistics: Unlocking the Power of Data" 
     by Lock, Lock, Lock, Lock and Lock.
 License: GPL-2
-Imports:
-    lubridate
 Suggests:
+    lubridate,
     lattice,
     mosaic
 LazyLoad: yes
