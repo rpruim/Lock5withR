@@ -11,7 +11,7 @@
 }}
 \source{
 Nathan's Famous webste at
-\url{http://nathansfamous.com/PageFetch/getpage.php?pgid=38}
+\url{http://nathansfamous.com/contest/hall_of_fame}
 }
 \description{
 Winning number of hot dogs consumed in an eating contest

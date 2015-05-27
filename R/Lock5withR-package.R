@@ -1344,7 +1344,7 @@ NA
 #' 		\item{\code{HotDogs}} {Winning number of hot dogs consumed }
 #' }
 #' @source Nathan's Famous webste at
-#' \url{http://nathansfamous.com/PageFetch/getpage.php?pgid=38}
+#' \url{http://nathansfamous.com/contest/hall_of_fame}
 #' @keywords datasets
 NA
 
