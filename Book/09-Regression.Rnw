@@ -81,16 +81,16 @@ For example, this suggests that the average price for inkjet printers that print
 
 \subsubsection*{Figure 9.1}
 <<Figure9.1>>=
-xyplot( Price ~ PPM, data=InkjetPrinters, type=c('p','r') )
+xyplot( Price ~ PPM, data = InkjetPrinters, type = c('p','r') )
 @
 
 \subsubsection*{Figure 9.2}
 
 <<Figure9.2>>=
-Boot.Ink <- do(1000) * lm(Price ~ PPM, data=resample(InkjetPrinters))
+Boot.Ink <- do(1000) * lm(Price ~ PPM, data = resample(InkjetPrinters))
 favstats(~PPM, data = Boot.Ink)
 dotPlot(~PPM, width =2, data = Boot.Ink)
-Rand.Ink <- do(1000) * lm(Price ~ shuffle(PPM), data=InkjetPrinters)
+Rand.Ink <- do(1000) * lm(Price ~ shuffle(PPM), data = InkjetPrinters)
 favstats(~PPM, data = Rand.Ink)
 dotPlot(~PPM, width =2, data = Rand.Ink)
 @
@@ -99,16 +99,16 @@ dotPlot(~PPM, width =2, data = Rand.Ink)
 \subsubsection*{Example 9.2}
 
 <<Example9.2>>=
-summary( lm( Price ~ PPM, data=InkjetPrinters) ) 
-confint( lm( Price ~ PPM, data=InkjetPrinters) , "PPM")
+summary( lm( Price ~ PPM, data = InkjetPrinters) ) 
+confint( lm( Price ~ PPM, data = InkjetPrinters) , "PPM")
 @
 
 \subsubsection*{Example 9.3}
 
 <<Example9.3>>=
 head(RestaurantTips)
-summary( lm( Tip ~ Bill, data=RestaurantTips) ) 
-confint( lm( Tip ~ Bill, data=RestaurantTips) , "Bill", level=0.90)
+summary(lm( Tip ~ Bill, data = RestaurantTips) ) 
+confint(lm( Tip ~ Bill, data = RestaurantTips) , "Bill", level=0.90)
 @
 
 \subsubsection*{Example 9.4}
@@ -130,14 +130,14 @@ summary( lm( PctTip ~ Bill, data=RestaurantTips) )
 \subsubsection*{Example 9.5}
 
 <<Example9.5>>=
-summary( lm( CostBW ~ PPM, data=InkjetPrinters) ) 
+summary( lm( CostBW ~ PPM, data = InkjetPrinters) ) 
 @
 %how to do test for correlation?
 
 \subsubsection*{Example 9.6}
 
 <<Example9.6>>=
-summary( lm( PctTip ~ Bill, data=RestaurantTips) ) 
+summary( lm( PctTip ~ Bill, data = RestaurantTips) ) 
 @
 
 \subsection*{Coefficient of Determination: R-squared}
@@ -145,7 +145,7 @@ summary( lm( PctTip ~ Bill, data=RestaurantTips) )
 \subsubsection*{Example 9.7}
 
 <<Example9.7>>=
-summary( lm( Price ~ PPM, data=InkjetPrinters ) )
+summary( lm( Price ~ PPM, data = InkjetPrinters ) )
 @
 
 \subsection*{Checking Conditions for a Simple Linear Model}
@@ -161,8 +161,8 @@ summary( lm( Price ~ PPM, data=InkjetPrinters ) )
 \subsubsection*{Example 9.9}
 
 <<Example9.9>>=
-xyplot( Tip ~ Bill, data=RestaurantTips, type=c('p','r'), cex=0.5 )
-xyplot( PctTip ~ Bill, data=RestaurantTips, type=c('p','r'), cex=0.5)
+xyplot( Tip ~ Bill, data = RestaurantTips, type = c('p','r'), cex = 0.5 )
+xyplot( PctTip ~ Bill, data = RestaurantTips, type = c('p','r'), cex = 0.5)
 @
 
 
@@ -186,8 +186,8 @@ As before, when $SSM$ is large and $SSE$ is small, then the model ($\hat y = \ha
 \subsubsection*{Example 9.10}
 
 <<Example9.10>>=
-summary(lm(Calories ~ Sugars, Cereal))
-anova(lm(Calories ~ Sugars, Cereal))
+summary(lm(Calories ~ Sugars, data = Cereal))
+anova(lm(Calories ~ Sugars, data = Cereal))
 @
 
 \subsection*{F-Statistic}
@@ -223,8 +223,8 @@ pf(F, 1, 28, lower.tail = FALSE)
 \subsubsection*{Example 9.12}
 
 <<Example9.12>>=
-summary(lm(Calories ~ Sodium, Cereal))
-anova(lm(Calories ~ Sodium, Cereal))
+summary(lm(Calories ~ Sodium, data = Cereal))
+anova(lm(Calories ~ Sodium, data = Cereal))
 @
 
 The percentage of explained variability is denoted $r^2$ or $R^2$:
@@ -301,7 +301,7 @@ variability of responses around the true regression line.
 
 First, let's build our linear model and store it.
 <<Example9.18>>=
-ink.model <- lm(Price~PPM, data=InkjetPrinters)
+ink.model <- lm(Price~PPM, data = InkjetPrinters)
 summary(ink.model)
 @
 
@@ -312,7 +312,7 @@ Ink.Price <- makeFun(ink.model)
 @
 We can now input a PPM and see what our least squares regression line predicts for the price:
 <<Example9.18c>>=
-Ink.Price(PPM=3.0)   # estimate Price when PPM is 3.0
+Ink.Price(PPM = 3.0)   # estimate Price when PPM is 3.0
 @
 
 \R\ can compute two kinds of confidence intervals for the response for a given value
@@ -321,14 +321,14 @@ Ink.Price(PPM=3.0)   # estimate Price when PPM is 3.0
 A confidence interval for the \emph{mean response} for  a \emph{given explanatory value} 
 can be computed by adding \verb!interval='confidence'!.  
 <<Example9.18d>>=
-Ink.Price(PPM=3.0, interval='confidence')
+Ink.Price(PPM = 3.0, interval = 'confidence')
 @
 \item
 An interval for an \emph{individual response} (called a prediction interval to 
 avoid confusion with the confidence interval above) 
 can be computed by adding \verb!interval='prediction'! instead.  
 <<Example9.18e>>=
-Ink.Price(PPM=3.0, interval='prediction')
+Ink.Price(PPM = 3.0, interval = 'prediction')
 @
 \end{enumerate}
 
@@ -336,7 +336,8 @@ Ink.Price(PPM=3.0, interval='prediction')
 
 The figure below shows the confidence (dotted) and prediction (dashed) intervals as bands around the regression line.  
 <<Figure9.13>>=
-xyplot(Price ~ PPM, data=InkjetPrinters, panel=panel.lmbands, cex=.6, alpha=.5)
+xyplot(Price ~ PPM, data = InkjetPrinters, panel = panel.lmbands, 
+       cex = .6, alpha = .5)
 @
 As the graph illustrates, the intervals are narrow near the center of the data and wider near the edges of the data. It is not safe to extrapolate beyond the data (without additional information), since there is no data to let us know whether the pattern of the data extends.
 
@@ -355,26 +356,26 @@ to use the bootstrap.
 
 \subsubsection{Florida Lakes}
 <<>>=
-boot.lakes <- do(1000) * lm( AvgMercury ~ pH, data=resample(FloridaLakes) )
-head(boot.lakes,2)
-dotPlot( ~ pH, data=boot.lakes, width=.003 )
-dotPlot( ~ Intercept, data=boot.lakes, width=.02 )
-histogram( ~ pH, data=boot.lakes, width=0.01 )
-histogram( ~ Intercept, data=boot.lakes, width=0.1 )
+boot.lakes <- do(1000) * lm(AvgMercury ~ pH, data = resample(FloridaLakes))
+head(boot.lakes, 2)
+dotPlot( ~ pH, data = boot.lakes, width = .003 )
+dotPlot( ~ Intercept, data=boot.lakes, width = .02 )
+histogram( ~ pH, data = boot.lakes, width = 0.01 )
+histogram( ~ Intercept, data = boot.lakes, width = 0.1 )
 @
 <<>>=
-cdata(.95, pH, boot.lakes)
-cdata(.95, Intercept, boot.lakes)
+cdata(.95, ~pH, data = boot.lakes)
+cdata(.95, ~Intercept, data = boot.lakes)
 @
 
 \subsubsection{Inkjet Printers}
 <<>>=
-boot.printers <- do(1000) * lm( Price ~ PPM, data=resample(InkjetPrinters) )
-head(boot.printers,2)
-histogram( ~ PPM, data=boot.printers )
-histogram( ~ Intercept, data=boot.printers )
-cdata(.95, PPM, boot.printers)
-cdata(.95, Intercept, boot.printers)
+boot.printers <- do(1000) * lm(Price ~ PPM, data = resample(InkjetPrinters))
+head(boot.printers, 2)
+histogram( ~ PPM, data = boot.printers )
+histogram( ~ Intercept, data = boot.printers )
+cdata(.95, PPM, data = boot.printers)
+cdata(.95, Intercept, data = boot.printers)
 @
 
 \subsection{Using Standard Errors}
@@ -388,13 +389,13 @@ But \R\ will calculate them for us.  For $t_*$ we use $n-2$ degrees of freedom.
 
 \subsubsection{Florida Lakes}
 <<>>=
-summary( lm( AvgMercury ~ pH, data=resample(FloridaLakes) ) )
+summary( lm( AvgMercury ~ pH, data = resample(FloridaLakes) ) )
 @
 The $t_*$ value is based on $DFE$, the degrees of freedom for the errors (residuals).  
 For simple linear regression, the error degrees of freedom is $n-2 = 51$.
 For a 95\% confidence interval, we first compute $t_*$:
 <<>>=
-t.star <- qt(.975, df=51); t.star
+t.star <- qt(.975, df = 51); t.star
 @
 
 So we get the following confidence intervals for intercept
@@ -417,8 +418,8 @@ and the slope
 Of course, \R\ can compute the confidence intervals for us:
 
 <<>>=
-confint( lm( AvgMercury ~ pH, data=resample(FloridaLakes) ) )             # 95% CI
-confint( lm( AvgMercury ~ pH, data=resample(FloridaLakes) ), level=.99 )  # 99% CI
+confint(lm(AvgMercury ~ pH, data = resample(FloridaLakes)))             # 95% CI
+confint(lm(AvgMercury ~ pH, data = resample(FloridaLakes)), level=.99)  # 99% CI
 @
 
 In fact, the \function{confint()} function can be applied to data sets containing bootstrap
@@ -427,9 +428,9 @@ This makes it even easier to calculate bootstrap confidence intervals.  We even 
 between (a) using the standard error as estimated by taking the standard deviation of the bootstrap
 distribution or (b) using the percentile method:
 <<>>=
-confint(boot.lakes)                # 95% CIs for each parameter
-confint(boot.lakes, method="perc") # 95% CIs for each parameter; percentile method
-confint(boot.lakes, "pH", level=.98, method=c("stderr","perc"))  # 98% CI just for pH, both methods
+confint(boot.lakes)                  # 95% CIs for each parameter
+confint(boot.lakes, method = "perc") # 95% CIs for each parameter; percentile method
+confint(boot.lakes, "pH", level = .98, method=c("stderr", "perc"))  # 98% CI just for pH, both methods
 @
 
 \subsubsection{Inkjet Printers}
@@ -443,7 +444,7 @@ confint( boot.printers, "PPM" )
 
 The summary of linear models includes the results of some hypothesis tests:
 <<>>=
-summary( lm( AvgMercury ~ pH, data=FloridaLakes ) )
+summary( lm( AvgMercury ~ pH, data = FloridaLakes ) )
 @
 Of these the most interesting is the one in the row labeled \variable{pH}.  This is a test of 
 \begin{itemize}
@@ -465,9 +466,9 @@ so the explanatory variable doesn't matter for determining the response.
 This means we can simulate a world in which 
 the null hypothesis is true by shuffling the explanatory variable:
 <<>>=
-rand.lakes <- do(1000) * lm( AvgMercury ~ shuffle(pH), data=FloridaLakes )
-histogram(~pH, data=rand.lakes, v=0)
-2 * prop( ~ (pH <= -0.1523), data=rand.lakes )    # p-value from randomization distribution
+rand.lakes <- do(1000) * lm( AvgMercury ~ shuffle(pH), data = FloridaLakes )
+histogram(~pH, data = rand.lakes, v = 0)
+2 * prop( ~ (pH <= -0.1523), data = rand.lakes )    # p-value from randomization distribution
 @
 In this case, none of our 1000 resamples produced such a small value for $\hat \beta_1$.  This is 
 consistent with the small p-value computed previously.
@@ -565,27 +566,27 @@ interesting data set.
 Notice how similar the numerical summaries are for these for pairs of 
 variables
 <<>>=
-summary( lm( y1 ~ x1, anscombe) )
+summary( lm( y1 ~ x1, data = anscombe) )
 @
 <<>>=
-summary( lm( y2 ~ x2, anscombe) )
+summary( lm( y2 ~ x2, data = anscombe) )
 @
 <<>>=
-summary( lm( y3 ~ x3, anscombe) )
+summary( lm( y3 ~ x3, data = anscombe) )
 @
 <<>>=
-summary( lm( y4 ~ x4, anscombe) )
+summary( lm( y4 ~ x4, data = anscombe) )
 @
 
 But the plots reveal that very different things are going on.
 \begin{center}
 <<anscombe,fig.width=6,fig.height=2,out.width='.7\\textwidth',echo=FALSE>>=
 ddd <- with(anscombe, data.frame( 
-	x=c(x1,x2,x3,x4), 
-	y=c(y1,y2,y3,y4), 
-	set=rep(1:4,each=nrow(anscombe))) 
+	x=c(x1, x2, x3, x4), 
+	y=c(y1, y2, y3, y4), 
+	set=rep(1:4, each = nrow(anscombe))) 
 	)
-xyplot( y ~ x| factor(set), data=ddd, type=c('p','r'), as.table=TRUE, lty=2 )
+xyplot(y ~ x | factor(set), data = ddd, type = c('p','r'), as.table = TRUE, lty = 2)
 @
 \end{center}
 
@@ -612,18 +613,18 @@ of the residuals of the model vs either the explanatory variable or the fitted v
 latter works in a wider variety of settings (including multiple regression and two-way ANOVA).
 
 <<>>=
-model1 <- lm( y1 ~ x1, data=anscombe )
-model2 <- lm( y2 ~ x2, data=anscombe )
-model3 <- lm( y3 ~ x3, data=anscombe )
-model4 <- lm( y4 ~ x4, data=anscombe )
+model1 <- lm( y1 ~ x1, data = anscombe )
+model2 <- lm( y2 ~ x2, data = anscombe )
+model3 <- lm( y3 ~ x3, data = anscombe )
+model4 <- lm( y4 ~ x4, data = anscombe )
 @
 <<>>=
-xyplot( resid(model1) ~ x1, data=anscombe )
-xyplot( resid(model1) ~ fitted(model1), data=anscombe )
+xyplot( resid(model1) ~ x1, data = anscombe )
+xyplot( resid(model1) ~ fitted(model1), data = anscombe )
 @
 <<>>=
-xyplot( resid(model2) ~ x2, data=anscombe )
-xyplot( resid(model2) ~ fitted(model2), data=anscombe )
+xyplot( resid(model2) ~ x2, data = anscombe )
+xyplot( resid(model2) ~ fitted(model2), data = anscombe )
 @
 
 You can make similar plots for models 3 and 4.  The main advantage of these plots is that they use the vertical
@@ -634,9 +635,9 @@ Returning to our Florida lakes, we see that things look reasonable for the model
 for the next section).
 
 <<>>=
-lake.model <- lm( AvgMercury ~ pH, data=FloridaLakes)
-xyplot( AvgMercury ~ pH, data=FloridaLakes, type=c('p','r') )
-xyplot( resid(lake.model) ~ fitted(lake.model), data=FloridaLakes)
+lake.model <- lm(AvgMercury ~ pH, data = FloridaLakes)
+xyplot(AvgMercury ~ pH, data=FloridaLakes, type = c('p','r'))
+xyplot(resid(lake.model) ~ fitted(lake.model), data = FloridaLakes)
 @
 We are hoping not to see any strong patterns in these residual plots.
 
@@ -647,8 +648,8 @@ normal and that that standard deviation remains consistent across the range of
 our data (and across time).
 
 <<lakes-qq>>=
-histogram( ~ resid(lakes.model) )
-xqqmath( ~ resid(lakes.model) )
+histogram( ~ resid(lakes.model))
+xqqmath( ~ resid(lakes.model))
 @
 The normal-quantile plot shown above is designed so that the points will fall along a straight line 
 when the underlying distribution is exactly normal.  As the distribution becomes less and less normal,
@@ -671,15 +672,16 @@ residuals.  In biological applications, a logarithmic transformation
 is often useful.
 
 <<>>=
-lakes.model2 <- lm( log(AvgMercury) ~ pH, data=FloridaLakes )
-xyplot( log(AvgMercury) ~ pH, data=FloridaLakes, type=c('p','r') )
+lakes.model2 <- lm( log(AvgMercury) ~ pH, data = FloridaLakes )
+xyplot(log(AvgMercury) ~ pH, data = FloridaLakes, type = c('p','r'))
 summary(lakes.model2)
 @
 
 If we like, we can show the new model fit overlaid on the original data:
 <<>>=
-xyplot( AvgMercury ~ pH, data=FloridaLakes, main="untransformed model", type=c("p","r") )
-xyplot( AvgMercury ~ pH, data=FloridaLakes, main="log transformed model" )
+xyplot(AvgMercury ~ pH, data = FloridaLakes, main = "untransformed model", 
+       type = c("p","r"))
+xyplot(AvgMercury ~ pH, data = FloridaLakes, main = "log transformed model")
 Hg <- makeFun( lakes.model2 )              # turn model into a function
 plotFun( exp(Hg(pH)) ~ pH, add=TRUE)       # add this function to the plot
 @
@@ -690,29 +692,29 @@ A logarithmic transformation of \variable{AvgMercury} improves the normality of 
 <<>>=
 histogram( ~ resid(lakes.model2) )
 qqmath( ~ resid(lakes.model2) )
-xyplot( resid(lakes.model2) ~ pH, data=FloridaLakes) 
+xyplot( resid(lakes.model2) ~ pH, data = FloridaLakes) 
 xyplot( resid(lakes.model2) ~ fitted(lakes.model2) )
 @
 The absolute values of the residuals are perhaps a bit larger when the pH is higher (and fits are smaller),
 although this is exagerated somewhat in the plots because there is so little data with very small pH values.
 If we look at square roots of standardized residuals this effect is not as pronounced:
 <<fig.height=3>>=
-plot( lakes.model2, w=3 )
+plot(lakes.model2, w = 3)
 @
 On balance, the log transformation seems to improve the situation and is to be preferred over the original model.
 
 \subsubsection{Florida Lakes}
 
 <<>>=
-xyplot( AvgMercury ~ pH, data=FloridaLakes, type=c('p','r') )
-lm( AvgMercury ~ pH, data=FloridaLakes )
+xyplot(AvgMercury ~ pH, data = FloridaLakes, type = c('p','r'))
+lm(AvgMercury ~ pH, data = FloridaLakes)
 @
 <<include=FALSE>>=
-lake.coefs <- do(1) * lm( AvgMercury ~ pH, data=FloridaLakes )
+lake.coefs <- do(1) * lm(AvgMercury ~ pH, data = FloridaLakes)
 @
 You can get terser output with
 <<>>=
-coef( lm( AvgMercury ~ pH, data=FloridaLakes ) )  # just show me the coefficients
+coef(lm(AvgMercury ~ pH, data=FloridaLakes))  # just show me the coefficients
 @
 
 From these coefficients, we see that our regression equation is 
