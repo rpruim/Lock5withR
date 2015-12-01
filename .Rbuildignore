@@ -12,3 +12,5 @@
 ^\.travis\.yml$
 ^README\.html$
 ^cran-comments\.md$
+^iris.csv$
+^iris.rda$
