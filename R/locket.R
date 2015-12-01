@@ -34,7 +34,7 @@ locket <- function (name, execute = TRUE, view = !execute, echo = TRUE,
 {
   package <- "Lock5withR"
   paths <- find.package(package, lib.loc, verbose = verbose)
-  paths <- paths[file_test("-d", file.path(paths, "snippets"))]
+  paths <- paths[utils::file_test("-d", file.path(paths, "snippets"))]
   if (missing(name)) {
     noName = TRUE
   }
