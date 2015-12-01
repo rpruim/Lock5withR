@@ -8,22 +8,22 @@
 \subsection*{Density Curves}
 
 \subsubsection*{Example 5.1}
-<<Example5.1, cache=TRUE, seed=1234>>=
-Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta))
+<<Example5.1, cache = TRUE, seed = 1234>>=
+Bootstrap <- do(1000) * mean( ~ Time, data = resample(CommuteAtlanta))
 head(Bootstrap, 3)
-histogram(~result, density=TRUE, data=Bootstrap)
-densityplot(~result, data=Bootstrap)
+histogram( ~ mean, density = TRUE, data = Bootstrap)
+densityplot( ~ mean, data = Bootstrap)
 @
 
-<<Figure5.2,include=FALSE>>=
+<<Figure5.2, include = FALSE>>=
 <<Example5.1>>
 @
 
 
 <<Example5.1b>>=
-prop( ~ (result <= 30), data=Bootstrap )                # proportion less than 30 min
-prop( ~ (result >= 31), data=Bootstrap )                # proportion greater than 31 min
-prop( ~ (result >= 30 & result <= 31), data=Bootstrap ) # proportion between 30 and 31 min
+prop( ~ (mean <= 30), data = Bootstrap)                # proportion less than 30 min
+prop( ~ (mean >= 31), data = Bootstrap)                # proportion greater than 31 min
+prop( ~ (mean >= 30 & mean <= 31), data = Bootstrap)   # proportion between 30 and 31 min
 @
 
 
@@ -48,25 +48,25 @@ The \function{plotDist()} function can be used to plot many common distributions
 \subsubsection*{Figure 5.5}
 
 <<Figure5.5>>=
-plotDist("norm", mean=0, sd=1, xlim=c(-5, 6))
-plotDist("norm", mean=2, sd=1, col="red", add=TRUE)
+plotDist("norm", mean = 0, sd = 1, xlim = c(-5, 6))
+plotDist("norm", mean = 2, sd = 1, col = "red", add = TRUE)
 @
 
-<<Figure5.5b, opts.label="fig3">>=
-plotDist("norm", mean = 0, sd = 0.5, xlim=c(-5,5))
-plotDist("norm", mean = 0, sd = 1, add=TRUE, col="red")
-plotDist("norm", mean = 0, sd = 2, add=TRUE, col="green")
+<<Figure5.5b, opts.label = "fig3">>=
+plotDist("norm", mean = 0, sd = 0.5, xlim = c(-5, 5))
+plotDist("norm", mean = 0, sd = 1, add = TRUE, col = "red")
+plotDist("norm", mean = 0, sd = 2, add = TRUE, col = "green")
 @
 
 \subsubsection*{Example 5.2}
 
-<<Example5.2, opts.label="fig3", fig.keep='all', fig.show='hold'>>=
-plotDist("norm", mean = 75, sd = 10, xlim=c(40,110))
-plotDist("norm", mean = 7.1, sd = 1.1, xlim=c(2.7,11.5))
-plotDist("norm", mean = 0, sd = 0.02, xlim=c(-.07,.07))
+<<Example5.2, opts.label = "fig3", fig.keep = 'all', fig.show = 'hold'>>=
+plotDist("norm", mean = 75, sd = 10, xlim = c(40, 110))
+plotDist("norm", mean = 7.1, sd = 1.1, xlim = c(2.7, 11.5))
+plotDist("norm", mean = 0, sd = 0.02, xlim = c(-.07, .07))
 @
 
-<<Figure5.6,include=FALSE>>=
+<<Figure5.6, include = FALSE>>=
 <<Example5.2>>
 @
 
@@ -77,7 +77,7 @@ The two main functions we need for working with normal distributions are \functi
 \function{pnorm} computes the proportion of a normal distribution below a specified value:
 
 \[
-\mbox{\texttt{pnorm(x,mean=$\mu$, sd=$\sigma$)}} = \Prob(X \le x)
+\mbox{\texttt{pnorm(x, mean = $\mu$, sd = $\sigma$)}} = \Prob(X \le x)
 \]
 when $X \sim \Norm(\mu, \sigma)$.
 
@@ -85,25 +85,25 @@ We can obtain arbitrary probabilities using \verb!pnorm()!
 
 \subsubsection*{Example 5.3}
 
-<<Example5.3, opts.label="fig4">>=
-pnorm(90, 75, 10, lower.tail=FALSE) # proportion of scores above 90
-xpnorm(90, 75, 10, lower.tail=FALSE)
+<<Example5.3, opts.label = "fig4">>=
+pnorm(90, 75, 10, lower.tail = FALSE) # proportion of scores above 90
+xpnorm(90, 75, 10, lower.tail = FALSE)
 @
-The \function{xpnorm()} function gives a bit more verbose output and also gives you a picture. Notice the \argument{lower.tail=FALSE}. This is added because the default for \function{pnorm} and \function{xpnorm} finds the lower tail, not the upper tail. However, we can also subtract the proportion of the lower tail from 1 to find the the proportion of the upper tail.
+The \function{xpnorm()} function gives a bit more verbose output and also gives you a picture. Notice the \argument{lower.tail = FALSE}. This is added because the default for \function{pnorm} and \function{xpnorm} finds the lower tail, not the upper tail. However, we can also subtract the proportion of the lower tail from 1 to find the the proportion of the upper tail.
 
-<<Figure5.7,include=FALSE>>=
+<<Figure5.7, include = FALSE>>=
 <<Example5.3>>
 @
 
 \subsubsection*{Example 5.4}
 
 \function{qnorm()} goes the other direction:  You provide the quantile (percentile expressed as a decimal) and \R\ gives you the value.
-<<Example5.4, opts.label="fig4">>=
+<<Example5.4, opts.label = "fig4">>=
 qnorm(0.2, 75, 10) # 20th percentile in Norm(75, 10)
 xqnorm(0.2, 75, 10)  
 @
 
-<<Figure5.8,include=FALSE>>=
+<<Figure5.8, include = FALSE>>=
 <<Example5.4>>
 @
 
@@ -121,7 +121,7 @@ Z-scores provide a second way to compute normal probabilities.
 
 \subsubsection*{Example 5.5}
 
-<<Example5.5, tidy=FALSE, opts.label="fig4">>=
+<<Example5.5, tidy = FALSE, opts.label = "fig4">>=
 z30 <- (30 - 29.11) / 0.93; z30  # z-score for 30 min
 z31 <- (31 - 29.11) / 0.93; z31  # z-score for 31 min
 xpnorm(c(30, 31), 29.11, 0.93)   # original normal distribution proportion between 30 and 31 min
@@ -129,18 +129,18 @@ xpnorm(c(z30, z31))              # standardized distribution proportion between 
 pnorm(z31) - pnorm(z30)
 @
 
-<<Figure5.9,include=FALSE>>=
+<<Figure5.9, include = FALSE>>=
 <<Example5.5>>
 @
 
-<<Example5.5b, tidy=FALSE, opts.label="fig4">>=
+<<Example5.5b, tidy = FALSE, opts.label = "fig4">>=
 xpnorm(0.957)                      # proportion with z-score below 0.957
 xpnorm(2.032, lower.tail = FALSE)  # proportion with z-score above 2.032
 pnorm(30, 29.11, 0.93)          
 pnorm(31, 29.11, 0.93, lower.tail = FALSE)
 @
 
-<<Figure5.10,include=FALSE>>=
+<<Figure5.10, include = FALSE>>=
 <<Example5.5b>>
 @
 
@@ -157,12 +157,12 @@ z <- qnorm(0.2); z
 \subsection*{Confidence Intervals Based on a Normal Distribution}
 
 \subsubsection*{Example 5.7}
-<<Example5.7,opts.label="fig1",cache=TRUE,seed=1234>>=
-Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta)) 
-dotPlot(~result, width = 0.1, data=Bootstrap)
+<<Example5.7, opts.label = "fig1", cache = TRUE, seed = 1234>>=
+Bootstrap <- do(1000) * mean( ~ Time, data = resample(CommuteAtlanta)) 
+dotPlot( ~ mean, width = 0.1, data = Bootstrap)
 @
 
-<<Figure5.15,include=FALSE>>=
+<<Figure5.15, include = FALSE>>=
 <<Example5.7>>
 @
 
@@ -170,7 +170,7 @@ dotPlot(~result, width = 0.1, data=Bootstrap)
 xqnorm(c(0.025, 0.975), 29.11, 0.915)   # 95% confidence interval for the normal distribution
 @
 
-<<Figure5.16,include=FALSE>>=
+<<Figure5.16, include = FALSE>>=
 <<Example5.7b>>
 @
 
@@ -191,9 +191,9 @@ qnorm(0.995, 13.10, 0.20) # upper endpoint for 99% confidence interval
 \subsection*{P-values Based on a Normal Distribution}
 
 \subsubsection*{Example 5.9}
-<<Example5.9, cache=TRUE, seed=1234, opt.label="fig1">>=
-Randomization.Temp <- do(10000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 )
-histogram(~result, width=.025, fit = "normal", data=Randomization.Temp)
+<<Example5.9, cache = TRUE, seed = 1234, opt.label = "fig1">>=
+Randomization.Temp <- do(10000) * (mean( ~ BodyTemp, data = resample(BodyTemp50)) + 0.34)
+histogram( ~ mean, width = .025, fit = "normal", data = Randomization.Temp)
 @
 <<Example5.9b>>=
 pnorm(98.26, 98.6, 0.1066)
@@ -207,61 +207,61 @@ pnorm(z)
 
 \subsubsection*{Example 5.10}
 <<Example5.10>>=
-pnorm(0.66, 0.65, 0.013, lower.tail=FALSE)
+pnorm(0.66, 0.65, 0.013, lower.tail = FALSE)
 @
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \iffalse
-<<plotnorm,echo=FALSE>>=
+<<plotnorm, echo = FALSE>>=
 plotnorm <- function(
-		mean=0, sd=1,
+		mean = 0, sd = 1,
 		lower = -Inf, upper = Inf,
-		n=750, xlim, xlab="", ylab="", 
-		groups, lwd=2, lty=1,
-		main = paste("N(",mean, ",", sd, ")",sep=""),
-		scales = list(y=list(draw=FALSE)),
-		col=trellis.par.get('superpose.polygon')$col,
-		add.text=TRUE,
-		digits=3,
-		cex=1,
+		n = 750, xlim, xlab = "", ylab = "", 
+		groups, lwd = 2, lty = 1,
+		main = paste("N(", mean, ",", sd, ")", sep = ""),
+		scales = list(y = list(draw = FALSE)),
+		col = trellis.par.get('superpose.polygon')$col,
+		add.text = TRUE,
+		digits = 3,
+		cex = 1,
 		...)
 {
 	if (missing(xlim)) {
-		xlim <- mean + c(-1,1) * 4.5 * sd
+		xlim <- mean + c(-1, 1) * 4.5 * sd
 	}
 
 
-	x <- seq( xlim[1], xlim[2], by= diff(xlim)/n )
-		y <- dnorm( x, mean=mean, sd=sd )
+	x <- seq(xlim[1], xlim[2], by= diff(xlim)/n)
+		y <- dnorm(x, mean = mean, sd = sd)
 
 		if (missing(groups)) { groups = ((x > lower) + (x > upper)) }
 
-	middle.prob = round(pnorm(upper, mean, sd) - pnorm(lower,mean,sd),digits)
-		upper.prob = round(1 - pnorm(upper,mean,sd),digits)
-		lower.prob = round(pnorm(lower,mean,sd),digits)
+	middle.prob = round(pnorm(upper, mean, sd) - pnorm(lower, mean, sd), digits)
+		upper.prob = round(1 - pnorm(upper, mean, sd), digits)
+		lower.prob = round(pnorm(lower, mean, sd), digits)
 
-		xyplot( y ~ x, xlab=xlab, ylab=ylab, lwd=lwd, lty=lty, scales=scales, groups=groups,
+		xyplot(y ~ x, xlab = xlab, ylab = ylab, lwd = lwd, lty = lty, scales = scales, groups = groups,
 				main= main,
-				panel = function(x,y,...) {
-				panel.xyplot(x,y,type='h' ,col=col, ...)
-				panel.xyplot(x,y,type='l',lwd=3)
+				panel = function(x, y, ...) {
+				panel.xyplot(x, y, type = 'h' , col = col, ...)
+				panel.xyplot(x, y, type = 'l', lwd = 3)
 				if (is.finite(upper) && !is.finite(lower) && add.text && FALSE) {
-				grid.text(x=.98,y=unit(1,'npc')-unit(5,'lines'), 
+				grid.text(x = .98, y = unit(1, 'npc')-unit(5, 'lines'), 
 					bquote(P(X>.(upper)) == .(upper.prob)),
-					gp=gpar(cex=cex),
-					just='right'
+					gp = gpar(cex = cex),
+					just = 'right'
 					)
 				}
 				if (is.finite(lower) && add.text && FALSE) {
-				grid.text(x=.02,y=unit(1,'npc')-unit(5,'lines'), 
+				grid.text(x = .02, y = unit(1, 'npc')-unit(5, 'lines'), 
 					bquote(P(X<.(lower)) == .(lower.prob)), 
-					gp=gpar(cex=cex),
-					just='left'
+					gp = gpar(cex = cex),
+					just = 'left'
 					)
 				}
 				if (is.finite(upper) && is.finite(lower) && add.text) {
-				grid.text(x=unit(mean(c(lower,upper)),'native'),y=unit(0,'native')+unit(1,'lines'), 
-					bquote(.(middle.prob)), gp=gpar(cex=cex),
-					just='center'
+				grid.text(x = unit(mean(c(lower, upper)), 'native'), y = unit(0, 'native')+unit(1, 'lines'), 
+					bquote(.(middle.prob)), gp = gpar(cex = cex),
+					just = 'center'
 					)
 				}
 				},
@@ -284,11 +284,11 @@ Approximately 95\% of any normal distribution lies within 2 standard deviations 
 Approximately 99.7\% of any normal distribution lies within 3 standard deviations of the mean.
 \end{itemize}
 
-<<normal-68-95-99.7,echo=FALSE,fig.height=2.0,fig.width=2,fig.show="hold",out.width=".3\\textwidth">>=
-trellis.par.set(superpose.polygon = list(col=c('gray50', 'gray80', 'gray50')))
-print(plotnorm(lower=-1,upper=1,main="",xlab="standard deviations from the mean"))
-print(plotnorm(lower=-2,upper=2,main="",xlab="standard deviations from the mean"))
-print(plotnorm(lower=-3,upper=3,main="",xlab="standard deviations from the mean"))
+<<normal-68-95-99.7, echo = FALSE, fig.height = 2.0, fig.width = 2, fig.show = "hold", out.width = ".3\\textwidth">>=
+trellis.par.set(superpose.polygon = list(col = c('gray50', 'gray80', 'gray50')))
+print(plotnorm(lower = -1, upper = 1, main = "", xlab = "standard deviations from the mean"))
+print(plotnorm(lower = -2, upper = 2, main = "", xlab = "standard deviations from the mean"))
+print(plotnorm(lower = -3, upper = 3, main = "", xlab = "standard deviations from the mean"))
 @
 
 Many naturally occurring distributions are approximately normally distributed.
@@ -317,7 +317,7 @@ The two main functions we need for working with normal distributions are \functi
 
 
 \[
-\mbox{\texttt{pnorm(x,mean=$\mu$, sd=$\sigma$)}} = \Prob(X \le x)
+\mbox{\texttt{pnorm(x, mean = $\mu$, sd = $\sigma$)}} = \Prob(X \le x)
 \]
 when $X \sim \Norm(\mu, \sigma)$.
 
@@ -325,14 +325,14 @@ We can obtain arbitrary probabilities using \verb!pnorm()!:
 <<pnorm-1>>=
 pnorm(650, 500, 100)                     # proportion who score below 650 on SAT
 1-pnorm(650, 500, 100)                   # proportion who score above 650 on SAT
-pnorm(650,500,100) - pnorm(400,500,100)  # proportion who score between 400 and 650 on SAT
+pnorm(650, 500, 100) - pnorm(400, 500, 100)  # proportion who score between 400 and 650 on SAT
 @
 
-<<SAT-1,echo=FALSE,fig.height=2.0,fig.width=2, out.width=".3\\textwidth">>=
-trellis.par.set(superpose.polygon = list(col=c('gray80', 'gray50', 'gray50')))
-print(plotnorm(500,100,lower=-300,upper=650,main="",xlab="SAT score",digits=3))
-print(plotnorm(500,100,upper=1050,lower=650,main="",xlab="SAT score",digits=3))
-print(plotnorm(500,100,lower=400,upper=650,main="",xlab="SAT score",digits=3))
+<<SAT-1, echo = FALSE, fig.height = 2.0, fig.width = 2, out.width = ".3\\textwidth">>=
+trellis.par.set(superpose.polygon = list(col = c('gray80', 'gray50', 'gray50')))
+print(plotnorm(500, 100, lower = -300, upper = 650, main = "", xlab = "SAT score", digits = 3))
+print(plotnorm(500, 100, upper = 1050, lower = 650, main = "", xlab = "SAT score", digits = 3))
+print(plotnorm(500, 100, lower = 400, upper = 650, main = "", xlab = "SAT score", digits = 3))
 @
 
 
@@ -344,8 +344,8 @@ qnorm(.80, 500, 100)
 @
 
 The \function{xpnorm()} function gives a bit more verbose output and also gives you a picture.
-<<xpnorm,fig.height=2.5,fig.width=4>>=
-xpnorm(700,500,100)
+<<xpnorm, fig.height = 2.5, fig.width = 4>>=
+xpnorm(700, 500, 100)
 @
 
 \subsection*{Z-scores (standardized scores)}
@@ -361,8 +361,8 @@ the mean and standard deviation of a random sample as an estimate.
 
 Z-scores provide a second way to compute normal probabilities:
 
-<<tidy=FALSE>>=
-pnorm ( 650, 500, 100 )    # proportion of SATs below 650 
+<<tidy = FALSE>>=
+pnorm (650, 500, 100)    # proportion of SATs below 650 
 z <- (650 - 500) / 100     # z-score
 pnorm (1.5)                # proportion with z-score below 1.5
 @

@@ -62,15 +62,16 @@ Testing one proportion.
 	\item
 		We can simulate a world in which $p = 0.5$ using \function{rflip()}:
 <<Example4.13, cache=TRUE>>=
-Randomization.Match <- do(10000) * rflip(25, .5)  # 25 because n=25
+Randomization.Match <- 
+  do(10000) * rflip(25, .5)  # 25 because n = 25
 head(Randomization.Match)
-histogram(~prop, width=0.04, data=Randomization.Match)
+histogram( ~ prop, width = 0.04, data = Randomization.Match)
 @
 
 Here we find the proportion of the simulations which resulted in 16 or more matches out of 25, or 0.64 or greater, for the p-value.
 <<Example4.13b>>=
-prop( ~ (prop >= 0.64), data=Randomization.Match ) # 16/25
-histogram(~prop, width=0.04, groups = (prop >= 0.64), data=Randomization.Match)
+prop( ~ (prop >= 0.64), data = Randomization.Match ) # 16/25
+histogram( ~ prop, width = 0.04, groups = (prop >= 0.64), data = Randomization.Match)
 @
 
 <<Figure4.7, include=FALSE>>=
@@ -83,10 +84,10 @@ histogram(~prop, width=0.04, groups = (prop >= 0.64), data=Randomization.Match)
 \subsubsection*{Example 4.15}
 
 <<Example4.15>>=
-prop( ~ (prop >= 0.60), data=Randomization.Match ) # 15/25
-prop( ~ (prop >= 0.76), data=Randomization.Match ) # 19/25
-histogram(~prop, width=0.04, groups = (prop >= 0.60), data=Randomization.Match )
-histogram(~prop, width=0.04, groups = (prop >= 0.76), data=Randomization.Match )
+prop( ~ (prop >= 0.60), data = Randomization.Match ) # 15/25
+prop( ~ (prop >= 0.76), data = Randomization.Match ) # 19/25
+histogram( ~ prop, width = 0.04, groups = (prop >= 0.60), data = Randomization.Match )
+histogram( ~ prop, width = 0.04, groups = (prop >= 0.76), data = Randomization.Match )
 @
 
 <<Figure4.9, include=FALSE>>=
@@ -96,8 +97,8 @@ histogram(~prop, width=0.04, groups = (prop >= 0.76), data=Randomization.Match )
 \subsubsection*{Example 4.16}
 
 <<Example4.16>>=
-prop( ~ (prop >= 0.88), data=Randomization.Match ) # 22/25
-histogram(~prop, width=0.04, v=c(0.88), data=Randomization.Match )
+prop( ~ (prop >= 0.88), data = Randomization.Match ) # 22/25
+histogram( ~ prop, width = 0.04, v = c(0.88), data = Randomization.Match )
 @
 
 %Example 4.17
@@ -105,7 +106,7 @@ histogram(~prop, width=0.04, v=c(0.88), data=Randomization.Match )
 \subsubsection*{Figure 4.10}
 
 <<Figure4.10, opts.label="fig1">>=
-dotPlot(~Taps|Group, layout=c(1,2), width=1, cex=.3, data=CaffeineTaps)
+dotPlot( ~ Taps | Group, layout = c(1,2), width = 1, cex = .3, data = CaffeineTaps)
 @
 
 
@@ -113,8 +114,8 @@ dotPlot(~Taps|Group, layout=c(1,2), width=1, cex=.3, data=CaffeineTaps)
 
 Testing two means.
 <<Example4.18>>=
-mean(Taps ~ Group, data=CaffeineTaps)
-diff( mean(Taps ~ Group, data=CaffeineTaps) )
+mean(Taps ~ Group, data = CaffeineTaps)
+diff( mean(Taps ~ Group, data = CaffeineTaps) )
 @
 
 \begin{enumerate}
@@ -127,14 +128,14 @@ diff( mean(Taps ~ Group, data=CaffeineTaps) )
 	\item
 		We simulate a world in which $\mu_1 = \mu_2$ or $\mu_1 - \mu_2 = 0$:
 <<Example4.18b, cache=TRUE>>=
-Randomization.Caff <- do (1000) * ediff( mean( Taps ~ shuffle(Group), data=CaffeineTaps ) )
+Randomization.Caff <- do (1000) * ediff( mean( Taps ~ shuffle(Group), data = CaffeineTaps ) )
 head(Randomization.Caff,3)
-dotPlot(~No.Caffeine, width = 0.2, data=Randomization.Caff)
+dotPlot( ~ No.Caffeine, width = 0.2, data = Randomization.Caff)
 @
 
 <<Example4.18c>>=
-prop( ~ (No.Caffeine >= 3.5), data=Randomization.Caff )
-dotPlot(~No.Caffeine, width = 0.2, groups = (No.Caffeine >=3.5), data=Randomization.Caff)
+prop( ~ (No.Caffeine >= 3.5), data = Randomization.Caff )
+dotPlot( ~ No.Caffeine, width = 0.2, groups = (No.Caffeine >=3.5), data = Randomization.Caff)
 @
 
 <<Figure4.11, include=FALSE>>=
@@ -157,17 +158,17 @@ Testing one proportion.
 	\item
 		We simulate a world in which $p = 0.5$:
 <<Example4.19, seed=12345, cache=TRUE>>=
-RandomizationDist <- do(1000) * rflip(10, .5)  # 10 because n=10
+RandomizationDist <- do(1000) * rflip(10, .5)  # 10 because n = 10
 head(RandomizationDist)
-histogram(~prop, label=TRUE, width = 1/10, data=RandomizationDist)
+histogram( ~ prop, label = TRUE, width = 1/10, data = RandomizationDist)
 @
 <<Figure4.12,include=FALSE>>=
 <<Example4.19>>
 @
 <<Example4.19b>>=
-prop( ~ (prop >= 0.8), data=RandomizationDist )
-prop( ~ (prop >= 0.6), data=RandomizationDist )
-prop( ~ (prop >= 0.4), data=RandomizationDist )
+prop( ~ (prop >= 0.8), data = RandomizationDist )
+prop( ~ (prop >= 0.6), data = RandomizationDist )
+prop( ~ (prop >= 0.4), data = RandomizationDist )
 @
 \end{enumerate}
 
@@ -217,8 +218,8 @@ prop(~ (prop <= 0.2 | prop >= 0.8), data = RandomizationDist)
 Testing two means.
 <<Example4.27>>=
 head(Smiles)
-mean(Leniency ~ Group, data=Smiles)
-diff(mean(Leniency ~ Group, data=Smiles))
+mean(Leniency ~ Group, data = Smiles)
+diff(mean(Leniency ~ Group, data = Smiles))
 @
 
 \begin{enumerate}
@@ -246,9 +247,9 @@ dotPlot(~ smile, width = 0.03, cex = 0.5, groups = (smile >= 0.79),
 
 Now we find the p-value to test a difference of 0.76:
 <<Example4.27d>>=
-prop( ~ (smile <= -0.76 | smile >= 0.76), data=Randomization.Smiles )
-2 * prop( ~ smile >= 0.76, data=Randomization.Smiles )
-dotPlot(~smile, width=.03, cex=.5, groups= (smile >=0.76), data=Randomization.Smiles)
+prop( ~ (smile <= -0.76 | smile >= 0.76), data = Randomization.Smiles )
+2 * prop( ~ smile >= 0.76, data = Randomization.Smiles )
+dotPlot( ~ smile, width = .03, cex = .5, groups =  (smile >= 0.76), data= Randomization.Smiles)
 @
 \end{enumerate}
 
@@ -322,10 +323,10 @@ Here's one way to create the data in \R:
 %  do(14) * data.frame( treatment = "Desipramine", response="No Relapse"),
 <<Section4.4b,tidy=FALSE>>=
 Cocaine <- rbind( 
-  do(18) * data.frame( treatment = "Lithium",     response="Relapse"),
-  do(6)  * data.frame( treatment = "Lithium",     response="No Relapse"),
-  do(20) * data.frame( treatment = "Placebo",     response="Relapse"),
-  do(4)  * data.frame( treatment = "Placebo",     response="No Relapse")
+  do(18) * data.frame( treatment = "Lithium", response = "Relapse"),
+  do(6)  * data.frame( treatment = "Lithium", response = "No Relapse"),
+  do(20) * data.frame( treatment = "Placebo", response = "Relapse"),
+  do(4)  * data.frame( treatment = "Placebo", response = "No Relapse")
   )
 @
 
@@ -335,9 +336,9 @@ Cocaine <- rbind(
 
 Testing two proportions.
 <<Example4.29>>=
-tally( response ~ treatment, data=Cocaine )
-prop( response ~ treatment,  data=Cocaine )
-diff( prop( response ~ treatment, data=Cocaine ))
+tally( response ~ treatment, data = Cocaine )
+prop( response ~ treatment,  data = Cocaine )
+diff( prop( response ~ treatment, data = Cocaine ))
 @
 
 \begin{enumerate}
@@ -350,13 +351,13 @@ diff( prop( response ~ treatment, data=Cocaine ))
 	\item
 		We simulate a world in which $p_1 = p_2$ or $p_1 - p_2 = 0$:
 <<Example4.29b, cache=TRUE>>=
-Randomization.Coc <- do (5000) * diff( prop( response ~ shuffle(treatment), data=Cocaine ) )
+Randomization.Coc <- do (5000) * diff( prop( response ~ shuffle(treatment), data = Cocaine ) )
 head(Randomization.Coc)
 @
 
 <<Example4.29c>>=
-prop( ~ (Relapse.Placebo < -0.0833 ), data=Randomization.Coc )
-histogram( ~ Relapse.Placebo, data=Randomization.Coc, v=c(-0.0833), width=0.08)
+prop( ~ (Relapse.Placebo < -0.0833 ), data = Randomization.Coc )
+histogram( ~ Relapse.Placebo, data = Randomization.Coc, v = c(-0.0833), width = 0.08)
 @
 <<Figure4.28, include=FALSE>>=
 <<Example4.29c>>
@@ -371,8 +372,8 @@ histogram( ~ Relapse.Placebo, data=Randomization.Coc, v=c(-0.0833), width=0.08)
 
 Testing correlation.
 <<Example4.31>>=
-xyplot(ZPenYds ~ NFL_Malevolence, type=c("p", "r"), data=MalevolentUniformsNFL)
-cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
+xyplot(ZPenYds ~ NFL_Malevolence, type = c("p", "r"), data = MalevolentUniformsNFL)
+cor(ZPenYds ~ NFL_Malevolence, data = MalevolentUniformsNFL)
 @
 
 \begin{enumerate}
@@ -385,14 +386,14 @@ cor(ZPenYds ~ NFL_Malevolence, data=MalevolentUniformsNFL)
 	\item
 		We simulate a world in which $\rho = 0$:
 <<Example4.31b, cache=TRUE, tidy=FALSE>>=
-Randomization.Mal <- do(10000) * cor(NFL_Malevolence ~ shuffle(ZPenYds), 
-                                      data = MalevolentUniformsNFL)
+Randomization.Mal <- 
+  do(10000) * cor(NFL_Malevolence ~ shuffle(ZPenYds), data = MalevolentUniformsNFL)
 head(Randomization.Mal)
 @
 
 <<Example4.32c>>=
-prop( ~ (result > 0.43 ), data=Randomization.Mal )
-histogram(~result, v = c(0.43), width = 0.05, data = Randomization.Mal)
+prop( ~ (cor > 0.43 ), data = Randomization.Mal )
+histogram(~ cor, v = c(0.43), width = 0.05, data = Randomization.Mal)
 @
 
 <<Figure4.29, include=FALSE>>=
@@ -408,8 +409,8 @@ histogram(~result, v = c(0.43), width = 0.05, data = Randomization.Mal)
 
 Testing one mean.
 <<Example4.33, opts.label="fig1">>=
-mean(~BodyTemp, data=BodyTemp50)
-dotPlot(~BodyTemp, v=c(98.26), width=.1, cex=.2, data=BodyTemp50)
+mean( ~ BodyTemp, data = BodyTemp50)
+dotPlot( ~ BodyTemp, v = c(98.26), width = .1, cex = .2, data = BodyTemp50)
 @
 <<Figure4.30,include=FALSE>>=
 <<Example4.33>>
@@ -425,7 +426,7 @@ dotPlot(~BodyTemp, v=c(98.26), width=.1, cex=.2, data=BodyTemp50)
     
 Notice that the test statistic differs a bit from 98.6
 <<Example4.33b>>=
-98.6 - mean( ~ BodyTemp, data=BodyTemp50)  
+98.6 - mean( ~ BodyTemp, data = BodyTemp50)  
 @
 
 But might this just be random variation?
@@ -436,15 +437,16 @@ We need a randomization distribution to compare against.
 have the desired mean while preserving the shape of the distribution indicated by
 our sample. We simulate a world in which $\mu = 98.6$:
 <<Example4.33c, seed=1234, cache=TRUE>>=
-Randomization.Temp <- do(10000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.34 ) 
+Randomization.Temp <- 
+  do(10000) * ( mean( ~ BodyTemp, data = resample(BodyTemp50) ) + 0.34 ) 
 head(Randomization.Temp, 3)
-mean( ~ result, data=Randomization.Temp )
-cdata(0.95, result, data=Randomization.Temp )
+mean( ~ result, data = Randomization.Temp )
+cdata( ~ result, 0.95, data = Randomization.Temp )
 @
 From this we can estimate the p-value:
 <<Example4.33d, opts.label="fig4">>=
-prop( ~ abs(result - 98.6) > 0.34, data = Randomization.Temp )
-histogram(~result, width=.01, v=c(98.40, 98.6, 98.81), data=Randomization.Temp)
+prop( ~ abs(result - 98.6) > 0.34, data = Randomization.Temp)
+histogram( ~ result, width = .01, v = c(98.40, 98.6, 98.81), data = Randomization.Temp)
 @
 
 <<Figure4.31,include=FALSE>>=
@@ -471,14 +473,15 @@ hypotheses.
 	\item
 		We we create a randomization distribution centered at $\mu - 98.6 = 0$:
 <<Example4.33e, cache=TRUE>>=
-Randomization.Temp2 <- do(5000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) - 98.26 ) 
+Randomization.Temp2 <- 
+  do(5000) * ( mean( ~ BodyTemp, data = resample(BodyTemp50) ) - 98.26 ) 
 head(Randomization.Temp2, 3)
-mean( ~ result, data=Randomization.Temp2 )
+mean( ~ result, data = Randomization.Temp2 )
 @
 From this we can estimate the p-value:
 <<Example4.33f, , opts.label="fig4">>=
 prop( ~ abs(result) > 0.34, data = Randomization.Temp2 )
-histogram(~result, width=.01, v=c(0.34, -0.34), data=Randomization.Temp2)
+histogram( ~ result, width = .01, v = c(0.34, -0.34), data = Randomization.Temp2)
 @
 \end{enumerate}
 
@@ -495,12 +498,12 @@ If your randomization distribution is centered at the wrong value, then it isn't
 \subsubsection*{Figure 4.32}
 
 <<Figure4.32, seed=1234, cache=TRUE,opts.label="fig4">>=
-Boot.Temp <- do (5000) * mean(~ BodyTemp, data=resample(BodyTemp50))
+Boot.Temp <- do (5000) * mean(~ BodyTemp, data = resample(BodyTemp50))
 head(Boot.Temp,3)
-mean(~ result, data=Boot.Temp)
-cdata(0.95, result, data=Boot.Temp)
-histogram(~result, width=.01, v=c(98.26, 98.6), 
-          groups=(98.05 <=result & result <= 98.46), data=Boot.Temp)
+mean(~ mean, data = Boot.Temp)
+cdata( ~ mean, 0.95, data = Boot.Temp)
+histogram( ~ mean, width = .01, v = c(98.26, 98.6), 
+          groups = (98.05 <= mean & mean <= 98.46), data = Boot.Temp)
 @
 Notice that the distribution is now centered at our test statistic instead of at the value
 from the null hypothesis.
@@ -517,16 +520,17 @@ from the null hypothesis.
 	\item
 		We simulate a world in which $\mu = 98.4$:
 <<Example4.35, seed=1234, cache=TRUE, opts.label="fig4">>=
-Randomization.Temp3 <- do(5000) * ( mean( ~BodyTemp, data=resample(BodyTemp50) ) + 0.14 ) 
+Randomization.Temp3 <- 
+  do(5000) * ( mean( ~ BodyTemp, data = resample(BodyTemp50) ) + 0.14 ) 
 head(Randomization.Temp3, 3)
-mean( ~ result, data=Randomization.Temp3 )
-cdata(0.95, result, data=Randomization.Temp3)
-histogram(~result, width=.01, v=c(98.26, 98.4), 
-          groups=(98.19 <=result & result <= 98.62), 
-          xlim=c(97.8, 99.0), data=Randomization.Temp3) # randomization
-histogram(~result, width=.01, v=c(98.26, 98.4), 
-          groups=(98.05 <=result & result <= 98.46), 
-          xlim=c(97.8, 99.0), data=Boot.Temp) # bootstrap
+mean( ~ result, data = Randomization.Temp3 )
+cdata(~ result, 0.95, data = Randomization.Temp3)
+histogram( ~ result, width = .01, v = c(98.26, 98.4), 
+          groups = (98.19 <= result & result <= 98.62), 
+          xlim = c(97.8, 99.0), data = Randomization.Temp3) # randomization
+histogram( ~ mean, width = .01, v = c(98.26, 98.4), 
+          groups = (98.05 <= mean & mean <= 98.46), 
+          xlim = c(97.8, 99.0), data = Boot.Temp) # bootstrap
 @
 
 \end{enumerate}
@@ -559,19 +563,20 @@ But the design of this study is different.
 The procedure for comparing two means is very similar
 
 <<>>=
-mean(BodyTemp ~ Sex, data=BodyTemp50)
-diff( mean(BodyTemp ~ Sex, data=BodyTemp50) )
+mean(BodyTemp ~ Sex, data = BodyTemp50)
+diffmean(BodyTemp ~ Sex, data = BodyTemp50) 
 @
 
 <<>>=
-Randomization.Temp <- do (1000) * diff( mean( BodyTemp ~ shuffle(Sex), data=BodyTemp50 ) )
+Randomization.Temp <- 
+  do (1000) * diffmean( BodyTemp ~ shuffle(Sex), data = BodyTemp50)
 head(Randomization.Temp,3)
-histogram(~Male, data=Randomization.Temp, v=c(0.176, -0.176))
+histogram( ~ diffmean, data = Randomization.Temp, v = c(0.176, -0.176))
 @
 <<>>=
-prop( ~ (Male > 0.176), data=Randomization.Temp )       # 1-sided
-2 * prop( ~ (Male > 0.176), data=Randomization.Temp )   # 2-sided
-prop( ~ (abs(Male) > 0.176), data=Randomization.Temp )  # 2-sided
+prop( ~ (diffmean > 0.176), data = Randomization.Temp )       # 1-sided
+2 * prop( ~ (diffmean > 0.176), data = Randomization.Temp )   # 2-sided
+prop( ~ (abs(diffmean) > 0.176), data = Randomization.Temp )  # 2-sided
 @
 
 \subsubsection{Separate sampling from two groups}
@@ -594,15 +599,16 @@ We could
 Here's a way to do this in \R:
 
 <<>>=
-Randomization.Temp2 <- do (1000) * diff( mean( resample(BodyTemp) ~ shuffle(Sex), data=BodyTemp50 ) )
-head(Randomization.Temp2,3)
-histogram(~Male, data=Randomization.Temp2, v=c(0.176, -0.176))
+Randomization.Temp2 <- 
+  do (1000) * diffmean( resample(BodyTemp) ~ shuffle(Sex), data = BodyTemp50 )
+head(Randomization.Temp2, 3)
+histogram( ~ diffmean, data = Randomization.Temp2, v = c(0.176, -0.176))
 @
 
 <<>>=
-prop( ~ (Male > 0.176), data=Randomization.Temp2 )       # 1-sided
-2 * prop( ~ (Male > 0.176), data=Randomization.Temp2 )   # 2-sided
-prop( ~ (abs(Male) > 0.176), data=Randomization.Temp2 )  # 2-sided
+prop( ~ (diffmean > 0.176), data = Randomization.Temp2 )       # 1-sided
+2 * prop( ~ (diffmean > 0.176), data = Randomization.Temp2 )   # 2-sided
+prop( ~ (abs(diffmean) > 0.176), data = Randomization.Temp2 )  # 2-sided
 @
 
 \subsubsection{Sampling from one population with two variables}
@@ -611,15 +617,16 @@ If on the other hand our study design was to randomly sample 50 people and recor
 body temperature and their sex, then another approach could be used:
 
 <<>>=
-Randomization.Temp3 <- do (1000) * diff( mean( BodyTemp ~ shuffle(Sex), data=resample(BodyTemp50) ) )
-head(Randomization.Temp3,3)
-histogram(~Male, data=Randomization.Temp3, v=c(0.176, -0.176))
+Randomization.Temp3 <- 
+  do (1000) * diffmean( BodyTemp ~ shuffle(Sex), data = resample(BodyTemp50))
+head(Randomization.Temp3, 3)
+histogram( ~ diffmean, data = Randomization.Temp3, v = c(0.176, -0.176))
 @
 
 <<>>=
-prop( ~ (Male > 0.176), data=Randomization.Temp3 )       # 1-sided
-2 * prop( ~ (Male > 0.176), data=Randomization.Temp3 )   # 2-sided
-prop( ~ (abs(Male) > 0.176), data=Randomization.Temp3 )  # 2-sided
+prop( ~ (diffmean > 0.176), data = Randomization.Temp3 )       # 1-sided
+2 * prop( ~ (diffmean > 0.176), data = Randomization.Temp3 )   # 2-sided
+prop( ~ (abs(diffmean) > 0.176), data = Randomization.Temp3 )  # 2-sided
 @
 
 As we see, the three methods give essentially the same results in this case.  But they correspond to
@@ -644,9 +651,9 @@ Similar approaches work for testing whether two proportions are equal as well.
 Take a look at the three histograms in this section.  Notice how each is centered at 0.   (They
 also have our hoped for bell shape.)
 <<>>=
-mean( ~ Male, data=Randomization.Temp )
-mean( ~ Male, data=Randomization.Temp2 )
-mean( ~ Male, data=Randomization.Temp3 )
+mean( ~ diffmean, data = Randomization.Temp )
+mean( ~ diffmean, data = Randomization.Temp2 )
+mean( ~ diffmean, data = Randomization.Temp3 )
 @
 This is because we are computing the difference in means \emph{assuming the difference in means is 0}.
 

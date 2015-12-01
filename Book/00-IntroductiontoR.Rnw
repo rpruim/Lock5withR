@@ -1,4 +1,6 @@
 
+\Sexpr{set_parent('Lock5withR.Rnw')}
+
 \setcounter{chapter}{-1}
 \Chapter{Introduction to R and Statistics}
 
@@ -81,7 +83,7 @@ sqrt(16)
 @
 
 You can save values to named variables for later reuse
-<<variables2,tidy=FALSE>>=
+<<variables2, tidy=FALSE>>=
 product = 15.3 * 23.4       # save result
 product                     # show the result
 product <- 15.3 * 23.4      # <- is assignment operator, same as =
@@ -91,7 +93,7 @@ newproduct
 .5 * product                # half of the product
 log(product)                # (natural) log of the product
 log10(product)              # base 10 log of the product
-log(product,base=2)         # base 2 log of the product
+log(product, base = 2)      # base 2 log of the product
 @
 
 The semi-colon can be used to place multiple commands on one line.  One frequent use of this is to save and print a value all in one go:
@@ -105,14 +107,14 @@ The semi-colon can be used to place multiple commands on one line.  One frequent
 \subsection*{The \RStudio\ help system}
 
 There are several ways to get \RStudio\ to help you when you forget something. Most objects in packages have help files that you can access by typing something like:
-<<help-questionmark,eval=FALSE,tidy=FALSE>>=
+<<help-questionmark, eval=FALSE, tidy=FALSE>>=
 ?bargraph
 ?histogram
 ?HELPrct
 @
 
 You can search the help system using
-<<help-GR,eval=FALSE>>=
+<<help-GR, eval=FALSE>>=
 help.search('Grand Rapids')    # Does R know anything about Grand Rapids?
 @
 This can be useful if you don't know the name of the function or data set you are looking for.
@@ -138,7 +140,7 @@ If you mis-capitalize something in \R\ it won't do what you want.
 
 \item 
 Functions in \R\ use the following syntax:
-<<function-syntax,eval=FALSE>>=
+<<function-syntax, eval=FALSE>>=
 functionname( argument1, argument2, ... )
 @
 \vspace{-5mm}
@@ -167,8 +169,8 @@ If you begin a command and hit the TAB key, \R\ will show you a list of possible
 Most often, data sets in \R\ are stored in a structure called a \term{data frame}.  There are a number of data sets built into \R\ and many more that come in various add on packages.  The \pkg{Lock5withR} package, for example, contains all the data sets from our text book. In the book, data set names are printed in bold text.
 
 You can see a list of them using 
-<<datasets,eval=FALSE>>=
-data(package="Lock5withR")
+<<datasets, eval=FALSE>>=
+data(package = "Lock5withR")
 @
 
 You can find a longer list of all data sets available in any loaded package using 
@@ -181,7 +183,7 @@ data()
 The \dataframe{HELPrct} data frame from the \pkg{mosaicData} package contains data from the 
 Health Evaluation and Linkage to Primary Care randomized clinical trial.  
 You can find out more about the study and the data in this data frame by typing
-<<HELPrcthelp,eval=FALSE,tidy=FALSE>>=
+<<HELPrcthelp, eval=FALSE, tidy=FALSE>>=
 ?HELPrct
 @
 
@@ -329,8 +331,8 @@ loaded above.  You can find it at
 
 The \option{na.strings} argument can be used to specify codes for missing values.  The following can be useful, for example:
 <<tidy=FALSE, eval=FALSE>>=
-someData <- read.file('file.csv', na.strings='.')
-someData <- read.file('file.csv', na.strings='-')
+someData <- read.file('file.csv', na.strings = '.')
+someData <- read.file('file.csv', na.strings = '-')
 @
 because SAS uses a period (\verb!.!) to code missing data, and some csv exporters use `\texttt{-}'.  By default \R\ reads these as string data, which forces the entire variable to be of character type instead of numeric.
 
@@ -394,7 +396,7 @@ a formula involved), you just need to know what goes in each slot.  This can be 
 Let's try an example.  Suppose we want to make this plot
 <<echo=FALSE>>=
 require(mosaicData)
-xyplot( births ~ date, data=Births78 )
+xyplot(births ~ date, data = Births78)
 @
 
 \begin{enumerate}
@@ -416,7 +418,7 @@ head(Births78)
 We want the date on the x-axis and the number of births on the y axis, so
 the full command is
 <<births-scatterplot>>=
-xyplot(births ~ date, data=Births78)
+xyplot(births ~ date, data = Births78)
 @
 
 This same template can be used for a wide variety of graphical and 
@@ -424,7 +426,7 @@ numerical summaries.  For example, to compute the mean number of births, we can
 change \function{xyplot()} to \function{mean()} and provide \variable{births}
 but not \variable{date}:
 <<>>=
-mean( ~ births, data=Births78)
+mean( ~ births, data = Births78)
 @
 Notice that when there is only one variable, it goes on the right side of the 
 wiggle (code{\textasciitilde}).
@@ -475,15 +477,15 @@ head(iris2, 3)
 
 We can add a new variable to data set using \function{mutate()}:
 <<tidy=FALSE>>=
-head(iris,3)
+head(iris, 3)
 iris3  <- mutate(iris, 
                     Sepal.Ratio = Sepal.Length / Sepal.Width,
                     Petal.Ratio = Petal.Length / Petal.Width )
-head(iris3,3)
+head(iris3, 3)
 States3 <- mutate(States2, 
                     Pop.Increase = 100 * (POPESTIMATE2012 - POPESTIMATE2010)/POPESTIMATE2010 )
-histogram( ~ Pop.Increase, data=States3, width=0.5, 
-                           main="% Population increase (2010 to 2012)" )
+histogram( ~ Pop.Increase, data = States3, width = 0.5, 
+                           main = "% Population increase (2010 to 2012)")
 @
 Generally, it is a good idea to keep raw data (like \variable{Sepal.Length} and \variable{Sepal.Width} in your data file, but let \R\ do the computation of derived variables for you.  Among other advantages, if you ever fix an error in a \variable{Sepal.Length} measurement, you don't have to worry about remembering to also recompute the ratio.  Futhermore, your \R\ code documents how the derived value was computed.
 
@@ -506,8 +508,8 @@ Data can also be saved in native \R\ format.  Saving data sets (and other \R\ ob
 \end{itemize}
 The downside is that these files are only readable in \R.
 
-<<savingData,exec=FALSE,echo=TRUE>>=
-save(iris3, file="iris3.rda")   # the traditional file extension is rda for R native data.
+<<savingData, exec=FALSE, echo=TRUE>>=
+save(iris3, file = "iris3.rda")   # the traditional file extension is rda for R native data.
 load("iris3.rda")               # loads previously saved data
 @
 
@@ -521,13 +523,13 @@ The \dataframe{fusion1} data frame in the \pkg{fastR} package contains genotype 
 %\Rindex{merge()}%
 <<>>=
 require(fastR)
-head(fusion1,3)
-head(pheno,3)
+head(fusion1, 3)
+head(pheno, 3)
 @
 
 <<>>=
 # merge fusion1 and pheno keeping only id's that are in both
-fusion1m <- merge(fusion1, pheno, by.x='id', by.y='id', all.x=FALSE, all.y=FALSE)
+fusion1m <- merge(fusion1, pheno, by.x = 'id', by.y = 'id', all.x = FALSE, all.y = FALSE)
 head(fusion1m, 3)
 @
 In this case, since the values are the same for each data frame, we could collapse \option{by.x} and \option{by.y} to \option{by} and collapse \option{all.x} and \option{all.y} to \option{all}. The first of these specifies which column(s) to use to identify matching cases. The second indicates whether cases in one data frame that do not appear in the other should be kept (\code{TRUE}) or dropped (filling in \code{NA} as needed) or dropped from the merged data frame.
@@ -875,63 +877,54 @@ Now let's suppose the lady gets 9 out of 10 correct.  That's not perfect, but it
 But how do we figure out how unusual it is to get 9 out of 10 just by guessing?  We'll learn another method later, but for now, let's just flip a bunch of coins and keep track.  If the lady is just guessing, she might as well be flipping a coin.
 
 So here's the plan.  We'll flip 10 coins.  We'll call the heads correct guesses and the tails incorrect guesses.  Then we'll flip 10 more coins, and 10 more, and 10 more, and \dots.  That would get pretty tedious. Fortunately, computers are good at tedious things, so we'll let the computer do the flipping for us using a tool in the \pkg{mosaic} package. This package is already installed in our \RStudio\ server.  If you are running your own installation of \R\ you can install \pkg{mosaic} using the following command:
-<<install-mosaic,eval=FALSE>>=
+<<install-mosaic, eval=FALSE>>=
 install.packages("mosaic")
 @
 
 The \function{rflip()} function can flip one coin
-<<flip1coin,cache=TRUE>>=
+<<flip1coin, cache=TRUE>>=
 require(mosaic)
 rflip()
 @
 
 or a number of coins
-<<flip10coins,cache=TRUE>>=
+<<flip10coins, cache=TRUE>>=
 rflip(10)
 @
 and show us the results.
 
 Typing \code{rflip(10)} a bunch of times is almost as tedious as flipping all those coins.   But it is not too hard to tell \R\ to \function{do()} this a bunch of times.
-<<flip2,cache=TRUE>>=
+<<flip2, cache=TRUE>>=
 do(2) * rflip(10)
 @
 %And if we switch to a ``quiet'' version of \verb!rflip()!,
 %we will get much terser output -- 
 %just the counts of the number of heads (i.e., correct guesses).
-%<<flip3,cache=TRUE>>=
+%<<flip3, cache=TRUE>>=
 %do(100) * rflip(10)           # "quiet version" of rflip()
 %@
 
 Let's get \R\ to \function{do()} it for us 10,000 times and make a table of the results.
-<<seed123,echo=FALSE>>=
+<<seed123, echo=FALSE>>=
 set.seed(123)
 @
-<<flip4,cache=TRUE>>=
-results <- do(10000) * rflip(10)
-table(results$heads)
-@
-<<flip5,cache=TRUE>>=
-perctable(results$heads)     #  the table in percents
-proptable(results$heads)     #  the table in proportions (i.e., decimals)
-@
-
-We could also use \function{tally()} for this.
-<<tally>>=
-tally(~heads, data=results)
-tally(~heads, data=results, format='percent')
-tally(~heads, data=results, format='proportion')
+<<flip4, cache=TRUE>>=
+Flips <- do(10000) * rflip(10)
+tally(~heads, data = Flips)
+tally(~heads, data = Flips, format = 'percent')
+tally(~heads, data = Flips, format = 'proportion')
 @
 
 You might be surprised to see that the number of correct guesses is exactly 5 (half of the 10 tries) only 
-\Sexpr{round(as.numeric(table(results$heads)[6]/100,1))}\%
+\Sexpr{round(as.numeric(table(Flips$heads)[6]/100, 1))}\%
 of the time.  But most of the results are quite close to 5 correct.
-\Sexpr{round(sum(table(results$heads)[5:7]/100,1))}\% of the results are 
+\Sexpr{round(sum(table(Flips$heads)[5:7]/100, 1))}\% of the results are 
 4, 5, or 6, for example.
-And \Sexpr{round(sum(table(results)[4:8]/100,1))}\% of the results are  between 3 and 7 (inclusive). But getting 8 correct is a bit unusual, and getting 9 or 10 correct is even 
+And \Sexpr{round(sum(table(Flips)[4:8]/100, 1))}\% of the results are  between 3 and 7 (inclusive). But getting 8 correct is a bit unusual, and getting 9 or 10 correct is even 
 more unusual.  
 
 So what do we conclude?  It is possible that the lady could get 9 or 10 correct just by guessing, but it is not very likely (it only happened in about
-\Sexpr{round( sum(table(results$heads)[10:11]/100), 1 )}\% of our simulations). 
+\Sexpr{round( sum(table(Flips$heads)[10:11]/100), 1 )}\% of our simulations). 
 So \emph{one of two things must be true}:
 \begin{itemize}
 \item The lady got unusually ``lucky", or 

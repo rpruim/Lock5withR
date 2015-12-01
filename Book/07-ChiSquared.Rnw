@@ -4,7 +4,7 @@
 \Chapter{Chi-Squared Tests for Categorical Variables}
 
 %do(10) *  chisq.test(tally( ~ resample(toupper(letters[1:5]), 400) ) )$statistic
-%rmultinom(10,400, prob=c(.2,.2,.2,.2,.2))
+%rmultinom(10, 400, prob = c(.2, .2, .2, .2, .2))
 
 Goodness of fit tests test how well a distribution fits some hypothesis.
 
@@ -13,7 +13,7 @@ Goodness of fit tests test how well a distribution fits some hypothesis.
 \subsubsection*{Example 7.1}
 
 <<Example7.1>>=
-tally(~Answer, format="proportion", data=APMultipleChoice)
+tally(~Answer, format = "proportion", data = APMultipleChoice)
 @
 
 %\subsection*{Null and Alternative Hypotheses}
@@ -41,11 +41,11 @@ followed our null hypothesis exactly.  (Note: the expected counts might not be w
 
 \subsubsection*{Example 7.5}
 
-You could calculate the chi-square statistic manually but of course, \R\ can automate this whole process for us if we provide the data table and the null hypothesis. Notice that to use \function{chisq.test}, you must enter the data like \verb!answer <- c( 85, 90, 79, 78, 68)!. The default null hypothesis is that all the probabilities are equal.
+You could calculate the chi-square statistic manually but of course, \R\ can automate this whole process for us if we provide the data table and the null hypothesis. Notice that to use \function{chisq.test}, you must enter the data like \verb!answer <- c(85, 90, 79, 78, 68)!. The default null hypothesis is that all the probabilities are equal.
 
 <<Example7.5>>=
 head(APMultipleChoice)
-answer <- c( 85, 90, 79, 78, 68)
+answer <- c(85, 90, 79, 78, 68)
 chisq.test(answer)
 @
 
@@ -53,18 +53,29 @@ chisq.test(answer)
 
 \subsection*{Chi-square Distribution}
 
+The \function{chisq()} function can be used to calculate a chi-squared statistic from one 
+of three kinds of input: from the result of \function{chisq.test()}, from a table of counts, as 
+produced by \function{tally()}, or from a formula and data frame that could have been the input
+to \function{tally()}.
+
+<<>>=
+chisq(sex ~ substance, data = HELPrct)
+chisq(tally(sex ~ substance, data = HELPrct))
+chisq(chisq.test(tally(sex ~ substance, data = HELPrct)))
+@
+
 \subsubsection*{Figure 7.2}
 
 <<Figure7.02>>=
-chisq.sample <- do(1000) *  chisq.test(tally( ~ resample(toupper(letters[1:5]), 400) ) )$statistic
+chisq.sample <- do(1000) *  chisq( ~ resample(toupper(letters[1:5]), 400))
 histogram(~X.squared, data = chisq.sample)
 @
 
 \subsubsection*{Figure 7.3}
 
-<<Figure7.03, fig.keep='last'>>=
-plotDist("chisq", params=list(df=4), type=c("h","l"), groups=  x > 3.425, lty=1)
-ladd(grid.text("3.425",3.425,.175, default.units="native", hjust=0))
+<<Figure7.03, fig.keep = 'last'>>=
+plotDist("chisq", params = list(df = 4), type = c("h", "l"), groups=  x > 3.425, lty = 1)
+ladd(grid.text("3.425", 3.425, .175, default.units = "native", hjust = 0))
 @
 
 Our test statistic will be large when the observed counts and expected counts are quite different.  It will be small when the observed counts and expected counts are quite close.  So we will reject when the test statistic is large. To know how large is large enough, we need to know the sampling distribution.
@@ -95,9 +106,9 @@ The mean of a Chi-squared distribution is equal to its degrees of freedom. This 
 	\item 
     Chi-squared test:
 <<Example7.6>>=
-jury <- c( 780, 117, 114, 384, 58)
-chisq.test( jury, p=c(.54, .18, .12, .15, .01) )
-xchisq.test( jury, p=c(.54, .18, .12, .15, .01) ) # to list expected counts
+jury <- c(780, 117, 114, 384, 58)
+chisq.test(jury, p = c(.54, .18, .12, .15, .01))
+xchisq.test(jury, p = c(.54, .18, .12, .15, .01)) # to list expected counts
 @
 Notice in this example, we need to tell \R\ what the null hypothesis is.
 
@@ -115,7 +126,7 @@ When there are only two categories, the Chi-squared goodeness of fit test is equ
 
 <<Example7.8>>=
 prop.test(84, 200)
-chisq.test(c(84, 116), p=c(.5, .5))
+chisq.test(c(84, 116), p = c(.5, .5))
 binom.test(84, 200)
 @
 
@@ -135,15 +146,15 @@ are only approximate, and the approximation is poor when sample sizes are small.
 \subsubsection*{Example 7.9}
 
 <<Example7.9>>=
-OneTrueLove <- read.file( "OneTrueLove.csv" )
-tally(~Response, format="proportion", data=OneTrueLove)
-tally(~ Response + Gender, format="proportion", margin=TRUE, data=OneTrueLove)
+OneTrueLove <- read.file("OneTrueLove.csv")
+tally(~Response, format = "proportion", data = OneTrueLove)
+tally(~ Response + Gender, format = "proportion", margin = TRUE, data = OneTrueLove)
 @
 
 \subsubsection*{Figure 7.4}
 
 <<Figure7.04>>=
-bargraph(~Response|Gender, type="count", data = OneTrueLove)
+bargraph(~Response|Gender, type = "count", data = OneTrueLove)
 @
 
 %\subsection*{Null and Alternative Hypothesis}
@@ -155,16 +166,16 @@ bargraph(~Response|Gender, type="count", data = OneTrueLove)
 
 <<Example7.10>>=
 head(WaterTaste, 3)
-water <- tally(~UsuallyDrink + First, data=WaterTaste); water
+water <- tally(~UsuallyDrink + First, data = WaterTaste); water
 @
 <<Example7.10b>>=
-water <- rbind( c(14,15,8,4), c(11,26,16,6) ) # to combine Tap and Filtered
+water <- rbind(c(14, 15, 8, 4), c(11, 26, 16, 6)) # to combine Tap and Filtered
 water
 colnames(water) <- c('Aquafina', 'Fiji', 'SamsChoice', 'Tap') # add column names
 rownames(water) <- c('Bottled', 'Tap/Filtered') # add row names
 water
 @
-<<Example7.10c, warning=FALSE>>=
+<<Example7.10c, warning = FALSE>>=
 xchisq.test(water)
 @
 
@@ -178,7 +189,7 @@ Note: For a $2\times2$ table, we could also use the method of 2-proportions (\fu
 
 \subsubsection*{Example 7.11}
 <<Example7.11>>=
-SplitStealTable <- rbind( c(187,195), c(116,76) ); SplitStealTable
+SplitStealTable <- rbind(c(187, 195), c(116, 76)); SplitStealTable
 colnames(SplitStealTable) <- c('Split', 'Steal')
 rownames(SplitStealTable) <- c('Younger', 'Older'); SplitStealTable
 @
@@ -187,12 +198,12 @@ fisher.test(SplitStealTable)
 xchisq.test(SplitStealTable)
 @
 To use the test for proportions as done in Example 6.23,
-<<Example7.11c, tidy=FALSE>>=
+<<Example7.11c, tidy = FALSE>>=
 SplitStealData <- rbind( 
-  do(187) * data.frame( agegroup = "Under40",   decision="Split"),
-  do(195) * data.frame( agegroup = "Under40",   decision="Steal"),
-  do(116) * data.frame( agegroup = "Over40",    decision="Split"),
-  do(76)  * data.frame( agegroup = "Over40",    decision="Steal")
+  do(187) * data.frame(agegroup = "Under40", decision = "Split"),
+  do(195) * data.frame(agegroup = "Under40", decision = "Steal"),
+  do(116) * data.frame(agegroup = "Over40",  decision = "Split"),
+  do(76)  * data.frame(agegroup = "Over40",  decision = "Steal")
   )
 @
 <<Example7.11d>>=
@@ -265,10 +276,10 @@ not be whole numbers.)
 In our particular example, we would expect $25\%$ of the 486 (i.e., 121.5) 
 golf balls in each category, so
 \Rindex{sum()}%
-<<golfballs-teststat-7,echo=F>>=
+<<golfballs-teststat-7, echo = F>>=
 observed <- golfballs
 expected <- 121.5
-teststat <- sum( ( observed - expected )^2 / expected )
+teststat <- sum((observed - expected )^2 / expected)
 @
 
 \[
@@ -281,7 +292,7 @@ teststat <- sum( ( observed - expected )^2 / expected )
 +
 \frac{(104 - 121.5)^2}{ 121.5}
 =
-\Sexpr{round( teststat, 3 ) }
+\Sexpr{round(teststat, 3) }
 \]
 
 {\sf Step 3: Compute a p-value}
@@ -310,13 +321,13 @@ This can help us get a rough idea about whether our test statistic
 is unusually large or not.
 
 How unusual is it to get a test statistic at least as large as 
-ours (\Sexpr{round(teststat,2)})?  
+ours (\Sexpr{round(teststat, 2)})?  
 We compare to a Chi-squared distribution with 3 degrees of freedom.  
 The mean value of such a statistic is 3, and our test statistic is 
 almost 3 times as big, so we anticipate that our value is 
 rather unusual, but not extremely unusual.  This is the case:
 <<golfballs-pvalue-7>>=
-1 - pchisq( 8.469, df=3 ) 
+1 - pchisq(8.469, df = 3) 
 @
 
 {\sf Step 4: Interpret the p-value and Draw a Conclusion.}
@@ -333,7 +344,7 @@ to give \R\ the golf balls data.
 
 \Rindex{chisq.test()}%
 <<golfballs-chisq.test-7>>=
-chisq.test( golfballs )
+chisq.test(golfballs)
 @
 %\end{example}
 
@@ -359,18 +370,18 @@ Should she worry that
 the simple genetic model doesn't work for her phenotypes?
 
 <<plants-2-7>>=
-plants <- c( 20, 10, 7, 4 ) 
-chisq.test( plants, p=c(9/16, 3/16, 3/16, 1/16) )
+plants <- c(20, 10, 7, 4) 
+chisq.test(plants, p = c(9/16, 3/16, 3/16, 1/16))
 @
 
 Things to notice:
 \begin{itemize}
 \item
-\verb!plants <- c( 20, 10, 7, 4 )! is the way to enter this kind of data
+\verb!plants <- c(20, 10, 7, 4)! is the way to enter this kind of data
 by hand. 
 \item
 This time we need to tell \R\ what the null hypothesis is.  That's what
-\verb! p=c(9/16, 3/16, 3/16, 1/16)! is for.
+\verb! p = c(9/16, 3/16, 3/16, 1/16)! is for.
 \item
 The Chi-squared distribution is only an approximation to the sampling 
 distribution of our test statistic, and the approximation is not very
@@ -399,7 +410,7 @@ Notice that this depends on \emph{expected} counts, not observed counts.
 \end{boxedText}
 
 Our expected count for phenotype 4 is only 
-$\frac{1}{16} \cdot 41 = \Sexpr{ round(1/16 * 41,3) }$, which means that 
+$\frac{1}{16} \cdot 41 = \Sexpr{ round(1/16 * 41, 3) }$, which means that 
 25\% of our expected counts are between 1 and 5, so our approximation will
 be a little crude.  (The other expected counts are well in the safe range.)
 If you are too lazy to calculate all those expected counts yourself, you can
@@ -409,14 +420,14 @@ If we are getting sick of typing
 those null probabilities over and over, we could save them, too:
 <<xchisq.test-7>>=
 nullHypothesis <- c(9/16, 3/16, 3/16, 1/16)
-xchisq.test(plants, p=nullHypothesis) 
+xchisq.test(plants, p = nullHypothesis) 
 @
 
 When the expected cell counts are not large enough, 
 we can ask \R\ to use the empirical 
 method (just like we did with \verb!statTally!) instead.
 <<plants-simulate-7>>=
-chisq.test( plants, p= nullHypothesis, simulate = TRUE )
+chisq.test(plants, p= nullHypothesis, simulate = TRUE)
 @
 
 This doesn't change our overall conclusion in this case.  These data are 
@@ -434,8 +445,8 @@ with the \option{B} argument to \function{chisq.test()}.
 Interestingly, if we had 10 times as much data in the same proportions, the 
 conclusion would be very different.
 <<plants-more-7>>=
-morePlants <- c( 200, 100, 70, 40 ) 
-chisq.test( morePlants, p=nullHypothesis )
+morePlants <- c(200, 100, 70, 40) 
+chisq.test(morePlants, p = nullHypothesis)
 @
 % We've seen this same effect with the binomial test in an exercise.
 %\end{example}
@@ -451,10 +462,10 @@ that \function{chisq.test()} uses cell counts.
 \Rindex{binom.test()}%
 \Rindex{chisq.test()}%
 <<toads-binom-7>>=
-prop.test(66,119, p=1/3)     
+prop.test(66, 119, p = 1/3)     
 @
 <<toads-chisq-7>>=
-chisq.test(c(66,53), p=c(1/3, 2/3))    # 66 + 53 = 119
+chisq.test(c(66, 53), p = c(1/3, 2/3))    # 66 + 53 = 119
 @
 Both of these test the same hypotheses:
 \begin{itemize}
@@ -467,7 +478,7 @@ where $p_R$ is the proportion of people playing rock first.
 
 We could also use \function{binom.test()}:
 <<>>=
-binom.test(66, 119, p=1/3)
+binom.test(66, 119, p = 1/3)
 @
 Although all three tests test the same hypotheses and give similar p-values (in this
 example), the binomial test is generally used because
@@ -484,8 +495,8 @@ are only approximate, and the approximation is poor when sample sizes are small.
 But there is a better way to deal with the Rock-Paper-Scissors data.  We should take advantage of the full
 data.
 <<>>=
-chisq.test( c(66, 39, 14), p=c(1/3,1/3,1/3) )
-xchisq.test( c(66, 39, 14), p=c(1/3,1/3,1/3) )
+chisq.test(c(66, 39, 14), p = c(1/3, 1/3, 1/3))
+xchisq.test(c(66, 39, 14), p = c(1/3, 1/3, 1/3))
 @
 
 \section{Chi-squared for Two-Way Tables}
@@ -510,7 +521,7 @@ The proportion of fish that are eaten is the same for each treatment group
 		= \frac{ \mbox{ (row total) (column total) } }{ \mbox{grand total} }$
 \end{itemize}
 <<trematodes-2-7>>=
-observed <- c( 9, 35, 49, 37, 10, 1)
+observed <- c(9, 35, 49, 37, 10, 1)
 9 + 35 + 49    # row 1 total
 37 + 10 + 1    # row 2 total
 9 + 37         # col 1 total
@@ -519,8 +530,8 @@ observed <- c( 9, 35, 49, 37, 10, 1)
 9 + 35 + 49 + 37 + 10 + 1    # grand total 
 @
 <<trematodes-3-7>>=
-expected <- c( 93*46/141, 93*45/141, 93*50/141, 48*46/141, 48*45/141, 48*50/141 ); expected
-X.squared <- sum ( (observed - expected)^2 / expected ) ; X.squared
+expected <- c(93*46/141, 93*45/141, 93*50/141, 48*46/141, 48*45/141, 48*50/141); expected
+X.squared <- sum ((observed - expected)^2 / expected) ; X.squared
 @
 \begin{itemize}
 \item $\displaystyle \mbox{expected proportion} 
@@ -546,16 +557,16 @@ X.squared <- sum ( (observed - expected)^2 / expected ) ; X.squared
 	\item
 		Again, \function{xchisq.test()} will show us some of the internal details.
 <<>>=
-xchisq.test( fish )
+xchisq.test(fish)
 @
 \end{itemize}
 
 \subsection{Example: Physicians Health Study}
 
 <<phs-7>>=
-phs <- cbind(c(104,189),c(10933,10845)); phs
-rownames(phs) <- c("aspirin","placebo")                  # add row names
-colnames(phs) <- c("heart attack","no heart attack")     # add column names
+phs <- cbind(c(104, 189), c(10933, 10845)); phs
+rownames(phs) <- c("aspirin", "placebo")                  # add row names
+colnames(phs) <- c("heart attack", "no heart attack")     # add column names
 phs 
 xchisq.test(phs)
 @
@@ -607,7 +618,7 @@ monozygotic and dizygotic twins.  That is,
 \end{itemize}
 
 <<fisher-twins-7>>=
-twins <- rbind( c(2,15), c(10,3) ); twins
+twins <- rbind(c(2, 15), c(10, 3)); twins
 rownames(twins) <- c('dizygotic', 'monozygotic')
 colnames(twins) <- c('convicted', 'not convicted')
 twins
@@ -633,7 +644,7 @@ For a $2 \times 2$ table, this means all four expected counts should be at least
 In our example, we are just on the good side of our rule of thumb.  
 We could compare with the randomization p-value:
 <<>>=
-chisq.test(twins, simulate=TRUE)
+chisq.test(twins, simulate = TRUE)
 @
 
 There is also an exact test that works only
@@ -662,7 +673,7 @@ will be poor in the same situations where the Chi-squared test gives a poor appr
 What do we do if we have low expected counts?
 \begin{enumerate}
 \item
-	We can use \option{simulate=TRUE} to tell \R\ to use simulations instead of comparing 
+	We can use \option{simulate = TRUE} to tell \R\ to use simulations instead of comparing 
 	the test statistic to the Chi-Squared (or normal) distribution.
 \item
 If we have a $2\times2$ table, we can use Fisher's Exact Test.
@@ -706,9 +717,9 @@ column totals & 22 & 328 & 350
 \end{center}
 
 <<cows-7>>=
-cows <- cbind(c(15,6),c(7,322)); cows
-rownames(cows) <- c("bitten","not bitten")               # add row names
-colnames(cows) <- c("in estrous","not in estrous")       # add column names
+cows <- cbind(c(15, 6), c(7, 322)); cows
+rownames(cows) <- c("bitten", "not bitten")               # add row names
+colnames(cows) <- c("in estrous", "not in estrous")       # add column names
 cows
 xchisq.test(cows)
 @
@@ -721,7 +732,7 @@ fisher.test(cows)
 
 Alternatively, we could use the Chi-Squared test statistic and a randomization approach:
 <<>>=
-chisq.test(cows, simulate=TRUE)
+chisq.test(cows, simulate = TRUE)
 @
 
 In this example the conclusion is the same: extremely strong evidence against the null hypothesis.
@@ -807,17 +818,17 @@ survey2 <- subset(survey, grepl("2013", date))   # only keep rows with 2013 in t
 @
 
 <<>>=
-tally( play ~ playVer, data=survey2, format="count" )
-tally( play ~ playVer, data=survey2 )
+tally(play ~ playVer, data = survey2, format = "count")
+tally(play ~ playVer, data = survey2)
 @
 
 <<>>=
-playTable <- tally(play ~ playVer, data=survey2, format="count", margin=FALSE)
+playTable <- tally(play ~ playVer, data = survey2, format = "count", margin = FALSE)
 playTable
 chisq.test(playTable)
-chisq.test(playTable,simulate=TRUE)
+chisq.test(playTable, simulate = TRUE)
 fisher.test(playTable)
-prop.test(play ~ playVer, data=survey2)
+prop.test(play ~ playVer, data = survey2)
 @
 
 \fi

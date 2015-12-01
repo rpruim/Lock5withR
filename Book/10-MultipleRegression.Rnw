@@ -20,19 +20,19 @@ Ink.Price(PPM = 3.0, CostBW = 3.7)
 \subsubsection*{Example 10.2}
 
 <<Example10.2>>=
-summary(lm(Price ~ PPM + CostBW, data = InkjetPrinters))
+msummary(lm(Price ~ PPM + CostBW, data = InkjetPrinters))
 @
 
 \subsubsection*{Example 10.3}
 
 <<Example10.3>>=
-summary(lm(Bodyfat ~ Weight + Height, data = BodyFat))
+msummary(lm(Bodyfat ~ Weight + Height, data = BodyFat))
 @
 
 \subsubsection*{Example 10.4}
 
 <<Example10.4>>=
-summary(lm(Bodyfat ~ Weight + Height + Abdomen, data = BodyFat))
+msummary(lm(Bodyfat ~ Weight + Height + Abdomen, data = BodyFat))
 @
 
 %Example 10.5
@@ -54,7 +54,7 @@ anova(Mod0, Mod2)
 <<Example10.7>>=
 Mod0 <- lm(Price ~ 1, data = InkjetPrinters)
 Mod1 <- lm(Price ~ PhotoTime + CostColor, data = InkjetPrinters)
-summary(Mod1)
+msummary(Mod1)
 anova(Mod0, Mod1)
 @
 
@@ -83,11 +83,11 @@ rsquared(lm(Price ~ PhotoTime + CostColor, data = InkjetPrinters))
 
 <<Example10.12>>=
 ink.model <- lm(Price ~ PPM, data = InkjetPrinters)
-dotPlot(~resid(ink.model), cex = .05, nint = 40)
+dotPlot( ~ resid(ink.model), cex = .05, nint = 40)
 @
 
 <<Example10.12b>>=
-xyplot(resid(ink.model) ~ fitted(ink.model), type=c("p", "r"), cex=0.5)
+xyplot(resid(ink.model) ~ fitted(ink.model), type = c("p", "r"), cex = 0.5)
 @
 
 \subsection*{Checking Conditions for a Multiple Regression Model}
@@ -96,9 +96,9 @@ xyplot(resid(ink.model) ~ fitted(ink.model), type=c("p", "r"), cex=0.5)
 
 <<Example10.13>>=
 body.model <- lm(Bodyfat ~ Weight + Abdomen, data = BodyFat)
-summary(body.model)
-histogram(~ resid(body.model), breaks = 10)
-xyplot(resid(body.model) ~ fitted(body.model), type=c("p", "r"), cex=0.5)
+msummary(body.model)
+histogram( ~ resid(body.model), breaks = 10)
+xyplot(resid(body.model) ~ fitted(body.model), type = c("p", "r"), cex = 0.5)
 @
 
 
@@ -109,14 +109,14 @@ xyplot(resid(body.model) ~ fitted(body.model), type=c("p", "r"), cex=0.5)
 \subsubsection*{Example 10.14}
 
 <<Example10.14>>=
-summary(lm(Bodyfat ~ Weight + Height + Abdomen + Age + Wrist, data = BodyFat))
-summary(lm(Bodyfat ~ Weight + Abdomen + Age + Wrist, data = BodyFat))
+msummary(lm(Bodyfat ~ Weight + Height + Abdomen + Age + Wrist, data = BodyFat))
+msummary(lm(Bodyfat ~ Weight + Abdomen + Age + Wrist, data = BodyFat))
 @
 
 \subsubsection*{Example 10.15}
 
 <<Example10.15>>=
-summary(lm(Bodyfat ~ Weight + Abdomen + Wrist, data = BodyFat))
+msummary(lm(Bodyfat ~ Weight + Abdomen + Wrist, data = BodyFat))
 @
 
 \subsection*{Categorical Variables}
@@ -130,13 +130,13 @@ bwplot(Salary ~ Gender, horizontal = FALSE, data = SalaryGender)
 \subsubsection*{Example 10.16}
 
 <<Example10.16>>=
-summary(lm(Salary ~ Gender, data = SalaryGender))
+msummary(lm(Salary ~ Gender, data = SalaryGender))
 @
 
 \subsubsection*{Example 10.17}
 
 <<Example10.17>>=
-summary(lm(Salary ~ PhD, data = SalaryGender))
+msummary(lm(Salary ~ PhD, data = SalaryGender))
 confint(lm(Salary ~ PhD, data = SalaryGender))
 @
 
@@ -145,7 +145,7 @@ confint(lm(Salary ~ PhD, data = SalaryGender))
 \subsubsection*{Example 10.18}
 
 <<Example10.18>>=
-summary(lm(Salary ~ Gender + PhD + Age, data = SalaryGender))
+msummary(lm(Salary ~ Gender + PhD + Age, data = SalaryGender))
 @
 
 \subsection*{Association between Explanatory Variables}
@@ -153,7 +153,7 @@ summary(lm(Salary ~ Gender + PhD + Age, data = SalaryGender))
 \subsubsection*{Example 10.19}
 
 <<Example10.19>>=
-summary(lm(Final ~ Exam1 + Exam2, data = StatGrades))
+msummary(lm(Final ~ Exam1 + Exam2, data = StatGrades))
 @
 
 \subsubsection*{Figure 10.10}

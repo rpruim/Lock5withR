@@ -141,23 +141,6 @@
 {\textbf{Example. }}%
 {}
 
-
-%%%%%%%%%%%%%%%%%%%%%% title page info %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\title{Lock5 with R \\
-\ \\
-a companion to \\
-\  \\
-Statistics: Unlocking the Power of Data}
-
-\author{Randall Pruim and Lana Park}
-
-\date{\today}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\makeindex
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 <<setup,echo=FALSE,message=FALSE>>=
 require(grDevices)
 require(datasets)
@@ -172,6 +155,7 @@ trellis.par.set(theme=col.mosaic())
 trellis.par.set(fontsize=list(text=9))
 options(keep.blank.line=FALSE)
 options(width=90)
+options(digits=3)
 require(knitr)
 opts_chunk$set(
 tidy=TRUE,
@@ -238,6 +222,23 @@ knit_hooks$set(document = function(x) {
 			   x, fixed = TRUE) 
 }) 
 @ 
+
+%%%%%%%%%%%%%%%%%%%%%% title page info %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Lock5 with R \\
+\ \\
+a companion to \\
+\  \\
+Statistics: Unlocking the Power of Data}
+
+\author{Randall Pruim and Lana Park}
+
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeindex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \def\intersect{\tand}
 
 \parindent=0pt

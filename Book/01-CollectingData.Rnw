@@ -40,15 +40,16 @@ head(StudentSurvey) # first six cases of the data set
 
 We can easily classify variables as either \term{categorical} or \term{quantitative} by studying the result of \function{head()}, but there are some summaries of the data set which reveal such information.
 <<Data1.1>>=
-str(StudentSurvey) # structure of the data set
+str(StudentSurvey)     # structure of the data set
 summary(StudentSurvey) # summary of each variable
+inspect(StudentSurvey) # summary of each variable
 @
 
 Here are some more summaries:
 <<Data1.1b>>=
 nrow(StudentSurvey) # number of rows
 ncol(StudentSurvey) # number of columns
-dim(StudentSurvey) # number of rows and columns
+dim(StudentSurvey)  # number of rows and columns
 @
 
 Many of the datasets in \R\ have useful help files that describe the data and explain how they were collected or give references to the original studies. You can access this information for the \dataframe{AllCountries} data set by typing
@@ -82,7 +83,7 @@ Quantitative variables can be \term{continuous} or \term{discrete}. Continuous v
 
 <<Data1.2>>=
 head(AllCountries)
-summary(AllCountries)
+inspect(AllCountries)
 AllCountries[86, ]
 @
 
@@ -188,8 +189,8 @@ sample(AllCountries, 5)
 \subsubsection*{Table 1.2}
 <<Table1.2>>=
 head(LifeExpectancyVehicles, 10)
-sub <- filter(LifeExpectancyVehicles, Year %% 4==2)
-sub
+Sub <- filter(LifeExpectancyVehicles, Year %% 4==2)
+Sub
 @
 %fix for every 4 years?
 
@@ -199,6 +200,6 @@ xyplot(LifeExpectancy ~ Vehicles, xlab = "Vehicles (millions)", ylab = "Life Exp
        data = LifeExpectancyVehicles)
 @
 
-\subsection*{Observational Studies vs Experiments}
+\subsection*{Observational Studies vs. Experiments}
 
 Statisticians use the word experiment to mean something very specific. \emph{In an \term{experiment}, the researcher determines the values of one or more (explanatory) variables}, typically by random assignment. If there is no such assignment by the researcher, the study is an \term{observational study}.

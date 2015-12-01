@@ -16,7 +16,7 @@ the population (what we would like to know about) or the sample (what we actuall
 \subsubsection*{Example 3.4}
 <<Example3.4>>=
 head(StatisticsPhD)
-mean(~FTGradEnrollment, data=StatisticsPhD) # mean enrollment in original population
+mean(~FTGradEnrollment, data = StatisticsPhD) # mean enrollment in original population
 @
 
 \subsubsection*{Example 3.5}
@@ -24,18 +24,18 @@ mean(~FTGradEnrollment, data=StatisticsPhD) # mean enrollment in original popula
 To select a random sample of a certain size in \R, we can use the \function{sample()} function.
 <<Example3.5, cache=TRUE>>=
 sample10 <- sample(StatisticsPhD, 10); sample10
-x.bar <- mean(~FTGradEnrollment, data=sample10); x.bar  # mean enrollment in sample10
+x.bar <- mean(~FTGradEnrollment, data = sample10); x.bar  # mean enrollment in sample10
 @
 Note that this sample has been assigned a name to which we can refer back to find the mean of that particular sample.
 
 <<Example3.5b, cache=TRUE>>=
-mean(~FTGradEnrollment, data=sample(StatisticsPhD, 10))  # mean enrollment in another sample 
+mean(~FTGradEnrollment, data = sample(StatisticsPhD, 10))  # mean enrollment in another sample 
 @
 
-<<Table3.2,include=FALSE>>=
+<<Table3.2, include=FALSE>>=
 <<Example3.5>>
 @
-<<Table3.3,include=FALSE>>=
+<<Table3.3, include=FALSE>>=
 <<Example3.5>>
 @
 
@@ -44,9 +44,9 @@ mean(~FTGradEnrollment, data=sample(StatisticsPhD, 10))  # mean enrollment in an
 We should check that that our sample distribution has an appropriate shape:
 <<Figure3.1, opts.label="fig4", cache=TRUE>>=
 # Now we'll do it 1000 times
-sampledist <- do(1000) * mean(~FTGradEnrollment, data=sample(StatisticsPhD, 10))
-head(sampledist, 3)
-dotPlot(~result, width=.005, data=sampledist)
+Sampledist <- do(1000) * mean( ~ FTGradEnrollment, data = sample(StatisticsPhD, 10))
+head(Sampledist, 3)
+dotPlot( ~ mean, width = .005, data = Sampledist)
 @
 
 In many (but not all) situations, the sampling distribution is 
@@ -59,13 +59,13 @@ In many (but not all) situations, the sampling distribution is
 \subsubsection*{Example 3.6}
 
 This time we don't have data, but instead we have a summary of the data. We can however, still simulate the sample distribution by using the \function{rflip()} function.
-<<Example3.6, opts.label="fig4", cache=TRUE>>=
-sampledist.deg <- do(1000) * rflip(200, 0.275) # 1000 samples, each of size 200 and proportion 0.275
-head(sampledist.deg, 3)
-dotPlot(~ prop, width=.005, data=sampledist.deg)
+<<Example3.6, opts.label = "fig4", cache = TRUE>>=
+Sampledist.deg <- do(1000) * rflip(200, 0.275) # 1000 samples, each of size 200 and proportion 0.275
+head(Sampledist.deg, 3)
+dotPlot(~ prop, width = .005, data = Sampledist.deg)
 @
 
-<<Figure3.2,include=FALSE>>=
+<<Figure3.2, include=FALSE>>=
 <<Example3.6>>
 @
 
@@ -82,8 +82,8 @@ The standard error is our primary way of measuring how much variability there is
 
 Calculating the SE is the same as calculating the standard deviation of a sampling distribution, so we use \function{sd()}.
 <<Example3.7>>=
-SE <- sd(~result, data=sampledist); SE    # sample from Example 3.5
-SE2 <- sd(~prop, data=sampledist.deg); SE2     # sample from Example 3.6
+SE <- sd( ~ mean, data = Sampledist); SE    # sample from Example 3.5
+SE2 <- sd(~prop, data = Sampledist.deg); SE2     # sample from Example 3.6
 @
 
 %Example 3.8
@@ -93,17 +93,17 @@ SE2 <- sd(~prop, data=sampledist.deg); SE2     # sample from Example 3.6
 \subsubsection*{Example 3.9}
 
 <<Example3.9>>=
-sampledist.1000 <- do(1000) * rflip(1000, 0.275) # 1000 samples, each of size 1000 and proportion 0.275
-sampledist.200 <- do(1000) * rflip(200, 0.275)   # 1000 samples, each of size 200 and proportion 0.275
-sampledist.50 <- do(1000) * rflip(50, 0.275)     # 1000 samples, each of size 50 and proportion 0.275
+Sampledist.1000 <- do(1000) * rflip(1000, 0.275) # 1000 samples, each of size 1000 and proportion 0.275
+Sampledist.200 <- do(1000) * rflip(200, 0.275)   # 1000 samples, each of size 200 and proportion 0.275
+Sampledist.50 <- do(1000) * rflip(50, 0.275)     # 1000 samples, each of size 50 and proportion 0.275
 @
 
 \subsubsection*{Figure 3.3}
 
 <<Figure3.3, opts.label="fig3">>=
-dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=sampledist.1000)
-dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=sampledist.200)
-dotPlot(~ prop, width=.005, xlim=c(0.05, 0.5), data=sampledist.50)
+dotPlot(~ prop, width = .005, xlim = c(0.05, 0.5), data = Sampledist.1000)
+dotPlot(~ prop, width = .005, xlim = c(0.05, 0.5), data = Sampledist.200)
+dotPlot(~ prop, width = .005, xlim = c(0.05, 0.5), data = Sampledist.50)
 @
 
 %Example 3.10
@@ -202,7 +202,7 @@ SE <- 0.03
 MoE <- 2 * SE
 p - MoE
 p + MoE
-dotPlot(~ prop, width=.005, groups = (0.215 <= prop & prop <= 0.335), data=sampledist.deg)
+dotPlot(~ prop, width = .005, groups = (0.215 <= prop & prop <= 0.335), data = Sampledist.deg)
 @
 Notice how we defined groups in this dotplot. We are grouping proportions that less than 0.215 and more than 0.335.
 
@@ -211,23 +211,23 @@ Notice how we defined groups in this dotplot. We are grouping proportions that l
 We can create the data needed for plots like Figure 3.13 using \function{CIsim()}.  
 % The plot itself uses \function{xYplot()} from the \pkg{Hmisc} package.
 <<Figure3.13, message=FALSE, seed=1234, opts.label="fig1">>=
-CIsim(200, samples=3, rdist=rbinom, args=list(size=1, prob=0.275), 
-      method=binom.test, method.args=list(success=1), 
-	  verbose=FALSE, estimand=0.275)
+CIsim(200, samples = 3, rdist = rbinom, args = list(size = 1, prob = 0.275), 
+      method = binom.test, method.args = list(success = 1), 
+	  verbose = FALSE, estimand = 0.275)
 @
 %require(Hmisc)
-%xYplot(Cbind(estimate,lower,upper) ~ sample,
+%xYplot(Cbind(estimate, lower, upper) ~ sample,
 %  data=results,
 %  par.settings=col.mosaic(), 
 %  groups=cover)
 
 <<Figure3.13b, message=FALSE, seed=1234, opts.label="fig1">>=
-CIsim(200, samples=100, rdist=rbinom, args=list(size=1, prob=0.275), 
-      method=binom.test, method.args=list(success=1), 
-	  verbose=FALSE, estimand=0.275)
+CIsim(200, samples = 100, rdist = rbinom, args = list(size = 1, prob = 0.275), 
+      method = binom.test, method.args = list(success = 1), 
+	  verbose = FALSE, estimand = 0.275)
 @
 %require(Hmisc)
-%xYplot(Cbind(estimate,lower,upper) ~ sample,
+%xYplot(Cbind(estimate, lower, upper) ~ sample,
 %  data=results,
 %  par.settings=col.mosaic(), 
 %  groups=cover)
@@ -263,7 +263,7 @@ Here's the clever idea:  We don't have the population, but we have a sample.  Pr
 \subsubsection*{Figure 3.14}
 
 <<Figure3.14, opts.label="fig1">>=
-dotPlot(~Time, width=1, data=CommuteAtlanta)
+dotPlot(~Time, width = 1, data = CommuteAtlanta)
 @
 
 \subsection*{Bootstrap Samples}
@@ -284,10 +284,10 @@ mean(~Time, data = resample(CommuteAtlanta))
 The example below uses data from 500 Atlanta commuters.
 <<Figure3.16, cache=TRUE, opts.label="fig1">>=
 # Now we'll do it 1000 times
-Bootstrap <- do(1000) * mean( ~Time, data=resample(CommuteAtlanta))
+Bootstrap <- do(1000) * mean( ~Time, data = resample(CommuteAtlanta))
 head(Bootstrap, 3)
 # We should check that that our bootstrap distribution has an appropriate shape:
-dotPlot(~result, width = 0.005, data=Bootstrap)
+dotPlot( ~ mean, width = 0.005, data = Bootstrap)
 @
 
 \subsubsection*{Example 3.19}
@@ -295,10 +295,10 @@ dotPlot(~result, width = 0.005, data=Bootstrap)
 <<Example3.19, cache=TRUE, opts.label="fig4">>=
 BootP <- do(1000) * rflip(100, .52)
 head(BootP, 3)
-dotPlot(~ prop, width=.01, data=BootP)
+dotPlot(~ prop, width = .01, data = BootP)
 @
 
-<<Figure3.18,include=FALSE>>=
+<<Figure3.18, include=FALSE>>=
 <<Example3.19>>
 @
 
@@ -308,13 +308,13 @@ Variables can be created in \R\ using the \function{c()} function then collected
 a data frame using the \function{data.frame()} function.
 <<Example3.20>>=
 Laughter <- data.frame( NumLaughs =  c(16, 22, 9, 31, 6, 42) )
-mean( ~ NumLaughs, data=Laughter )
+mean( ~ NumLaughs, data = Laughter )
 @
 
 <<Example3.20b>>=
-mean( ~NumLaughs, data=resample(Laughter))
-mean( ~NumLaughs, data=resample(Laughter))
-mean( ~NumLaughs, data=resample(Laughter))
+mean( ~NumLaughs, data = resample(Laughter))
+mean( ~NumLaughs, data = resample(Laughter))
+mean( ~NumLaughs, data = resample(Laughter))
 @
 
 \subsection*{Estimating Standard Error Based on a Bootstrap Distribution}
@@ -323,7 +323,7 @@ mean( ~NumLaughs, data=resample(Laughter))
 
 Since the shape of the bootstrap distribution from Example 3.19 looks good, we can estimate the standard error.
 <<Example3.21>>=
-SE <- sd(~prop, data=BootP); SE
+SE <- sd(~prop, data = BootP); SE
 @
 
 \subsection*{95 \% Confidence Interval Based on a Bootstrap Standard Error}
@@ -332,7 +332,7 @@ SE <- sd(~prop, data=BootP); SE
 We can again use the standard error to compute a 95\% confidence interval.
 <<Example3.22, tidy=FALSE>>=
 x.bar <- mean(~Time, data = CommuteAtlanta); x.bar
-SE <- sd(~result, data = Bootstrap ); SE        # standard error
+SE <- sd( ~ mean, data = Bootstrap ); SE        # standard error
 MoE <- 2 * SE; MoE                              # margin of error for 95% CI
 x.bar - MoE                                     # lower limit of 95% CI
 x.bar + MoE                                     # upper limit of 95% CI
@@ -340,7 +340,7 @@ x.bar + MoE                                     # upper limit of 95% CI
 
 <<Example3.22b>>=
 p.hat <- 0.52
-SE <- sd( ~prop, data=BootP); SE      
+SE <- sd( ~prop, data = BootP); SE      
 MoE <- 2 * SE; MoE                          
 p.hat - MoE                                 
 p.hat + MoE                                 
@@ -373,14 +373,14 @@ The steps used in this example get used in a wide variety of confidence interval
 
 Another way to create a 95\% confidence interval is to use the middle 95\% of the bootstrap distribution. The \function{cdata()} function can compute this for us as follows:
 <<Example3.23>>=
-cdata(0.95, result, data=Bootstrap)
+cdata( ~ mean, 0.95, data = Bootstrap)
 @
 This is not exactly the same as the interval of the original sample, but it is pretty close.
 
 \subsubsection*{Figure 3.22}
 
 <<Figure3.22, opts.label="fig1">>=
-dotPlot(~ result, width=.1, groups = (27.43 <= result & result <= 31.05), data=Bootstrap)
+dotPlot(~ mean, width = .1, groups = (27.43 <= mean & mean <= 31.05), data = Bootstrap)
 @
 Notice the \argument{groups=} for marking the confidence interval.
 
@@ -390,14 +390,14 @@ One advantage of this method is that it is easy to change the confidence level.
 
 To make a 90\% and 99\% confidence interval, we use the middle 90\% and 99\% of the sample distribution instead.
 <<Example3.24, opts.label="fig1">>=
-cdata(0.90, result, data=Bootstrap)
-dotPlot(~ result, width=.1, groups = (27.70 <= result & result <= 30.71), data=Bootstrap)
+cdata(~ mean, 0.90, data = Bootstrap)
+dotPlot(~ mean, width = .1, groups = (27.70 <= mean & mean <= 30.71), data = Bootstrap)
 
-cdata(0.99, result, data=Bootstrap)
-dotPlot(~ result, width=.1, groups = (26.98 <= result & result <= 31.63), data=Bootstrap)
+cdata( ~ mean, 0.99, data = Bootstrap)
+dotPlot(~ mean, width = .1, groups = (26.98 <= mean & mean <= 31.63), data = Bootstrap)
 @
 
-<<Figure3.23,include=FALSE>>=
+<<Figure3.23, include=FALSE>>=
 <<Example3.23>>
 @
 
@@ -413,20 +413,20 @@ bwplot(Gender~Exercise, data=ExerciseHours)
 
 <<Example3.25>>=
 head(ExerciseHours)
-favstats(~Exercise|Gender, data=ExerciseHours)
-stat <- diff(mean(Exercise~Gender, data=ExerciseHours)); stat
+favstats(~Exercise|Gender, data = ExerciseHours)
+stat <- diffmean(Exercise~Gender, data = ExerciseHours); stat
 @
 <<Example3.25b, cache=TRUE>>=
-BootE <- do(3000) * diff(mean(Exercise~Gender, data=resample(ExerciseHours)))
+BootE <- do(3000) * diffmean(Exercise~Gender, data = resample(ExerciseHours))
 head(BootE, 3)
 @
 <<Example3.25c, opts.label="fig4">>=
-cdata(0.95, M, data=BootE)
-dotPlot(~M, width=.25, cex=.75, groups =(-1.717 <= M & M <= 7.633), 
-        xlab="Difference in mean", data=BootE)
+cdata( ~ diffmean, 0.95, data = BootE)
+dotPlot(~ diffmean, width = .25, cex = .75, groups =(-1.717 <= M & M <= 7.633), 
+        xlab = "Difference in mean", data = BootE)
 @
 <<Example3.25d>>=
-SE <- sd( ~ M, data=BootE); SE
+SE <- sd( ~ diffmean, data = BootE); SE
 stat - 2 * SE
 stat + 2 * SE
 @
@@ -434,19 +434,20 @@ stat + 2 * SE
 \subsubsection*{Figure 3.26}
 
 <<Figure3.26>>=
-xyplot(Price~Miles, ylab="Price ($1000s)", xlab="Miles (1000s)", data=MustangPrice)
-cor(Price~Miles, data=MustangPrice)
+xyplot(Price~Miles, ylab = "Price ($1000s)", xlab = "Miles (1000s)", data = MustangPrice)
+cor(Price~Miles, data = MustangPrice)
 @
 
 \subsubsection*{Example 3.26}
 
 <<Example3.26, cache=TRUE>>=
-BootM <- do(5000) * cor(Price~Miles, data=resample((MustangPrice)))
+BootM <- do(5000) * cor(Price~Miles, data = resample((MustangPrice)))
 head(BootM, 3)
 @
 <<Example3.26b, opts.label="fig4">>=
-cdata(0.98, result, data=BootM)
-dotPlot(~result, width=.005, groups =(-.940 <= result & result <= -.705), xlab="r", data=BootM)
+cdata( ~ cor, 0.98, data = BootM)
+dotPlot( ~ cor, width = .005, groups = (-.940 <= cor & cor <= -.705), 
+         xlab = "r", data = BootM)
 @
 
 <<Figure3.27, include=FALSE>>=
@@ -459,10 +460,10 @@ dotPlot(~result, width=.005, groups =(-.940 <= result & result <= -.705), xlab="
 <<Example3.27, opts.label="fig4", cache=TRUE>>=
 BootP400 <- do(1000) * rflip(400, .52)
 head(BootP400, 3)
-cdata(0.95, prop, data=BootP400)
-dotPlot(~ prop, width=.005, groups= (0.472 <= prop & prop<= 0.568), data=BootP400)
+cdata( ~ prop, 0.95, data = BootP400)
+dotPlot(~ prop, width = 0.005, groups = (0.472 <= prop & prop<= 0.568), data = BootP400)
 @
-<<Figure3.28,include=FALSE>>=
+<<Figure3.28, include=FALSE>>=
 <<Example3.27>>
 @
 
@@ -471,10 +472,10 @@ dotPlot(~ prop, width=.005, groups= (0.472 <= prop & prop<= 0.568), data=BootP40
 \subsubsection*{Example 3.28}
 
 <<Example3.28, opts.label="fig4", cache=TRUE>>=
-median(~ Price, data=MustangPrice )
-Boot.Mustang <- do(5000) * median( ~Price, data=resample(MustangPrice) )
+median(~ Price, data = MustangPrice )
+Boot.Mustang <- do(5000) * median( ~Price, data = resample(MustangPrice) )
 head(Boot.Mustang, 3)
-histogram( ~ result, n=50, data=Boot.Mustang)
+histogram( ~ median, n = 50, data = Boot.Mustang)
 @
 
 <<Figure3.29, include=FALSE>>=

@@ -33,35 +33,35 @@ SE <- sqrt(0.4 *(1 - 0.4) / 50); SE
 
 <<Figure6.02, cache=TRUE, opts.label="fig3">>=
 P.05 <- do(2000) * rflip(50, .05)
-dotPlot(~prop, width = .02, cex = 25, data=P.05)
+dotPlot(~prop, width = .02, cex = 25, data = P.05)
 
 P.10 <- do(2000) * rflip(50, .10)
-dotPlot(~prop, width = .02, cex = 15, data=P.10)
+dotPlot(~prop, width = .02, cex = 15, data = P.10)
 
 P.25 <- do(2000) * rflip(50, .25)
-dotPlot(~prop, width = .02, cex = 10, data=P.25)
+dotPlot(~prop, width = .02, cex = 10, data = P.25)
 
 P.50 <- do(2000) * rflip(50, .50)
-dotPlot(~prop, width = .02, cex = 5, data=P.50)
+dotPlot(~prop, width = .02, cex = 5, data = P.50)
 
 P.90 <- do(2000) * rflip(50, .90)
-dotPlot(~prop, width = .02, cex = 10, data=P.90)
+dotPlot(~prop, width = .02, cex = 10, data = P.90)
 
 P.99 <- do(2000) * rflip(50, .99)
-dotPlot(~prop, width = .02, cex = 25, data=P.99)
+dotPlot(~prop, width = .02, cex = 25, data = P.99)
 @
 
 \subsubsection*{Figure 6.3}
 
 <<Figure6.03, cache=TRUE, opts.label="fig3">>=
 n10 <- do(2000) * rflip(10, .10)
-dotPlot(~prop, width = .1, cex = 25, data=n10)
+dotPlot(~prop, width = .1, cex = 25, data = n10)
 
 n25 <- do(2000) * rflip(25, .10)
-dotPlot(~prop, width = .04, cex = 10, data=n25)
+dotPlot(~prop, width = .04, cex = 10, data = n25)
 
 n200 <- do(2000) * rflip(200, .10)
-dotPlot(~prop, width = .005, cex = 5, data=n200)
+dotPlot(~prop, width = .005, cex = 5, data = n200)
 @
 
 \subsubsection*{Example 6.2}
@@ -70,7 +70,7 @@ dotPlot(~prop, width = .005, cex = 5, data=n200)
 p.hat <- 0.80; p.hat
 p.hat * 400               # check >= 10
 (1 - p.hat) * 400         # check >= 10
-SE <- sqrt( .80 * .20 / 400 ); SE
+SE <- sqrt(.80 * .20 / 400); SE
 @
 
 \subsubsection*{Figure 6.4}
@@ -88,15 +88,15 @@ plotFun(dnorm(x,0.80,0.02) ~ x, x.lim = c(0.72, 0.88))
 
 <<Example6.3, tidy=FALSE>>=
 p.hat <- 52/100; p.hat            
-SE <- sqrt( p.hat * (1 - p.hat) / 100 ); SE    # est. SE
-p.hat - 1.96 * SE                              # lower end of CI 
-p.hat + 1.96 * SE                              # upper end of CI
+SE <- sqrt(p.hat * (1 - p.hat) / 100); SE    # est. SE
+p.hat - 1.96 * SE                            # lower end of CI 
+p.hat + 1.96 * SE                            # upper end of CI
 @
 
 \R\ can automate finding the confidence interval. Notice the \argument{correct = FALSE} in the second line. The default for the proportion test includes a continuity correction for more accurate results. You can perform the test without the correction for answers closer to the ones in the textbook.
 <<Example6.3b>>=
 confint(prop.test(52, 100))
-confint(prop.test(52, 100, correct=FALSE))
+confint(prop.test(52, 100, correct = FALSE))
 @
 
 
@@ -104,18 +104,18 @@ confint(prop.test(52, 100, correct=FALSE))
 
 <<Example6.4, tidy=FALSE>>=
 p.hat <- 0.28; p.hat            
-SE <- sqrt( p.hat * (1 - p.hat) / 800 ); SE    # est. SE
-p.hat - 1.96 * SE                              # lower end of CI 
-p.hat + 1.96 * SE                              # upper end of CI
-confint(prop.test(224, 800))                   # 224 = 0.28 * 800
+SE <- sqrt(p.hat * (1 - p.hat) / 800); SE    # est. SE
+p.hat - 1.96 * SE                            # lower end of CI 
+p.hat + 1.96 * SE                            # upper end of CI
+confint(prop.test(224, 800))                 # 224 = 0.28 * 800
 @
 
 <<Example6.4b, tidy=FALSE>>=
 p.hat <- 0.82; p.hat            
-SE <- sqrt( p.hat * (1 - p.hat) / 800 ); SE    # est. SE
-p.hat - 1.96 * SE                              # lower end of CI 
-p.hat + 1.96 * SE                              # upper end of CI
-confint(prop.test(656, 800))                   # 656 = 0.82 * 800
+SE <- sqrt(p.hat * (1 - p.hat) / 800); SE    # est. SE
+p.hat - 1.96 * SE                            # lower end of CI 
+p.hat + 1.96 * SE                            # upper end of CI
+confint(prop.test(656, 800))                 # 656 = 0.82 * 800
 @
 
 \subsection*{Determining Sample Size for Estimating a Proportion}
@@ -123,7 +123,7 @@ confint(prop.test(656, 800))                   # 656 = 0.82 * 800
 \subsubsection*{Example 6.5}
 
 <<Example6.5>>=
-z.star <- qnorm( 0.995 ); z.star               # critical value for 99% confidence
+z.star <- qnorm(0.995); z.star               # critical value for 99% confidence
 p.hat <- 0.28; p.hat                          
 n <- ((z.star / 0.01)^2) * p.hat * (1 - p.hat); n                          
 @
@@ -131,7 +131,7 @@ n <- ((z.star / 0.01)^2) * p.hat * (1 - p.hat); n
 \subsubsection*{Example 6.6}
 
 <<Example6.6>>=
-z.star <- qnorm( 0.975 ); z.star               # critical value for 95% confidence
+z.star <- qnorm(0.975); z.star               # critical value for 95% confidence
 p.hat <- 0.5; p.hat                          
 n <- ((z.star / 0.03)^2) * p.hat * (1 - p.hat); n                          
 @
@@ -161,7 +161,7 @@ pnorm(z)
 @
 Again, \R\ can automate the test for us.
 <<Example6.7b>>=
-prop.test(192, 1013, alt = "less", p=0.20) # 192 = 0.19 * 1013
+prop.test(192, 1013, alt = "less", p = 0.20) # 192 = 0.19 * 1013
 @
 Notice the ``less" for the alternative hypothesis because this is a lower tail alternative.
 \end{enumerate}
@@ -178,7 +178,7 @@ z <- (p.hat - p) / SE; z
 pnorm(z)                  # large side (rounded)
 1 - pnorm(z)              # small side (less rounding)
 2 * (1 - pnorm(z))        # p-value = 2 * small side
-prop.test(66, 119, p=1/3)
+prop.test(66, 119, p = 1/3)
 @
 
 \subsubsection*{Example 6.9}
@@ -192,7 +192,7 @@ p * 9                   # check >= 10
 <<Example6.9b, cache=TRUE>>=
 Randomization <- do(1000) * rflip(9, 0.5)
 head(Randomization, 3)
-prop( ~ (prop >= p.hat), data=Randomization)
+prop( ~ (prop >= p.hat), data = Randomization)
 @
 
 \section{Distribution of a Sample Mean}
@@ -210,18 +210,18 @@ SE <- 32000 / sqrt(400); SE
 
 \subsubsection*{Figure 6.6}
 <<Figure6.06,cache=TRUE,opts.label="fig3">>=
-n1 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 1))
-histogram(~result, data=n1)
-n5 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 5))
-histogram(~result, data=n5)
-n15 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 15))
-histogram(~result, data=n15)
-n30 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 30))
-histogram(~result, data=n30)
-n125 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 125))
-histogram(~result, data=n125)
-n500 <- do(100) * mean( ~Time, data=resample(CommuteAtlanta, 500))
-histogram(~result, data=n500)
+n1 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 1))
+histogram( ~ mean, data = n1)
+n5 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 5))
+histogram( ~ mean, data = n5)
+n15 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 15))
+histogram( ~ mean, data = n15)
+n30 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 30))
+histogram( ~ mean, data = n30)
+n125 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 125))
+histogram( ~ mean, data = n125)
+n500 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 500))
+histogram( ~ mean, data = n500)
 @
 
 \subsection*{The t-Distribution}
@@ -258,36 +258,36 @@ SE <- 1.25 / sqrt (8); SE
 \subsubsection*{Figure 6.8}
 
 <<Figure6.08, fig.keep='last'>>=
-plotFun(dnorm(x, 0, 1) ~x, x.lim=c(-4, 4), col="black")
-plotFun(dt(x, df=15) ~x, add=TRUE, lty=2)
-plotFun(dt(x, df=5) ~x, add=TRUE, lty=3, col="red")
+plotFun(dnorm(x, 0, 1) ~x, x.lim = c(-4, 4), col = "black")
+plotFun(dt(x, df = 15) ~x, add = TRUE, lty = 2)
+plotFun(dt(x, df = 5) ~x, add = TRUE, lty = 3, col = "red")
 @
 
 \subsubsection*{Example 6.12}
 
 <<Example6.12>>=
-qt(.975, df=15)
-pt(1.5, df=15, lower.tail=FALSE)
+qt(.975, df = 15)
+pt(1.5, df = 15, lower.tail = FALSE)
 @
 Similar to the normal distribution, the function for t-distribution is set to find probability of the lower tail.
 
 <<Example6.12b>>=
 qnorm(.975)
-pnorm(1.5, lower.tail=FALSE)
+pnorm(1.5, lower.tail = FALSE)
 @
 
 \subsubsection*{Figure 6.9}
 
 <<Figure6.09,fig.keep='last'>>=
-plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
-plotDist("t", params=list(df=15), type=c("h","l"), groups= (-2.131 < x & x < 2.131), lty=1)
-ladd(grid.text("2.131",2.1,.1, default.units="native", hjust=0))
+plotFun(dt(x, df = 15) ~x, x.lim = c(-4, 4))
+plotDist("t", params = list(df=15), type = c("h","l"), groups = (-2.131 < x & x < 2.131), lty = 1)
+ladd(grid.text("2.131",2.1,.1, default.units = "native", hjust = 0))
 @
 
 <<Figure6.09b,fig.keep='last'>>=
-plotFun(dt(x, df=15) ~x, x.lim=c(-4, 4))
-plotDist("t", params=list(df=15), type=c("h","l"), groups= x > 1.5, lty=1)
-ladd(grid.text("1.5",1.5,.2, default.units="native", hjust=0))
+plotFun(dt(x, df = 15) ~x, x.lim = c(-4, 4))
+plotDist("t", params = list(df=15), type = c("h","l"), groups =  x > 1.5, lty = 1)
+ladd(grid.text("1.5",1.5,.2, default.units = "native", hjust = 0))
 @
 
 \section{Confidence Interval for a Mean Using the t-Distribution}
@@ -309,12 +309,12 @@ dotPlot(~Flight179, cex = 0.5, data = Flight179) # to check for normality
 \RStudio\ can do all of the calculations for you if you give it the raw data:
 <<Example6.13b>>=
 favstats(~Flight179, data = Flight179)
-t.test(~Flight179, data=Flight179)
+t.test(~Flight179, data = Flight179)
 @
 
 You can also zoom in just the information you want:
 <<Example6.13c>>=
-confint(t.test(~Flight179, data=Flight179))
+confint(t.test(~Flight179, data = Flight179))
 @
 
 \subsubsection*{Example 6.14}
@@ -324,16 +324,16 @@ head(CommuteAtlanta, 3)
 densityplot(~Time, data = CommuteAtlanta) # to check for normality
 @
 <<Example6.14b>>=
-favstats(~Time, data=CommuteAtlanta)
-confint(t.test(~Time, conf.level = 0.99, data=CommuteAtlanta))
-confint(t.test(~Time, conf.level = 0.95, data=CommuteAtlanta))
+favstats(~Time, data = CommuteAtlanta)
+confint(t.test(~Time, conf.level = 0.99, data = CommuteAtlanta))
+confint(t.test(~Time, conf.level = 0.95, data = CommuteAtlanta))
 @
 
 \subsubsection*{Example 6.15}
 
 <<Example6.15, opts.label="fig1">>=
 head(ManhattanApartments, 3)
-dotPlot(~Rent, width=200, cex=.3,  data=ManhattanApartments) # to check for normality
+dotPlot(~Rent, width = 200, cex = .3,  data = ManhattanApartments) # to check for normality
 @
 
 <<Figure6.13,include=FALSE>>=
@@ -341,10 +341,10 @@ dotPlot(~Rent, width=200, cex=.3,  data=ManhattanApartments) # to check for norm
 @
 
 <<Example6.15b, cache=TRUE>>=
-Boot.Rent <- do(1000) * mean( ~Rent, data=resample(ManhattanApartments)) 
+Boot.Rent <- do(1000) * mean( ~ Rent, data = resample(ManhattanApartments)) 
 head(Boot.Rent, 3)
-favstats(~result, data=Boot.Rent)
-cdata(0.95, result, data=Boot.Rent)
+favstats( ~ mean, data = Boot.Rent)
+cdata( ~ mean, 0.95, data = Boot.Rent)
 @
 
 \subsection*{Determining Sample Size for Estimating a Mean}
@@ -371,25 +371,25 @@ dotPlot(~BodyTemp, cex = .15, width = .1, data = BodyTemp50) # to check for norm
 <<Example6.17b>>=
 favstats(~BodyTemp, data = BodyTemp50)
 t.test(~BodyTemp, mu = 98.6, data = BodyTemp50)
-pval(t.test(~BodyTemp, mu = 98.6, data=BodyTemp50)) # to find the p-value directly
+pval(t.test(~BodyTemp, mu = 98.6, data = BodyTemp50)) # to find the p-value directly
 @
 
 \subsubsection*{Figure 6.17}
 
 <<Figure6.17,fig.keep='last'>>=
-plotFun(dt(x, df=49) ~x, x.lim=c(-4, 4))
-plotDist("t", params=list(df=49), type=c("h","l"), groups= (-3.14 < x & x < 3.14), lty=1)
-ladd(grid.text("3.14",3,.05, default.units="native", hjust=0))
+plotFun(dt(x, df = 49) ~x, x.lim = c(-4, 4))
+plotDist("t", params = list(df=49), type = c("h","l"), groups = (-3.14 < x & x < 3.14), lty = 1)
+ladd(grid.text("3.14",3,.05, default.units = "native", hjust = 0))
 @
 
 \subsubsection*{Example 6.18}
 <<Example6.18>>=
 head(FloridaLakes, 3)
-densityplot(~Alkalinity, data=FloridaLakes) # to check for normality
+densityplot(~Alkalinity, data = FloridaLakes) # to check for normality
 @
 
 <<Example6.18b>>=
-favstats(~Alkalinity, data=FloridaLakes)
+favstats(~Alkalinity, data = FloridaLakes)
 t.test(~Alkalinity, alt = "greater", mu = 35, data = FloridaLakes)
 @
 Notice the ``greater" for the alternative hypothesis.
@@ -399,19 +399,19 @@ Notice the ``greater" for the alternative hypothesis.
 \subsubsection*{Example 6.19}
 
 <<Example6.19>>=
-OneTrueLove <- read.file( "OneTrueLove.csv" )
+OneTrueLove <- read.file("OneTrueLove.csv")
 head(OneTrueLove)
-tally(Response~Gender, format="count", margins=TRUE, data=OneTrueLove)
-prop(Response~Gender, data=OneTrueLove)
-diff(prop(Response~Gender, data=OneTrueLove))
+tally(Response~Gender, format = "count", margins = TRUE, data = OneTrueLove)
+prop(Response~Gender, data = OneTrueLove)
+diff(prop(Response~Gender, data = OneTrueLove))
 @
 
 \subsubsection*{Figure 6.20}
 
 <<Figure6.20, cache=TRUE>>=
-Boot.Love <- do(5000)*diff(prop(Response~Gender, data=resample(OneTrueLove)))
+Boot.Love <- do(5000)*diff(prop(Response~Gender, data = resample(OneTrueLove)))
 head(Boot.Love, 3)
-histogram(~Agree.Male, fit="normal", data=Boot.Love)
+histogram(~Agree.Male, fit = "normal", data = Boot.Love)
 @
 
 \subsubsection*{Example 6.20}
@@ -434,7 +434,7 @@ n <- c(444,922)
 <<Example6.21>>=
 success <- c(158, 109)
 n <- c(444,922)
-prop.test(success, n, conf.level=0.90)
+prop.test(success, n, conf.level = 0.90)
 @
 
 
@@ -444,25 +444,25 @@ prop.test(success, n, conf.level=0.90)
 
 <<Data6.4, tidy=FALSE>>=
 SplitSteal <- rbind( 
-  do(187) * data.frame( agegroup = "Under40", decision = "Split"),
-  do(195) * data.frame( agegroup = "Under40", decision = "Steal"),
-  do(116) * data.frame( agegroup = "Over40",  decision = "Split"),
-  do(76)  * data.frame( agegroup = "Over40",  decision = "Steal")
+  do(187) * data.frame(agegroup = "Under40", decision = "Split"),
+  do(195) * data.frame(agegroup = "Under40", decision = "Steal"),
+  do(116) * data.frame(agegroup = "Over40",  decision = "Split"),
+  do(76)  * data.frame(agegroup = "Over40",  decision = "Steal")
   )
 @
 
 \subsubsection*{Example 6.22}
 
 <<Example6.22>>=
-prop(decision~agegroup, data=SplitSteal) # sample prop within each group
-prop(~decision, data=SplitSteal) # pooled proportion
+prop(decision~agegroup, data = SplitSteal) # sample prop within each group
+prop(~decision, data = SplitSteal) # pooled proportion
 @
 
 \subsubsection*{Example 6.23}
 
 <<Example6.23>>=
-diff <- diff(prop(decision~agegroup, data=SplitSteal)); diff
-prop.test(decision~agegroup, data=SplitSteal)
+diff <- diff(prop(decision~agegroup, data = SplitSteal)); diff
+prop.test(decision~agegroup, data = SplitSteal)
 @
 
 
@@ -471,15 +471,15 @@ prop.test(decision~agegroup, data=SplitSteal)
 \subsubsection*{Figure 6.21}
 
 <<Figure6.21, cache=TRUE>>=
-BootE <- do(2000) * diff(mean(Exercise~Gender, data=resample(ExerciseHours)))
+BootE <- do(2000) * diff(mean(Exercise~Gender, data = resample(ExerciseHours)))
 head(BootE, 3)
-histogram(~M, width=0.5, fit="normal", data=BootE)
+histogram(~M, width = 0.5, fit = "normal", data = BootE)
 @
 
 <<Figure6.21b, cache=TRUE>>=
 Random.Smiles <- do(2000) * diff(mean(Leniency ~ shuffle(Group), data = Smiles))
 head(Random.Smiles, 3)
-histogram(~smile, n=24,, fit="normal", data=Random.Smiles)
+histogram(~smile, n = 24,, fit = "normal", data = Random.Smiles)
 @
 
 \subsection*{The t-Distribution}
@@ -487,9 +487,9 @@ histogram(~smile, n=24,, fit="normal", data=Random.Smiles)
 \subsubsection*{Example 6.24}
 
 <<Example6.24>>=
-favstats(Exercise~Gender, data=ExerciseHours)
+favstats(Exercise~Gender, data = ExerciseHours)
 SE <- sqrt(8.80^2/20 + 7.41^2/30); SE
-favstats(Leniency~Group, data=Smiles)
+favstats(Leniency~Group, data = Smiles)
 SE <- sqrt(1.68^2/34 + 1.52^2/34); SE
 @
 
@@ -502,10 +502,10 @@ SE <- sqrt(1.68^2/34 + 1.52^2/34); SE
 
 <<Example6.26>>=
 head(CommuteStLouis)
-favstats(~Time, data=CommuteStLouis)
-favstats(~Time, data=CommuteAtlanta)
-bwplot(~Time, xlim=c(0, 200), data = CommuteAtlanta) # to check for normality
-bwplot(~Time, xlim=c(0, 200), data = CommuteStLouis) # to check for normality
+favstats(~Time, data = CommuteStLouis)
+favstats(~Time, data = CommuteAtlanta)
+bwplot(~Time, xlim = c(0, 200), data = CommuteAtlanta) # to check for normality
+bwplot(~Time, xlim = c(0, 200), data = CommuteStLouis) # to check for normality
 @
 
 <<Figure6.23,include=FALSE>>=
@@ -513,7 +513,7 @@ bwplot(~Time, xlim=c(0, 200), data = CommuteStLouis) # to check for normality
 @
 
 <<Example6.26b>>=
-confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time, conf.level=0.90))
+confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time, conf.level = 0.90))
 @
 
 
@@ -523,7 +523,7 @@ confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time, conf.level=0.90))
 
 <<Example6.27>>=
 head(Smiles, 3)
-bwplot(Group~Leniency, data=Smiles) # to check for normality
+bwplot(Group~Leniency, data = Smiles) # to check for normality
 @
 
 <<Figure6.25,include=FALSE>>=
@@ -532,7 +532,7 @@ bwplot(Group~Leniency, data=Smiles) # to check for normality
 
 
 <<Example6.27b>>=
-t.test(Leniency~Group, alt="less", data=Smiles)
+t.test(Leniency~Group, alt = "less", data = Smiles)
 @
 
 
@@ -542,8 +542,8 @@ t.test(Leniency~Group, alt="less", data=Smiles)
 
 <<Example6.28, opts.label="fig1">>=
 head(Wetsuits, 3)
-dotPlot(~ Wetsuit, xlim = c(1.1, 1.8), cex=.25, data = Wetsuits) # to check for normality
-dotPlot(~ NoWetsuit, xlim = c(1.1, 1.8), cex=.25, data = Wetsuits) # to check for normality
+dotPlot(~ Wetsuit, xlim = c(1.1, 1.8), cex = .25, data = Wetsuits) # to check for normality
+dotPlot(~ NoWetsuit, xlim = c(1.1, 1.8), cex = .25, data = Wetsuits) # to check for normality
 @
 
 <<Figure6.27,include=FALSE>>=
@@ -558,7 +558,7 @@ t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit)
 
 <<Example6.29, opts.label="fig1">>=
 head(Wetsuits, 3)
-t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired=TRUE)
+t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired = TRUE)
 dotPlot(Wetsuits$Wetsuit - Wetsuits$NoWetsuit, width = .01, cex = .3)
 @
 
@@ -569,8 +569,8 @@ dotPlot(Wetsuits$Wetsuit - Wetsuits$NoWetsuit, width = .01, cex = .3)
 \subsubsection*{Example 6.30}
 
 <<Example6.30>>=
-confint(t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired=TRUE))
-confint(t.test( ~(Wetsuit - NoWetsuit), data=Wetsuits ))
+confint(t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired = TRUE))
+confint(t.test( ~ (Wetsuit - NoWetsuit), data = Wetsuits))
 @
 
 
@@ -648,7 +648,7 @@ p n \ge 10 and (1-p) n \ge 10
 p.hat <- 66/119; p.hat
 p.hat * 119               # check >= 10
 (1 - p.hat) * 119         # check >= 10
-SE <- sqrt( 1/3 * 2/3 / 119 ); SE
+SE <- sqrt(1/3 * 2/3 / 119); SE
 z <- (p.hat - 1/3) / SE; z
 pnorm(z)                  # large side (rounded)
 1 - pnorm(z)              # small side (less rounding)
@@ -660,19 +660,19 @@ We hardly needed to compute a p-value in this case.  A test statistic of $z =
 
 We can also compute a 95\% confidence interval for the proportion of people who start with rock:
 <<tidy=FALSE>>=
-p.hat                                          # same as above
-1/3 * 119                                      # check >= 10
-2/3 * 119                                      # check >= 10
-SE <- sqrt( p.hat * (1 - p.hat) / 119 ); SE    # est. SE is (a little) different now
-p.hat - 1.96 * SE                              # lower end of CI 
-p.hat + 1.96 * SE                              # upper end of CI
+p.hat                                        # same as above
+1/3 * 119                                    # check >= 10
+2/3 * 119                                    # check >= 10
+SE <- sqrt(p.hat * (1 - p.hat) / 119); SE    # est. SE is (a little) different now
+p.hat - 1.96 * SE                            # lower end of CI 
+p.hat + 1.96 * SE                            # upper end of CI
 @
 If we want a different confidence level, we simply adjust the critical value.  Let's compute
 a 98\% confidence interval.
 <<tidy=FALSE>>=
-z.star <- qnorm( 0.99 ); z.star                # critical value for 98% CI
-p.hat <- 66/119; p.hat                         # same as above
-SE <- sqrt( p.hat * (1 - p.hat) / 119 ); SE    # est. SE is (a little) different now
+z.star <- qnorm(0.99); z.star                # critical value for 98% CI
+p.hat <- 66/119; p.hat                       # same as above
+SE <- sqrt(p.hat * (1 - p.hat) / 119); SE    # est. SE is (a little) different now
 p.hat - z.star * SE                            # lower end of CI 
 p.hat + z.star * SE                            # upper end of CI
 @
@@ -694,9 +694,9 @@ We can test $H_0$: $p = 1/4$ against a two-sided alternative as follows:
 <<tidy=FALSE>>=
 p.hat <- 6/27; p.hat
 Rand.Flowers <- do (1000) * rflip(27, .25)
-histogram( ~prop, data=Rand.Flowers, width=1/27 )
-prop( ~ (prop < p.hat), data=Rand.Flowers )        # one-sided p-value
-2 * prop( ~ (prop < p.hat), data=Rand.Flowers )    # two-sided p-value
+histogram( ~ prop, data = Rand.Flowers, width = 1/27)
+prop( ~ (prop < p.hat), data = Rand.Flowers)        # one-sided p-value
+2 * prop( ~ (prop < p.hat), data = Rand.Flowers)    # two-sided p-value
 @
 Notice that we need to be a bit cautious about 
 using the normal distribution in this case since
@@ -706,14 +706,14 @@ $p_0 n < 10$:
 @
 Let's see how different the results are:
 <<tidy=FALSE>>=
-SE <- sqrt( 1/4 * 3/4 / 27 ); SE
+SE <- sqrt(1/4 * 3/4 / 27); SE
 z <- (p.hat - 1/4) / SE; z
 pnorm(z)                                           # one-sided p-value
 2 * pnorm(z)                                       # two-sided p-value
 @
 
 The approximation is not very good in this case (\Sexpr{2 * pnorm(z)} vs.
-\Sexpr{2 * prop( ~ (prop < p.hat), data=Rand.Flowers ) }), but the conclusion
+\Sexpr{2 * prop( ~ (prop < p.hat), data = Rand.Flowers)}), but the conclusion
 either way would be the same -- do not reject the null hypothesis. 
 In this case, that means that the data are consistent with the null hypothesis.  But 
 there is not a lot of data, and it may well be consistent with other hypotheses as well.
@@ -759,17 +759,17 @@ the randomization distribution and see how close the results are.
 
 <<helper-hinder-norm, tidy=FALSE>>=
 p.hat <- 14/16; p.hat
-SE <- sqrt ( (1/2 * 1/2) / 16);  SE
+SE <- sqrt ((1/2 * 1/2) / 16);  SE
 z <- (p.hat - 1/2) / SE; z
 pnorm(z)
-2 * ( 1 - pnorm(z) )                   # p-value
+2 * (1 - pnorm(z))                   # p-value
 @
 
 <<helper-hinder-rand>>=
 Rand.toys <- do(5000) * rflip(16, .5)
 head(Rand.toys, 3)
-2 * prop( ~(prop >= p.hat), data=Rand.toys )
-histogram(~prop, data=Rand.toys, width=1/16)
+2 * prop( ~ (prop >= p.hat), data = Rand.toys)
+histogram(~prop, data = Rand.toys, width=1/16)
 @
 
 In this case, the normal approximation is not so far off (which shouldn't surprise us too much
@@ -785,29 +785,29 @@ $\alpha=0.05$ level) and conclude that the kids are not just guessing.
 
 \subsubsection{Pollination}
 <<>>=
-binom.test( 6, 27, p=0.25 )    # using an exact method
-prop.test( 6, 27, p=0.25 )     # using normal approximation
+binom.test(6, 27, p = 0.25)    # using an exact method
+prop.test(6, 27, p = 0.25)     # using normal approximation
 @
 
 The proportion test above uses a fancier version of the normal approximation (employing 
 the so-called continuity correction, which usually makes it more accurate).  We can get
 \R\ to do without this correction, and then the results will match ours above:
 <<>>=
-prop.test( 6, 27, p=0.5, correct=FALSE)
+prop.test(6, 27, p = 0.5, correct = FALSE)
 z^2                            # should match X-squared in the output above.
 @
 
 \subsubsection{Helper-Hinderer}
 <<>>=
-binom.test( 14, 16, p=0.5 )    # using an exact method
-prop.test(  14, 16, p=0.5 )    # using normal approximation
+binom.test(14, 16, p = 0.5)    # using an exact method
+prop.test(14, 16, p = 0.5)     # using normal approximation
 @
 
 The proportion test above uses a fancier version of the normal approximation (employing 
 the so-called continuity correction, which usually makes it more accurate).  We can get
 \R\ to do without this correction, and then the results will match ours above:
 <<>>=
-prop.test( 14, 16, p=0.5, correct=FALSE)
+prop.test(14, 16, p = 0.5, correct = FALSE)
 z^2                            # should match X-squared in the output above.
 @
 
@@ -864,9 +864,9 @@ requires a bit of programming to use it:
 <<uniroot>>=
 # uniroot finds when a function is 0, so we need to build such a function;
 # this function is 0 when the margin of error is 0.03:
-f <- makeFun( 1.96 * sqrt(.5 * .5/ n) - 0.03  ~ n )  
+f <- makeFun(1.96 * sqrt(.5 * .5/ n) - 0.03  ~ n)  
 # uniroot needs a function and a lower bound and upper bound to search between
-uniroot( f, c(1,50000) )$root  
+uniroot(f, c(1,50000))$root  
 @
 
 \subsubsection{Example}
@@ -887,11 +887,11 @@ We'll use \verb!uniroot()! here.
 You should use the ``higher-lower'' method or algebra and compare your results.
 
 <<sample-size-uniroot>>=
-f1 <- makeFun( qnorm(.99) * sqrt(.5 * .5/ n) - 0.03 ~ n )
+f1 <- makeFun(qnorm(.99) * sqrt(.5 * .5/ n) - 0.03 ~ n)
 uniroot(f1, c(1,50000))$root
-f2 <- makeFun( qnorm(.975) * sqrt(.5 * .5/ n) - 0.005 ~ n )
+f2 <- makeFun(qnorm(.975) * sqrt(.5 * .5/ n) - 0.005 ~ n)
 uniroot(f2, c(1,50000))$root
-f3 <- makeFun( qnorm(.99) * sqrt(.1 * .9/ n) - 0.005 ~ n )
+f3 <- makeFun(qnorm(.99) * sqrt(.1 * .9/ n) - 0.005 ~ n)
 uniroot(f3, c(1,50000))$root
 @
 
@@ -939,19 +939,19 @@ t = \frac{ \mean x - \mu_0}{ s/\sqrt{n}} = \frac{ \mbox{estimate} - \mbox{hypoth
 This is easily computed in \RStudio:
 <<temp1,tidy=FALSE>>=
 # some ingredients
-x.bar <- mean(~ BodyTemp, data=BodyTemp50); x.bar
-sd <- sd (~ BodyTemp, data=BodyTemp50); sd
+x.bar <- mean(~ BodyTemp, data = BodyTemp50); x.bar
+sd <- sd (~ BodyTemp, data = BodyTemp50); sd
 n <- nrow (BodyTemp50); n
 se <- sd/sqrt(n); se
 # test statistic
-t <- ( x.bar - 98.6 ) / se; t
+t <- (x.bar - 98.6) / se; t
 # 2-sided p-value
-2 * pt( - abs(t), df=49 )
+2 * pt(- abs(t), df = 49)
 @
 
 Similarly, we can compute a 95\% confidence interval
 <<temp2>>=
-t.star <- qt(.975, df=49); t.star
+t.star <- qt(.975, df = 49); t.star
 # lower limit
 x.bar - t.star * se
 # upper limit
@@ -962,12 +962,12 @@ x.bar + t.star * se
 
 Of course, \RStudio\ can do all of the calculations for you if you give it the raw data:
 <<temp3>>=
-t.test(~BodyTemp, data=BodyTemp50, mu=98.6)
+t.test(~BodyTemp, data = BodyTemp50, mu = 98.6)
 @
 You can also zoom in just the information you want:
 <<temp4>>=
-pval(t.test(~BodyTemp, data=BodyTemp50, mu=98.6))
-confint(t.test(~BodyTemp, data=BodyTemp50))
+pval(t.test(~BodyTemp, data = BodyTemp50, mu = 98.6))
+confint(t.test(~BodyTemp, data = BodyTemp50))
 @
 
 

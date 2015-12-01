@@ -77,11 +77,11 @@
 \subsubsection*{Example 8.1}
 
 <<Example8.1>>=
-favstats( Ants ~ Filling, data=SandwichAnts )
+favstats( Ants ~ Filling, data = SandwichAnts )
 @
 
 <<Example8.1b>>=
-xyplot( Ants ~ Filling, SandwichAnts, type=c('p','a') )
+xyplot( Ants ~ Filling, SandwichAnts, type = c('p', 'a') )
 bwplot( Ants ~ Filling, SandwichAnts )
 @
 
@@ -112,7 +112,7 @@ anova(Ants.Model)
 
 The p-value listed in this output is the p-value for our null hypothesis that
 the mean population response is the same in each treatment group.
-In this case we would reject the null hypothesis at the $\alpha=0.05$ level.
+In this case we would reject the null hypothesis at the $\alpha = 0.05$ level.
 
 In the next section we'll look at this test in more detail, but notice that if 
 you know the assumptions of a test, the null hypothesis being tested, and 
@@ -137,11 +137,11 @@ Each of these will be involved in the calculation of $F$.
 
 \subsubsection*{Figure 8.3}
 
-<<Figure8.3, cache=TRUE, opts.label="fig4">>=
-Rand.Ants <- do(1000) * anova(lm(Ants ~ shuffle(Filling), data=SandwichAnts))
+<<Figure8.3, cache = TRUE, opts.label = "fig4">>=
+Rand.Ants <- do(1000) * anova(lm(Ants ~ shuffle(Filling), data = SandwichAnts))
 tally( ~ (F >= 5.63), data = Rand.Ants)
 prop( ~ (F >= 5.63), data = Rand.Ants)
-dotPlot( ~ F, width=0.20, groups = (F <=5.63), data=Rand.Ants)
+dotPlot( ~ F, width = 0.20, groups = (F <=5.63), data = Rand.Ants)
 @
 
 \subsection*{The F-distribution}
@@ -180,9 +180,9 @@ In our example, this is $2$ for the numerator and $7$ for the denominator.
 
 \subsubsection*{Figure 8.4}
 
-<<Figure8.4, fig.keep='last'>>=
-histogram( ~ F, width=4/7, center=.25, data=Rand.Ants)
-plotDist("f", df1=2, df2=21, add=TRUE)
+<<Figure8.4, fig.keep = 'last'>>=
+histogram( ~ F, width = 4/7, center = .25, data = Rand.Ants)
+plotDist("f", df1 = 2, df2 = 21, add = TRUE)
 @
 
 \subsection*{More Examples of ANOVA}
@@ -191,15 +191,15 @@ plotDist("f", df1=2, df2=21, add=TRUE)
 
 <<Example8.5>>=
 head(StudentSurvey, 3)
-favstats(~Pulse, data=StudentSurvey)
-favstats(Pulse~Award, data=StudentSurvey)
-anova(lm(Pulse~Award, StudentSurvey))
+favstats( ~ Pulse, data = StudentSurvey)
+favstats(Pulse ~ Award, data = StudentSurvey)
+anova(lm(Pulse ~ Award, StudentSurvey))
 @
 
 \subsubsection*{Figure 8.5}
 
 <<Figure8.5>>=
-bwplot(Award ~ Pulse, data=StudentSurvey)
+bwplot(Award ~ Pulse, data = StudentSurvey)
 @
 
 \subsection*{ANOVA Calculations}
@@ -228,8 +228,8 @@ bwplot(Award ~ Pulse, data=StudentSurvey)
 Let's first compute the grand mean and group means.
 <<Example8.6>>=
 SandwichAnts
-mean(Ants, data=SandwichAnts)  # grand mean
-mean(Ants ~ Filling, data=SandwichAnts)  # group means
+mean(Ants, data = SandwichAnts)  # grand mean
+mean(Ants ~ Filling, data = SandwichAnts)  # group means
 @
 And add those to our data frame
 <<Example8.6b>>=
@@ -253,9 +253,9 @@ SA
 
 And then add them up (SS stands for ``sum of squares")
 <<Example8.6e>>=
-SST <- sum( ~((Ants - grandMean)^2), data=SA); SST
-SSM <- sum( ~M2, data=SA ); SSM    # also called SSG
-SSE <- sum( ~E2, data=SA ); SSE
+SST <- sum( ~((Ants - grandMean)^2), data = SA); SST
+SSM <- sum( ~M2, data = SA ); SSM    # also called SSG
+SSE <- sum( ~E2, data = SA ); SSE
 @
 
 
@@ -281,14 +281,14 @@ different from which.  (See the solution to problem 15.3 for an example.)
 <<Example8.7>>=
 anova(Ants.Model)
 MSE<- 138.7
-mean(Ants~Filling, data = SandwichAnts)
+mean(Ants ~ Filling, data = SandwichAnts)
 mean <- 34.0
-t.star <- qt(.975, df=21); t.star
+t.star <- qt(.975, df = 21); t.star
 mean - t.star * (sqrt(MSE) / sqrt(8))
 mean + t.star * (sqrt(MSE) / sqrt(8))
 @
 
-<<Example8.7b, opts.label="fig4">>=
+<<Example8.7b, opts.label = "fig4">>=
 TukeyHSD(Ants.Model)
 plot(TukeyHSD(Ants.Model))
 @
@@ -297,9 +297,9 @@ plot(TukeyHSD(Ants.Model))
 
 <<Example8.8>>=
 MSE<- 138.7
-mean(Ants~Filling, data = SandwichAnts)
+mean(Ants  ~ Filling, data = SandwichAnts)
 diff.mean <- (30.75 - 49.25)
-t.star <- qt(.975, df=21); t.star
+t.star <- qt(.975, df = 21); t.star
 @
 <<Example8.8b>>=
 diff.mean - t.star * (sqrt(MSE * (1/8 + 1/8)))
@@ -310,7 +310,7 @@ diff.mean + t.star * (sqrt(MSE * (1/8 + 1/8)))
 
 <<Example8.9>>=
 MSE<- 138.7
-mean(Ants~Filling, data = SandwichAnts)
+mean(Ants ~ Filling, data = SandwichAnts)
 diff.mean <- (30.75 - 34.0)
 @
 <<Example8.9b>>=
@@ -335,7 +335,7 @@ TukeyHSD(Books.Model)
 \subsubsection*{Figure 8.8}
 
 <<Figure8.8>>=
-bwplot(Field ~ Cost, data=TextbookCosts)
+bwplot(Field ~ Cost, data = TextbookCosts)
 @
 
 
@@ -366,8 +366,8 @@ small
 @
 Now let's compute the grand mean and group means.
 <<>>=
-mean( response, data=small)  # grand mean
-mean( response ~ group, data=small)  # group means
+mean( response, data = small)  # grand mean
+mean( response ~ group, data = small)  # group means
 @
 And add those to our data frame
 <<>>=
@@ -412,10 +412,10 @@ small
 
 And then add them up (SS stands for ``sum of squares")
 
-<<tidy=FALSE>>=
-SSM <- sum( ~M2, data=small ); SSM    # also called SSG
+<<tidy = FALSE>>=
+SSM <- sum( ~M2, data = small ); SSM    # also called SSG
 0.16 * 3 + 0.36 * 4 + 1.21 * 3 # alternate way to calculate
-SSE <- sum( ~E2, data=small ); SSE
+SSE <- sum( ~E2, data = small ); SSE
 @
 
 Now we adjust for sample size using
@@ -426,7 +426,7 @@ Now we adjust for sample size using
 		\resid{$MSE = SSE / DFE = SSE / (n - \mbox{number of groups}) $}
 \end{itemize}
 MS stands for ``mean square"
-<<tidy=FALSE>>=
+<<tidy = FALSE>>=
 MSM <- SSM / ( 3-1); MSM
 MSE <- SSE / (10-3); MSE
 @
@@ -435,7 +435,7 @@ Finally, our test statistic is
 \[
 F = \frac{\fit{MSM}}{\resid{MSE}} 
 \]
-<<tidy=FALSE>>=
+<<tidy = FALSE>>=
 F <- MSM / MSE; F
 @
 
@@ -445,10 +445,10 @@ We can now compute a p-value by comparing our value of $F$ (\Sexpr{F}) to a rand
 If the null hypothesis is true, the three groups are really just one big group and the group labels are 
 meaningless, so we can shuffle the group labels to get a randomization distribution:
 <<>>=
-small.rand <- do(1000) * anova(lm( response ~ shuffle(group), data=small ))
+small.rand <- do(1000) * anova(lm( response ~ shuffle(group), data = small ))
 tally( ~ (F >= 10.27), data = small.rand )
 prop( ~ (F >= 10.27), data = small.rand )
-histogram( ~ F, data=small.rand, v=10.27 )
+histogram( ~ F, data = small.rand, v = 10.27 )
 @
 
 Since our estimated p-value is small, we have enough evidence in the data to reject the null hypothesis.
@@ -508,7 +508,7 @@ as $F$ and the p-value.
 
 Here is the ANOVA table for the \dataframe{SandwichAnts} example again:
 <<>>=
-anova( lm( Ants ~ Filling, data=SandwichAnts ) )
+anova( lm( Ants ~ Filling, data = SandwichAnts ) )
 @
 
 
@@ -535,12 +535,12 @@ the grouping variable (treatment).
 
 \subsection{An Example: Jet Lag}
 
-<<blisters-6, echo=FALSE>>=
+<<blisters-6, echo = FALSE>>=
 blisters <- data.frame(
 	time = c( 5,6,6,7,7,8,9,10,
               7,7,8,9,9,10,10,11,
               7,9,9,10,10,10,11,12,13),
-	treatment=c(rep('A',8), rep('B', 8), rep('P',9))
+	treatment = c(rep('A', 8), rep('B', 8), rep('P', 9))
 	)
 small <- data.frame(
 	response = c(
@@ -553,16 +553,16 @@ small <- data.frame(
 
 <<jetlag-summary-6>>=
 require(abd)
-favstats( shift ~ treatment, data=JetLagKnees )
+favstats( shift ~ treatment, data = JetLagKnees )
 @
 
-<<jetlag1-6,fig.height=2,fig.width=4>>=
-xyplot( shift ~ treatment, data=JetLagKnees, type=c('p','a') )
-bwplot( shift ~ treatment, data=JetLagKnees )
+<<jetlag1-6, fig.height = 2, fig.width = 4>>=
+xyplot( shift ~ treatment, data = JetLagKnees, type = c('p', 'a') )
+bwplot( shift ~ treatment, data = JetLagKnees )
 @
 
 <<>>=
-jetlag.model <- lm( shift ~ treatment, data=JetLagKnees )
+jetlag.model <- lm( shift ~ treatment, data = JetLagKnees )
 anova(jetlag.model)
 
 @
@@ -571,8 +571,8 @@ anova(jetlag.model)
 We can use \function{plot()} to create some diagnostic plots.  The first two are 
 the most important for our purposes.  The provide a \term{residual plot} and a 
 \term{normal-quantile plot of residuals}.
-<<small-plot-6,fig.out=".47\\textwidth",fig.height=3.5>>=
-plot(small.model, w=1:2)
+<<small-plot-6, fig.out = ".47\\textwidth", fig.height = 3.5>>=
+plot(small.model, w = 1:2)
 @
 The residual plot shows the residual broken down by groups (actually by group means).  
 Ideally we should see similar patterns of variation in each cluster.
@@ -584,11 +584,11 @@ we can combine all the residuals into a single normal-quantile plot.
 
 Here is all the code needed to analyze the jet lag experiment
 \begin{small}
-<<jetlag-reprise-6,fig.height=3.5>>=
+<<jetlag-reprise-6, fig.height = 3.5>>=
 jetlag.model <- lm( shift ~ treatment, JetLagKnees )
 anova(jetlag.model)
 summary(jetlag.model)
-plot(jetlag.model, w=1:2)
+plot(jetlag.model, w = 1:2)
 @
 \end{small}
 
@@ -655,7 +655,7 @@ or hypothesis tests just as before.
 Suppose we have 5 groups in our study and we want to make comparisons
 between each pair of groups.  That's $4 + 3 + 2 +1 = 10$ pairs.
 If we made 10 independent 95\% confidence intervals, the probability
-that all of the cover the appropriate parameter is \Sexpr{round(.95^10,3)}:
+that all of the cover the appropriate parameter is \Sexpr{round(.95^10, 3 )}:
 <<>>=
 .95^10
 @
@@ -669,7 +669,7 @@ The probability that both cover (assuming independence) is
 .95^2
 @
 Now suppose we want both intervals to cover 95\% instead of 
-\Sexpr{round(100 * .95^2,1)}\% of the time.  We could get this by
+\Sexpr{round(100 * .95^2, 1)}\% of the time.  We could get this by
 forming two \Sexpr{round(100 * sqrt(.95), 1)}\% confidence intervals.
 <<>>=
 sqrt(.95);
@@ -707,11 +707,11 @@ number & number of & family-wise & individual & confidence level
 groups & pairs of groups & error rate & error rate & for determining $t_*$
 \\
 \hline
-3 & 3 & .05 & \Sexpr{round(.05/3,3)} & \Sexpr{round( 1 - .05/3, 3)}
+3 & 3 & .05 & \Sexpr{round(.05/3, 3)} & \Sexpr{round( 1 - .05/3, 3)}
 \\
-4 & 6 & .05 & \Sexpr{round(.05/6,3)} & \Sexpr{round( 1 - .05/6, 3)}
+4 & 6 & .05 & \Sexpr{round(.05/6, 3)} & \Sexpr{round( 1 - .05/6, 3)}
 \\
-5 & 10 & .05 & \Sexpr{round(.05/10,3)} & \Sexpr{round( 1 - .05/10, 3)}
+5 & 10 & .05 & \Sexpr{round(.05/10, 3)} & \Sexpr{round( 1 - .05/10, 3)}
 \\
 \hline
 \end{tabular}
@@ -726,7 +726,7 @@ an ANOVA situation.  (It takes into account the fact that the
 tests are not independent.)
 \R\ can compute Tukey's Honest Significant Differences easily.
 \begin{center}
-<<tukey1-6, fig.width=4,fig.height=3.0>>=
+<<tukey1-6, fig.width = 4, fig.height = 3.0>>=
 TukeyHSD ( lm ( shift ~ treatment, JetLagKnees ) )
 plot( TukeyHSD ( lm ( shift ~ treatment, JetLagKnees ) ) )
 @
@@ -774,8 +774,8 @@ small
 @
 Now let's compute the grand mean and group means.
 <<>>=
-mean( response, data=small)  # grand mean
-mean( response ~ group, data=small)  # group means
+mean( response, data = small)  # grand mean
+mean( response ~ group, data = small)  # group means
 @
 And add those to our data frame
 <<>>=
@@ -820,10 +820,10 @@ small
 
 And then add them up (SS stands for ``sum of squares")
 
-<<tidy=FALSE>>=
-SSM <- sum( ~M2, data=small ); SSM    # also called SSG
+<<tidy = FALSE>>=
+SSM <- sum( ~M2, data = small ); SSM    # also called SSG
 0.16 * 3 + 0.36 * 4 + 1.21 * 3 # alternate way to calculate
-SSE <- sum( ~E2, data=small ); SSE
+SSE <- sum( ~E2, data = small ); SSE
 @
 
 Now we adjust for sample size using
@@ -834,7 +834,7 @@ Now we adjust for sample size using
 		\resid{$MSE = SSE / DFE = SSE / (n - \mbox{number of groups}) $}
 \end{itemize}
 MS stands for ``mean square"
-<<tidy=FALSE>>=
+<<tidy = FALSE>>=
 MSM <- SSM / ( 3-1); MSM
 MSE <- SSE / (10-3); MSE
 @
@@ -843,7 +843,7 @@ Finally, our test statistic is
 \[
 F = \frac{\fit{MSM}}{\resid{MSE}} 
 \]
-<<tidy=FALSE>>=
+<<tidy = FALSE>>=
 F <- MSM / MSE; F
 @
 
