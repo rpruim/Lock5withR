@@ -219,7 +219,7 @@ Testing two means.
 <<Example4.27>>=
 head(Smiles)
 mean(Leniency ~ Group, data = Smiles)
-diff(mean(Leniency ~ Group, data = Smiles))
+diffmean(Leniency ~ Group, data = Smiles)
 @
 
 \begin{enumerate}
@@ -232,24 +232,24 @@ diff(mean(Leniency ~ Group, data = Smiles))
 	\item
 		We simulate a world in which $\mu_1 = \mu_2$:
 <<Example4.27b, cache=TRUE>>=
-Randomization.Smiles <- do(1000) * diff(mean(Leniency ~ shuffle(Group), data = Smiles))
+Randomization.Smiles <- do(1000) * diffmean(Leniency ~ shuffle(Group), data = Smiles)
 head(Randomization.Smiles, 3)
 @
 <<Example4.27c, tidy=FALSE>>=
-prop(~ (smile <= -0.79 | smile >= 0.79), data = Randomization.Smiles)
-2 * prop(~ smile >= 0.79, data = Randomization.Smiles )
-dotPlot(~ smile, width = 0.03, cex = 0.5, groups = (smile >= 0.79), 
+prop(~ (diffmean <= -0.79 | diffmean >= 0.79), data = Randomization.Smiles)
+2 * prop(~ diffmean >= 0.79, data = Randomization.Smiles )
+dotPlot(~ diffmean, width = 0.03, cex = 0.5, groups = (diffmean >= 0.79), 
         xlab = "Diff", data = Randomization.Smiles)
 @
 <<Figure4.24,include=FALSE>>=
 <<Example4.27c>>
 @
 
-Now we find the p-value to test a difference of 0.76:
+Now we find the p-value:
 <<Example4.27d>>=
-prop( ~ (smile <= -0.76 | smile >= 0.76), data = Randomization.Smiles )
-2 * prop( ~ smile >= 0.76, data = Randomization.Smiles )
-dotPlot( ~ smile, width = .03, cex = .5, groups =  (smile >= 0.76), data= Randomization.Smiles)
+prop( ~ (diffmean <= -0.79 | diffmean >= 0.79), data = Randomization.Smiles)
+2 * prop( ~ diffmean >= 0.79, data = Randomization.Smiles )
+dotPlot( ~ diffmean, width = .03, cex = .5, groups = (diffmean >= 0.79), data = Randomization.Smiles)
 @
 \end{enumerate}
 
