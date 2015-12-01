@@ -1,2 +1,2 @@
-summary(lm(Bodyfat ~ Weight + Abdomen + Wrist, data = BodyFat))
+msummary(lm(Bodyfat ~ Weight + Abdomen + Wrist, data = BodyFat))
 

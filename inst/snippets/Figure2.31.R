@@ -1,3 +1,3 @@
-favstats(~Longevity, data=MammalLongevity)
-bwplot(~Longevity, data=MammalLongevity)
+favstats( ~ Longevity, data = MammalLongevity)
+bwplot( ~ Longevity, data = MammalLongevity)
 

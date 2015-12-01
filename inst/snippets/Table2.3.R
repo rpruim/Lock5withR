@@ -1,2 +1,2 @@
-tally(~ Response + Gender, data=OneTrueLove)
+tally( ~ Response + Gender, data = OneTrueLove)
 

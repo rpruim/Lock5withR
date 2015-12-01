@@ -1,2 +1,2 @@
-bwplot(~Budget, data=HollywoodMovies2011)
+bwplot( ~ Budget, data = HollywoodMovies2011)
 

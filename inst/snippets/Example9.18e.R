@@ -1,2 +1,2 @@
-Ink.Price(PPM=3.0, interval='prediction')
+Ink.Price(PPM = 3.0, interval = 'prediction')
 

@@ -1,2 +1,2 @@
-xyplot(Tip ~ Bill, cex = .5, data=RestaurantTips)
+xyplot(Tip ~ Bill, cex = .5, data = RestaurantTips)
 

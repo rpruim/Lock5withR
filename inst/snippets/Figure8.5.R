@@ -1,2 +1,2 @@
-bwplot(Award ~ Pulse, data=StudentSurvey)
+bwplot(Award ~ Pulse, data = StudentSurvey)
 

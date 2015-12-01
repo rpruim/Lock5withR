@@ -1,2 +1,2 @@
-tally(~Answer, format="proportion", data=APMultipleChoice)
+tally(~Answer, format = "proportion", data = APMultipleChoice)
 

@@ -1,2 +1,2 @@
-tally(~ Longevity, margin=TRUE, data=MammalLongevity)
+tally( ~ Longevity, margin = TRUE, data = MammalLongevity)
 

@@ -1,4 +1,4 @@
 head(AllCountries)
-summary(AllCountries)
+inspect(AllCountries)
 AllCountries[86, ]
 

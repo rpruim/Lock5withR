@@ -1,2 +1,2 @@
-summary(lm(Salary ~ Gender, data = SalaryGender))
+msummary(lm(Salary ~ Gender, data = SalaryGender))
 

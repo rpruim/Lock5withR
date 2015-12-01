@@ -1,2 +1,2 @@
-xyplot( Price ~ PPM, data=InkjetPrinters, type=c('p','r') )
+xyplot(Price ~ PPM, data = InkjetPrinters, type = c('p', 'r'))
 

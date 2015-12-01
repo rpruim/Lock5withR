@@ -1,2 +1,2 @@
-prop(~ Response, data=OneTrueLove)
+prop( ~ Response, data = OneTrueLove)
 

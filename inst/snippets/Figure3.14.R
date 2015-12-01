@@ -1,2 +1,2 @@
-dotPlot(~Time, width=1, data=CommuteAtlanta)
+dotPlot(~Time, width = 1, data = CommuteAtlanta)
 

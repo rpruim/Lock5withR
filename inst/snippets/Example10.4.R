@@ -1,2 +1,2 @@
-summary(lm(Bodyfat ~ Weight + Height + Abdomen, data = BodyFat))
+msummary(lm(Bodyfat ~ Weight + Height + Abdomen, data = BodyFat))
 

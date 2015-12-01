@@ -1,2 +1,2 @@
-confint(t.test(~Flight179, data=Flight179))
+confint(t.test(~Flight179, data = Flight179))
 

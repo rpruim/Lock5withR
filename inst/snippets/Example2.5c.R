@@ -1,2 +1,2 @@
-tally(~ Gender, format="percent", data=OneTrueLove)
+tally( ~ Gender, format = "percent", data = OneTrueLove)
 

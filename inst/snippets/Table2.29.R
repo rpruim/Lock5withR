@@ -1,2 +1,2 @@
-xyplot(Margin ~ Approval, data=ElectionMargin)
+xyplot(Margin ~ Approval, data = ElectionMargin)
 

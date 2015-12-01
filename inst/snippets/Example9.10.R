@@ -1,3 +1,3 @@
-summary(lm(Calories ~ Sugars, Cereal))
-anova(lm(Calories ~ Sugars, Cereal))
+summary(lm(Calories ~ Sugars, data = Cereal))
+anova(lm(Calories ~ Sugars, data = Cereal))
 

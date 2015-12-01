@@ -1,3 +1,3 @@
-histogram( ~ resid(lakes.model) )
-xqqmath( ~ resid(lakes.model) )
+histogram( ~ resid(lakes.model))
+xqqmath( ~ resid(lakes.model))
 

@@ -1,2 +1,2 @@
-bargraph(~ Award | Gender, data=StudentSurvey)
+bargraph( ~ Award | Gender, data = StudentSurvey)
 

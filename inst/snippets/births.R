@@ -1,2 +1,2 @@
-xyplot(births ~ date, data=Births78)
+xyplot(births ~ date, data = Births78)
 

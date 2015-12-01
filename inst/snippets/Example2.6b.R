@@ -1,2 +1,2 @@
-as.data.frame(tally(~ Gender + Award, data=StudentSurvey))
+as.data.frame(tally( ~ Gender + Award, data = StudentSurvey))
 

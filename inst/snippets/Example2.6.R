@@ -1,2 +1,2 @@
-tally(~Gender + Award, margin=TRUE, data=StudentSurvey)
+tally( ~ Gender + Award, margin = TRUE, data = StudentSurvey)
 

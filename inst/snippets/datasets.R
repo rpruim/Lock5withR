@@ -1,2 +1,2 @@
-## data(package="Lock5withR")
+## data(package = "Lock5withR")
 

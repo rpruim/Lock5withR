@@ -1,2 +1,2 @@
-xyplot(Calcium ~ pH, type=c("p", "r"), data=FloridaLakes)
+xyplot(Calcium ~ pH, type = c("p", "r"), data = FloridaLakes)
 

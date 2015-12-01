@@ -1,3 +1,3 @@
-mean(~Alkalinity, data=FloridaLakes)
-median(~Alkalinity, data=FloridaLakes)
+mean( ~ Alkalinity, data = FloridaLakes)
+median( ~ Alkalinity, data = FloridaLakes)
 

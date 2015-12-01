@@ -1,2 +1,2 @@
-SE <- sd(~prop, data=BootP); SE
+SE <- sd(~prop, data = BootP); SE
 

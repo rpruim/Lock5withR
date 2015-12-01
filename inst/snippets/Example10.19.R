@@ -1,2 +1,2 @@
-summary(lm(Final ~ Exam1 + Exam2, data = StatGrades))
+msummary(lm(Final ~ Exam1 + Exam2, data = StatGrades))
 

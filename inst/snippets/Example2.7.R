@@ -1,2 +1,2 @@
-diff(prop(Award~Gender, level="Olympic", data=StudentSurvey))
+diff(prop(Award~Gender, level = "Olympic", data = StudentSurvey))
 

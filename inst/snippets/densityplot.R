@@ -1,3 +1,3 @@
-densityplot(~ Longevity, data=MammalLongevity)
-densityplot(~ BirthRate, data=AllCountries )
+densityplot( ~ Longevity, data = MammalLongevity)
+densityplot( ~ BirthRate, data = AllCountries )
 

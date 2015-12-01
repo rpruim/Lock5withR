@@ -1,2 +1,2 @@
-bwplot(~Smokers, data=USStates)
+bwplot( ~ Smokers, data = USStates)
 

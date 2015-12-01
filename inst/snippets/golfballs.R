@@ -1,2 +1,2 @@
-chisq.test( golfballs )
+chisq.test(golfballs)
 

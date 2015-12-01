@@ -1,2 +1,2 @@
-favstats( Ants ~ Filling, data=SandwichAnts )
+favstats( Ants ~ Filling, data = SandwichAnts )
 

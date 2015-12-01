@@ -1,2 +1,2 @@
-lm( Price ~ PPM, data=InkjetPrinters )
+lm(Price ~ PPM, data = InkjetPrinters)
 

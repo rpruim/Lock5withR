@@ -1,2 +1,2 @@
-summary( lm( CostBW ~ PPM, data=InkjetPrinters) ) 
+summary(lm(CostBW ~ PPM, data = InkjetPrinters)) 
 

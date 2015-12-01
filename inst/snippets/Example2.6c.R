@@ -1,2 +1,2 @@
-prop(~ Award, level="Olympic", data=StudentSurvey)
+prop( ~ Award, level = "Olympic", data = StudentSurvey)
 

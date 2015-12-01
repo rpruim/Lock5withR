@@ -1,2 +1,2 @@
-cdata(0.95, result, data=Bootstrap)
+cdata( ~ mean, 0.95, data = Bootstrap)
 

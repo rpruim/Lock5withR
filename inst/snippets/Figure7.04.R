@@ -1,2 +1,2 @@
-bargraph(~Response|Gender, type="count", data = OneTrueLove)
+bargraph(~Response|Gender, type = "count", data = OneTrueLove)
 

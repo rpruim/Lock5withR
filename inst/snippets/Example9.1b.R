@@ -1,2 +1,2 @@
-coef( lm( Price ~ PPM, data=InkjetPrinters ) )
+coef(lm(Price ~ PPM, data = InkjetPrinters))
 

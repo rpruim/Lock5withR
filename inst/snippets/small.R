@@ -1,2 +1,2 @@
-plot(small.model, w=1:2)
+plot(small.model, w = 1:2)
 

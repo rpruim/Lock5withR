@@ -1,2 +1,2 @@
-bwplot(Field ~ Cost, data=TextbookCosts)
+bwplot(Field ~ Cost, data = TextbookCosts)
 

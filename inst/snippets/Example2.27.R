@@ -1,2 +1,2 @@
-fivenum(~Smokers, data=USStates)
+fivenum( ~ Smokers, data = USStates)
 

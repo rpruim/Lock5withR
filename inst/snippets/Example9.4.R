@@ -1,2 +1,2 @@
-summary( lm( PctTip ~ Bill, data=RestaurantTips) ) 
+msummary(lm(PctTip ~ Bill, data = RestaurantTips)) 
 

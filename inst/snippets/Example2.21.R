@@ -1,2 +1,2 @@
-## fivenum(~Exercise, data=StudentSurvey)
+## fivenum( ~ Exercise, data = StudentSurvey)
 

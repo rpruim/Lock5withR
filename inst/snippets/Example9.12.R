@@ -1,3 +1,3 @@
-summary(lm(Calories ~ Sodium, Cereal))
-anova(lm(Calories ~ Sodium, Cereal))
+summary(lm(Calories ~ Sodium, data = Cereal))
+anova(lm(Calories ~ Sodium, data = Cereal))
 

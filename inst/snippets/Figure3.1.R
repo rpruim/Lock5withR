@@ -1,5 +1,5 @@
 # Now we'll do it 1000 times
-sampledist <- do(1000) * mean(~FTGradEnrollment, data=sample(StatisticsPhD, 10))
-head(sampledist, 3)
-dotPlot(~result, width=.005, data=sampledist)
+Sampledist <- do(1000) * mean( ~ FTGradEnrollment, data = sample(StatisticsPhD, 10))
+head(Sampledist, 3)
+dotPlot( ~ mean, width = .005, data = Sampledist)
 
