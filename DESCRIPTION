@@ -1,8 +1,8 @@
 Package: Lock5withR
 Type: Package
 Title: Data sets for "Statistics: Unlocking the Power of Data"
-Version: 1.0
-Date: 2015-05-18
+Version: 1.1
+Date: 2015-11-30
 Author: Randall Pruim
 Maintainer: Randall Pruim <rpruim@calvin.edu>
 Description: Data sets and other 
