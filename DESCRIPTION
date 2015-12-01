@@ -5,8 +5,8 @@ Version: 1.1
 Date: 2015-11-30
 Author: Randall Pruim
 Maintainer: Randall Pruim <rpruim@calvin.edu>
-Description: Data sets and other 
-    utilities for "Statistics: Unlocking the Power of Data" 
+Description: Data sets and other
+    utilities for "Statistics: Unlocking the Power of Data"
     by Lock, Lock, Lock, Lock and Lock.
 License: GPL-2
 Suggests:
@@ -15,3 +15,4 @@ Suggests:
     mosaic
 LazyLoad: yes
 LazyData: yes
+RoxygenNote: 5.0.1
