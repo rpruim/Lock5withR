@@ -4,7 +4,11 @@
 * win-builder (devel and release)
 
 ## R CMD check results
+
 There were no ERRORs or WARNINGs. 
+
+Some of the URLs that were broken at the time of the last sumbission are either back up again or
+have been eliminated or replaced with updated URLs.
 
 ## Downstream dependencies
 
