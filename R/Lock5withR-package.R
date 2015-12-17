@@ -1723,9 +1723,10 @@ NA
 #' 		\item{\code{First}} {First round score (in relation to par)}
 #' 		\item{\code{Final}} {Final four round score (in relation to par)}
 #' }
-#' @source 2011 Masters tournament results at
-#' \url{http://www.masters.com/en_US/discover/past_winners.html}
-#' @keywords datasets
+# This URL is dead now, so removing.
+# @source 2011 Masters tournament results at
+# \url{http://www.masters.com/en_US/discover/past_winners.html}
+# @keywords datasets
 NA
 
 
@@ -2422,7 +2423,10 @@ NA
 #' \item{\code{phD}} {\code{No} or \code{Yes}}
 #' \item{\code{PhD}} {\code{0} or \code{1}}
 #' }
-#' @source \url{http://www.census.gov/acs/www/data_documentation/public_use_microdata_sample/}
+# This original source URL is no longer valid
+# @source \url{http://www.census.gov/acs/www/data_documentation/public_use_microdata_sample/}
+# Here is an updated URL that seems to provide PUMS data.
+#' @source \url{https://www.census.gov/main/www/pums.html}
 #' @keywords datasets
 NA
 

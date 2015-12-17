@@ -14,7 +14,7 @@
 \item{\code{PhD}} {\code{0} or \code{1}}
 }}
 \source{
-\url{http://www.census.gov/acs/www/data_documentation/public_use_microdata_sample/}
+\url{https://www.census.gov/main/www/pums.html}
 }
 \description{
 Salaries for college teachers

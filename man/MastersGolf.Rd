@@ -9,10 +9,6 @@
 		\item{\code{First}} {First round score (in relation to par)}
 		\item{\code{Final}} {Final four round score (in relation to par)}
 }}
-\source{
-2011 Masters tournament results at
-\url{http://www.masters.com/en_US/discover/past_winners.html}
-}
 \description{
 Scores from the 2011 Masters golf tournament
 }
@@ -20,5 +16,4 @@ Scores from the 2011 Masters golf tournament
 Data for a random sample of 20 golfers who made the cut at the 2011 Masters
 golf tournament.
 }
-\keyword{datasets}
 
