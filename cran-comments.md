@@ -7,6 +7,12 @@
 
 There were no ERRORs or WARNINGs. 
 
+The following NOTE will go away once the package appears on CRAN:
+
+  Found the following (possibly) invalid URLs:
+    URL: http://cran.r-project.org/package=Lock5withR
+      From: README.md
+    
 Some of the URLs that were broken at the time of the last sumbission are either back up again or
 have been eliminated or replaced with updated URLs.
 
