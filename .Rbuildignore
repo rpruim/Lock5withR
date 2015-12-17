@@ -14,3 +14,4 @@
 ^cran-comments\.md$
 ^iris3\.csv$
 ^iris3\.rda$
+^inst/snippets/\.R$
