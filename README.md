@@ -3,7 +3,7 @@
 
 
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/Lock5withR)](http://cran.r-project.org/web/packages/Lock5withR)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/Lock5withR)](http://cran.r-project.org/package=Lock5withR)
 [![Travis-CI Build Status](https://travis-ci.org/rpruim/Lock5withR.svg?branch=master)](https://travis-ci.org/rpruim/Lock5withR)
 
 Lock5withR
@@ -50,20 +50,20 @@ locket("Example2.11")
 #> 	locket(Example2.11)
 #> 	------ ~~~~~~~~~~~
 #> 
-#> > ICU20 <- subset(ICUAdmissions, Age=="20")
+#> > ICU20 <- subset(ICUAdmissions, Age == "20")
 #> 
-#> > mean(~HeartRate, data=ICU20)
+#> > mean( ~ HeartRate, data = ICU20)
 #> [1] 82.2
 #> 
-#> > median(~HeartRate, data=ICU20)
+#> > median( ~ HeartRate, data = ICU20)
 #> [1] 80
 #> 
-#> > ICU55 = subset(ICUAdmissions, Age=="55")
+#> > ICU55 = subset(ICUAdmissions, Age == "55")
 #> 
-#> > mean(~HeartRate, data=ICU55)
+#> > mean( ~ HeartRate, data = ICU55)
 #> [1] 108.5
 #> 
-#> > median(~HeartRate, data=ICU55)
+#> > median( ~ HeartRate, data = ICU55)
 #> [1] 106
 ```
 
