@@ -40,9 +40,13 @@ NA
 #' \item{\code{Language}} { a factor with two levels (\code{English} and \code{Other})}
 #' }
 #' @source The full public dataset can be downloaded at 
-#' \url{http://www.census.gov/acs/www/data_documentation/pums_data/}, and the
+#' \url{http://www.census.gov/programs-surveys/acs/data/pums.html}, and the
 #' full list of variables are at 
-#' \url{http://www.census.gov/acs/www/Downloads/datadocumentation/pums/DataDict/PUMSDataDict10.pdf}.
+#' \url{http://www.census.gov/programs-surveys/acs/guidance.html}.
+# @source The full public dataset can be downloaded at 
+# \url{http://www.census.gov/acs/www/data_documentation/pums_data/}
+# and the full list of variables is at 
+# \url{http://www.census.gov/acs/www/Downloads/data/documentation/pums/DataDict/PUMSDataDict10.pdf}.
 #' @keywords datasets
 NA
 
@@ -745,10 +749,14 @@ NA
 #'		\item{code{language}} {Native language: \code{English} or \code{Other}}
 #'		\item{code{Language}} {Native language: \code{0} or \code{1}}
 #' }
+# @source The full public dataset can be downloaded at 
+# \url{http://www.census.gov/acs/www/data_documentation/pums_data/}
+# and the full list of variables is at 
+# \url{http://www.census.gov/acs/www/Downloads/data/documentation/pums/DataDict/PUMSDataDict10.pdf}.
 #' @source The full public dataset can be downloaded at 
-#' \url{http://www.census.gov/acs/www/data_documentation/pums_data/}
-#' and the full list of variables is at 
-#' \url{http://www.census.gov/acs/www/Downloads/data/documentation/pums/DataDict/PUMSDataDict10.pdf}.
+#' \url{http://www.census.gov/programs-surveys/acs/data/pums.html}, and the
+#' full list of variables are at 
+#' \url{http://www.census.gov/programs-surveys/acs/guidance.html}.
 #' @details
 #' Several variables in this data set are included in two encodings.  (Watch your 
 #' capitalization.)  The lowercase versions have more intuitive codings and can 
@@ -2148,7 +2156,7 @@ NA
 #' \code{2}, or \code{3} }
 #' }
 #' @references Data downloaded from
-#' \url{http://lib.stat.cmu.edu/datasets/Plasma_Retinol}.
+#' \url{http://lib.stat.cmu.edu/DASL/}.
 #' @source Nierenberg, Stukel, Baron, Dain, and Greenberg, "Determinants of
 #' plasma levels of beta-carotene and retinol", American Journal of
 #' Epidemiology (1989).
