@@ -65,7 +65,7 @@ data(NutritionStudy)
 }
 \references{
 Data downloaded from
-\url{http://lib.stat.cmu.edu/datasets/Plasma_Retinol}.
+\url{http://lib.stat.cmu.edu/DASL/}.
 }
 \keyword{datasets}
 

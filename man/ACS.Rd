@@ -23,9 +23,9 @@
 }}
 \source{
 The full public dataset can be downloaded at 
-\url{http://www.census.gov/acs/www/data_documentation/pums_data/}, and the
+\url{http://www.census.gov/programs-surveys/acs/data/pums.html}, and the
 full list of variables are at 
-\url{http://www.census.gov/acs/www/Downloads/datadocumentation/pums/DataDict/PUMSDataDict10.pdf}.
+\url{http://www.census.gov/programs-surveys/acs/guidance.html}.
 }
 \description{
 Data from a sample of individuals in the American Community Survey
