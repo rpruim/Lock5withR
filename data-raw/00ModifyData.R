@@ -163,7 +163,7 @@ Wetsuits <- transform(Wetsuits,
                         Sex = factor(ifelse(Gender=="M", "Male", "Female")))
 
 devtools::use_data( 
-  overwrite = TRUE,
+  overwrite = TRUE, compress = "bzip2",
   AllCountries,
   AtmosphericCO2,
   BikeCommute,
