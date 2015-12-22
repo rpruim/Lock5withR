@@ -15,3 +15,4 @@
 ^iris3\.csv$
 ^iris3\.rda$
 ^inst/snippets/\.R$
+^data-raw$
