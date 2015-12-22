@@ -10,6 +10,7 @@ Description: Data sets and other utilities for
     by Lock, Lock, Lock, Lock and Lock 
     (ISBN : 978-0-470-60187-7, http://lock5stat.com/).
 License: GPL-2
+Depends: R (>= 2.10)
 Suggests:
     lubridate,
     lattice,
