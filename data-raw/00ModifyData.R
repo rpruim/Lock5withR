@@ -3,6 +3,9 @@ for( f in files) {
   load(f)
 }
 
+objects <- sub("\\.rda", "", files)
+objects <- lapply(objects, as.name)
+
 l <- c("Under 2500",  "2500 - 5000", "Over 5000")
 AllCountries <- transform(AllCountries, 
                           kwhPerCap = ordered(l[Developed],levels=l))
@@ -162,30 +165,8 @@ WaterTaste <- transform(WaterTaste,
 Wetsuits <- transform(Wetsuits,
                         Sex = factor(ifelse(Gender=="M", "Male", "Female")))
 
-devtools::use_data( 
-  overwrite = TRUE, compress = "bzip2",
-  AllCountries,
-  AtmosphericCO2,
-  BikeCommute,
-  BodyTemp50,
-  CaffeineTaps,
-  EmployedACS,
-  Flight179,
-  GPAGender,
-  ICUAdmissions,
-  MiamiHeat,
-  MindsetMatters,
-  NFLScores2011,
-  NutritionStudy,
-  RestaurantTips,
-  RetailSales,
-  SalaryGender,
-  SampCountries,
-  SandP500,
-  SleepStudy,
-  SpeedDating,
-  StudentSurvey,
-  USStates,
-  WaterTaste,
-  Wetsuits
+do.call(
+  devtools::use_data,
+  c(list(overwrite = TRUE, compress = "xz"),
+    objects)
 )
