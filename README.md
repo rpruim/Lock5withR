@@ -1,3 +1,12 @@
+---
+output:
+  html_document:
+    keep_md: yes
+    fig.width: 5
+    fig.height: 3
+  md_document:
+    variant: markdown_github
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -33,7 +42,7 @@ devtools::install_github("rpruim/Lock5withR")
 ```
 
 This package contains all of the data sets used in the package and the `locket()` function which can be used to run any of 
-417 code chunks from the campanion.  
+417 code chunks from the companion.  
 
 For example:
 
