@@ -47,7 +47,7 @@ devtools::install_github("rpruim/Lock5withR")
 ```
 
 This package contains all of the data sets used in the package and the `locket()` function which can be used to run any of 
-`r length(Lock5withR::locket())` code chunks from the campanion.  
+`r length(Lock5withR::locket())` code chunks from the companion.  
 
 For example:
 
