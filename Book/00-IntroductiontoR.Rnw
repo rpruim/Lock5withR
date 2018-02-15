@@ -1,5 +1,5 @@
 
-\Sexpr{set_parent('Lock5withR.Rnw')}
+\Sexpr{knitr::set_parent('Lock5withR.Rnw')}
 
 \setcounter{chapter}{-1}
 \Chapter{Introduction to R and Statistics}
@@ -396,7 +396,7 @@ a formula involved), you just need to know what goes in each slot.  This can be 
 Let's try an example.  Suppose we want to make this plot
 <<echo=FALSE>>=
 require(mosaicData)
-xyplot(births ~ date, data = Births78)
+gf_point(births ~ date, data = Births78)
 @
 
 \begin{enumerate}
