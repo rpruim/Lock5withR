@@ -49,7 +49,7 @@
 %\newcommand{\Rindex}[2][black]{\index{{\color{#1}\texttt{#2}}}}
 \newcommand{\Rindex}[1]{\index{\texttt{#1}}}
 \newcommand{\dataframe}[1]{{\color{blue!80!black}\texttt{#1}}\Rindex{#1}}
-\newcommand{\function}[1]{{\color{purple!75!blue}\texttt{\StrSubstitute{#1}{()}{}()}}\Rindex{#1}}
+\newcommand{\function}[1]{{\color{purple!75!blue}\texttt{\StrSubstitute{\detokenize{#1}}{()}{}()}}\Rindex{\detokenize{#1}}}
 \newcommand{\option}[1]{{\color{brown!80!black}\texttt{#1}}}
 \newcommand{\argument}[1]{{\color{brown!80!black}\texttt{#1}}}
 %\newcommand{\pkg}[1]{{\color{red!80!black}\texttt{#1}}}
