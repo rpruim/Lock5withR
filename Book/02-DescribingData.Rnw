@@ -145,7 +145,7 @@ We will continue more with proportions in Chapter 3.
 
 \subsubsection*{Figure 2.2}
 
-A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}. We use the \argument{groups} argument for this. What \argument{groups} does depends a bit on the type of graph. Using \argument{groups} with \function{histogram()} doesn't work so well because it is difficult to overlay histograms.%
+A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}. We use the \argument{groups} argument for this. What \argument{groups} does depends a bit on the type of graph. Using \argument{groups} with \function{gf_histogram()} doesn't work so well because it is difficult to overlay histograms.%
 \footnote{The \pkg{mosaic} function
 \function{histogram()} does do something meaningful with \argument{groups}
 in some situations.}
