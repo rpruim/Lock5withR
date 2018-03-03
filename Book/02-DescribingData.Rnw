@@ -53,8 +53,8 @@ tally( ~ Response, margin = TRUE, data = OneTrueLove)
 
 To find the proportion of responders who \emph{disagree} or \emph{don't know}, we can use the \argument{level=} argument in the function to find proportions.
 <<Example2.3>>=
-prop( ~ Response, level = "Disagree", data = OneTrueLove)
-prop( ~ Response, level = "Don't know", data = OneTrueLove)
+prop( ~ Response, success = "Disagree", data = OneTrueLove)
+prop( ~ Response, success = "Don't know", data = OneTrueLove)
 @
 
 Further, we can also display the \emph{relative frequencies}, or \term{proportions} in a table.
@@ -67,8 +67,8 @@ tally( ~ Response, format = "proportion", margin = TRUE, data = OneTrueLove)
 \R\ provides many different chart and plot functions, including \emph{bar charts} and \emph{pie charts}, to visualize counts or proportions. Bar charts, also known as bar graphs, are a way of displaying the distribution of a categorical variable.
 
 <<Figure2.1>>=
-bargraph( ~ Response, data = OneTrueLove)
-bargraph( ~ Response, data = OneTrueLove, horizontal = TRUE)
+gf_bar( ~ Response, data = OneTrueLove)
+gf_bar( ~ Response, data = OneTrueLove, horizontal = TRUE)
 @
 
 %Here is an example of a pie chart, but note that statisticians rarely use pie charts because they are harder to read.
@@ -131,33 +131,34 @@ as.data.frame(tally( ~ Gender + Award, data = StudentSurvey))
 @
 
 <<Example2.6c>>=
-prop( ~ Award, level = "Olympic", data = StudentSurvey)
+prop( ~ Award, success = "Olympic", data = StudentSurvey)
 @
 
 \subsubsection*{Example 2.7}
 
 To calculate the difference of certain statistics, we can use the \function{diff()} function. Here we use it to find the difference in proportions, but it can be used for means, medians, and etc.
 <<Example2.7>>=
-diff(prop(Award~Gender, level = "Olympic", data = StudentSurvey))
+diff(prop(Award~Gender, success = "Olympic", data = StudentSurvey))
 @
 
 We will continue more with proportions in Chapter 3. 
 
 \subsubsection*{Figure 2.2}
 
-A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}. We use the \argument{groups} argument for this. What \argument{groups} does depends a bit on the type of graph. Using \argument{groups} with \function{gf_histogram()} doesn't work so well because it is difficult to overlay histograms.%
+A way to look at multiple groups simultaneously is by using \emph{comparative plots} such as a \emph{segmented bar chart} or \emph{side-by-side bar chart}. We use the \argument{fill} argument for this. What \argument{fill} does depends a bit on the type of graph. Using \argument{fill} with \function{gf_histogram()} doesn't work so well because it is difficult to overlay histograms.%
 \footnote{The \pkg{mosaic} function
-\function{histogram()} does do something meaningful with \argument{groups}
+\function{gf_histogram()} does do something meaningful with \argument{groups}
 in some situations.}
 Density plots work better for this.
+%I think this explanatory paragraph and footnote need to be rewritten to explain fill =, gf_histogram(), and position
 
-Notice the addition of \argument{groups=} (to group), \argument{stack=} (to segment the graph), and \argument{auto.key=TRUE} (to build a simple legend so we can tell which groups are which).
+Notice the addition of \argument{fill=} (to group), \argument{position=} (to segment the graph), and \argument{auto.key=TRUE} (to build a simple legend so we can tell which groups are which).
 <<Figure2.2>>=
-bargraph( ~ Award, groups = Gender, stack = TRUE, auto.key = TRUE, data = StudentSurvey)
+gf_bar( ~ Award, fill = ~Gender, auto.key = TRUE, data = StudentSurvey)
 @
 
 <<Figure2.2b>>=
-bargraph( ~ Gender, groups = Award, auto.key = TRUE, data = StudentSurvey)
+gf_bar( ~ Gender, fill = ~Award, position = 'dodge', auto.key = TRUE, data = StudentSurvey)
 @
 
 %Example 2.8

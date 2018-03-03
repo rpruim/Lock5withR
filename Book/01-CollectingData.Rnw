@@ -13,6 +13,7 @@ Data sets in \R\ are usually stored as \term{data frames} in a rectangular arran
 
 <<>>=
 require(Lock5withR)  # Tell R to use the package for our text book
+require(mosaic) # Tell R to use the package for creating plots
 data(StudentSurvey) # load the StudentSurvey data set
 @
 
@@ -52,7 +53,7 @@ ncol(StudentSurvey) # number of columns
 dim(StudentSurvey)  # number of rows and columns
 @
 
-Many of the datasets in \R\ have useful help files that describe the data and explain how they were collected or give references to the original studies. You can access this information for the \dataframe{AllCountries} data set by typing
+Many of the datasets in \R\ have useful help files that describe the data and explain how they were collected or give references to the original studies. You can access this information for the \dataframe{StudentSurvey} data set by typing
 <<Data1.1c, tidy=FALSE, eval=FALSE>>=
 ?StudentSurvey
 @
@@ -196,7 +197,7 @@ Sub
 
 \subsubsection*{Figure 1.2}
 <<Figure1.2, tidy=FALSE>>=
-xyplot(LifeExpectancy ~ Vehicles, xlab = "Vehicles (millions)", ylab = "Life Expectancy", 
+gf_point(LifeExpectancy ~ Vehicles, xlab = "Vehicles (millions)", ylab = "Life Expectancy", 
        data = LifeExpectancyVehicles)
 @
 
