@@ -268,8 +268,7 @@ The various options available for the \function{gf_histogram()} function enable 
 <<Figure2.8, opts.label = "fig3", tidy = FALSE>>=
 gf_histogram( ~ Pulse, binwidth = 5, data = StudentSurvey)
 gf_histogram( ~ Exercise, binwidth = 2, closed = 'left',
-               data = StudentSurvey, ylim = c(10, 30))
-histogram( ~ Piercings, width = 1, data = StudentSurvey)
+               data = StudentSurvey)
 gf_dhistogram( ~Piercings, binwidth = 1, data = StudentSurvey)
 @
 \authNote{histogram( ~ Exercise, type = "count", width = 2, center = 2, 
