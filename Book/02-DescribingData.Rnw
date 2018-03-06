@@ -274,7 +274,6 @@ gf_dhistogram( ~Piercings, binwidth = 1, data = StudentSurvey)
 @
 \authNote{histogram( ~ Exercise, type = "count", width = 2, center = 2, 
           right = FALSE, ylim = c(0, 70), data = StudentSurvey) was the original 2nd graph. The           replacement looks the same but I get the Warning message 'Removed 1 rows containing             non-finite values (stat_bin)'}
-\authNote{histogram( ~ Piercings, width = 1, data = StudentSurvey) was the original 3rd graph but its y axis ranged from }
 Sometimes a \term{frequency polygon} provides a more useful view.
 The only thing that changes is \function{histogram()} becomes \function{freqpolygon()}.
 
