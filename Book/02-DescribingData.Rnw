@@ -243,35 +243,38 @@ We won't use this very often however, since seeing this information in a histogr
 Histograms are a way of displaying the distribution of a quantitative variable.
 <<Figure2.7>>=
 gf_histogram( ~ Longevity, data = MammalLongevity)
-gf_histogram( ~ Longevity, binwidth = 5, type = "count", data = MammalLongevity)
+gf_histogram( ~ Longevity, binwidth = 5, data = MammalLongevity)
 @
 
 We can control the (approximate) number of bins using the \option{bins} argument. The number of bins (and to a lesser extent the positions of the bins) can make a histogram look quite different.
 <<Figure2.7b, opts.label = "fig3">>=
-gf_histogram( ~ Longevity, type = "count", data = MammalLongevity, bins = 8)
-gf_histogram( ~ Longevity, type = "count", data = MammalLongevity, bins = 15)
-gf_histogram( ~ Longevity, type = "count", data = MammalLongevity, bins = 30)
+gf_histogram( ~ Longevity, data = MammalLongevity, bins = 8)
+gf_histogram( ~ Longevity, data = MammalLongevity, bins = 15)
+gf_histogram( ~ Longevity, data = MammalLongevity, bins = 30)
 @
 
 We can also describe the bins in terms of width instead of in terms of the number of bins.  This is especially nice for count or other integer data.
 <<Figure2.7c, opts.label = "fig3">>=
-gf_histogram( ~ Longevity, type = "count", data = MammalLongevity, binwidth = 10)
-gf_histogram( ~ Longevity, type = "count", data = MammalLongevity, binwidth = 5)
-gf_histogram( ~ Longevity, type = "count", data = MammalLongevity, binwidth = 2)
+gf_histogram( ~ Longevity, data = MammalLongevity, binwidth = 10)
+gf_histogram( ~ Longevity, data = MammalLongevity, binwidth = 5)
+gf_histogram( ~ Longevity, data = MammalLongevity, binwidth = 2)
 @
 
 %Example 2.9
 
 \subsubsection*{Figure 2.8}
 
-The various options available for the \function{gf_histogram()} function enable us to replicate Figure 2.8, some including centering, adding counts, labels, and limit to the y-axis (similar for x-axis).
+The various options available for the \function{gf_histogram()} function enable us to replicate Figure 2.8, some including centering, adding counts, labels, and limit to the y-axis (similar for x-axis). Using \function{gf_histogram()} measures the y-axis by density rather than count. This is useful for determing relative amounts.
 <<Figure2.8, opts.label = "fig3", tidy = FALSE>>=
-histogram( ~ Pulse, type = "count", width = 5, data = StudentSurvey)
-histogram( ~ Exercise, type = "count", width = 2, center = 2, 
-          right = FALSE, ylim = c(0, 70), data = StudentSurvey) 
+gf_histogram( ~ Pulse, binwidth = 5, data = StudentSurvey)
+gf_histogram( ~ Exercise, binwidth = 2, closed = 'left',
+               data = StudentSurvey, ylim = c(10, 30))
 histogram( ~ Piercings, width = 1, data = StudentSurvey)
+gf_dhistogram( ~Piercings, binwidth = 1, data = StudentSurvey)
 @
-
+\authNote{histogram( ~ Exercise, type = "count", width = 2, center = 2, 
+          right = FALSE, ylim = c(0, 70), data = StudentSurvey) was the original 2nd graph. The           replacement looks the same but I get the Warning message 'Removed 1 rows containing             non-finite values (stat_bin)'}
+\authNote{histogram( ~ Piercings, width = 1, data = StudentSurvey) was the original 3rd graph but its y axis ranged from }
 Sometimes a \term{frequency polygon} provides a more useful view.
 The only thing that changes is \function{histogram()} becomes \function{freqpolygon()}.
 
