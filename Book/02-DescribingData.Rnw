@@ -274,11 +274,12 @@ gf_dhistogram( ~Piercings, binwidth = 1, data = StudentSurvey)
 \authNote{histogram( ~ Exercise, type = "count", width = 2, center = 2, 
           right = FALSE, ylim = c(0, 70), data = StudentSurvey) was the original 2nd graph. The           replacement looks the same but I get the Warning message 'Removed 1 rows containing             non-finite values (stat_bin)'}
 Sometimes a \term{frequency polygon} provides a more useful view.
-The only thing that changes is \function{histogram()} becomes \function{freqpolygon()}.
+The only thing that changes is \function{gf_histogram()} becomes \function{gf_freqpoly()}.
 
 <<freqpolygon>>=
-freqpolygon( ~ Exercise, width = 5, data = StudentSurvey)
+gf_freqpoly( ~ Exercise, binwidth = 5, data = StudentSurvey)
 @
+\authNote{'removed 1 rows containing non-finite values (stat_bin)' error and y axis is count instead of density}
 
 What is a frequency polygon?  The picture below shows how it is related to a histogram.  The frequency polygon is just a dot-to-dot drawing through the centers of the tops of the bars of the histogram.
 <<freqpolygon-illustrated, echo = FALSE>>=
