@@ -400,9 +400,9 @@ var( ~ DesMoines, data = April14Temps)        # variance = sd^2
 
 \subsubsection*{Example 2.17}
 
-To see that the distribution is indeed symmetric and approximately bell-shaped, you can use the argument \argument{fit} to overlay a ``normal" curve.
+To see that the distribution is indeed symmetric and approximately bell-shaped, you can chain the function \function{gf_dens()}. It can be helpful to set alpha (the transparency argument) lower than 1 to make the plot easier to read.
 <<Example2.17>>=
-histogram( ~ Pulse, fit = "normal", data = StudentSurvey)
+gf_dhistogram( ~ Pulse, data = StudentSurvey, alpha = .5) %>% gf_dens( ~ Pulse)
 mean <- mean( ~ Pulse, data = StudentSurvey); mean
 sd <- sd( ~ Pulse, data = StudentSurvey); sd
 mean - 2*sd
