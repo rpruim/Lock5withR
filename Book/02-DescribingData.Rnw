@@ -357,7 +357,7 @@ median( ~ HeartRate, data = ICU55)
 \subsubsection*{Figure 2.10}
 <<Figure2.10>>=
 head(FloridaLakes)
-histogram( ~ Alkalinity, width = 10, type = "count", data = FloridaLakes)
+gf_histogram( ~ Alkalinity, binwidth = 10, data = FloridaLakes)
 @
 
 \subsubsection*{Example 2.14}
@@ -383,12 +383,12 @@ The density plots of the temperatures of Des Moines and San Francisco reveal tha
 
 \subsubsection*{Figure 2.18}
 
-The \argument{cex} argument controls ``character expansion" and can be used to make the plotting ``characters" larger or smaller by specifying the scaling ratio. \argument{xlim} sets the limits for the x-axis.
+The \argument{dotsize} argument controls ``character expansion" and can be used to make the plotting ``characters" larger or smaller by specifying the scaling ratio. \argument{xlim} sets the limits for the x-axis. \argument{stackratio} allows you to adjust the vertical distance between points. Chaining \function{gf_lims()} lets you set the limits for the x-axis.
 <<Figure2.18, opts.label = "fig1">>=
-dotPlot( ~ DesMoines, width = 1, cex = .25, xlim = c(35, 80), data = April14Temps)
-dotPlot( ~ SanFrancisco, width = 1, cex = .35, xlim = c(35, 80), data = April14Temps)
+gf_dotplot( ~ DesMoines, binwidth = 1, dotsize = 2, stackratio = 6, data = April14Temps) %>% gf_lims(x = c(35, 80))
+gf_dotplot( ~ SanFrancisco, binwidth = 1, dotsize = 1, stackratio = 4, data = April14Temps) %>% gf_lims(x = c(45, 65))
 @
-
+\authNote{add explanation for arguments and chaining gf_lims()}
 \subsubsection*{Example 2.16}
 
 Although both \function{summary()} and \function{favstats()} calculate the \term{standard deviation} of a variable, we can also use \function{sd()} to find just the standard deviation. 
