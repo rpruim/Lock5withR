@@ -412,7 +412,7 @@ mean + 2*sd
 \subsubsection*{Figure 2.20}
 
 <<Figure2.20>>=
-histogram( ~ Sales, type = "count", data = RetailSales)
+gf_dhistogram( ~ Sales, binwidth = 25, data = RetailSales)
 @
 
 \subsubsection*{Example 2.18}
@@ -437,7 +437,7 @@ Z-scores can be computed as follows:
 \subsubsection*{Figure 2.21}
 
 <<Figure2.21>>=
-histogram( ~ Close, type = "count", width = 20, center = 10, data = SandP500)
+gf_histogram( ~ Close, binwidth = 20, data = SandP500)
 @
 
 \subsubsection*{Example 2.20}
