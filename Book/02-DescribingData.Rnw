@@ -385,8 +385,10 @@ The density plots of the temperatures of Des Moines and San Francisco reveal tha
 
 The \argument{dotsize} argument controls ``character expansion" and can be used to make the plotting ``characters" larger or smaller by specifying the scaling ratio. \argument{xlim} sets the limits for the x-axis. \argument{stackratio} allows you to adjust the vertical distance between points. Chaining \function{gf_lims()} lets you set the limits for the x-axis.
 <<Figure2.18, opts.label = "fig1">>=
-gf_dotplot( ~ DesMoines, binwidth = 1, dotsize = 2, stackratio = 6, data = April14Temps) %>% gf_lims(x = c(35, 80))
-gf_dotplot( ~ SanFrancisco, binwidth = 1, dotsize = 1, stackratio = 4, data = April14Temps) %>% gf_lims(x = c(45, 65))
+gf_dotplot( ~ DesMoines, binwidth = 1, dotsize = 2, stackratio = 3, data = April14Temps)
+%>% gf_lims(x = c(35, 80))
+gf_dotplot( ~ SanFrancisco, binwidth = 1, dotsize = .5, stackratio = 2, data = April14Temps)
+%>% gf_lims(x = c(45, 65))
 @
 \authNote{add explanation for arguments and chaining gf_lims()}
 \subsubsection*{Example 2.16}
@@ -517,8 +519,9 @@ A way to visualize the five number summary and outliers for a variable is to cre
 
 <<Example2.26, opts.label = "fig1">>=
 favstats( ~ Longevity, data = MammalLongevity)
-bwplot( ~ Longevity, data = MammalLongevity)
+gf_boxplot(Longevity ~ 'NULL', xlab = '', data = MammalLongevity)
 @
+\authNote{I think there is probably a better way to plot this against nothing than using 'NULL' but I'm not sure how, also not sure how I can change the orientation of this plot}
 
 <<Figure2.31, include = FALSE>>=
 <<Example2.26>>
