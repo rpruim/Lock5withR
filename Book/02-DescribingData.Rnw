@@ -275,25 +275,20 @@ gf_dhistogram( ~Piercings, binwidth = 1, data = StudentSurvey)
 Sometimes a \term{frequency polygon} provides a more useful view.
 The only thing that changes is \function{gf_histogram()} becomes \function{gf_freqpoly()}.
 
-<<freqpolygon,message = FALSE, warning = FALSE>>=
+<<freqpolygon, message = FALSE, warning = FALSE>>=
 gf_freqpoly( ~ Exercise, binwidth = 5, data = StudentSurvey)
 @
 \authNote{'removed 1 rows containing non-finite values (stat_bin)' error and y axis is count instead of density}
 
 What is a frequency polygon?  The picture below shows how it is related to a histogram.  The frequency polygon is just a dot-to-dot drawing through the centers of the tops of the bars of the histogram.
-<<freqpolygon-illustrated, echo = FALSE>>=
-freqpolygon( ~ Exercise, data = StudentSurvey, breaks = seq(0, 45, by = 4), lwd = 3, 
-            par.settings = col.whitebg(), 
-            panel = function(x, ...) { 
-  panel.xhistogram(x, ...);
-  panel.freqpolygon(x, ...)}
-             )
+<<freqpolygon-illustrated, echo = FALSE, message = FALSE, warning = FALSE>>=
+gf_dhistogram( ~ Exercise, bins = 10, data = StudentSurvey) %>% gf_freqpoly( ~ Exercise, bins = 10, data = StudentSurvey)
 @
 
-\R\ also provides a ``smooth'' version called a density plot; just change the function name from \function{histogram()} to \function{densityplot()}.
-<<densityplot>>=
-densityplot( ~ Longevity, data = MammalLongevity)
-densityplot( ~ BirthRate, data = AllCountries )
+\R\ also provides a ``smooth'' version called a density plot; just change the function name from \function{gf_histogram()} to \function{gf_density()}.
+<<densityplot, message = FALSE, warning = FALSE>>=
+gf_density( ~ Longevity, data = MammalLongevity)
+gf_density( ~ BirthRate, data = AllCountries )
 @
 
 If we make a histogram (or any of these other plots) of our data, we can describe the overall shape of the distribution. Keep in mind that the shape of a particular histogram may depend on the choice of bins. Choosing too many or too few bins can hide the true shape of the distribution.  (When in doubt, make more than one histogram.)
