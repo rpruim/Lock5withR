@@ -265,18 +265,17 @@ gf_histogram( ~ Longevity, data = MammalLongevity, binwidth = 2)
 \subsubsection*{Figure 2.8}
 
 The various options available for the \function{gf_histogram()} function enable us to replicate Figure 2.8, some including centering, adding counts, labels, and limit to the y-axis (similar for x-axis). Using \function{gf_histogram()} measures the y-axis by density rather than count. This is useful for determing relative amounts.
-<<Figure2.8, opts.label = "fig3", tidy = FALSE>>=
+<<Figure2.8, opts.label = "fig3", tidy = FALSE,message = FALSE, warning = FALSE>>=
 gf_histogram( ~ Pulse, binwidth = 5, data = StudentSurvey)
 gf_histogram( ~ Exercise, binwidth = 2, closed = 'left',
                data = StudentSurvey)
 gf_dhistogram( ~Piercings, binwidth = 1, data = StudentSurvey)
 @
-\authNote{histogram( ~ Exercise, type = "count", width = 2, center = 2, 
-          right = FALSE, ylim = c(0, 70), data = StudentSurvey) was the original 2nd graph. The           replacement looks the same but I get the Warning message 'Removed 1 rows containing             non-finite values (stat_bin)'}
+
 Sometimes a \term{frequency polygon} provides a more useful view.
 The only thing that changes is \function{gf_histogram()} becomes \function{gf_freqpoly()}.
 
-<<freqpolygon>>=
+<<freqpolygon,message = FALSE, warning = FALSE>>=
 gf_freqpoly( ~ Exercise, binwidth = 5, data = StudentSurvey)
 @
 \authNote{'removed 1 rows containing non-finite values (stat_bin)' error and y axis is count instead of density}
