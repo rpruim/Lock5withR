@@ -264,11 +264,11 @@ gf_histogram( ~ Longevity, data = MammalLongevity, binwidth = 2)
 
 \subsubsection*{Figure 2.8}
 
-The various options available for the \function{gf_histogram()} function enable us to replicate Figure 2.8, some including centering, adding counts, labels, and limit to the y-axis (similar for x-axis). Using \function{gf_histogram()} measures the y-axis by density rather than count. This is useful for determing relative amounts.
-<<Figure2.8, opts.label = "fig3", tidy = FALSE,message = FALSE, warning = FALSE>>=
+The various options available for the \function{gf_histogram()} function enable us to replicate Figure 2.8, some including centering, adding counts, labels, and limit to the y-axis (similar for x-axis). Using \function{gf_dhistogram()} measures the y-axis by density rather than count. This is useful for determing relative amounts.
+<<Figure2.8, opts.label = "fig3", tidy = FALSE, message = FALSE, warning = FALSE>>=
 gf_histogram( ~ Pulse, binwidth = 5, data = StudentSurvey)
 gf_histogram( ~ Exercise, binwidth = 2, closed = 'left',
-               data = StudentSurvey)
+              data = StudentSurvey)
 gf_dhistogram( ~Piercings, binwidth = 1, data = StudentSurvey)
 @
 
@@ -385,10 +385,10 @@ The density plots of the temperatures of Des Moines and San Francisco reveal tha
 
 The \argument{dotsize} argument controls ``character expansion" and can be used to make the plotting ``characters" larger or smaller by specifying the scaling ratio. \argument{xlim} sets the limits for the x-axis. \argument{stackratio} allows you to adjust the vertical distance between points. Chaining \function{gf_lims()} lets you set the limits for the x-axis.
 <<Figure2.18, opts.label = "fig1">>=
-gf_dotplot( ~ DesMoines, binwidth = 1, dotsize = 2, stackratio = 3, data = April14Temps)
-%>% gf_lims(x = c(35, 80))
-gf_dotplot( ~ SanFrancisco, binwidth = 1, dotsize = .5, stackratio = 2, data = April14Temps)
-%>% gf_lims(x = c(45, 65))
+gf_dotplot( ~ DesMoines, binwidth = 1, dotsize = 2, stackratio = 3,
+            data = April14Temps) %>% gf_lims(x = c(35, 80))
+gf_dotplot( ~ SanFrancisco, binwidth = 1, dotsize = .5, stackratio = 2, 
+            data = April14Temps) %>% gf_lims(x = c(45, 65))
 @
 \authNote{add explanation for arguments and chaining gf_lims()}
 \subsubsection*{Example 2.16}
@@ -517,11 +517,11 @@ A way to visualize the five number summary and outliers for a variable is to cre
 
 \subsubsection*{Example 2.26}
 
-<<Example2.26, opts.label = "fig1">>=
+<<Example2.26>>=
 favstats( ~ Longevity, data = MammalLongevity)
-gf_boxplot(Longevity ~ 'NULL', xlab = '', data = MammalLongevity)
+gf_boxplot(Longevity ~ '', xlab = '', data = MammalLongevity)
 @
-\authNote{I think there is probably a better way to plot this against nothing than using 'NULL' but I'm not sure how, also not sure how I can change the orientation of this plot}
+\authNote{I think there is probably a better way to plot this against nothing than using '' but I'm not sure how, also not sure how I can change the orientation of this plot}
 
 <<Figure2.31, include = FALSE>>=
 <<Example2.26>>
@@ -529,9 +529,10 @@ gf_boxplot(Longevity ~ 'NULL', xlab = '', data = MammalLongevity)
 
 \subsubsection*{Figure 2.32}
 
-<<Figure2.32, opts.label = "fig1">>=
-bwplot( ~ Smokers, data = USStates)
+<<Figure2.32>>=
+gf_boxplot(Smokers ~ '', xlab = '', data = USStates)
 @
+\authNote{this would be better with a horizontal orientation}
 
 \subsubsection*{Example 2.27}
 
@@ -548,10 +549,10 @@ subset(USStates, Smokers>28)
 
 \subsubsection*{Figure 2.33}
 
-<<Figure2.33, opts.label = "fig1">>=
-bwplot( ~ Budget, data = HollywoodMovies2011)
+<<Figure2.33, message = FALSE, warning = FALSE>>=
+gf_boxplot(Budget ~ '', xlab = '', data = HollywoodMovies2011)
 @
-
+\authNote{this would be better with a horizontal orientation}
 \subsubsection*{Example 2.28}
 
 <<Example2.28>>=
@@ -570,10 +571,11 @@ plotname( ~ variable | condition, data = dataName )
 
 \subsubsection*{Figure 2.34}
 Depending on the type of plot, you will want to use conditioning.
-<<Figure2.34>>=
-bwplot(Gender ~ TV, data = StudentSurvey)
-dotPlot( ~ TV|Gender, layout = c(1, 2), width = 1, cex = 1, data = StudentSurvey)
+<<Figure2.34, opts.label = "fig1", message = FALSE, warning = FALSE>>=
+gf_boxplot(TV ~ Gender, data = StudentSurvey)
+gf_dotplot( ~ TV|Gender, binwidth = 1, dotsize = .35, data = StudentSurvey)
 @
+\authNote{It would be better for the boxplot to be horizontal}
 
 We can do the same thing for bar graphs.
 <<Figure2.34b>>=
