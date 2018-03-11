@@ -612,9 +612,9 @@ ElectionMargin
 
 \subsection*{Visualizing a Relationship between Two Quantitative Variables: Scatterplots}
 
-The most common way to look at two quantitative variables is with a scatterplot.  The \pkg{lattice} function for this is \function{xyplot()}, and the basic syntax is
+The most common way to look at two quantitative variables is with a scatterplot.  The \pkg{ggformula} function for this is \function{gf_point()}, and the basic syntax is
 <<eval = FALSE>>=
-xyplot(yvar ~ xvar, data = dataName)
+gf_point(yvar ~ xvar, data = dataName)
 @
 
 Notice that now we have something on both sides of the \~{} since we need to tell \R\ about two variables.
@@ -622,7 +622,7 @@ Notice that now we have something on both sides of the \~{} since we need to tel
 \subsubsection*{Example 2.33}
 
 <<Example2.33>>=
-xyplot(Margin ~ Approval, data = ElectionMargin)
+gf_point(Margin ~ Approval, data = ElectionMargin)
 @
 
 <<Table2.29, include = FALSE>>=
