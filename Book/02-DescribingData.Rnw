@@ -642,10 +642,10 @@ gf_point(Margin ~ Approval, data = ElectionMargin)
 \subsubsection*{Figure 2.49}
 
 <<Figure2.49>>=
-xyplot(AvgMercury ~ pH, data = FloridaLakes)
-xyplot(AvgMercury ~ Alkalinity, data = FloridaLakes)
-xyplot(Alkalinity ~ pH, data = FloridaLakes)
-xyplot(AvgMercury ~ ThreeYrStdMercury, data = FloridaLakes)
+gf_point(AvgMercury ~ pH, data = FloridaLakes)
+gf_point(AvgMercury ~ Alkalinity, data = FloridaLakes)
+gf_point(Alkalinity ~ pH, data = FloridaLakes)
+gf_point(AvgMercury ~ ThreeYrStdMercury, data = FloridaLakes)
 @
 
 <<Example2.34, include = FALSE>>=
@@ -672,7 +672,7 @@ CricketChirps
 \subsubsection*{Figure 2.50}
 
 <<Figure2.50>>=
-xyplot(Temperature ~ Chirps, data = CricketChirps)
+gf_point(Temperature ~ Chirps, data = CricketChirps)
 @
 
 \subsubsection*{Example 2.35}
@@ -688,14 +688,14 @@ cor(Temperature ~ Chirps, data = CricketChirps)
 
 Further, using the \function{subset()} function again, we can investigate the correlation between variables with some restrictions.
 <<Example2.38>>=
-xyplot(Alcohol ~ Calories, data = subset(NutritionStudy, Age>59))
+gf_point(Alcohol ~ Calories, data = subset(NutritionStudy, Age>59))
 cor(Alcohol ~ Calories, data = subset(NutritionStudy, Age>59))
 @
 
 And now we omit the outlier
 <<Example2.38b>>=
 NutritionStudy60 = subset(NutritionStudy, Age>59)
-xyplot(Alcohol ~ Calories, data = subset(NutritionStudy60, Alcohol<25))
+gf_point(Alcohol ~ Calories, data = subset(NutritionStudy60, Alcohol<25))
 cor(Alcohol ~ Calories, data = subset(NutritionStudy60, Alcohol<25))
 @
 
@@ -710,14 +710,14 @@ cor(Alcohol ~ Calories, data = subset(NutritionStudy60, Alcohol<25))
 \subsubsection*{Figure 2.63}
 
 <<Figure2.63>>=
-xyplot(Tip ~ Bill, cex = .5, data = RestaurantTips)
+gf_point(Tip ~ Bill, size = .5, data = RestaurantTips)
 @
 
 \subsubsection*{Example 2.39}
 
-When the relationship between variables is sufficiently \emph{linear}, you may be able to predict the value of a variable using the other variable. This is possible by fitting a \emph{regression line}. To plot this in \R, all we need to do is add an additional argument, \argument{type = c("p", "r")}, to the xyplot.
+When the relationship between variables is sufficiently \emph{linear}, you may be able to predict the value of a variable using the other variable. This is possible by fitting a \emph{regression line}. To plot this in \R, all we need to do is chain \function{gf_lim()} to the scatter plot and give it the corresponding arguments.
 <<Example2.39>>=
-xyplot(Tip ~ Bill, cex = 0.5, type = c("p", "r"), data = RestaurantTips)
+gf_point(Tip ~ Bill, cex = 0.5, data = RestaurantTips) %>% gf_lm(Tip ~ Bill, data = RestaurantTips)
 cor(Tip ~ Bill, data = RestaurantTips)
 @
 
@@ -791,7 +791,7 @@ resid(lm(Margin~Approval, data = ElectionMargin))
 
 <<Example2.45>>=
 lm(AvgMercury ~ pH, data = FloridaLakes)
-xyplot(AvgMercury ~ pH, type = c("p", "r"), data = FloridaLakes)
+gf_point(AvgMercury ~ pH, data = FloridaLakes) %>% gf_lm(AvgMercury ~ pH, data = FloridaLakes)
 @
 <<Example2.45b>>=
 Mer.Fun <- makeFun(lm(AvgMercury ~ pH, data = FloridaLakes))
@@ -814,7 +814,7 @@ Cal.Fun
 \subsubsection*{Figure 2.68}
 
 <<Figure2.68>>=
-xyplot(Calcium ~ pH, type = c("p", "r"), data = FloridaLakes)
+gf_point(Calcium ~ pH, data = FloridaLakes) %>% gf_lm(Calcium ~ pH, data = FloridaLakes)
 @
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
