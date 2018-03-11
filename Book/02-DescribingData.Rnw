@@ -842,10 +842,10 @@ When we do statistical analysis, we will see that the analysis we use will
 also depend on the kinds of variables involved, so this is an important idea.
 
 \subsection*{Side-by-side Plots and Overlays Can Reveal Importance of Additional Factors}
-The \pkg{lattice} graphics plots make it particularly easy to generate plats that 
+The \pkg{ggformula} graphics plots make it particularly easy to generate plots that 
 divide the data into groups and either produce a panel for each group (using \verb!|!)
 or display each group in a different way (different colors or symbols, using 
-the \argument{groups} argument).  These plots can reveal the 
+the \argument{fill} or \argument{colour} arguments).  These plots can reveal the 
 possible influence of additional variables -- sometimes called covariates.
 
 \subsection*{Area = (relative) frequency}
@@ -867,10 +867,9 @@ But in this case it is important that the height of the bars is chosen so
 that area (\emph{NOT height}) is proportional to frequency.  
 Using height instead of area would distort the picture.
 
-When unequal bin sizes are specified, \function{histogram()} by default chooses
-the density scale:
+When unequal bin sizes are specified, you should use \function{gf_dhistogram()}
 <<hist-unequal-bins, fig.width = 3, fig.height = 2>>=
-histogram( ~ Sepal.Length, data = iris, breaks = c(4,5,5.5,5.75,6,6.5,7,8,9))
+gf_dhistogram( ~ Sepal.Length, data = iris, breaks = c(4,5,5.5,5.75,6,6.5,7,8,9))
 @
 The density scale is important.
 It tells \R\ to use a scale such that 
@@ -879,20 +878,20 @@ For example, the bar from 5.0 to 5.5 has width $\frac12$ and height about $0.36$
 the area is $0.18$, which means approximately 18\% of the sepal lengths are 
 between 5.0 and 5.5.
 
-It would be incorrect to choose \option{type="count"} or \option{type="proportion"} since
-this distorts the picture of the data.  Fortunately, \R\ will warn you if you try:
+It would be incorrect to choose \function{gf_histogram()} since
+this distorts the picture of the data.
 <<hist-unequal-bins-bad-echo, fig.width = 3, fig.height = 2, eval = FALSE>>=
-histogram( ~ Sepal.Length, data = iris, breaks = c(4,5,5.5,5.75,6,6.5,7,8,9), type = 'count')
+gf_histogram( ~ Sepal.Length, data = iris, breaks = c(4,5,5.5,5.75,6,6.5,7,8,9))
 @
 <<hist-unequal-bins-bad, fig.width = 3, fig.height = 2, echo = FALSE>>=
 trellis.par.set(theme = col.mosaic(bw = TRUE))
-histogram( ~ Sepal.Length, data = iris, breaks = c(4,5,5.5,5.75,6,6.5,7,8,9),type = "count")
+gf_histogram( ~ Sepal.Length, data = iris, breaks = c(4,5,5.5,5.75,6,6.5,7,8,9))
 trellis.focus('panel', 1, 1)
 grid::grid.text(y = .7, 'Never do this!', gp = grid::gpar(col = 'red', cex = 2, alpha = .6))
 trellis.unfocus()
 trellis.par.set(theme = col.mosaic())
 @
-
+\authNote{I'm not sure what this is displaying since it doesn't compile}
 Notice how different this looks.  Now the heights are equal to the relative
 frequency, but this makes the wider bars have too much area.
 
@@ -906,11 +905,11 @@ few examples, some of which we have already seen.
 \subsection*{auto.key}
 
 \option{auto.key = TRUE} turns on a simple legend for the grouping variable.  
-(There are ways to have more control, if you need it.)
+(There are ways to have more control, if you need it.) It is on by default in ggformula plots
 
 <<iris-xyplot-key, cache = TRUE, fig.width = 2.6, fig.height = 2.4>>=
-xyplot(Sepal.Length ~ Sepal.Width, groups = Species, data = iris, 
-	auto.key = TRUE)   
+gf_point(Sepal.Length ~ Sepal.Width, colour = ~Species, data = iris, 
+	auto.key = TRUE)
 @
 
 \subsection*{alpha, cex}
@@ -918,7 +917,7 @@ Sometimes it is nice to have elements of a plot be partly transparent.  When
 such elements overlap, they get darker, showing us where data are ``piling up."
 Setting the \argument{alpha} argument to a value between 0 and 1 controls the
 degree of transparency: 1 is completely opaque, 0 is invisible.  The
-\argument{cex} argument controls ``character expansion" and can be used to make
+\argument{dotsize} for \function{gf_dotplot()} and \argument{size} for \function{gf_point()} arguments control ``character expansion" and can be used to make
 the plotting ``characters" larger or smaller by specifying the scaling ratio.
 
 Here is another example using data on 150 iris plants of three species.
@@ -927,9 +926,13 @@ xyplot(Sepal.Length ~ Sepal.Width, groups = Species, data = iris,
 	auto.key = list(columns = 3),
 	alpha = .5,
 	cex = 1.3)   
+gf_point(Sepal.Length ~ Sepal.Width, colour = ~Species, data = iris, 
+	auto.key = TRUE,
+	alpha = .5,
+	size = 1.3)  
 @
-
-\subsection*{main, sub, xlab, ylab}
+\authNote{couldn't figure out how to format the legend}
+\subsection*{gf_labs()}
 
 You can add a title or subtitle, or change the default labels of the axes.
 <<iris-xyplot-text, cache = TRUE, fig.width = 3, fig.height = 2.5>>=
@@ -939,7 +942,12 @@ xyplot(Sepal.Length ~ Sepal.Width, groups = Species, data = iris,
 	xlab = "sepal width (cm)",
 	ylab = "sepal length (cm)",
 	alpha = .5,        
-	auto.key = list(columns = 3))   
+	auto.key = list(columns = 3))  
+gf_point(Sepal.Length ~ Sepal.Width, colour = ~Species, data = iris, alpha = .5)  %>% gf_labs(
+  x = "sepal width (cm)", 
+  y = "sepal length (cm)", 
+  subtitle = "(R. A. Fisher analysized this data in 1936)", 
+  title = "Some Iris Data")
 @
 
 \subsection*{layout}
@@ -951,26 +959,20 @@ layout = c(cols, rows)
 @
 where \code{cols} is the number of columns and \code{rows} is the number of 
 rows.  (Columns first because that is the $x$-coordinate of the plot.)
+\authNote{does this only pertain to lattice plots?}
 
-\subsubsection*{lty, lwd, pch, col}
-These can be used to change the line type, line width, plot character, and
-color.  To specify multiples (one for each group), use the \function{c()} function 
-(see below).
+\subsubsection*{size, theme, color, shape}
+These can be used to change the size of the data visual, set theme of the plot, change the color of the data visual and its shape.
 
 <<pch-lwd-lty, cache = TRUE>>=
-densityplot( ~age, data = HELPrct, groups = sex, lty = 1, lwd = c(2, 4) )
-histogram( ~ age, data = HELPrct, col = 'green')
+gf_dens( ~age, data = HELPrct, colour = ~sex, size = 2) %>% gf_theme(theme = theme_dark())
+gf_histogram( ~ age, data = HELPrct, fill = 'skyblue')
 @
 <<col, opts.label = "fig1", tidy = FALSE>>=
-# There are 25 numbered plot symbols; pch = plot character
-xyplot( mcs ~ age, data = HELPrct, groups = sex, 
-	    pch = c(1, 2), col = c('brown', 'darkgreen'), cex = .75 )  
+# There are 25 numbered plot symbols; shape = plot character
+gf_point( mcs ~ age, data = HELPrct, colour = ~sex, 
+	    shape = 8, size = 2 )  
 @
-
-Note: If you change this this way, they will \emph{not} match what is 
-generated in the legend using \argument{auto.key = TRUE}.  So it can be better
-to set these things in a different way if you are using \option{groups}.  
-See below.
 
 You can a list of the hundreds of available color names using
 \Rindex{colors()}%
@@ -1022,6 +1024,8 @@ trellis.par.set(theme = col.mosaic())
 # switch back to my saved settings
 trellis.par.set(mySettings)
 @
+
+\authNote{this trellis stuff for lattice seems irrelevant now}
 
 %\subsection*{Working with Pre-Tabulated Data}
 %
@@ -1082,8 +1086,8 @@ use some of the bells and whistles to make the plots even better.
 \end{problem}
 \begin{solution}
 <<>>=
-densityplot( ~i1, groups = sex, data = HELPrct )
-densityplot( ~i2, groups = sex, data = HELPrct )
+gf_dens( ~i1, colour = ~sex, data = HELPrct )
+gf_dens( ~i2, colour = ~sex, data = HELPrct )
 @
 \end{solution}
 
@@ -1093,15 +1097,15 @@ densityplot( ~i2, groups = sex, data = HELPrct )
 \end{problem}
 \begin{solution}
 <<>>=
-densityplot( ~i1, groups = substance, data = HELPrct )
-densityplot( ~i2, groups = substance, data = HELPrct )
+gf_dens( ~i1, colour = ~substance, data = HELPrct )
+gf_dens( ~i2, colour = ~substance, data = HELPrct )
 @
 <<>>=
-densityplot( ~i1|sex, groups = substance, data = HELPrct )
-densityplot( ~i2|sex, groups = substance, data = HELPrct )
+gf_dens( ~i1|sex, colour = ~substance, data = HELPrct )
+gf_dens( ~i2|sex, colour = ~substance, data = HELPrct )
 @
 <<>>=
-xyplot( i2 ~ i1, groups = sex, data= HELPrct, alpha = .6, cex = .6 )
+gf_point( i2 ~ i1, colour = ~sex, data= HELPrct, alpha = .6, size = .6 )
 @
 \end{solution}
 
