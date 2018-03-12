@@ -932,15 +932,20 @@ gf_point(Sepal.Length ~ Sepal.Width, colour = ~Species, data = iris,
 	size = 1.3)  
 @
 \authNote{couldn't figure out how to format the legend}
-\subsection*{gf_labs()}
+\subsection*{gf_labs(), xlab, ylab, title, subtitle}
 
-You can add a title or subtitle, or change the default labels of the axes.
+You can add a title or subtitle, or change the default labels of the axes in one of two ways. \function{gf_labs()} allows the chaining syntax to be used.
 <<iris-xyplot-text, cache = TRUE, fig.width = 3, fig.height = 2.5>>=
 gf_point(Sepal.Length ~ Sepal.Width, colour = ~Species, data = iris, alpha = .5)  %>% gf_labs(
   x = "sepal width (cm)", 
   y = "sepal length (cm)", 
   subtitle = "(R. A. Fisher analysized this data in 1936)", 
   title = "Some Iris Data")
+gf_point(Sepal.Length ~ Sepal.Width, colour = ~Species, data = iris, alpha = .5, 
+         xlab = "sepal width (cm)", 
+         ylab = "sepal length (cm)", 
+         subtitle = "(R. A. Fisher analysized this data in 1936)", 
+         title = "Some Iris Data")
 @
 
 \subsection*{layout}
