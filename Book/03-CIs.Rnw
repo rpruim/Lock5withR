@@ -432,15 +432,16 @@ head(BootE, 3)
 @
 <<Example3.25c, opts.label="fig4">>=
 cdata( ~ diffmean, 0.95, data = BootE)
-dotPlot(~ diffmean, width = .25, cex = .75, groups =(-1.717 <= M & M <= 7.633), 
-        xlab = "Difference in mean", data = BootE)
+gf_dotplot(~ diffmean, binwidth = .20, dotsize = .5, 
+           colour = ~(-1.717 <= diffmean & diffmean <= 7.633), 
+           xlab = "Difference in mean", data = BootE, show.legend = FALSE)
 @
 <<Example3.25d>>=
 SE <- sd( ~ diffmean, data = BootE); SE
 stat - 2 * SE
 stat + 2 * SE
 @
-
+\authNote{original plot used variable 'M' but it was unrecognized. I assumed they wanted to filter 'diffmean'}
 \subsubsection*{Figure 3.26}
 
 <<Figure3.26>>=
