@@ -386,24 +386,27 @@ This is not exactly the same as the interval of the original sample, but it is p
 
 \subsubsection*{Figure 3.22}
 
-<<Figure3.22, opts.label="fig1">>=
-dotPlot(~ mean, width = .1, groups = (27.43 <= mean & mean <= 31.05), data = Bootstrap)
+<<Figure3.22>>=
+gf_dotplot(~ mean, binwidth = .08, colour = ~(27.43 <= mean & mean <= 31.05), 
+           data = Bootstrap, show.legend = FALSE)
 @
-Notice the \argument{groups=} for marking the confidence interval.
-
+Notice the \argument{colour=} for marking the confidence interval.
+\authNote{should a new variable be made?}
 \subsubsection*{Example 3.24}
 
 One advantage of this method is that it is easy to change the confidence level. 
 
 To make a 90\% and 99\% confidence interval, we use the middle 90\% and 99\% of the sample distribution instead.
-<<Example3.24, opts.label="fig1">>=
+<<Example3.24>>=
 cdata(~ mean, 0.90, data = Bootstrap)
-dotPlot(~ mean, width = .1, groups = (27.70 <= mean & mean <= 30.71), data = Bootstrap)
+gf_dotplot(~ mean, binwidth = .08, colour = ~(27.70 <= mean & mean <= 30.71), 
+           data = Bootstrap, show.legend = FALSE)
 
 cdata( ~ mean, 0.99, data = Bootstrap)
-dotPlot(~ mean, width = .1, groups = (26.98 <= mean & mean <= 31.63), data = Bootstrap)
+gf_dotplot(~ mean, binwidth = .08, colour = ~(26.98 <= mean & mean <= 31.63), 
+           data = Bootstrap, show.legend = FALSE)
 @
-
+\authNote{new variable?}
 <<Figure3.23, include=FALSE>>=
 <<Example3.23>>
 @
@@ -413,7 +416,7 @@ dotPlot(~ mean, width = .1, groups = (26.98 <= mean & mean <= 31.63), data = Boo
 \subsubsection*{Figure 3.24}
 
 <<Figure3.24>>=
-bwplot(Gender~Exercise, data=ExerciseHours)
+gf_boxplot(Exercise~Gender, data=ExerciseHours)
 @
 
 \subsubsection*{Example 3.25}
