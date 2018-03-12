@@ -902,14 +902,14 @@ frequency, but this makes the wider bars have too much area.
 There are lots of arguments that control how these plots look.  Here are just a
 few examples, some of which we have already seen.
 
-\subsection*{auto.key}
+\subsection*{show.legend}
 
-\option{auto.key = TRUE} turns on a simple legend for the grouping variable.  
+\option{show.legend = TRUE} turns on a simple legend for the grouping variable.  
 (There are ways to have more control, if you need it.) It is on by default in ggformula plots
 
 <<iris-xyplot-key, cache = TRUE, fig.width = 2.6, fig.height = 2.4>>=
 gf_point(Sepal.Length ~ Sepal.Width, colour = ~Species, data = iris, 
-	auto.key = TRUE)
+	show.legend = TRUE)
 @
 
 \subsection*{alpha, cex}
@@ -927,7 +927,7 @@ xyplot(Sepal.Length ~ Sepal.Width, groups = Species, data = iris,
 	alpha = .5,
 	cex = 1.3)   
 gf_point(Sepal.Length ~ Sepal.Width, colour = ~Species, data = iris, 
-	auto.key = TRUE,
+	show.legend = TRUE,
 	alpha = .5,
 	size = 1.3)  
 @
@@ -936,13 +936,6 @@ gf_point(Sepal.Length ~ Sepal.Width, colour = ~Species, data = iris,
 
 You can add a title or subtitle, or change the default labels of the axes.
 <<iris-xyplot-text, cache = TRUE, fig.width = 3, fig.height = 2.5>>=
-xyplot(Sepal.Length ~ Sepal.Width, groups = Species, data = iris, 
-	main = "Some Iris Data",
-	sub = "(R. A. Fisher analysized this data in 1936)",
-	xlab = "sepal width (cm)",
-	ylab = "sepal length (cm)",
-	alpha = .5,        
-	auto.key = list(columns = 3))  
 gf_point(Sepal.Length ~ Sepal.Width, colour = ~Species, data = iris, alpha = .5)  %>% gf_labs(
   x = "sepal width (cm)", 
   y = "sepal length (cm)", 
