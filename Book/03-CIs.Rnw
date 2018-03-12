@@ -46,8 +46,9 @@ We should check that that our sample distribution has an appropriate shape:
 # Now we'll do it 1000 times
 Sampledist <- do(1000) * mean( ~ FTGradEnrollment, data = sample(StatisticsPhD, 10))
 head(Sampledist, 3)
-dotPlot( ~ mean, width = .005, data = Sampledist)
+gf_dotplot( ~ mean, binwidth = 1, data = Sampledist)
 @
+\authNote{density instead of count}
 
 In many (but not all) situations, the sampling distribution is 
 \begin{itemize}
@@ -62,7 +63,7 @@ This time we don't have data, but instead we have a summary of the data. We can 
 <<Example3.6, opts.label = "fig4", cache = TRUE>>=
 Sampledist.deg <- do(1000) * rflip(200, 0.275) # 1000 samples, each of size 200 and proportion 0.275
 head(Sampledist.deg, 3)
-dotPlot(~ prop, width = .005, data = Sampledist.deg)
+gf_dotplot(~ prop, binwidth = .002, data = Sampledist.deg)
 @
 
 <<Figure3.2, include=FALSE>>=
@@ -101,9 +102,12 @@ Sampledist.50 <- do(1000) * rflip(50, 0.275)     # 1000 samples, each of size 50
 \subsubsection*{Figure 3.3}
 
 <<Figure3.3, opts.label="fig3">>=
-dotPlot(~ prop, width = .005, xlim = c(0.05, 0.5), data = Sampledist.1000)
-dotPlot(~ prop, width = .005, xlim = c(0.05, 0.5), data = Sampledist.200)
-dotPlot(~ prop, width = .005, xlim = c(0.05, 0.5), data = Sampledist.50)
+gf_dotplot(~ prop, binwidth = .0025, data = Sampledist.1000) %>% gf_lims(
+  x = c(.05,.5), y = c(0, 150))
+gf_dotplot(~ prop, binwidth = .003, data = Sampledist.200) %>% gf_lims(
+  x = c(.05,.5), y = c(0, 60))
+gf_dotplot(~ prop, binwidth = .002, data = Sampledist.50) %>% gf_lims(
+  x = c(.05,.5), y = c(0, 150))
 @
 
 %Example 3.10
