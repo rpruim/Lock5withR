@@ -432,7 +432,7 @@ head(BootE, 3)
 @
 <<Example3.25c, opts.label="fig4">>=
 cdata( ~ diffmean, 0.95, data = BootE)
-gf_dotplot(~ diffmean, binwidth = .20, dotsize = .5, 
+gf_dotplot(~ diffmean, binwidth = .20, dotsize = .45, 
            colour = ~(-1.717 <= diffmean & diffmean <= 7.633), 
            xlab = "Difference in mean", data = BootE, show.legend = FALSE)
 @
@@ -445,7 +445,7 @@ stat + 2 * SE
 \subsubsection*{Figure 3.26}
 
 <<Figure3.26>>=
-xyplot(Price~Miles, ylab = "Price ($1000s)", xlab = "Miles (1000s)", data = MustangPrice)
+gf_point(Price~Miles, ylab = "Price ($1000s)", xlab = "Miles (1000s)", data = MustangPrice)
 cor(Price~Miles, data = MustangPrice)
 @
 
@@ -457,8 +457,8 @@ head(BootM, 3)
 @
 <<Example3.26b, opts.label="fig4">>=
 cdata( ~ cor, 0.98, data = BootM)
-dotPlot( ~ cor, width = .005, groups = (-.940 <= cor & cor <= -.705), 
-         xlab = "r", data = BootM)
+gf_dotplot( ~ cor, binwidth = .002, colour = ~(-.940 <= cor & cor <= -.705), 
+         xlab = "r", data = BootM, show.legend = FALSE)
 @
 
 <<Figure3.27, include=FALSE>>=
@@ -472,7 +472,8 @@ dotPlot( ~ cor, width = .005, groups = (-.940 <= cor & cor <= -.705),
 BootP400 <- do(1000) * rflip(400, .52)
 head(BootP400, 3)
 cdata( ~ prop, 0.95, data = BootP400)
-dotPlot(~ prop, width = 0.005, groups = (0.472 <= prop & prop<= 0.568), data = BootP400)
+gf_dotplot(~ prop, binwidth = 0.002, colour = ~(0.472 <= prop & prop<= 0.568),
+           data = BootP400, show.legend = FALSE)
 @
 <<Figure3.28, include=FALSE>>=
 <<Example3.27>>
@@ -486,7 +487,7 @@ dotPlot(~ prop, width = 0.005, groups = (0.472 <= prop & prop<= 0.568), data = B
 median(~ Price, data = MustangPrice )
 Boot.Mustang <- do(5000) * median( ~Price, data = resample(MustangPrice) )
 head(Boot.Mustang, 3)
-histogram( ~ median, n = 50, data = Boot.Mustang)
+gf_histogram( ~ median, bins = 50, data = Boot.Mustang)
 @
 
 <<Figure3.29, include=FALSE>>=
