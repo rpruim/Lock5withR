@@ -46,7 +46,7 @@ We should check that that our sample distribution has an appropriate shape:
 # Now we'll do it 1000 times
 Sampledist <- do(1000) * mean( ~ FTGradEnrollment, data = sample(StatisticsPhD, 10))
 head(Sampledist, 3)
-gf_dotplot( ~ mean, binwidth = 1, data = Sampledist)
+gf_dotplot( ~ mean, binwidth = .9, data = Sampledist)
 @
 \authNote{density instead of count}
 
@@ -106,7 +106,7 @@ gf_dotplot(~ prop, binwidth = .0025, data = Sampledist.1000) %>% gf_lims(
   x = c(.05,.5), y = c(0, 150))
 gf_dotplot(~ prop, binwidth = .003, data = Sampledist.200) %>% gf_lims(
   x = c(.05,.5), y = c(0, 60))
-gf_dotplot(~ prop, binwidth = .002, data = Sampledist.50) %>% gf_lims(
+gf_dotplot(~ prop, binwidth = .0015, data = Sampledist.50) %>% gf_lims(
   x = c(.05,.5), y = c(0, 150))
 @
 
@@ -206,9 +206,10 @@ SE <- 0.03
 MoE <- 2 * SE
 p - MoE
 p + MoE
-dotPlot(~ prop, width = .005, groups = (0.215 <= prop & prop <= 0.335), data = Sampledist.deg)
+gf_dotplot(~ prop, binwidth = .0015, colour = ~(0.215 <= prop & prop <= 0.335), data = Sampledist.deg, show.legend = FALSE)
 @
 Notice how we defined groups in this dotplot. We are grouping proportions that less than 0.215 and more than 0.335.
+\authNote{this is how it was done in the previous tutorial with lattice, would it be better to create a new variable in the data and use that instead?}
 
 \subsubsection*{Figure 3.13}
 
@@ -235,6 +236,8 @@ CIsim(200, samples = 100, rdist = rbinom, args = list(size = 1, prob = 0.275),
 %  data=results,
 %  par.settings=col.mosaic(), 
 %  groups=cover)
+
+\authNote{do I have to convert these to ggformula if they're not in lattice?}
 
 \subsection*{Interpreting Confidence Intervals}
 
@@ -266,8 +269,8 @@ Here's the clever idea:  We don't have the population, but we have a sample.  Pr
 
 \subsubsection*{Figure 3.14}
 
-<<Figure3.14, opts.label="fig1">>=
-dotPlot(~Time, width = 1, data = CommuteAtlanta)
+<<Figure3.14>>=
+gf_dotplot(~Time, binwidth = 1, data = CommuteAtlanta)
 @
 
 \subsection*{Bootstrap Samples}
@@ -286,12 +289,12 @@ mean(~Time, data = resample(CommuteAtlanta))
 \subsubsection*{Figure 3.16}
 
 The example below uses data from 500 Atlanta commuters.
-<<Figure3.16, cache=TRUE, opts.label="fig1">>=
+<<Figure3.16, cache=TRUE>>=
 # Now we'll do it 1000 times
 Bootstrap <- do(1000) * mean( ~Time, data = resample(CommuteAtlanta))
 head(Bootstrap, 3)
 # We should check that that our bootstrap distribution has an appropriate shape:
-dotPlot( ~ mean, width = 0.005, data = Bootstrap)
+gf_dotplot( ~ mean, binwidth = 0.08, data = Bootstrap)
 @
 
 \subsubsection*{Example 3.19}
@@ -299,7 +302,7 @@ dotPlot( ~ mean, width = 0.005, data = Bootstrap)
 <<Example3.19, cache=TRUE, opts.label="fig4">>=
 BootP <- do(1000) * rflip(100, .52)
 head(BootP, 3)
-dotPlot(~ prop, width = .01, data = BootP)
+gf_dotplot(~ prop, binwidth = .002, data = BootP)
 @
 
 <<Figure3.18, include=FALSE>>=
