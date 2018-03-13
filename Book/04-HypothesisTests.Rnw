@@ -110,7 +110,8 @@ gf_histogram(~ prop, binwidth = 0.04, data = Randomization.Match )
 \subsubsection*{Figure 4.10}
 
 <<Figure4.10, opts.label="fig1">>=
-dotPlot( ~ Taps | Group, layout = c(1,2), width = 1, cex = .3, data = CaffeineTaps)
+gf_dotplot(~ Taps, binwidth = 1, dotsize = .3, data = CaffeineTaps) %>%
+  gf_facet_grid(Group ~ .)
 @
 
 
@@ -134,14 +135,15 @@ diff( mean(Taps ~ Group, data = CaffeineTaps) )
 <<Example4.18b, cache=TRUE>>=
 Randomization.Caff <- do (1000) * ediff( mean( Taps ~ shuffle(Group), data = CaffeineTaps ) )
 head(Randomization.Caff,3)
-dotPlot( ~ No.Caffeine, width = 0.2, data = Randomization.Caff)
+gf_dotplot( ~ No.Caffeine, binwidth = 0.1, dotsize = .7, data = Randomization.Caff)
 @
 
 <<Example4.18c>>=
 prop( ~ (No.Caffeine >= 3.5), data = Randomization.Caff )
-dotPlot( ~ No.Caffeine, width = 0.2, groups = (No.Caffeine >=3.5), data = Randomization.Caff)
+gf_dotplot( ~ No.Caffeine, binwidth = 0.1, fill = ~(No.Caffeine >=3.5), 
+            data = Randomization.Caff, show.legend = FALSE)
 @
-
+\authNote{there shouldn't be a legend because I used show.legend = FALSE}
 <<Figure4.11, include=FALSE>>=
 <<Example4.18c>>
 @
@@ -165,7 +167,9 @@ Testing one proportion.
 RandomizationDist <- do(1000) * rflip(10, .5)  # 10 because n = 10
 head(RandomizationDist)
 histogram( ~ prop, label = TRUE, width = 1/10, data = RandomizationDist)
+gf_dhistogram( ~ prop, binwidth = 1/10, data = RandomizationDist) %>% gf_labs(label = TRUE)
 @
+\authNote{how do you get labels in the graph}
 <<Figure4.12,include=FALSE>>=
 <<Example4.19>>
 @
