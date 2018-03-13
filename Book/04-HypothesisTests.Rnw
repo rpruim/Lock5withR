@@ -66,13 +66,14 @@ Testing one proportion.
 Randomization.Match <- 
   do(10000) * rflip(25, .5)  # 25 because n = 25
 head(Randomization.Match)
-histogram( ~ prop, width = 0.04, data = Randomization.Match)
+gf_histogram( ~ prop, binwidth = 0.04, data = Randomization.Match)
 @
 
 Here we find the proportion of the simulations which resulted in 16 or more matches out of 25, or 0.64 or greater, for the p-value.
 <<Example4.13b>>=
 prop( ~ (prop >= 0.64), data = Randomization.Match ) # 16/25
-histogram( ~ prop, width = 0.04, groups = (prop >= 0.64), data = Randomization.Match)
+gf_histogram( ~ prop, binwidth = 0.04, fill = ~(prop >= 0.64), 
+              data = Randomization.Match, show.legend = FALSE)
 @
 
 <<Figure4.7, include=FALSE>>=
@@ -87,8 +88,8 @@ histogram( ~ prop, width = 0.04, groups = (prop >= 0.64), data = Randomization.M
 <<Example4.15>>=
 prop( ~ (prop >= 0.60), data = Randomization.Match ) # 15/25
 prop( ~ (prop >= 0.76), data = Randomization.Match ) # 19/25
-histogram( ~ prop, width = 0.04, groups = (prop >= 0.60), data = Randomization.Match )
-histogram( ~ prop, width = 0.04, groups = (prop >= 0.76), data = Randomization.Match )
+gf_histogram( ~ prop, binwidth = 0.04, fill = ~(prop >= 0.60), data = Randomization.Match, show.legend = FALSE )
+gf_histogram( ~ prop, binwidth = 0.04, fill = ~(prop >= 0.76), data = Randomization.Match, show.legend = FALSE )
 @
 
 <<Figure4.9, include=FALSE>>=
@@ -100,7 +101,9 @@ histogram( ~ prop, width = 0.04, groups = (prop >= 0.76), data = Randomization.M
 <<Example4.16>>=
 prop( ~ (prop >= 0.88), data = Randomization.Match ) # 22/25
 histogram( ~ prop, width = 0.04, v = c(0.88), data = Randomization.Match )
+gf_histogram(~ prop, binwidth = 0.04, data = Randomization.Match )
 @
+\authNote{not sure how to make that vertical line}
 
 %Example 4.17
 
