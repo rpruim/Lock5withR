@@ -30,7 +30,8 @@ The following 4-step outline is a useful way to organize the ideas of hypothesis
 \subsubsection*{Figure 4.1}
 
 <<Figure4.1>>=
-xyplot(ZPenYds ~ NFL_Malevolence, type = c("p", "r"), data = MalevolentUniformsNFL)
+gf_point(ZPenYds ~ NFL_Malevolence, data = MalevolentUniformsNFL) %>% 
+  gf_lm(ZPenYds ~ NFL_Malevolence, data = MalevolentUniformsNFL)
 @
 
 %Example 4.4
