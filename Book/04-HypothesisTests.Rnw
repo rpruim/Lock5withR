@@ -246,9 +246,10 @@ head(Randomization.Smiles, 3)
 <<Example4.27c, tidy=FALSE>>=
 prop(~ (diffmean <= -0.79 | diffmean >= 0.79), data = Randomization.Smiles)
 2 * prop(~ diffmean >= 0.79, data = Randomization.Smiles )
-dotPlot(~ diffmean, width = 0.03, cex = 0.5, groups = (diffmean >= 0.79), 
-        xlab = "Diff", data = Randomization.Smiles)
+gf_dotplot(~ diffmean, binwidth = 0.03, dotsize = 1, fill = ~(diffmean >= 0.79), 
+        xlab = "Diff", data = Randomization.Smiles, show.legend = FALSE)
 @
+\authNote{show.legend issue}
 <<Figure4.24,include=FALSE>>=
 <<Example4.27c>>
 @
@@ -257,8 +258,10 @@ Now we find the p-value:
 <<Example4.27d>>=
 prop( ~ (diffmean <= -0.79 | diffmean >= 0.79), data = Randomization.Smiles)
 2 * prop( ~ diffmean >= 0.79, data = Randomization.Smiles )
-dotPlot( ~ diffmean, width = .03, cex = .5, groups = (diffmean >= 0.79), data = Randomization.Smiles)
+gf_dotplot( ~ diffmean, binwidth = .03, dotsize = 1, fill = ~(diffmean >= 0.79), 
+            data = Randomization.Smiles, show.legend = FALSE)
 @
+\authNote{show.legend issue}
 \end{enumerate}
 
 \section{Creating Randomization Distributions}
@@ -365,8 +368,9 @@ head(Randomization.Coc)
 
 <<Example4.29c>>=
 prop( ~ (Relapse.Placebo < -0.0833 ), data = Randomization.Coc )
-histogram( ~ Relapse.Placebo, data = Randomization.Coc, v = c(-0.0833), width = 0.08)
+gf_histogram( ~ Relapse.Placebo, data = Randomization.Coc, v = c(-0.0833), binwidth = 0.08)
 @
+\authNote{need to make line at -0.0833}
 <<Figure4.28, include=FALSE>>=
 <<Example4.29c>>
 @
@@ -381,6 +385,8 @@ histogram( ~ Relapse.Placebo, data = Randomization.Coc, v = c(-0.0833), width = 
 Testing correlation.
 <<Example4.31>>=
 xyplot(ZPenYds ~ NFL_Malevolence, type = c("p", "r"), data = MalevolentUniformsNFL)
+gf_point(ZPenYds ~ NFL_Malevolence, data = MalevolentUniformsNFL) %>% 
+  gf_lm(ZPenYds ~ NFL_Malevolence, data = MalevolentUniformsNFL)
 cor(ZPenYds ~ NFL_Malevolence, data = MalevolentUniformsNFL)
 @
 
