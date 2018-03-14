@@ -294,7 +294,7 @@ someData <- read.file("file.csv")
 
 This can be used to read data directly from a URL as well.  For example, here is some data from the US Census Bureau:
 <<tidy=FALSE>>=
-Population <- read.file(
+Population <- read.csv(
   "https://www.census.gov/popest/data/national/totals/2012/files/NST_EST2012_ALLDATA.csv"
 )
 dim(Population)

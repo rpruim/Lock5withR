@@ -245,13 +245,14 @@ Statistics: Unlocking the Power of Data}
 \parskip=3mm
 
 \begin{document}
+# \SweaveOpts{concordance=TRUE}
 \maketitle
 \setcounter{tocdepth}{1}
 \tableofcontents
 
 
-<<child="00-IntroductiontoR.Rnw">>=
-@
+% <<child="00-IntroductiontoR.Rnw">>=
+% @
 
 <<child="01-CollectingData.Rnw">>=
 @
