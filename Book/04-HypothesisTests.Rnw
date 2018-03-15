@@ -88,8 +88,10 @@ gf_histogram( ~ prop, binwidth = 0.04, fill = ~(prop >= 0.64),
 <<Example4.15>>=
 prop( ~ (prop >= 0.60), data = Randomization.Match ) # 15/25
 prop( ~ (prop >= 0.76), data = Randomization.Match ) # 19/25
-gf_histogram( ~ prop, binwidth = 0.04, fill = ~(prop >= 0.60), data = Randomization.Match, show.legend = FALSE )
-gf_histogram( ~ prop, binwidth = 0.04, fill = ~(prop >= 0.76), data = Randomization.Match, show.legend = FALSE )
+gf_histogram( ~ prop, binwidth = 0.04, fill = ~(prop >= 0.60), 
+              data = Randomization.Match, show.legend = FALSE )
+gf_histogram( ~ prop, binwidth = 0.04, fill = ~(prop >= 0.76), 
+              data = Randomization.Match, show.legend = FALSE )
 @
 
 <<Figure4.9, include=FALSE>>=
@@ -100,9 +102,9 @@ gf_histogram( ~ prop, binwidth = 0.04, fill = ~(prop >= 0.76), data = Randomizat
 
 <<Example4.16>>=
 prop( ~ (prop >= 0.88), data = Randomization.Match ) # 22/25
-gf_histogram(~ prop, binwidth = 0.04, data = Randomization.Match )
+gf_histogram(~ prop, binwidth = 0.04, data = Randomization.Match ) %>%
+  gf_vline(xintercept = .88)
 @
-\authNote{need to make vertical line at .88}
 
 %Example 4.17
 
@@ -165,7 +167,8 @@ Testing one proportion.
 <<Example4.19, seed=12345, cache=TRUE>>=
 RandomizationDist <- do(1000) * rflip(10, .5)  # 10 because n = 10
 head(RandomizationDist)
-gf_histogram( ~ prop, binwidth = 1/10, data = RandomizationDist) %>% gf_labs(label = TRUE)
+gf_histogram( ~ prop, binwidth = 1/10, data = RandomizationDist) %>%
+  gf_labs(label = TRUE)
 @
 \authNote{need to label each bar, in lattice 'label = TRUE'}
 <<Figure4.12,include=FALSE>>=
@@ -366,9 +369,9 @@ head(Randomization.Coc)
 
 <<Example4.29c>>=
 prop( ~ (Relapse.Placebo < -0.0833 ), data = Randomization.Coc )
-gf_histogram( ~ Relapse.Placebo, data = Randomization.Coc, v = c(-0.0833), binwidth = 0.08)
+gf_histogram( ~ Relapse.Placebo, data = Randomization.Coc, binwidth = 0.08) %>% 
+  gf_vline(xintercept = -.0833)
 @
-\authNote{need to make line at -0.0833}
 <<Figure4.28, include=FALSE>>=
 <<Example4.29c>>
 @
@@ -404,9 +407,9 @@ head(Randomization.Mal)
 
 <<Example4.32c>>=
 prop( ~ (cor > 0.43 ), data = Randomization.Mal )
-gf_histogram(~ cor, v = c(0.43), binwidth = 0.05, data = Randomization.Mal)
+gf_histogram(~ cor, binwidth = 0.05, data = Randomization.Mal) %>% 
+  gf_vline(xintercept = .43)
 @
-\authNote{need to make line at .43}
 <<Figure4.29, include=FALSE>>=
 <<Example4.32c>>
 @
@@ -421,10 +424,10 @@ gf_histogram(~ cor, v = c(0.43), binwidth = 0.05, data = Randomization.Mal)
 Testing one mean.
 <<Example4.33, opts.label="fig1">>=
 mean( ~ BodyTemp, data = BodyTemp50)
-gf_dotplot(~ BodyTemp, v = c(98.26), binwidth = .1, stackratio = 2, dotsize = 1, 
-            data = BodyTemp50)
+gf_dotplot(~ BodyTemp, binwidth = .1, stackratio = 2, dotsize = 1, 
+            data = BodyTemp50) %>% gf_vline(xintercept = 98.26)
 @
-\authNote{v argument is here but there is no line, dotPlot( ~ BodyTemp, v = c(98.26), width = .1, cex = .2, data = BodyTemp50)}
+\authNote{v argument is in original plot but there is no line, dotPlot( ~ BodyTemp, v = c(98.26), width = .1, cex = .2, data = BodyTemp50)}
 <<Figure4.30,include=FALSE>>=
 <<Example4.33>>
 @
@@ -459,9 +462,11 @@ cdata( ~ result, 0.95, data = Randomization.Temp )
 From this we can estimate the p-value:
 <<Example4.33d, opts.label="fig4">>=
 prop( ~ abs(result - 98.6) > 0.34, data = Randomization.Temp)
-gf_histogram( ~ result, binwidth = .01, v = c(98.40, 98.6, 98.81), data = Randomization.Temp)
+gf_histogram( ~ result, binwidth = .01, data = Randomization.Temp) %>%
+  gf_vline(xintercept = 98.4) %>%
+  gf_vline(xintercept = 98.6) %>%
+  gf_vline(xintercept = 98.81)
 @
-\authNote(need to make vertical line at v = c(98.40, 98.6, 98.81))
 <<Figure4.31,include=FALSE>>=
 <<Example4.33d>>
 @
@@ -494,9 +499,10 @@ mean( ~ result, data = Randomization.Temp2 )
 From this we can estimate the p-value:
 <<Example4.33f, , opts.label="fig4">>=
 prop( ~ abs(result) > 0.34, data = Randomization.Temp2 )
-gf_histogram( ~ result, binwidth = .01, v = c(0.34, -0.34), data = Randomization.Temp2)
+gf_histogram( ~ result, binwidth = .01, data = Randomization.Temp2) %>%
+  gf_vline(xintercept = .34) %>%
+  gf_vline(xintercept = -.34)
 @
-\authNote{need to make vertical line at v = c(0.34, -0.34)}
 \end{enumerate}
 
 Often there are multiple ways to express the same hypothesis test.
@@ -517,9 +523,10 @@ head(Boot.Temp,3)
 mean(~ mean, data = Boot.Temp)
 cdata( ~ mean, 0.95, data = Boot.Temp)
 gf_histogram( ~ mean, binwidth = .01, v = c(98.26, 98.6), 
-          fill = ~(98.05 <= mean & mean <= 98.46), data = Boot.Temp, show.legend = FALSE)
+      fill = ~(98.05 <= mean & mean <= 98.46), data = Boot.Temp, show.legend = FALSE) %>%
+  gf_vline(xintercept = 98.26) %>%
+  gf_vline(xintercept = 98.6)
 @
-\authNote{need to make vertical lines, in lattice(v = c(98.26, 98.6)}
 Notice that the distribution is now centered at our test statistic instead of at the value
 from the null hypothesis.
 
@@ -540,14 +547,15 @@ Randomization.Temp3 <-
 head(Randomization.Temp3, 3)
 mean( ~ result, data = Randomization.Temp3 )
 cdata(~ result, 0.95, data = Randomization.Temp3)
-gf_histogram( ~ result, binwidth = .01, v = c(98.26, 98.4), 
-          fill = ~(98.19 <= result & result <= 98.62), 
-          xlim = c(97.8, 99.0), data = Randomization.Temp3, show.legend = FALSE) # randomization
-gf_histogram( ~ mean, binwidth = .01, v = c(98.26, 98.4), 
-          fill = ~(98.05 <= mean & mean <= 98.46), 
-          xlim = c(97.8, 99.0), data = Boot.Temp, show.legend = FALSE) # bootstrap
+gf_histogram( ~ result, binwidth = .01,fill = ~(98.19 <= result & result <= 98.62), 
+          xlim = c(97.8, 99.0), data = Randomization.Temp3, show.legend = FALSE) %>%
+  gf_vline(xintercept = 98.26) %>%
+  gf_vline(xintercept = 98.4)# randomization
+gf_histogram( ~ mean, binwidth = .01, fill = ~(98.05 <= mean & mean <= 98.46), 
+          xlim = c(97.8, 99.0), data = Boot.Temp, show.legend = FALSE) %>%
+  gf_vline(xintercept = 98.26) %>%
+  gf_vline(xintercept = 98.4)# bootstrap
 @
-\authNote{need to make vertical lines, in lattice at v = c(98.26, 98.4), then for plot 2, v = c(98.26, 98.4)}
 \end{enumerate}
 
 %Example 4.36
@@ -586,9 +594,10 @@ diffmean(BodyTemp ~ Sex, data = BodyTemp50)
 Randomization.Temp <- 
   do (1000) * diffmean( BodyTemp ~ shuffle(Sex), data = BodyTemp50)
 head(Randomization.Temp,3)
-gf_histogram( ~ diffmean, data = Randomization.Temp, binwidth = .12, v = c(0.176, -0.176))
+gf_histogram( ~ diffmean, data = Randomization.Temp, binwidth = .12) %>%
+  gf_vline(xintercept = .176) %>%
+  gf_vline(xintercept = -.176)
 @
-\authNote{need to make vertical lines, v = c(0.176, -0.176)}
 <<>>=
 prop( ~ (diffmean > 0.176), data = Randomization.Temp )       # 1-sided
 2 * prop( ~ (diffmean > 0.176), data = Randomization.Temp )   # 2-sided
@@ -618,9 +627,10 @@ Here's a way to do this in \R:
 Randomization.Temp2 <- 
   do (1000) * diffmean( resample(BodyTemp) ~ shuffle(Sex), data = BodyTemp50 )
 head(Randomization.Temp2, 3)
-gf_histogram( ~ diffmean, data = Randomization.Temp2, binwidth = .15, v = c(0.176, -0.176))
+gf_histogram( ~ diffmean, data = Randomization.Temp2, binwidth = .15) %>%
+  gf_vline(xintercept = .176) %>%
+  gf_vline(xintercept = -.176)
 @
-\authNote{need to make vertical line, at v = c(0.176, -0.176)}
 <<>>=
 prop( ~ (diffmean > 0.176), data = Randomization.Temp2 )       # 1-sided
 2 * prop( ~ (diffmean > 0.176), data = Randomization.Temp2 )   # 2-sided
@@ -636,9 +646,10 @@ body temperature and their sex, then another approach could be used:
 Randomization.Temp3 <- 
   do (1000) * diffmean( BodyTemp ~ shuffle(Sex), data = resample(BodyTemp50))
 head(Randomization.Temp3, 3)
-gf_histogram( ~ diffmean, data = Randomization.Temp3, binwidth = .12, v = c(0.176, -0.176))
+gf_histogram( ~ diffmean, data = Randomization.Temp3, binwidth = .12) %>%
+  gf_vline(xintercept = .176) %>%
+  gf_vline(xintercept = -.176)
 @
-\authNote{need to make vertical lines, at v = c(0.176, -0.176)}
 <<>>=
 prop( ~ (diffmean > 0.176), data = Randomization.Temp3 )       # 1-sided
 2 * prop( ~ (diffmean > 0.176), data = Randomization.Temp3 )   # 2-sided
