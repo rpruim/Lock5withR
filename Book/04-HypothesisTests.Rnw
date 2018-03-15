@@ -141,10 +141,9 @@ gf_dotplot( ~ No.Caffeine, binwidth = 0.1, dotsize = .7, data = Randomization.Ca
 
 <<Example4.18c>>=
 prop( ~ (No.Caffeine >= 3.5), data = Randomization.Caff )
-gf_dotplot( ~ No.Caffeine, binwidth = 0.1, fill = ~(No.Caffeine >=3.5), 
+gf_dotplot( ~ No.Caffeine, binwidth = 0.1, dotsize = .6, fill = ~(No.Caffeine >=3.5), 
             data = Randomization.Caff, show.legend = FALSE)
 @
-\authNote{there shouldn't be a legend because I used show.legend = FALSE}
 <<Figure4.11, include=FALSE>>=
 <<Example4.18c>>
 @
@@ -247,10 +246,9 @@ head(Randomization.Smiles, 3)
 <<Example4.27c, tidy=FALSE>>=
 prop(~ (diffmean <= -0.79 | diffmean >= 0.79), data = Randomization.Smiles)
 2 * prop(~ diffmean >= 0.79, data = Randomization.Smiles )
-gf_dotplot(~ diffmean, binwidth = 0.03, dotsize = 1, fill = ~(diffmean >= 0.79), 
+gf_dotplot(~ diffmean, binwidth = 0.03, dotsize = .7, fill = ~(diffmean >= 0.79), 
         xlab = "Diff", data = Randomization.Smiles, show.legend = FALSE)
 @
-\authNote{show.legend issue}
 <<Figure4.24,include=FALSE>>=
 <<Example4.27c>>
 @
@@ -259,10 +257,10 @@ Now we find the p-value:
 <<Example4.27d>>=
 prop( ~ (diffmean <= -0.79 | diffmean >= 0.79), data = Randomization.Smiles)
 2 * prop( ~ diffmean >= 0.79, data = Randomization.Smiles )
-gf_dotplot( ~ diffmean, binwidth = .03, dotsize = 1, fill = ~(diffmean >= 0.79), 
+gf_dotplot( ~ diffmean, binwidth = .03, dotsize = .7, fill = ~(diffmean >= 0.79), 
             data = Randomization.Smiles, show.legend = FALSE)
 @
-\authNote{show.legend issue}
+
 \end{enumerate}
 
 \section{Creating Randomization Distributions}
