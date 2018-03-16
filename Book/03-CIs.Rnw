@@ -206,7 +206,7 @@ SE <- 0.03
 MoE <- 2 * SE
 p - MoE
 p + MoE
-gf_dotplot(~ prop, binwidth = .0015, colour = ~(0.215 <= prop & prop <= 0.335), data = Sampledist.deg, show.legend = FALSE)
+gf_dotplot(~ prop, binwidth = .002, colour = ~(0.215 <= prop & prop <= 0.335), data = Sampledist.deg, show.legend = FALSE)
 @
 Notice how we defined groups in this dotplot. We are grouping proportions that less than 0.215 and more than 0.335.
 \authNote{this is how it was done in the previous tutorial with lattice, would it be better to create a new variable in the data and use that instead?}
@@ -441,7 +441,7 @@ SE <- sd( ~ diffmean, data = BootE); SE
 stat - 2 * SE
 stat + 2 * SE
 @
-\authNote{original plot used variable 'M' but it was unrecognized. I assumed they wanted to filter 'diffmean'}
+\authNote{original plot used variable 'M' but it was unrecognized. I assumed they wanted to filter 'diffmean', also in the book this is by count, not density}
 \subsubsection*{Figure 3.26}
 
 <<Figure3.26>>=
