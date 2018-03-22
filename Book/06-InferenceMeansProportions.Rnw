@@ -220,17 +220,17 @@ SE <- 32000 / sqrt(400); SE
 \subsubsection*{Figure 6.6}
 <<Figure6.06,cache=TRUE,opts.label="fig3">>=
 n1 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 1))
-histogram( ~ mean, data = n1)
+gf_dhistogram( ~ mean, bins = 8, data = n1)
 n5 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 5))
-histogram( ~ mean, data = n5)
+gf_dhistogram( ~ mean, bins = 8, data = n5)
 n15 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 15))
-histogram( ~ mean, data = n15)
+gf_dhistogram( ~ mean, bins = 8, data = n15)
 n30 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 30))
-histogram( ~ mean, data = n30)
+gf_dhistogram( ~ mean, bins = 8, data = n30)
 n125 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 125))
-histogram( ~ mean, data = n125)
+gf_dhistogram( ~ mean, bins = 8, data = n125)
 n500 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 500))
-histogram( ~ mean, data = n500)
+gf_dhistogram( ~ mean, bins = 8, data = n500)
 @
 
 \subsection*{The t-Distribution}
@@ -267,9 +267,9 @@ SE <- 1.25 / sqrt (8); SE
 \subsubsection*{Figure 6.8}
 
 <<Figure6.08, fig.keep='last'>>=
-plotFun(dnorm(x, 0, 1) ~x, x.lim = c(-4, 4), col = "black")
-plotFun(dt(x, df = 15) ~x, add = TRUE, lty = 2)
-plotFun(dt(x, df = 5) ~x, add = TRUE, lty = 3, col = "red")
+gf_fun(dnorm(x, 0, 1) ~x, xlim = c(-4, 4), colour = "black") %>%
+gf_fun(dt(x, df = 15) ~x, colour = 'green') %>%
+gf_fun(dt(x, df = 5) ~x, colour = "red")
 @
 
 \subsubsection*{Example 6.12}
