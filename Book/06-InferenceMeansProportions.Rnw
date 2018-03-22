@@ -34,36 +34,45 @@ SE <- sqrt(0.4 *(1 - 0.4) / 50); SE
 <<Figure6.02, cache=TRUE, opts.label="fig3">>=
 P.05 <- do(2000) * rflip(50, .05)
 dotPlot(~prop, width = .02, cex = 25, data = P.05)
+gf_dotplot(~prop, binwidth = .02, dotsize = .015, data = P.05)
 
 P.10 <- do(2000) * rflip(50, .10)
 dotPlot(~prop, width = .02, cex = 15, data = P.10)
+gf_dotplot(~prop, binwidth = .02, dotsize = .015, data = P.10)
 
 P.25 <- do(2000) * rflip(50, .25)
 dotPlot(~prop, width = .02, cex = 10, data = P.25)
+gf_dotplot(~prop, binwidth = .02, dotsize = .03, data = P.25)
 
 P.50 <- do(2000) * rflip(50, .50)
 dotPlot(~prop, width = .02, cex = 5, data = P.50)
+gf_dotplot(~prop, binwidth = .02, dotsize = .03, data = P.50)
 
 P.90 <- do(2000) * rflip(50, .90)
 dotPlot(~prop, width = .02, cex = 10, data = P.90)
+gf_dotplot(~prop, binwidth = .02, dotsize = .015, data = P.90)
 
 P.99 <- do(2000) * rflip(50, .99)
 dotPlot(~prop, width = .02, cex = 25, data = P.99)
+gf_dotplot(~prop, binwidth = .02, dotsize = .002, data = P.99)
 @
-
+\authNote{irregular bin sizes, count became density}
 \subsubsection*{Figure 6.3}
 
 <<Figure6.03, cache=TRUE, opts.label="fig3">>=
 n10 <- do(2000) * rflip(10, .10)
 dotPlot(~prop, width = .1, cex = 25, data = n10)
+gf_dotplot(~prop, binwidth = .02, dotsize = .02, data = n10)
 
 n25 <- do(2000) * rflip(25, .10)
 dotPlot(~prop, width = .04, cex = 10, data = n25)
+gf_dotplot(~prop, binwidth = .04, dotsize = .01, data = n25)
 
 n200 <- do(2000) * rflip(200, .10)
 dotPlot(~prop, width = .005, cex = 5, data = n200)
+gf_dotplot(~prop, binwidth = .005, dotsize = .04, data = n200)
 @
-
+\authNote{irregular bin sizes, count became density}
 \subsubsection*{Example 6.2}
 
 <<Example6.2, tidy=FALSE>>=
@@ -76,7 +85,7 @@ SE <- sqrt(.80 * .20 / 400); SE
 \subsubsection*{Figure 6.4}
 
 <<Figure6.4>>=
-plotFun(dnorm(x,0.80,0.02) ~ x, x.lim = c(0.72, 0.88))
+gf_fun(dnorm(x,0.80,0.02) ~ x, xlim = c(0.72, 0.88))
 @
 
 
