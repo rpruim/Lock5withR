@@ -44,27 +44,27 @@ Approximately 99.7\% of any normal distribution lies within 3 standard deviation
 \end{itemize}
 
 Many naturally occurring distributions are approximately normally distributed. Normal distributions are also an important part of statistical inference.
-The \function{plotDist()} function can be used to plot many common distributions.
+The \function{gf_dist()} function can be used to plot many common distributions.
 
 \subsubsection*{Figure 5.5}
 
 <<Figure5.5>>=
-plotDist("norm", mean = 0, sd = 1, xlim = c(-5, 6))
-plotDist("norm", mean = 2, sd = 1, col = "red", add = TRUE)
+gf_dist("norm", mean = 0, sd = 1, xlim = c(-5, 6)) %>%
+  gf_dist("norm", mean = 2, sd = 1, colour = "red")
 @
 
 <<Figure5.5b, opts.label = "fig3">>=
-plotDist("norm", mean = 0, sd = 0.5, xlim = c(-5, 5))
-plotDist("norm", mean = 0, sd = 1, add = TRUE, col = "red")
-plotDist("norm", mean = 0, sd = 2, add = TRUE, col = "green")
+gf_dist("norm", mean = 0, sd = 0.5, xlim = c(-5, 5)) 
+  gf_dist("norm", mean = 0, sd = 2, colour = "red") %>%
+  gf_dist("norm", mean = 0, sd = 3, colour = "green")
 @
-
+\authNote{I ended up deleting repetitive graphs that layered plots one at a time, also the sd argument doesn't seem to be able to handle values between 0 and 1 when the xlim isn't between 0 and 1, originally this was sd = .5, 1, 2}
 \subsubsection*{Example 5.2}
 
 <<Example5.2, opts.label = "fig3", fig.keep = 'all', fig.show = 'hold'>>=
-plotDist("norm", mean = 75, sd = 10, xlim = c(40, 110))
-plotDist("norm", mean = 7.1, sd = 1.1, xlim = c(2.7, 11.5))
-plotDist("norm", mean = 0, sd = 0.02, xlim = c(-.07, .07))
+gf_dist("norm", mean = 75, sd = 10, xlim = c(40, 110))
+gf_dist("norm", mean = 7.1, sd = 1.1, xlim = c(2.7, 11.5))
+gf_dist("norm", mean = 0, sd = 0.02, xlim = c(-.07, .07))
 @
 
 <<Figure5.6, include = FALSE>>=
@@ -90,6 +90,7 @@ We can obtain arbitrary probabilities using \verb!pnorm()!
 pnorm(90, 75, 10, lower.tail = FALSE) # proportion of scores above 90
 xpnorm(90, 75, 10, lower.tail = FALSE)
 @
+\authNote{this isn't in lattice, it seems like it may be another wrapper for ggplots? should I replace with ggformula?}
 The \function{xpnorm()} function gives a bit more verbose output and also gives you a picture. Notice the \argument{lower.tail = FALSE}. This is added because the default for \function{pnorm} and \function{xpnorm} finds the lower tail, not the upper tail. However, we can also subtract the proportion of the lower tail from 1 to find the the proportion of the upper tail.
 
 <<Figure5.7, include = FALSE>>=
@@ -103,7 +104,7 @@ The \function{xpnorm()} function gives a bit more verbose output and also gives 
 qnorm(0.2, 75, 10) # 20th percentile in Norm(75, 10)
 xqnorm(0.2, 75, 10)  
 @
-
+\authNote{should I replace?}
 <<Figure5.8, include = FALSE>>=
 <<Example5.4>>
 @
@@ -129,7 +130,7 @@ xpnorm(c(30, 31), 29.11, 0.93)   # original normal distribution proportion betwe
 xpnorm(c(z30, z31))              # standardized distribution proportion between 30 and 31 min
 pnorm(z31) - pnorm(z30)
 @
-
+\authNote{replace?}
 <<Figure5.9, include = FALSE>>=
 <<Example5.5>>
 @
@@ -140,7 +141,7 @@ xpnorm(2.032, lower.tail = FALSE)  # proportion with z-score above 2.032
 pnorm(30, 29.11, 0.93)          
 pnorm(31, 29.11, 0.93, lower.tail = FALSE)
 @
-
+\authNote{replace?}
 <<Figure5.10, include = FALSE>>=
 <<Example5.5b>>
 @
@@ -158,9 +159,9 @@ z <- qnorm(0.2); z
 \subsection*{Confidence Intervals Based on a Normal Distribution}
 
 \subsubsection*{Example 5.7}
-<<Example5.7, opts.label = "fig1", cache = TRUE, seed = 1234>>=
+<<Example5.7, cache = TRUE, seed = 1234>>=
 Bootstrap <- do(1000) * mean( ~ Time, data = resample(CommuteAtlanta)) 
-dotPlot( ~ mean, width = 0.1, data = Bootstrap)
+gf_dotplot( ~ mean, binwidth = 0.1, dotsize = .6, data = Bootstrap)
 @
 
 <<Figure5.15, include = FALSE>>=
@@ -170,7 +171,7 @@ dotPlot( ~ mean, width = 0.1, data = Bootstrap)
 <<Example5.7b>>=
 xqnorm(c(0.025, 0.975), 29.11, 0.915)   # 95% confidence interval for the normal distribution
 @
-
+\authNote{replace?}
 <<Figure5.16, include = FALSE>>=
 <<Example5.7b>>
 @
@@ -194,8 +195,11 @@ qnorm(0.995, 13.10, 0.20) # upper endpoint for 99% confidence interval
 \subsubsection*{Example 5.9}
 <<Example5.9, cache = TRUE, seed = 1234, opt.label = "fig1">>=
 Randomization.Temp <- do(10000) * (mean( ~ BodyTemp, data = resample(BodyTemp50)) + 0.34)
-histogram( ~ mean, width = .025, fit = "normal", data = Randomization.Temp)
+gf_dhistogram( ~ result, binwidth = .025, data = Randomization.Temp) %>%
+  gf_fitdistr()
 @
+\footnote{\function{gf_fitdistr()} has default arguments that will add a normal distribution, these defaults can be changed}
+\authNote{the original graph used 'mean' as the variable but Randomization.Temp only contains 'result' so I switched it to that }
 <<Example5.9b>>=
 pnorm(98.26, 98.6, 0.1066)
 2 * pnorm(98.26, 98.6, 0.1066)
@@ -269,7 +273,7 @@ plotnorm <- function(
 				...)
 }
 @
-
+\authNote{is this making or just showing the plotnorm function?}
 \section{The Family of Normal Distributions}
 
 Normal Distributions
@@ -291,7 +295,7 @@ print(plotnorm(lower = -1, upper = 1, main = "", xlab = "standard deviations fro
 print(plotnorm(lower = -2, upper = 2, main = "", xlab = "standard deviations from the mean"))
 print(plotnorm(lower = -3, upper = 3, main = "", xlab = "standard deviations from the mean"))
 @
-
+\authNote{not sure how to make this with gf_dist()}
 Many naturally occurring distributions are approximately normally distributed.
 
 Normal distributions are also an important part of statistical inference.
