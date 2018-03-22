@@ -8,11 +8,12 @@
 \subsection*{Density Curves}
 
 \subsubsection*{Example 5.1}
+\authNote{didn't bring textbook home so won't be able to compare to textbook over break}
 <<Example5.1, cache = TRUE, seed = 1234>>=
 Bootstrap <- do(1000) * mean( ~ Time, data = resample(CommuteAtlanta))
 head(Bootstrap, 3)
-histogram( ~ mean, density = TRUE, data = Bootstrap)
-densityplot( ~ mean, data = Bootstrap)
+gf_dhistogram( ~ mean, data = Bootstrap)
+gf_dens( ~ mean, data = Bootstrap)
 @
 
 <<Figure5.2, include = FALSE>>=
