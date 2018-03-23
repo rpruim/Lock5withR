@@ -274,7 +274,7 @@ Sometimes a \term{frequency polygon} provides a more useful view.
 The only thing that changes is \function{gf_histogram()} becomes \function{gf_freqpoly()}.
 
 <<freqpolygon, message = FALSE, warning = FALSE>>=
-gf_freqpoly( ~ Exercise, bins = 10, data = StudentSurvey)
+gf_freqpoly(..density.. ~ Exercise, bins = 10, data = StudentSurvey)
 @
 \authNote{y axis is count but it should be density}
 
