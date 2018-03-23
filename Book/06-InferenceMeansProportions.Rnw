@@ -33,19 +33,19 @@ SE <- sqrt(0.4 *(1 - 0.4) / 50); SE
 
 <<Figure6.02, cache=TRUE, opts.label="fig3">>=
 P.05 <- do(2000) * rflip(50, .05)
-gf_dotplot(~prop, binwidth = .01, dotsize = .025, data = P.05)
+gf_dotplot(~prop, binwidth = .01, dotsize = .02, data = P.05)
 
 P.10 <- do(2000) * rflip(50, .10)
 gf_dotplot(~prop, binwidth = .01, dotsize = .04, data = P.10)
 
 P.25 <- do(2000) * rflip(50, .25)
-gf_dotplot(~prop, binwidth = .01, dotsize = .1, data = P.25)
+gf_dotplot(~prop, binwidth = .01, dotsize = .08, data = P.25)
 
 P.50 <- do(2000) * rflip(50, .50)
 gf_dotplot(~prop, binwidth = .01, dotsize = .1, data = P.50)
 
 P.90 <- do(2000) * rflip(50, .90)
-gf_dotplot(~prop, binwidth = .01, dotsize = .04, data = P.90)
+gf_dotplot(~prop, binwidth = .01, dotsize = .03, data = P.90)
 
 P.99 <- do(2000) * rflip(50, .99)
 gf_dotplot(~prop, binwidth = .01, dotsize = .004, data = P.99)
@@ -55,12 +55,11 @@ gf_dotplot(~prop, binwidth = .01, dotsize = .004, data = P.99)
 
 <<Figure6.03, cache=TRUE, opts.label="fig3">>=
 n10 <- do(2000) * rflip(10, .10)
-gf_dotplot(~prop, binwidth = .02, dotsize = .02, data = n10)
+gf_dotplot(~prop, binwidth = .02, dotsize = .018, data = n10)
 n25 <- do(2000) * rflip(25, .10)
-gf_dotplot(~prop, binwidth = .03, dotsize = .015, data = n25)
-
+gf_dotplot(~prop, binwidth = .03, dotsize = .013, data = n25)
 n200 <- do(2000) * rflip(200, .10)
-gf_dotplot(~prop, binwidth = .006, dotsize = .04, data = n200)
+gf_dotplot(~prop, binwidth = .006, dotsize = .03, data = n200)
 @
 \authNote{changed binwidth, count became density}
 \subsubsection*{Example 6.2}
@@ -330,8 +329,7 @@ confint(t.test(~Time, conf.level = 0.95, data = CommuteAtlanta))
 
 <<Example6.15, opts.label="fig1">>=
 head(ManhattanApartments, 3)
-dotPlot(~Rent, width = 200, cex = .3,  data = ManhattanApartments) # to check for normality
-gf_dotplot(~Rent, binwidth = 200, dotsize = 1, stackratio = 2, data = ManhattanApartments) # to check for normality
+gf_dotplot(~Rent, binwidth = 200, dotsize = 1, data = ManhattanApartments) # to check for normality
 @
 \authNote{irregular bins}
 <<Figure6.13,include=FALSE>>=
@@ -549,8 +547,8 @@ t.test(Leniency~Group, alt = "less", data = Smiles)
 
 <<Example6.28, opts.label="fig1">>=
 head(Wetsuits, 3)
-gf_dotplot(~ Wetsuit, xlim = c(1.1, 1.8), binwidth = .04, stackratio = 2, data = Wetsuits) # to check for normality
-gf_dotplot(~ NoWetsuit, xlim = c(1.1, 1.8), binwidth = .04, stackratio = 2, data = Wetsuits) # to check for normality
+gf_dotplot(~ Wetsuit, xlim = c(1.1, 1.8), binwidth = .04, dotsize = .8, data = Wetsuits) # to check for normality
+gf_dotplot(~ NoWetsuit, xlim = c(1.1, 1.8), binwidth = .04, dotsize = .8, data = Wetsuits) # to check for normality
 @
 \authNote{irregular bin}
 <<Figure6.27,include=FALSE>>=
@@ -566,7 +564,7 @@ t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit)
 <<Example6.29, opts.label="fig1">>=
 head(Wetsuits, 3)
 t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired = TRUE)
-gf_dotplot(~(Wetsuit - NoWetsuit), binwidth = .01, dotsize = .5, data = Wetsuits)
+gf_dotplot(~(Wetsuit - NoWetsuit), binwidth = .01, dotsize = .4, data = Wetsuits)
 @
 
 <<Figure6.28,include=FALSE>>=
