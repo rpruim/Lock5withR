@@ -54,11 +54,11 @@ gf_dist("norm", mean = 0, sd = 1, xlim = c(-5, 6)) %>%
 @
 
 <<Figure5.5b, opts.label = "fig3">>=
-gf_dist("norm", mean = 0, sd = 0.5, xlim = c(-5, 5)) 
+gf_dist("norm", mean = 0, sd = 1, xlim = c(-5, 5)) %>%
   gf_dist("norm", mean = 0, sd = 2, colour = "red") %>%
   gf_dist("norm", mean = 0, sd = 3, colour = "green")
 @
-\authNote{I ended up deleting repetitive graphs that layered plots one at a time, also the sd argument doesn't seem to be able to handle values between 0 and 1 when the xlim isn't between 0 and 1, originally this was sd = .5, 1, 2}
+\authNote{the sd argument doesn't seem to be able to handle values between 0 and 1 when the xlim isn't between 0 and 1, originally this was sd = .5, 1, 2}
 \subsubsection*{Example 5.2}
 
 <<Example5.2, opts.label = "fig3", fig.keep = 'all', fig.show = 'hold'>>=
