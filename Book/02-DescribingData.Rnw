@@ -518,9 +518,9 @@ A way to visualize the five number summary and outliers for a variable is to cre
 
 <<Example2.26>>=
 favstats( ~ Longevity, data = MammalLongevity)
-gf_boxplot(Longevity ~ '', xlab = '', data = MammalLongevity)
+gf_boxplot(Longevity ~ '', xlab = '', data = MammalLongevity) %>%
+  gf_refine(coord_flip())
 @
-\authNote{I think there is probably a better way to plot this against nothing than using '' but I'm not sure how, also not sure how I can change the orientation of this plot}
 
 <<Figure2.31, include = FALSE>>=
 <<Example2.26>>
@@ -529,9 +529,9 @@ gf_boxplot(Longevity ~ '', xlab = '', data = MammalLongevity)
 \subsubsection*{Figure 2.32}
 
 <<Figure2.32>>=
-gf_boxplot(Smokers ~ '', xlab = '', data = USStates)
+gf_boxplot(Smokers ~ '', xlab = '', data = USStates) %>%
+  gf_refine(coord_flip())
 @
-\authNote{this would be better with a horizontal orientation}
 
 \subsubsection*{Example 2.27}
 
@@ -549,9 +549,9 @@ subset(USStates, Smokers>28)
 \subsubsection*{Figure 2.33}
 
 <<Figure2.33, message = FALSE, warning = FALSE>>=
-gf_boxplot(Budget ~ '', xlab = '', data = HollywoodMovies2011)
+gf_boxplot(Budget ~ '', xlab = '', data = HollywoodMovies2011) %>%
+  gf_refine(coord_flip())
 @
-\authNote{this would be better with a horizontal orientation}
 \subsubsection*{Example 2.28}
 
 <<Example2.28>>=
@@ -571,10 +571,10 @@ plotname( ~ variable | condition, data = dataName )
 \subsubsection*{Figure 2.34}
 Depending on the type of plot, you will want to use conditioning.
 <<Figure2.34, opts.label = "fig1", message = FALSE, warning = FALSE>>=
-gf_boxplot(TV ~ Gender, data = StudentSurvey)
+gf_boxplot(TV ~ Gender, data = StudentSurvey) %>%
+  gf_refine(coord_flip())
 gf_dotplot( ~ TV|Gender, binwidth = 1, dotsize = .35, data = StudentSurvey)
 @
-\authNote{It would be better for the boxplot to be horizontal}
 
 We can do the same thing for bar graphs.
 <<Figure2.34b>>=
