@@ -280,8 +280,7 @@ pnorm(1.5, lower.tail = FALSE)
 
 <<Figure6.09,fig.keep='last'>>=
 gf_fun(dt(x, df = 15) ~x, xlim = c(-4, 4)) %>%
-  gf_vline(xintercept = ~c(2.131,-2.131)) %>%
-  gf_text(dt(x, df = 15) ~ x, )
+  gf_vline(xintercept = ~c(2.131,-2.131))
 @
 \authNote{add label for vline on 2.131}
 <<Figure6.09b,fig.keep='last'>>=
@@ -295,11 +294,11 @@ gf_fun(dt(x, df = 15) ~x, xlim = c(-4, 4)) %>%
 
 \subsubsection*{Example 6.13}
 
-<<Example6.13, opts.label="fig1">>=
+<<Example6.13>>=
 head(Flight179, 3)
-dotPlot(~Flight179, cex = 0.5, data = Flight179) # to check for normality
+gf_dotplot(~Flight179, binwidth = 12, dotsize = 0.3, data = Flight179) #to check for normality
 @
-
+\authNote{irregular binwidth}
 <<Figure6.11,include=FALSE>>=
 <<Example6.13>>
 @
