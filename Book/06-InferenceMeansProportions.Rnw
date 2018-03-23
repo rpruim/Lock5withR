@@ -56,7 +56,6 @@ gf_dotplot(~prop, binwidth = .01, dotsize = .004, data = P.99)
 <<Figure6.03, cache=TRUE, opts.label="fig3">>=
 n10 <- do(2000) * rflip(10, .10)
 gf_dotplot(~prop, binwidth = .02, dotsize = .02, data = n10)
-
 n25 <- do(2000) * rflip(25, .10)
 gf_dotplot(~prop, binwidth = .03, dotsize = .015, data = n25)
 
@@ -319,7 +318,7 @@ confint(t.test(~Flight179, data = Flight179))
 
 <<Example6.14>>=
 head(CommuteAtlanta, 3)
-densityplot(~Time, data = CommuteAtlanta) # to check for normality
+gf_dens(~Time, data = CommuteAtlanta) # to check for normality
 @
 <<Example6.14b>>=
 favstats(~Time, data = CommuteAtlanta)
@@ -332,8 +331,9 @@ confint(t.test(~Time, conf.level = 0.95, data = CommuteAtlanta))
 <<Example6.15, opts.label="fig1">>=
 head(ManhattanApartments, 3)
 dotPlot(~Rent, width = 200, cex = .3,  data = ManhattanApartments) # to check for normality
+gf_dotplot(~Rent, binwidth = 200, dotsize = 1, stackratio = 2, data = ManhattanApartments) # to check for normality
 @
-
+\authNote{irregular bins}
 <<Figure6.13,include=FALSE>>=
 <<Example6.15>>
 @
@@ -358,7 +358,7 @@ n <- (1.96 * 20.18 / 2) ^ 2; n
 \subsubsection*{Example 6.17}
 <<Example6.17, opts.label="fig1">>=
 head(BodyTemp50)
-dotPlot(~BodyTemp, cex = .15, width = .1, data = BodyTemp50) # to check for normality
+gf_dotplot(~BodyTemp, dotsize = 1, binwidth = .1, stackratio = 2, data = BodyTemp50) # to check for normality
 @
 
 <<Figure6.16,include=FALSE>>=
@@ -378,12 +378,15 @@ pval(t.test(~BodyTemp, mu = 98.6, data = BodyTemp50)) # to find the p-value dire
 plotFun(dt(x, df = 49) ~x, x.lim = c(-4, 4))
 plotDist("t", params = list(df=49), type = c("h","l"), groups = (-3.14 < x & x < 3.14), lty = 1)
 ladd(grid.text("3.14",3,.05, default.units = "native", hjust = 0))
-@
 
+gf_fun(dt(x, df = 49) ~x, xlim = c(-4, 4)) %>%
+  gf_vline(xintercept = ~c(-3.14, 3.14))
+@
+\authNote{label vline at 3.14}
 \subsubsection*{Example 6.18}
 <<Example6.18>>=
 head(FloridaLakes, 3)
-densityplot(~Alkalinity, data = FloridaLakes) # to check for normality
+gf_dens(~Alkalinity, data = FloridaLakes) # to check for normality
 @
 
 <<Example6.18b>>=
@@ -409,7 +412,8 @@ diff(prop(Response~Gender, data = OneTrueLove))
 <<Figure6.20, cache=TRUE>>=
 Boot.Love <- do(5000)*diff(prop(Response~Gender, data = resample(OneTrueLove)))
 head(Boot.Love, 3)
-histogram(~Agree.Male, fit = "normal", data = Boot.Love)
+gf_dhistogram(~ prop_Agree.Male, data = Boot.Love) %>%
+  gf_fitdistr()
 @
 
 \subsubsection*{Example 6.20}
@@ -471,13 +475,15 @@ prop.test(decision~agegroup, data = SplitSteal)
 <<Figure6.21, cache=TRUE>>=
 BootE <- do(2000) * diff(mean(Exercise~Gender, data = resample(ExerciseHours)))
 head(BootE, 3)
-histogram(~M, width = 0.5, fit = "normal", data = BootE)
+gf_dhistogram(~M, binwidth = .5, data = BootE) %>%
+  gf_fitdistr()
 @
 
 <<Figure6.21b, cache=TRUE>>=
 Random.Smiles <- do(2000) * diff(mean(Leniency ~ shuffle(Group), data = Smiles))
 head(Random.Smiles, 3)
-histogram(~smile, n = 24,, fit = "normal", data = Random.Smiles)
+gf_dhistogram(~smile, bins = 24, data = Random.Smiles) %>%
+  gf_fitdistr()
 @
 
 \subsection*{The t-Distribution}
