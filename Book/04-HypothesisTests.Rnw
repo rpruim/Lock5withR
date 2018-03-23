@@ -170,7 +170,7 @@ head(RandomizationDist)
 gf_histogram( ~ prop, binwidth = 1/10, data = RandomizationDist) %>%
   gf_labs(label = TRUE)
 @
-\authNote{need to label each bar, in lattice 'label = TRUE'}
+\authNote{need to label each bar, in lattice 'label = TRUE', gf_text() needs y ~ x arg and doesn't take ..count..}
 <<Figure4.12,include=FALSE>>=
 <<Example4.19>>
 @
