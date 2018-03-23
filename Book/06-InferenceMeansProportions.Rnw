@@ -529,7 +529,6 @@ confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time, conf.level = 0.90))
 
 <<Example6.27>>=
 head(Smiles, 3)
-bwplot(Group~Leniency, data = Smiles) # to check for normality
 gf_boxplot(Leniency~Group, data = Smiles) %>%
   gf_refine(coord_flip()) # to check for normality
 @
@@ -550,10 +549,10 @@ t.test(Leniency~Group, alt = "less", data = Smiles)
 
 <<Example6.28, opts.label="fig1">>=
 head(Wetsuits, 3)
-dotPlot(~ Wetsuit, xlim = c(1.1, 1.8), cex = .25, data = Wetsuits) # to check for normality
-dotPlot(~ NoWetsuit, xlim = c(1.1, 1.8), cex = .25, data = Wetsuits) # to check for normality
+gf_dotplot(~ Wetsuit, xlim = c(1.1, 1.8), binwidth = .04, stackratio = 2, data = Wetsuits) # to check for normality
+gf_dotplot(~ NoWetsuit, xlim = c(1.1, 1.8), binwidth = .04, stackratio = 2, data = Wetsuits) # to check for normality
 @
-
+\authNote{irregular bin}
 <<Figure6.27,include=FALSE>>=
 <<Example6.28>>
 @
@@ -567,7 +566,7 @@ t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit)
 <<Example6.29, opts.label="fig1">>=
 head(Wetsuits, 3)
 t.test(Wetsuits$Wetsuit, Wetsuits$NoWetsuit, paired = TRUE)
-dotPlot(Wetsuits$Wetsuit - Wetsuits$NoWetsuit, width = .01, cex = .3)
+gf_dotplot(~(Wetsuit - NoWetsuit), binwidth = .01, dotsize = .5, data = Wetsuits)
 @
 
 <<Figure6.28,include=FALSE>>=
@@ -702,7 +701,7 @@ We can test $H_0$: $p = 1/4$ against a two-sided alternative as follows:
 <<tidy=FALSE>>=
 p.hat <- 6/27; p.hat
 Rand.Flowers <- do (1000) * rflip(27, .25)
-histogram( ~ prop, data = Rand.Flowers, width = 1/27)
+gf_dhistogram( ~ prop, data = Rand.Flowers, binwidth = 1/27)
 prop( ~ (prop < p.hat), data = Rand.Flowers)        # one-sided p-value
 2 * prop( ~ (prop < p.hat), data = Rand.Flowers)    # two-sided p-value
 @
@@ -777,7 +776,7 @@ pnorm(z)
 Rand.toys <- do(5000) * rflip(16, .5)
 head(Rand.toys, 3)
 2 * prop( ~ (prop >= p.hat), data = Rand.toys)
-histogram(~prop, data = Rand.toys, width=1/16)
+gf_dhistogram(~prop, data = Rand.toys, binwidth=1/16)
 @
 
 In this case, the normal approximation is not so far off (which shouldn't surprise us too much
