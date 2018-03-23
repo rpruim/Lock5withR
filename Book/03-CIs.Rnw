@@ -48,7 +48,7 @@ Sampledist <- do(1000) * mean( ~ FTGradEnrollment, data = sample(StatisticsPhD, 
 head(Sampledist, 3)
 gf_dotplot( ~ mean, binwidth = .9, data = Sampledist)
 @
-\authNote{density instead of count}
+\authNote{density instead of count, y = ~..count.. just changes label to ..count..}
 
 In many (but not all) situations, the sampling distribution is 
 \begin{itemize}
