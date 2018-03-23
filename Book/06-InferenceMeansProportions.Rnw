@@ -508,8 +508,10 @@ SE <- sqrt(1.68^2/34 + 1.52^2/34); SE
 head(CommuteStLouis)
 favstats(~Time, data = CommuteStLouis)
 favstats(~Time, data = CommuteAtlanta)
-bwplot(~Time, xlim = c(0, 200), data = CommuteAtlanta) # to check for normality
-bwplot(~Time, xlim = c(0, 200), data = CommuteStLouis) # to check for normality
+gf_boxplot(Time ~ '', x = '', xlim = c(0, 200), data = CommuteAtlanta) %>%
+  gf_refine(coord_flip()) # to check for normality
+gf_boxplot(Time ~ '', x = '', xlim = c(0, 200), data = CommuteStLouis) %>%
+  gf_refine(coord_flip()) # to check for normality
 @
 
 <<Figure6.23,include=FALSE>>=
@@ -528,6 +530,8 @@ confint(t.test(CommuteAtlanta$Time, CommuteStLouis$Time, conf.level = 0.90))
 <<Example6.27>>=
 head(Smiles, 3)
 bwplot(Group~Leniency, data = Smiles) # to check for normality
+gf_boxplot(Leniency~Group, data = Smiles) %>%
+  gf_refine(coord_flip()) # to check for normality
 @
 
 <<Figure6.25,include=FALSE>>=
