@@ -68,16 +68,16 @@ chisq(chisq.test(tally(sex ~ substance, data = HELPrct)))
 
 <<Figure7.02>>=
 chisq.sample <- do(1000) *  chisq( ~ resample(toupper(letters[1:5]), 400))
-histogram(~X.squared, data = chisq.sample)
+gf_dhistogram(~X.squared, bins = 11, data = chisq.sample)
 @
 
 \subsubsection*{Figure 7.3}
 
 <<Figure7.03, fig.keep = 'last'>>=
-plotDist("chisq", params = list(df = 4), type = c("h", "l"), groups=  x > 3.425, lty = 1)
-ladd(grid.text("3.425", 3.425, .175, default.units = "native", hjust = 0))
+gf_dist("chisq", params = list(df = 4), lty = 1) %>%
+  gf_vline(xintercept = 3.425)
 @
-
+\authNote{using vline instead of coloring sections, add label for at 3.424}
 Our test statistic will be large when the observed counts and expected counts are quite different.  It will be small when the observed counts and expected counts are quite close.  So we will reject when the test statistic is large. To know how large is large enough, we need to know the sampling distribution.
 
 \begin{boxedText}
@@ -154,7 +154,7 @@ tally(~ Response + Gender, format = "proportion", margin = TRUE, data = OneTrueL
 \subsubsection*{Figure 7.4}
 
 <<Figure7.04>>=
-bargraph(~Response|Gender, type = "count", data = OneTrueLove)
+gf_bar(~Response|Gender, data = OneTrueLove)
 @
 
 %\subsection*{Null and Alternative Hypothesis}
