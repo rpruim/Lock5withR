@@ -81,10 +81,11 @@ favstats( Ants ~ Filling, data = SandwichAnts )
 @
 
 <<Example8.1b>>=
-xyplot( Ants ~ Filling, SandwichAnts, type = c('p', 'a') )
-bwplot( Ants ~ Filling, SandwichAnts )
+gf_point( Ants ~ Filling, data = SandwichAnts) %>% 
+  gf_line(Ants ~ Filling, data = SandwichAnts)
+gf_boxplot( Ants ~ Filling, data = SandwichAnts )
 @
-
+\authNote{gf_line() is just making vertical lines rather than going from one group to the next, original: xyplot( Ants ~ Filling, data = SandwichAnts, type = c('p','a'))}
 %\subsection*{Why Analyze \emph{Variability} for a Difference in \emph{Means}?}
 
 %Question: Are these differences significant?
@@ -137,11 +138,11 @@ Each of these will be involved in the calculation of $F$.
 
 \subsubsection*{Figure 8.3}
 
-<<Figure8.3, cache = TRUE, opts.label = "fig4">>=
+<<Figure8.3, cache = TRUE, opts.label = "fig4", message = FALSE, warning = FALSE>>=
 Rand.Ants <- do(1000) * anova(lm(Ants ~ shuffle(Filling), data = SandwichAnts))
 tally( ~ (F >= 5.63), data = Rand.Ants)
 prop( ~ (F >= 5.63), data = Rand.Ants)
-dotPlot( ~ F, width = 0.20, groups = (F <=5.63), data = Rand.Ants)
+gf_dotplot( ~ F, binwidth = 0.20, dotsize = .2, colour = ~(F <= 5.63), data = Rand.Ants)
 @
 
 \subsection*{The F-distribution}
@@ -180,9 +181,9 @@ In our example, this is $2$ for the numerator and $7$ for the denominator.
 
 \subsubsection*{Figure 8.4}
 
-<<Figure8.4, fig.keep = 'last'>>=
-histogram( ~ F, width = 4/7, center = .25, data = Rand.Ants)
-plotDist("f", df1 = 2, df2 = 21, add = TRUE)
+<<Figure8.4, fig.keep = 'last', message = FALSE, warning = FALSE>>=
+gf_dhistogram( ~ F, binwidth = 4/7, center = .25, data = Rand.Ants) %>% 
+  gf_dist('f', df1 = 2, df2 = 21)
 @
 
 \subsection*{More Examples of ANOVA}
@@ -199,7 +200,7 @@ anova(lm(Pulse ~ Award, StudentSurvey))
 \subsubsection*{Figure 8.5}
 
 <<Figure8.5>>=
-bwplot(Award ~ Pulse, data = StudentSurvey)
+gf_boxplot(Pulse ~ Award, data = StudentSurvey)
 @
 
 \subsection*{ANOVA Calculations}
@@ -228,7 +229,7 @@ bwplot(Award ~ Pulse, data = StudentSurvey)
 Let's first compute the grand mean and group means.
 <<Example8.6>>=
 SandwichAnts
-mean(Ants, data = SandwichAnts)  # grand mean
+mean(~ Ants, data = SandwichAnts)  # grand mean
 mean(Ants ~ Filling, data = SandwichAnts)  # group means
 @
 And add those to our data frame
@@ -292,7 +293,7 @@ mean + t.star * (sqrt(MSE) / sqrt(8))
 TukeyHSD(Ants.Model)
 plot(TukeyHSD(Ants.Model))
 @
-
+\authNote{not sure if this need to be converted into ggformula}
 \subsubsection*{Example 8.8}
 
 <<Example8.8>>=
@@ -335,7 +336,8 @@ TukeyHSD(Books.Model)
 \subsubsection*{Figure 8.8}
 
 <<Figure8.8>>=
-bwplot(Field ~ Cost, data = TextbookCosts)
+gf_boxplot(Cost ~ Field, data = TextbookCosts) %>% 
+  gf_refine(coord_flip())
 @
 
 
@@ -444,11 +446,12 @@ F <- MSM / MSE; F
 We can now compute a p-value by comparing our value of $F$ (\Sexpr{F}) to a randomization distribution.
 If the null hypothesis is true, the three groups are really just one big group and the group labels are 
 meaningless, so we can shuffle the group labels to get a randomization distribution:
-<<>>=
+<<message = FALSE, warning = FALSE>>=
 small.rand <- do(1000) * anova(lm( response ~ shuffle(group), data = small ))
 tally( ~ (F >= 10.27), data = small.rand )
 prop( ~ (F >= 10.27), data = small.rand )
-histogram( ~ F, data = small.rand, v = 10.27 )
+gf_dhistogram( ~ F, bins = 12, data = small.rand) %>%
+  gf_vline(xintercept = 10.27)
 @
 
 Since our estimated p-value is small, we have enough evidence in the data to reject the null hypothesis.
@@ -559,8 +562,11 @@ favstats( shift ~ treatment, data = JetLagKnees )
 <<jetlag1-6, fig.height = 2, fig.width = 4>>=
 xyplot( shift ~ treatment, data = JetLagKnees, type = c('p', 'a') )
 bwplot( shift ~ treatment, data = JetLagKnees )
-@
 
+gf_point( shift ~ treatment, data = JetLagKnees, type = c('p', 'a') )
+gf_boxplot( treatment ~ shift, data = JetLagKnees )
+@
+\authNote{JetLagKnees data source not found}
 <<>>=
 jetlag.model <- lm( shift ~ treatment, data = JetLagKnees )
 anova(jetlag.model)
