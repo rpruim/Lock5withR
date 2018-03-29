@@ -649,9 +649,10 @@ normal and that that standard deviation remains consistent across the range of
 our data (and across time).
 
 <<lakes-qq>>=
-histogram( ~ resid(lakes.model))
-xqqmath( ~ resid(lakes.model))
+gf_dhistogram( ~ resid(lake.model), bins = 7)
+gf_qq( ~ resid(lake.model)) %>% gf_qqline()
 @
+\authNote{changed data source from lakes.model to lake.model}
 The normal-quantile plot shown above is designed so that the points will fall along a straight line 
 when the underlying distribution is exactly normal.  As the distribution becomes less and less normal,
 the normal-quantile will look less and less like a straight line.
