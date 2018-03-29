@@ -659,9 +659,9 @@ the normal-quantile will look less and less like a straight line.
 
 Similar plots (and some others as well) can also be made with 
 <<eval = FALSE>>=
-plot(lakes.model)
+plot(lake.model)
 @
-
+\authNote{changed to lake.model}
 In this case things don't look quite as good as we would like on the normality front.  The residuals
 are a bit too skewed (too many large positive residuals).  Using a log transformation on the response (see below)
 might improve things.
@@ -675,19 +675,18 @@ is often useful.
 
 <<>>=
 lakes.model2 <- lm(log(AvgMercury) ~ pH, data = FloridaLakes)
-xyplot(log(AvgMercury) ~ pH, data = FloridaLakes, type = c('p', 'r'))
+gf_point(log(AvgMercury) ~ pH, data = FloridaLakes) %>% gf_lm()
 summary(lakes.model2)
 @
 
 If we like, we can show the new model fit overlaid on the original data:
 <<>>=
-xyplot(AvgMercury ~ pH, data = FloridaLakes, main = "untransformed model", 
-       type = c("p", "r"))
-xyplot(AvgMercury ~ pH, data = FloridaLakes, main = "log transformed model")
 Hg <- makeFun(lakes.model2)              # turn model into a function
-plotFun(exp(Hg(pH)) ~ pH, add = TRUE)       # add this function to the plot
+gf_point(AvgMercury ~ pH, data = FloridaLakes, title = "untransformed model") %>% gf_lm()
+gf_point(AvgMercury ~ pH, data = FloridaLakes, title = "log transformed model") %>% 
+  gf_fun(exp(Hg(pH)) ~ pH)
 @
-
+\authNote{lattice graph had an error so I'm not sure what it should look like, plotFun(exp(Hg(pH)) ~ pH, add = TRUE)}
 
 
 A logarithmic transformation of \variable{AvgMercury} improves the normality of the residuals.
