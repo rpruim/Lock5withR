@@ -373,8 +373,8 @@ cdata(.95, ~Intercept, data = boot.lakes)
 <<>>=
 boot.printers <- do(1000) * lm(Price ~ PPM, data = resample(InkjetPrinters))
 head(boot.printers, 2)
-histogram( ~ PPM, data = boot.printers)
-histogram( ~ Intercept, data = boot.printers)
+gf_dhistogram( ~ PPM, data = boot.printers, bins = 11)
+gf_dhistogram( ~ Intercept, data = boot.printers, bins = 11)
 cdata(.95, PPM, data = boot.printers)
 cdata(.95, Intercept, data = boot.printers)
 @
@@ -468,7 +468,7 @@ This means we can simulate a world in which
 the null hypothesis is true by shuffling the explanatory variable:
 <<>>=
 rand.lakes <- do(1000) * lm(AvgMercury ~ shuffle(pH), data = FloridaLakes)
-histogram( ~ pH, data = rand.lakes, v = 0)
+gf_dhistogram( ~ pH, data = rand.lakes, bins =11) %>% gf_vline(xintercept= 0)
 2 * prop( ~ (pH <= -0.1523), data = rand.lakes)    # p-value from randomization distribution
 @
 In this case, none of our 1000 resamples produced such a small value for $\hat \beta_1$.  This is 
@@ -587,7 +587,7 @@ ddd <- with(anscombe, data.frame(
 	y = c(y1, y2, y3, y4), 
 	set = rep(1:4, each = nrow(anscombe))) 
 	)
-xyplot(y ~ x | factor(set), data = ddd, type = c('p', 'r'), as.table = TRUE, lty = 2)
+gf_point(y ~ x | factor(set), data = ddd) %>% gf_lm()
 @
 \end{center}
 
@@ -620,12 +620,12 @@ model3 <- lm(y3 ~ x3, data = anscombe)
 model4 <- lm(y4 ~ x4, data = anscombe)
 @
 <<>>=
-xyplot(resid(model1) ~ x1, data = anscombe)
-xyplot(resid(model1) ~ fitted(model1), data = anscombe)
+gf_point(resid(model1) ~ x1, data = anscombe)
+gf_point(resid(model1) ~ fitted(model1), data = anscombe)
 @
 <<>>=
-xyplot(resid(model2) ~ x2, data = anscombe)
-xyplot(resid(model2) ~ fitted(model2), data = anscombe)
+gf_point(resid(model2) ~ x2, data = anscombe)
+gf_point(resid(model2) ~ fitted(model2), data = anscombe)
 @
 
 You can make similar plots for models 3 and 4.  The main advantage of these plots is that they use the vertical
@@ -637,8 +637,8 @@ for the next section).
 
 <<>>=
 lake.model <- lm(AvgMercury ~ pH, data = FloridaLakes)
-xyplot(AvgMercury ~ pH, data = FloridaLakes, type = c('p', 'r'))
-xyplot(resid(lake.model) ~ fitted(lake.model), data = FloridaLakes)
+gf_point(AvgMercury ~ pH, data = FloridaLakes) %>% gf_lm()
+gf_point(resid(lake.model) ~ fitted(lake.model), data = FloridaLakes)
 @
 We are hoping not to see any strong patterns in these residual plots.
 
