@@ -83,11 +83,11 @@ rsquared(lm(Price ~ PhotoTime + CostColor, data = InkjetPrinters))
 
 <<Example10.12>>=
 ink.model <- lm(Price ~ PPM, data = InkjetPrinters)
-dotPlot( ~ resid(ink.model), cex = .05, nint = 40)
+gf_dotplot( ~ resid(ink.model), dotsize = 2, binwidth = 2, stackratio = 4)
 @
 
 <<Example10.12b>>=
-xyplot(resid(ink.model) ~ fitted(ink.model), type = c("p", "r"), cex = 0.5)
+gf_point(resid(ink.model) ~ fitted(ink.model), dotsize = 0.5) %>% gf_lm()
 @
 
 \subsection*{Checking Conditions for a Multiple Regression Model}
@@ -97,8 +97,8 @@ xyplot(resid(ink.model) ~ fitted(ink.model), type = c("p", "r"), cex = 0.5)
 <<Example10.13>>=
 body.model <- lm(Bodyfat ~ Weight + Abdomen, data = BodyFat)
 msummary(body.model)
-histogram( ~ resid(body.model), breaks = 10)
-xyplot(resid(body.model) ~ fitted(body.model), type = c("p", "r"), cex = 0.5)
+gf_histogram( ~ resid(body.model), bins = 10)
+gf_point(resid(body.model) ~ fitted(body.model), dotsize = 0.5) %>% gf_lm()
 @
 
 
@@ -124,9 +124,9 @@ msummary(lm(Bodyfat ~ Weight + Abdomen + Wrist, data = BodyFat))
 \subsubsection*{Figure 10.9}
 
 <<Figure10.9>>=
-bwplot(Salary ~ Gender, horizontal = FALSE, data = SalaryGender)
+gf_boxplot(Salary ~ Gender, group = ~Gender ,data = SalaryGender)
 @
-
+\authNote{Should I redefine the variable in the data to become categorical M-F?}
 \subsubsection*{Example 10.16}
 
 <<Example10.16>>=
@@ -159,7 +159,7 @@ msummary(lm(Final ~ Exam1 + Exam2, data = StatGrades))
 \subsubsection*{Figure 10.10}
 
 <<Figure10.10, opts.label="fig3">>=
-xyplot(Final ~ Exam1, type = c("p", "r"), data = StatGrades)
-xyplot(Final ~ Exam2, type = c("p", "r"), data = StatGrades)
-xyplot(Exam2 ~ Exam1, type = c("p", "r"), data = StatGrades)
+gf_point(Final ~ Exam1, data = StatGrades) %>% gf_lm()
+gf_point(Final ~ Exam2, data = StatGrades) %>% gf_lm()
+gf_point(Exam2 ~ Exam1, data = StatGrades) %>% gf_lm()
 @
