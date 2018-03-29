@@ -204,7 +204,7 @@ Our test statistic is
 \[
 F = \frac{\fit{MSM}}{\resid{MSE}} 
 \]
-
+\authNote{it seems that fit and resid are undefined and so I'm unable to compile the pdf}
 \subsubsection*{Example 9.11}
 
 <<Example9.11>>=
@@ -691,10 +691,10 @@ gf_point(AvgMercury ~ pH, data = FloridaLakes, title = "log transformed model") 
 
 A logarithmic transformation of \variable{AvgMercury} improves the normality of the residuals.
 <<>>=
-histogram( ~ resid(lakes.model2))
-qqmath( ~ resid(lakes.model2))
-xyplot(resid(lakes.model2) ~ pH, data = FloridaLakes) 
-xyplot(resid(lakes.model2) ~ fitted(lakes.model2))
+gf_dhistogram( ~ resid(lakes.model2), bins = 7)
+gf_qq( ~ resid(lakes.model2))
+gf_point(resid(lakes.model2) ~ pH, data = FloridaLakes) 
+gf_point(resid(lakes.model2) ~ fitted(lakes.model2))
 @
 The absolute values of the residuals are perhaps a bit larger when the pH is higher (and fits are smaller),
 although this is exagerated somewhat in the plots because there is so little data with very small pH values.
@@ -707,7 +707,7 @@ On balance, the log transformation seems to improve the situation and is to be p
 \subsubsection{Florida Lakes}
 
 <<>>=
-xyplot(AvgMercury ~ pH, data = FloridaLakes, type = c('p', 'r'))
+gf_point(AvgMercury ~ pH, data = FloridaLakes) %>% gf_lm()
 lm(AvgMercury ~ pH, data = FloridaLakes)
 @
 <<include = FALSE>>=
