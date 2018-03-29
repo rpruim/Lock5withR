@@ -81,7 +81,7 @@ For example, this suggests that the average price for inkjet printers that print
 
 \subsubsection*{Figure 9.1}
 <<Figure9.1>>=
-xyplot(Price ~ PPM, data = InkjetPrinters, type = c('p', 'r'))
+gf_point(Price ~ PPM, data = InkjetPrinters) %>% gf_lm()
 @
 
 \subsubsection*{Figure 9.2}
@@ -89,10 +89,10 @@ xyplot(Price ~ PPM, data = InkjetPrinters, type = c('p', 'r'))
 <<Figure9.2>>=
 Boot.Ink <- do(1000) * lm(Price ~ PPM, data = resample(InkjetPrinters))
 favstats( ~ PPM, data = Boot.Ink)
-dotPlot( ~ PPM, width = 2, data = Boot.Ink)
+gf_dotplot( ~ PPM, binwidth = 2, data = Boot.Ink)
 Rand.Ink <- do(1000) * lm(Price ~ shuffle(PPM), data = InkjetPrinters)
 favstats( ~ PPM, data = Rand.Ink)
-dotPlot( ~ PPM, width = 2, data = Rand.Ink)
+gf_dotplot( ~ PPM, binwidth = 2, data = Rand.Ink)
 @
 %how to get just the slope?
 
@@ -161,8 +161,8 @@ msummary(lm(Price ~ PPM, data = InkjetPrinters))
 \subsubsection*{Example 9.9}
 
 <<Example9.9>>=
-xyplot(Tip ~ Bill, data = RestaurantTips, type = c('p', 'r'), cex = 0.5)
-xyplot(PctTip ~ Bill, data = RestaurantTips, type = c('p', 'r'), cex = 0.5)
+gf_point(Tip ~ Bill, data = RestaurantTips, cex = 0.5) %>% gf_lm()
+gf_point(PctTip ~ Bill, data = RestaurantTips, cex = 0.5) %>% gf_lm()
 @
 
 
@@ -334,10 +334,13 @@ Ink.Price(PPM = 3.0, interval = 'prediction')
 
 \subsubsection*{Figure 9.13}
 
-The figure below shows the confidence (dotted) and prediction (dashed) intervals as bands around the regression line.  
+The figure below shows the confidence (inner band) and prediction (outer band) intervals as bands around the regression line.  
 <<Figure9.13>>=
-xyplot(Price ~ PPM, data = InkjetPrinters, panel = panel.lmbands, 
-       cex = .6, alpha = .5)
+gf_point(Price ~ PPM, data = InkjetPrinters,
+       dotsize = .6, alpha = .5) %>% 
+  gf_lm() %>% 
+  gf_lm(interval = "confidence") %>% 
+  gf_lm(interval = "prediction")
 @
 As the graph illustrates, the intervals are narrow near the center of the data and wider near the edges of the data. It is not safe to extrapolate beyond the data (without additional information), since there is no data to let us know whether the pattern of the data extends.
 
@@ -356,12 +359,10 @@ to use the bootstrap.
 
 \subsubsection{Florida Lakes}
 <<>>=
-boot.lakes <- do(1000) * lm(AvgMercury ~ pH, data = resample(FloridaLakes))
-head(boot.lakes, 2)
-dotPlot( ~ pH, data = boot.lakes, width = .003)
-dotPlot( ~ Intercept, data = boot.lakes, width = .02)
-histogram( ~ pH, data = boot.lakes, width = 0.01)
-histogram( ~ Intercept, data = boot.lakes, width = 0.1)
+gf_dotplot( ~ pH, data = boot.lakes, binwidth = .003)
+gf_dotplot( ~ Intercept, data = boot.lakes, binwidth = .02)
+gf_dhistogram( ~ pH, data = boot.lakes, binwidth = 0.01)
+gf_dhistogram( ~ Intercept, data = boot.lakes, binwidth = 0.1)
 @
 <<>>=
 cdata(.95, ~pH, data = boot.lakes)
