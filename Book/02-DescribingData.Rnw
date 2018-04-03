@@ -213,7 +213,7 @@ Let's make a \emph{dot plot} of the variable Longevity in the \dataframe{MammalL
 <<Figure2.6, opts.label = "fig1">>=
 gf_dotplot(~ Longevity, binwidth = 1, dotsize = .75, data = MammalLongevity)
 @
-\authNote{This is showing the density but the original showed number of cases, I'm not sure how to change this}
+\authNote{should be count not density}
 \subsubsection*{Table 2.15}
 
 Although \function{tally()} works with quantitative variables as well as categorical variables, this is only useful when there are not too many different values for the variable.
@@ -276,7 +276,6 @@ The only thing that changes is \function{gf_histogram()} becomes \function{gf_fr
 <<freqpolygon, message = FALSE, warning = FALSE>>=
 gf_freqpoly(..density.. ~ Exercise, bins = 10, data = StudentSurvey)
 @
-\authNote{y axis is count but it should be density}
 
 What is a frequency polygon?  The picture below shows how it is related to a histogram.  The frequency polygon is just a dot-to-dot drawing through the centers of the tops of the bars of the histogram.
 <<freqpolygon-illustrated, echo = FALSE, message = FALSE, warning = FALSE>>=
@@ -956,7 +955,6 @@ layout = c(cols, rows)
 @
 where \code{cols} is the number of columns and \code{rows} is the number of 
 rows.  (Columns first because that is the $x$-coordinate of the plot.)
-\authNote{does this only pertain to lattice plots?}
 
 \subsubsection*{size, theme, color, shape}
 These can be used to change the size of the data visual, set theme of the plot, change the color of the data visual and its shape.
@@ -1021,8 +1019,6 @@ trellis.par.set(theme = col.mosaic())
 # switch back to my saved settings
 trellis.par.set(mySettings)
 @
-
-\authNote{this trellis stuff for lattice seems irrelevant now}
 
 %\subsection*{Working with Pre-Tabulated Data}
 %

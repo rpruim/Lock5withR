@@ -293,7 +293,7 @@ mean + t.star * (sqrt(MSE) / sqrt(8))
 TukeyHSD(Ants.Model)
 plot(TukeyHSD(Ants.Model))
 @
-\authNote{not sure if this need to be converted into ggformula}
+
 \subsubsection*{Example 8.8}
 
 <<Example8.8>>=

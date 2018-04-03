@@ -652,7 +652,7 @@ our data (and across time).
 gf_dhistogram( ~ resid(lake.model), bins = 7)
 gf_qq( ~ resid(lake.model)) %>% gf_qqline()
 @
-\authNote{changed data source from lakes.model to lake.model}
+
 The normal-quantile plot shown above is designed so that the points will fall along a straight line 
 when the underlying distribution is exactly normal.  As the distribution becomes less and less normal,
 the normal-quantile will look less and less like a straight line.
@@ -661,7 +661,7 @@ Similar plots (and some others as well) can also be made with
 <<eval = FALSE>>=
 plot(lake.model)
 @
-\authNote{changed to lake.model}
+
 In this case things don't look quite as good as we would like on the normality front.  The residuals
 are a bit too skewed (too many large positive residuals).  Using a log transformation on the response (see below)
 might improve things.

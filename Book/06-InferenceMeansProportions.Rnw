@@ -221,7 +221,7 @@ gf_dhistogram( ~ mean, bins = 8, data = n125)
 n500 <- do(100) * mean( ~ Time, data = resample(CommuteAtlanta, 500))
 gf_dhistogram( ~ mean, bins = 8, data = n500)
 @
-
+\authNote{histograms in lattice but dotplots in book}
 \subsection*{The t-Distribution}
 
 If we are working with one quantitative variable, we can compute confidence intervals and p-values
@@ -545,7 +545,7 @@ t.test(Leniency~Group, alt = "less", data = Smiles)
 
 \subsubsection*{Example 6.28}
 
-<<Example6.28, opts.label="fig1">>=
+<<Example6.28, opts.label="fig1", message = FALSE, warning = FALSE>>=
 head(Wetsuits, 3)
 gf_dotplot(~ Wetsuit, xlim = c(1.1, 1.8), binwidth = .04, dotsize = .8, data = Wetsuits) # to check for normality
 gf_dotplot(~ NoWetsuit, xlim = c(1.1, 1.8), binwidth = .04, dotsize = .8, data = Wetsuits) # to check for normality

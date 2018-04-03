@@ -105,7 +105,7 @@ prop( ~ (prop >= 0.88), data = Randomization.Match ) # 22/25
 gf_histogram(~ prop, binwidth = 0.04, data = Randomization.Match ) %>%
   gf_vline(xintercept = .88)
 @
-\authNote{there is no plot for example 4.16 in the book}
+
 %Example 4.17
 
 \subsubsection*{Figure 4.10}
@@ -138,7 +138,6 @@ Randomization.Caff <- do (1000) * ediff( mean( Taps ~ shuffle(Group), data = Caf
 head(Randomization.Caff,3)
 gf_dotplot( ~ No.Caffeine, binwidth = 0.1, dotsize = .7, data = Randomization.Caff)
 @
-\authNote{there is no plot for example 4.18b}
 
 <<Example4.18c>>=
 prop( ~ (No.Caffeine >= 3.5), data = Randomization.Caff )
@@ -426,7 +425,7 @@ mean( ~ BodyTemp, data = BodyTemp50)
 gf_dotplot(~ BodyTemp, binwidth = .1, stackratio = 2, dotsize = 1, 
             data = BodyTemp50) %>% gf_vline(xintercept = 98.26)
 @
-\authNote{v argument is in original plot but there is no line, dotPlot( ~ BodyTemp, v = c(98.26), width = .1, cex = .2, data = BodyTemp50)}
+
 <<Figure4.30,include=FALSE>>=
 <<Example4.33>>
 @

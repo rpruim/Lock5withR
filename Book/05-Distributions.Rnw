@@ -8,7 +8,7 @@
 \subsection*{Density Curves}
 
 \subsubsection*{Example 5.1}
-\authNote{didn't bring textbook home so won't be able to compare to textbook over break}
+
 <<Example5.1, cache = TRUE, seed = 1234>>=
 Bootstrap <- do(1000) * mean( ~ Time, data = resample(CommuteAtlanta))
 head(Bootstrap, 3)
@@ -90,7 +90,7 @@ We can obtain arbitrary probabilities using \verb!pnorm()!
 pnorm(90, 75, 10, lower.tail = FALSE) # proportion of scores above 90
 xpnorm(90, 75, 10, lower.tail = FALSE)
 @
-\authNote{this isn't in lattice, it seems like it may be another wrapper for ggplots? should I replace with ggformula?}
+
 The \function{xpnorm()} function gives a bit more verbose output and also gives you a picture. Notice the \argument{lower.tail = FALSE}. This is added because the default for \function{pnorm} and \function{xpnorm} finds the lower tail, not the upper tail. However, we can also subtract the proportion of the lower tail from 1 to find the the proportion of the upper tail.
 
 <<Figure5.7, include = FALSE>>=
@@ -104,7 +104,7 @@ The \function{xpnorm()} function gives a bit more verbose output and also gives 
 qnorm(0.2, 75, 10) # 20th percentile in Norm(75, 10)
 xqnorm(0.2, 75, 10)  
 @
-\authNote{should I replace?}
+
 <<Figure5.8, include = FALSE>>=
 <<Example5.4>>
 @
@@ -130,7 +130,7 @@ xpnorm(c(30, 31), 29.11, 0.93)   # original normal distribution proportion betwe
 xpnorm(c(z30, z31))              # standardized distribution proportion between 30 and 31 min
 pnorm(z31) - pnorm(z30)
 @
-\authNote{replace?}
+
 <<Figure5.9, include = FALSE>>=
 <<Example5.5>>
 @
@@ -141,7 +141,7 @@ xpnorm(2.032, lower.tail = FALSE)  # proportion with z-score above 2.032
 pnorm(30, 29.11, 0.93)          
 pnorm(31, 29.11, 0.93, lower.tail = FALSE)
 @
-\authNote{replace?}
+
 <<Figure5.10, include = FALSE>>=
 <<Example5.5b>>
 @
@@ -171,7 +171,7 @@ gf_dotplot( ~ mean, binwidth = 0.1, dotsize = .6, data = Bootstrap)
 <<Example5.7b>>=
 xqnorm(c(0.025, 0.975), 29.11, 0.915)   # 95% confidence interval for the normal distribution
 @
-\authNote{replace?}
+
 <<Figure5.16, include = FALSE>>=
 <<Example5.7b>>
 @
@@ -273,7 +273,7 @@ plotnorm <- function(
 				...)
 }
 @
-\authNote{is this making or just showing the plotnorm function?}
+
 \section{The Family of Normal Distributions}
 
 Normal Distributions
@@ -295,7 +295,7 @@ print(plotnorm(lower = -1, upper = 1, main = "", xlab = "standard deviations fro
 print(plotnorm(lower = -2, upper = 2, main = "", xlab = "standard deviations from the mean"))
 print(plotnorm(lower = -3, upper = 3, main = "", xlab = "standard deviations from the mean"))
 @
-\authNote{not sure how to make this with gf_dist()}
+\authNote{not sure how to make this with gf_dist(), errror in lattice}
 Many naturally occurring distributions are approximately normally distributed.
 
 Normal distributions are also an important part of statistical inference.

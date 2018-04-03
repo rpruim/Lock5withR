@@ -48,7 +48,7 @@ Sampledist <- do(1000) * mean( ~ FTGradEnrollment, data = sample(StatisticsPhD, 
 head(Sampledist, 3)
 gf_dotplot( ~ mean, binwidth = .9, data = Sampledist)
 @
-\authNote{density instead of count, y = ~..count.. just changes label to ..count..}
+\authNote{should be count not density}
 
 In many (but not all) situations, the sampling distribution is 
 \begin{itemize}
@@ -236,8 +236,6 @@ CIsim(200, samples = 100, rdist = rbinom, args = list(size = 1, prob = 0.275),
 %  data=results,
 %  par.settings=col.mosaic(), 
 %  groups=cover)
-
-\authNote{do I have to convert these to ggformula if they're not in lattice?}
 
 \subsection*{Interpreting Confidence Intervals}
 
@@ -441,7 +439,7 @@ SE <- sd( ~ diffmean, data = BootE); SE
 stat - 2 * SE
 stat + 2 * SE
 @
-\authNote{original plot used variable 'M' but it was unrecognized. I assumed they wanted to filter 'diffmean', also in the book this is by count, not density}
+\authNote{original plot used variable 'M' but it was unrecognized. I assumed they wanted to filter 'diffmean', also should be count not density}
 \subsubsection*{Figure 3.26}
 
 <<Figure3.26>>=
