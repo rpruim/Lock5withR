@@ -82,7 +82,7 @@ favstats( Ants ~ Filling, data = SandwichAnts )
 
 <<Example8.1b>>=
 gf_point( Ants ~ Filling, data = SandwichAnts) %>% 
-  gf_line(Ants ~ Filling, data = SandwichAnts)
+  gf_line(mean_Ants ~ Filling, data = df_stats(Ants ~ Filling, data = SandwichAnts, mean))
 gf_boxplot( Ants ~ Filling, data = SandwichAnts )
 @
 \authNote{gf_line() is just making vertical lines rather than going from one group to the next, original: xyplot( Ants ~ Filling, data = SandwichAnts, type = c('p','a'))}

@@ -14,7 +14,8 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{patterns}
-\usepackage[hidenotes]{authNote}
+\usepackage{authNote}
+%\usepackage[hidenotes]{authNote}
 \usepackage[answerdelayed,exercisedelayed,lastexercise]{problems}
 
 %\def\myindex#1{\relax}
