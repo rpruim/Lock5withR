@@ -82,8 +82,8 @@ favstats( Ants ~ Filling, data = SandwichAnts )
 
 <<Example8.1b>>=
 gf_point( Ants ~ Filling, data = SandwichAnts) %>% 
-  gf_line(Ants ~ Filling, data = SandwichAnts)
-gf_boxplot( Ants ~ Filling, data = SandwichAnts )
+  gf_line(Ants ~ Filling, group = 1, stat = "summary")
+gf_boxplot( Ants ~ Filling, data = SandwichAnts)
 @
 \authNote{gf_line() is just making vertical lines rather than going from one group to the next, original: xyplot( Ants ~ Filling, data = SandwichAnts, type = c('p','a'))}
 %\subsection*{Why Analyze \emph{Variability} for a Difference in \emph{Means}?}
@@ -554,24 +554,24 @@ small <- data.frame(
 	)
 @
 
-<<jetlag-summary-6>>=
-require(abd)
-favstats( shift ~ treatment, data = JetLagKnees )
-@
-
-<<jetlag1-6, fig.height = 2, fig.width = 4>>=
-xyplot( shift ~ treatment, data = JetLagKnees, type = c('p', 'a') )
-bwplot( shift ~ treatment, data = JetLagKnees )
-
-gf_point( shift ~ treatment, data = JetLagKnees, type = c('p', 'a') )
-gf_boxplot( treatment ~ shift, data = JetLagKnees )
-@
-\authNote{JetLagKnees data source not found}
-<<>>=
-jetlag.model <- lm( shift ~ treatment, data = JetLagKnees )
-anova(jetlag.model)
-
-@
+% <<jetlag-summary-6>>=
+% require(abd)
+% favstats( shift ~ treatment, data = JetLagKnees )
+% @
+% 
+% <<jetlag1-6, fig.height = 2, fig.width = 4>>=
+% xyplot( shift ~ treatment, data = JetLagKnees, type = c('p', 'a') )
+% bwplot( shift ~ treatment, data = JetLagKnees )
+% 
+% gf_point( shift ~ treatment, data = JetLagKnees, type = c('p', 'a') )
+% gf_boxplot( treatment ~ shift, data = JetLagKnees )
+% @
+% \authNote{JetLagKnees data source not found}
+% <<>>=
+% jetlag.model <- lm( shift ~ treatment, data = JetLagKnees )
+% anova(jetlag.model)
+% 
+% @
 
 \subsubsection{Diagnositic Plots}
 We can use \function{plot()} to create some diagnostic plots.  The first two are 
