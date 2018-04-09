@@ -166,8 +166,7 @@ Testing one proportion.
 <<Example4.19, seed=12345, cache=TRUE>>=
 RandomizationDist <- do(1000) * rflip(10, .5)  # 10 because n = 10
 head(RandomizationDist)
-gf_histogram( ~ prop, binwidth = 1/10, data = RandomizationDist) %>%
-  gf_labs(label = TRUE)
+gf_histogram( ~ prop, binwidth = 1/10, data = RandomizationDist)
 @
 \authNote{need to label each bar, in lattice 'label = TRUE', gf_text() needs y ~ x arg and doesn't take ..count..}
 <<Figure4.12,include=FALSE>>=
