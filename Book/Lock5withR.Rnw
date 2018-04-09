@@ -14,8 +14,8 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{patterns}
+% \usepackage[hidenotes]{authNote}
 \usepackage{authNote}
-%\usepackage[hidenotes]{authNote}
 \usepackage[answerdelayed,exercisedelayed,lastexercise]{problems}
 
 %\def\myindex#1{\relax}
@@ -292,6 +292,10 @@ Statistics: Unlocking the Power of Data}
 \bibliography{StatsBook,DataSets,jamstatassoc,RS,R,kaplan}
 
 \printindex
+
+\newpage
+
+\authNotes
 
 
 %\section{More Examples}
