@@ -192,6 +192,8 @@ anova(lm(Calories ~ Sugars, data = Cereal))
 
 \subsection*{F-Statistic}
 
+\def\fit#1{#1}
+\def\resid#1{#1}
 \begin{itemize}
   \item
 		\fit{$MSM = SSM / DFM = SSM / (\mbox{number of groups} - 1)$}
